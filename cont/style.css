@@ -1,0 +1,435 @@
+/* ARQUIVO: style.css - Inspirado na Noite Estrelada de Van Gogh */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #1a1b3d 0%, #0c0e2a 50%, #2a1b5f 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Fundo estrelado inspirado em Van Gogh */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #f9f3a9, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #a3d9ff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 130px 80px, #f9f3a9, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #a3d9ff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 200px 50px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 240px 100px, #f9f3a9, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 280px 70px, #a3d9ff, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    opacity: 0.6;
+    z-index: -2;
+    animation: brilho 4s infinite alternate;
+}
+
+@keyframes brilho {
+    0% { opacity: 0.4; }
+    100% { opacity: 0.8; }
+}
+
+/* Elementos decorativos - Removi os girassóis e adicionei elementos Van Gogh */
+.decoracao {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.van-gogh-element {
+    position: absolute;
+    opacity: 0.3;
+    border-radius: 50%;
+}
+
+.van-gogh-element:nth-child(1) {
+    top: 15%;
+    left: 10%;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #f9f3a9 0%, #ffd700 30%, transparent 70%);
+    filter: blur(2px);
+    animation: mover 25s infinite linear;
+}
+
+.van-gogh-element:nth-child(2) {
+    bottom: 20%;
+    right: 15%;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #4d7dff 0%, #2a1b5f 50%, transparent 70%);
+    filter: blur(3px);
+    animation: mover 30s infinite linear reverse;
+}
+
+.van-gogh-element:nth-child(3) {
+    top: 40%;
+    right: 5%;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #a3d9ff 0%, #6a93ff 50%, transparent 70%);
+    filter: blur(2px);
+    animation: mover 20s infinite linear;
+}
+
+@keyframes mover {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(90deg); }
+    50% { transform: translateY(0) rotate(180deg); }
+    75% { transform: translateY(20px) rotate(270deg); }
+    100% { transform: translateY(0) rotate(360deg); }
+}
+
+.container {
+    background: rgba(26, 27, 61, 0.85);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 0 0 1px #4d7dff,
+        0 0 20px rgba(77, 125, 255, 0.3);
+    max-width: 90%;
+    width: 600px;
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #f9f3a9, #4d7dff, #a3d9ff, #2a1b5f);
+    border-radius: 17px;
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(5px);
+}
+
+/* Título no estilo da imagem (calendário) */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    text-shadow: 3px 3px 0 #2a1b5f;
+    color: #f9f3a9; /* Amarelo Van Gogh */
+    position: relative;
+    padding-bottom: 15px;
+    letter-spacing: 2px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+h1::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #f9f3a9, #4d7dff, transparent);
+    border-radius: 2px;
+}
+
+.nomes {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    font-weight: 400;
+    color: #a3d9ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.nomes span {
+    padding: 8px 20px;
+    background: rgba(42, 27, 95, 0.7);
+    border-radius: 8px;
+    border: 1px solid #4d7dff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.nomes span::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.nomes span:hover::before {
+    left: 100%;
+}
+
+.coracao-pequeno {
+    color: #f9f3a9;
+    font-size: 1.8rem;
+    text-shadow: 0 0 10px rgba(249, 243, 169, 0.7);
+    animation: pulsar 2s infinite;
+}
+
+/* Contador no estilo de calendário */
+.contador {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.bloco-tempo {
+    background: rgba(42, 27, 95, 0.8);
+    padding: 25px 15px;
+    border-radius: 12px;
+    border: 2px solid #4d7dff;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.bloco-tempo:hover {
+    transform: translateY(-8px);
+    border-color: #f9f3a9;
+    box-shadow: 0 10px 20px rgba(249, 243, 169, 0.3);
+}
+
+.bloco-tempo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #f9f3a9, #4d7dff, #a3d9ff);
+}
+
+.numero {
+    font-size: 3.5rem;
+    font-weight: bold;
+    display: block;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.legenda {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #a3d9ff;
+    margin-top: 10px;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.legenda::before, .legenda::after {
+    content: "•";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #f9f3a9;
+}
+
+.legenda::before {
+    left: -5px;
+}
+
+.legenda::after {
+    right: -5px;
+}
+
+/* Corações inspirados em Van Gogh */
+.coracao-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 20px;
+    position: relative;
+}
+
+.coracao {
+    font-size: 3rem;
+    color: #f9f3a9;
+    animation: pulsar-van-gogh 2s infinite;
+    text-shadow: 
+        0 0 15px rgba(249, 243, 169, 0.8),
+        0 0 30px rgba(77, 125, 255, 0.6);
+    position: relative;
+    filter: drop-shadow(0 0 5px rgba(249, 243, 169, 0.5));
+}
+
+.coracao:nth-child(1) {
+    color: #f9f3a9;
+    animation-delay: 0s;
+}
+
+.coracao:nth-child(2) {
+    color: #4d7dff;
+    animation-delay: 0.4s;
+}
+
+.coracao:nth-child(3) {
+    color: #a3d9ff;
+    animation-delay: 0.8s;
+}
+
+@keyframes pulsar-van-gogh {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg); 
+        filter: drop-shadow(0 0 5px rgba(249, 243, 169, 0.5));
+    }
+    50% { 
+        transform: scale(1.2) rotate(5deg); 
+        filter: drop-shadow(0 0 15px rgba(249, 243, 169, 0.8));
+    }
+}
+
+/* Mensagem especial */
+.mensagem {
+    font-size: 1.1rem;
+    margin-top: 25px;
+    color: #a3d9ff;
+    font-style: italic;
+    padding: 20px;
+    background: rgba(42, 27, 95, 0.7);
+    border-radius: 10px;
+    border-left: 4px solid #f9f3a9;
+    position: relative;
+    overflow: hidden;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.mensagem::before {
+    content: "❝";
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 2.5rem;
+    color: rgba(249, 243, 169, 0.3);
+}
+
+.mensagem::after {
+    content: "❞";
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    font-size: 2.5rem;
+    color: rgba(249, 243, 169, 0.3);
+}
+
+/* Efeito de pinceladas no container */
+.container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(90deg, transparent 95%, rgba(249, 243, 169, 0.05) 100%),
+        linear-gradient(0deg, transparent 95%, rgba(77, 125, 255, 0.05) 100%);
+    pointer-events: none;
+    border-radius: 15px;
+    z-index: -1;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 2rem;
+        width: 95%;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .nomes {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .contador {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .bloco-tempo {
+        padding: 20px 10px;
+    }
+    
+    .numero {
+        font-size: 2.8rem;
+    }
+    
+    .coracao {
+        font-size: 2.5rem;
+    }
+    
+    .van-gogh-element {
+        display: none; /* Esconde elementos decorativos em mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .contador {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .numero {
+        font-size: 2.5rem;
+    }
+    
+    .legenda {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+}

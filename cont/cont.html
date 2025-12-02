@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Tempo Juntos - Girassóis Azuis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Elementos decorativos - Girassóis -->
+    <div class="decoracao">
+        <div class="girassol"><i class="fas fa-sun"></i></div>
+        <div class="girassol"><i class="fas fa-sun"></i></div>
+        <div class="girassol"><i class="fas fa-sun"></i></div>
+        <div class="girassol"><i class="fas fa-sun"></i></div>
+        <div class="girassol"><i class="fas fa-sun"></i></div>
+    </div>
+
+    <div class="container">
+        <h1>tamo junto há:</h1>
+        
+        <div class="nomes">
+            <span id="nome1">[Seu Nome]</span> 
+            <i class="fas fa-heart coracao-pequeno"></i> 
+            <span id="nome2">[Nome do Parceiro]</span>
+        </div>
+        
+        <div class="contador">
+            <div class="bloco-tempo">
+                <span class="numero" id="dias">0</span>
+                <span class="legenda">Dias</span>
+            </div>
+            <div class="bloco-tempo">
+                <span class="numero" id="horas">0</span>
+                <span class="legenda">Horas</span>
+            </div>
+            <div class="bloco-tempo">
+                <span class="numero" id="minutos">0</span>
+                <span class="legenda">Minutos</span>
+            </div>
+            <div class="bloco-tempo">
+                <span class="numero" id="segundos">0</span>
+                <span class="legenda">Segundos</span>
+            </div>
+        </div>
+        
+        <div class="mensagem">
+            obrigado por ser voce.
+        </div>
+    </div>
+
+    <script>
+        // Configuração da data inicial do relacionamento
+        // Altere para a data em que começaram a namorar
+        const dataInicio = new Date("2025-11-29T00:00:00");
+        
+        // Elementos DOM
+        const diasElement = document.getElementById('dias');
+        const horasElement = document.getElementById('horas');
+        const minutosElement = document.getElementById('minutos');
+        const segundosElement = document.getElementById('segundos');
+        const nome1Element = document.getElementById('nome1');
+        const nome2Element = document.getElementById('nome2');
+        
+        // Personalização dos nomes (substitua pelos nomes reais)
+        nome1Element.textContent = "";
+        nome2Element.textContent = "";
+        
+        // Função para atualizar o contador
+        function atualizarContador() {
+            const agora = new Date();
+            const diferenca = agora - dataInicio;
+            
+            // Calcula dias, horas, minutos e segundos
+            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24)+1);
+            const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+            
+            // Atualiza os elementos na página
+            diasElement.textContent = dias;
+            horasElement.textContent = horas.toString().padStart(2, '0');
+            minutosElement.textContent = minutos.toString().padStart(2, '0');
+            segundosElement.textContent = segundos.toString().padStart(2, '0');
+        }
+        
+        // Atualiza o contador a cada segundo
+        setInterval(atualizarContador, 1000);
+        
+        // Inicializa o contador imediatamente
+        atualizarContador();
+        
+        // Adiciona interatividade aos blocos de tempo
+        document.querySelectorAll('.bloco-tempo').forEach(bloco => {
+            bloco.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
