@@ -115,7 +115,6 @@ body::before {
     width: 600px;
     position: relative;
     border: 2px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
 }
 
 .container::before {
