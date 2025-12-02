@@ -1,4 +1,4 @@
-/* ARQUIVO: style.css - Inspirado na Noite Estrelada de Van Gogh */
+
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Fundo estrelado inspirado em Van Gogh */
+
 body::before {
     content: "";
     position: fixed;
@@ -50,7 +50,7 @@ body::before {
     100% { opacity: 0.8; }
 }
 
-/* Elementos decorativos - Removi os girassóis e adicionei elementos Van Gogh */
+
 .decoracao {
     position: fixed;
     width: 100%;
@@ -131,12 +131,12 @@ body::before {
     filter: blur(5px);
 }
 
-/* Título no estilo da imagem (calendário) */
+
 h1 {
     font-size: 3rem;
     margin-bottom: 15px;
     text-shadow: 3px 3px 0 #2a1b5f;
-    color: #f9f3a9; /* Amarelo Van Gogh */
+    color: #f9f3a9;
     position: relative;
     padding-bottom: 15px;
     letter-spacing: 2px;
@@ -199,7 +199,6 @@ h1::after {
     animation: pulsar 2s infinite;
 }
 
-/* Contador no estilo de calendário */
 .contador {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -273,7 +272,7 @@ h1::after {
     right: -5px;
 }
 
-/* Corações inspirados em Van Gogh */
+
 .coracao-container {
     display: flex;
     justify-content: center;
@@ -320,7 +319,7 @@ h1::after {
     }
 }
 
-/* Mensagem especial */
+
 .mensagem {
     font-size: 1.1rem;
     margin-top: 25px;
@@ -354,7 +353,7 @@ h1::after {
     color: rgba(249, 243, 169, 0.3);
 }
 
-/* Efeito de pinceladas no container */
+
 .container::after {
     content: "";
     position: absolute;
@@ -370,7 +369,7 @@ h1::after {
     z-index: -1;
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
     .container {
         padding: 2rem;
@@ -405,7 +404,7 @@ h1::after {
     }
     
     .van-gogh-element {
-        display: none; /* Esconde elementos decorativos em mobile */
+        display: none; 
     }
 }
 
