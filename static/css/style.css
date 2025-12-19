@@ -1,26 +1,60 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 :root {
-    /* Paleta Van Gogh mais suave */
-    --deep-night: #0c1038;
-    --starry-blue: #1d2671;
+    --deep-night: #0a0d2a;
+    --border-gold: #c5a059;
     --gold-star: #ffd700;
-    --moon-glow: #f0f2ff;
-    --swirl-blue: #3f51b5;
-    --village-dark: #364387;
-    --accent-gold: #ffc107;
-    --border-gold: #ffd740;
     --text-light: #e8eaf6;
-    
-    /* Fontes */
-    --font-serif: 'Playfair Display', Georgia, serif;
-    --font-script: 'Dancing Script', cursive;
     --font-mono: 'Cascadia Code', monospace;
 }
+
+body {
+    background: var(--deep-night);
+    /* Estrelas minimalistas */
+    background-image: 
+        radial-gradient(1px 1px at 10% 10%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 50% 50%, var(--gold-star) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 20%, #fff 50%, transparent 100%);
+    background-size: 400px 400px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Moldura externa dourada elegante */
+.container::before {
+    content: '';
+    position: fixed;
+    top: 20px; right: 20px; bottom: 20px; left: 20px;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.number {
+    font-size: 13rem;
+    font-weight: 900;
+    font-family: var(--font-mono);
+    line-height: 0.8;
+    display: block;
+    
+    /* Aplicação das 4 fotos individuais */
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Atribuição correta das fotos enviadas */
+#days { background-image: url('../img/foto1.jpg'); }
+#hours { background-image: url('../img/foto2.jpg'); }
+#minutes { background-image: url('../img/foto3.jpg'); }
+#seconds { background-image: url('../img/foto4.jpg'); }
+
+
 
 body {
     font-family: var(--font-serif);
