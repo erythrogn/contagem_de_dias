@@ -290,3 +290,116 @@ body::before {
     .container::after { top: 10px; right: 10px; bottom: 10px; left: 10px; }
     .title { font-size: 1.1rem; letter-spacing: 0.4em; }
 }
+/* =========================================
+   9. Modal da Surpresa (NOVO - Integrado ao Tema)
+   ========================================= */
+
+/* Fundo que cobre a tela inteira */
+.modal-surpresa {
+    display: none; /* Controlado via JS */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 9999;
+    
+    /* Fundo escuro com blur para focar na mensagem */
+    background-color: rgba(5, 7, 20, 0.95); /* Baseado no --deep-night */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Classe ativada pelo JS */
+.modal-surpresa.mostrar {
+    display: flex;
+    animation: fade-in-zoom 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* O Cartão da Mensagem */
+.conteudo-surpresa {
+    text-align: center;
+    padding: 3rem;
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+    border-radius: 20px;
+
+    /* Estilo Glassmorphism Premium (igual aos time-blocks) */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    border: 1px solid var(--border-gold); /* Borda dourada */
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.5),
+        inset 0 0 30px rgba(197, 160, 89, 0.1); /* Brilho interno dourado */
+}
+
+/* Título "Feliz 1º Mês" */
+.texto-pulo {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    color: var(--gold-star); /* Dourado vibrante */
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    
+    /* Animação */
+    animation: pular 1.5s infinite alternate ease-in-out;
+}
+
+/* Subtítulo "Te amo" */
+.conteudo-surpresa p {
+    font-family: var(--font-script); /* Fonte cursiva */
+    font-size: 3rem;
+    color: var(--moon-glow);
+    margin-bottom: 2.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Botão Fechar - Estilo Premium */
+#btn-fechar {
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    color: var(--border-gold);
+    padding: 12px 40px;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#btn-fechar:hover {
+    background: var(--border-gold);
+    color: var(--deep-night);
+    box-shadow: 0 0 25px rgba(197, 160, 89, 0.6);
+    transform: translateY(-3px);
+}
+
+/* =========================================
+   Animações da Surpresa
+   ========================================= */
+
+/* Entrada suave do modal */
+@keyframes fade-in-zoom {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Pulo suave e elegante */
+@keyframes pular {
+    0% { transform: translateY(0); text-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+    100% { transform: translateY(-15px); text-shadow: 0 0 35px rgba(255, 215, 0, 0.8); }
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .texto-pulo { font-size: 2.5rem; }
+    .conteudo-surpresa p { font-size: 2rem; }
+    .conteudo-surpresa { padding: 2rem; }
+}

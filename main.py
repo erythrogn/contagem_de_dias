@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -7,11 +7,11 @@ app = Flask(__name__)
 def index():
     nome1 = ""
     nome2 = ""
-  
     data_inicio_iso = "2025-11-29T00:00:00"
-    
-    return render_template('index.html', n1=nome1, n2=nome2, data=data_inicio_iso)
+    agora = datetime.now()
+    agora_br = agora - timedelta(hours=3)
+    mostrar_surpresa = (agora_br.day == 29 and agora_br.month == 12)
+    return render_template('index.html', n1=nome1, n2=nome2, data=data_inicio_iso, surpresa=mostrar_surpresa)
 
-# Necessário para deploy e testes locais
 if __name__ == '__main__':
     app.run(debug=True)

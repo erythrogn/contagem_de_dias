@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tempo juntos</title>
+    <title>Tempo Juntos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@600&family=Cascadia+Code:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -44,24 +44,34 @@
         <div class="message">amo voce mozi</div>
     </div>
 
+    {% if surpresa %}
+    <div id="surpresa-mes" class="modal-surpresa mostrar">
+        <div class="conteudo-surpresa">
+            <h1 class="texto-pulo"> feliz 1 mes</h1>
+            <p>te amo.</p>
+            <button id="btn-fechar" onclick="document.getElementById('surpresa-mes').style.display='none'">FECHAR</button>
+        </div>
+    </div>
+    {% endif %}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+          
             const dataInicio = new Date("{{ data }}");
             
             function atualizarContador() {
                 const agora = new Date();
                 const diferenca = agora - dataInicio;
-
-                const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24) + 1);
+                const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24) + 1); // +1 para contagem inclusiva
                 const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
                 const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
-
                 document.getElementById('days').textContent = dias;
                 document.getElementById('hours').textContent = horas.toString().padStart(2, '0');
                 document.getElementById('minutes').textContent = minutos.toString().padStart(2, '0');
                 document.getElementById('seconds').textContent = segundos.toString().padStart(2, '0');
             }
+            
             atualizarContador();
             setInterval(atualizarContador, 1000);
         });
