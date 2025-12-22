@@ -1,22 +1,13 @@
-/* =========================================
-   1. Variáveis e Configurações Globais
-   ========================================= */
 :root {
-    /* Paleta de Cores */
     --deep-night: #050714;
     --night-blue: #0a0d2a;
     --swirl-blue: #1a237e;
-    
-    /* Tons de Ouro Premium */
     --border-gold: #c5a059;
     --gold-star: #ffd700;
     --accent-gold: #fbc02d;
     --gold-gradient: linear-gradient(135deg, #c5a059 0%, #ffd700 50%, #fbc02d 100%);
-    
     --moon-glow: #e8eaf6;
     --text-light: #ffffff;
-
-    /* Tipografia */
     --font-mono: 'Cascadia Code', 'Courier New', monospace;
     --font-serif: 'Playfair Display', 'Cinzel', serif; 
     --font-script: 'Great Vibes', 'Dancing Script', cursive; 
@@ -28,9 +19,6 @@
     box-sizing: border-box;
 }
 
-/* =========================================
-   2. Estrutura e Fundo (Background Vivo)
-   ========================================= */
 body {
     background-color: var(--deep-night);
     font-family: var(--font-serif);
@@ -41,12 +29,9 @@ body {
     align-items: center;
     overflow-x: hidden;
     position: relative;
-
-    /* Gradiente profundo */
     background: radial-gradient(circle at 50% 0%, #1a237e 0%, var(--deep-night) 60%);
 }
 
-/* Animação de Poeira Estelar */
 body::before {
     content: '';
     position: fixed;
@@ -64,9 +49,6 @@ body::before {
     animation: stars-drift 60s linear infinite;
 }
 
-/* =========================================
-   3. Moldura Externa Pulsante
-   ========================================= */
 .container::after {
     content: '';
     position: fixed;
@@ -86,9 +68,6 @@ body::before {
     z-index: 2;
 }
 
-/* =========================================
-   4. Títulos e Nomes
-   ========================================= */
 .title {
     font-size: 1.5rem;
     color: var(--moon-glow);
@@ -100,7 +79,6 @@ body::before {
     text-shadow: 0 0 15px rgba(232, 234, 246, 0.4);
 }
 
-/* Linha decorativa dourada */
 .title::after {
     content: '';
     display: block;
@@ -127,13 +105,10 @@ body::before {
     letter-spacing: 0.1em;
     padding: 1rem 3rem;
     border-radius: 50px;
-    
-    /* Glassmorphism Refinado */
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(197, 160, 89, 0.3);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    
     transition: all 0.3s ease;
     animation: float-names 6s ease-in-out infinite;
 }
@@ -148,7 +123,6 @@ body::before {
 
 .heart-icon {
     font-size: 2.5rem;
-    /* Coração Dourado Brilhante */
     background: var(--gold-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -156,9 +130,6 @@ body::before {
     animation: heartbeat 1.5s ease-in-out infinite;
 }
 
-/* =========================================
-   5. O Contador (Main)
-   ========================================= */
 .counter {
     display: flex;
     justify-content: center;
@@ -174,96 +145,93 @@ body::before {
     border-radius: 20px;
     position: relative;
     overflow: hidden;
-    
-    /* Vidro Profundo */
-    background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    
-    transition: transform 0.4s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(197, 160, 89, 0.4);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Brilho que passa pelo card */
 .time-block::before {
     content: '';
     position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
-    opacity: 0;
-    transform: scale(0.5);
-    transition: opacity 0.5s, transform 0.5s;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(5, 7, 20, 0.65);
+    z-index: 0;
+    transition: background 0.3s;
 }
 
 .time-block:hover {
-    transform: translateY(-10px);
-    border-color: var(--border-gold);
-    box-shadow: 0 0 30px rgba(197, 160, 89, 0.2);
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--gold-star);
+    box-shadow: 0 20px 50px rgba(197, 160, 89, 0.2);
 }
 
 .time-block:hover::before {
-    opacity: 1;
-    transform: scale(1);
+    background: rgba(5, 7, 20, 0.4);
 }
 
 .number {
+    position: relative;
+    z-index: 5;
     display: block;
     font-family: var(--font-mono);
-    font-size: 9rem;
+    font-size: 8rem;
     font-weight: 900;
     line-height: 1;
-    margin-bottom: 1rem;
-    
-    /* Mágica da Imagem no Texto */
-    background-size: cover;
-    background-position: center;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-
-    /* Glow Dourado ao redor da Imagem/Texto */
-    filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.6));
+    margin-bottom: 0.5rem;
+    color: var(--gold-star);
+    text-shadow: 
+        2px 2px 0px var(--border-gold),
+        0px 10px 20px rgba(0, 0, 0, 0.8);
 }
 
-/* IDs das Fotos */
-#days { background-image: url('../img/foto1.jpg'); }
-#hours { background-image: url('../img/foto2.jpg'); }
-#minutes { background-image: url('../img/foto3.jpg'); }
-#seconds { background-image: url('../img/foto4.jpg'); }
-
 .label {
+    position: relative;
+    z-index: 1;
     display: block;
     font-size: 1rem;
     letter-spacing: 0.5em;
-    color: var(--gold-star);
+    color: var(--text-light);
     text-transform: uppercase;
     font-weight: 700;
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
-/* =========================================
-   6. Mensagem Final
-   ========================================= */
+.time-block:nth-child(1) {
+    background-image: url('../img/foto1.jpg');
+}
+
+.time-block:nth-child(2) {
+    background-image: url('../img/foto2.jpg');
+}
+
+.time-block:nth-child(3) {
+    background-image: url('../img/foto3.jpg');
+}
+
+.time-block:nth-child(4) {
+    background-image: url('../img/foto4.jpg');
+}
+
+#days, #hours, #minutes, #seconds {
+    background-image: none !important;
+}
+
 .message {
     margin-top: 4rem;
     font-family: var(--font-script);
     font-size: 3rem;
-    
-    /* Gradiente no texto */
     background: linear-gradient(to right, #fff, var(--gold-star), #fff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
     text-align: center;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
     animation: shine-text 5s linear infinite;
 }
 
-/* =========================================
-   7. Animações
-   ========================================= */
 @keyframes stars-drift {
     0% { transform: translateY(0) rotate(0deg); }
     100% { transform: translateY(-200px) rotate(5deg); }
@@ -289,9 +257,6 @@ body::before {
     100% { background-position: 200%; }
 }
 
-/* =========================================
-   8. Modal da Surpresa Premium
-   ========================================= */
 .modal-surpresa {
     display: none;
     position: fixed;
@@ -321,7 +286,6 @@ body::before {
 .texto-pulo {
     font-family: var(--font-serif);
     font-size: 4rem;
-    /* Texto Dourado Metálico */
     background: var(--gold-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -370,9 +334,6 @@ body::before {
     100% { transform: translateY(-15px); filter: drop-shadow(0 0 25px rgba(255,215,0,0.8)); }
 }
 
-/* =========================================
-   9. Responsividade
-   ========================================= */
 @media (max-width: 1200px) {
     .number { font-size: 6rem; }
     .container { padding: 1rem; }
