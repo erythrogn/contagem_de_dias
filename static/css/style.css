@@ -5,16 +5,18 @@
     /* Paleta de Cores */
     --deep-night: #050714;
     --night-blue: #0a0d2a;
-    --swirl-blue: #1a237e; /* Azul profundo para gradientes */
-    --starry-blue: #0d47a1; /* Azul levemente mais claro */
+    --swirl-blue: #1a237e;
     
+    /* Tons de Ouro Premium */
     --border-gold: #c5a059;
     --gold-star: #ffd700;
     --accent-gold: #fbc02d;
+    --gold-gradient: linear-gradient(135deg, #c5a059 0%, #ffd700 50%, #fbc02d 100%);
+    
     --moon-glow: #e8eaf6;
     --text-light: #ffffff;
 
-    /* Tipografia (Sugestão: Importar no HTML) */
+    /* Tipografia */
     --font-mono: 'Cascadia Code', 'Courier New', monospace;
     --font-serif: 'Playfair Display', 'Cinzel', serif; 
     --font-script: 'Great Vibes', 'Dancing Script', cursive; 
@@ -27,7 +29,7 @@
 }
 
 /* =========================================
-   2. Estrutura e Fundo (Background)
+   2. Estrutura e Fundo (Background Vivo)
    ========================================= */
 body {
     background-color: var(--deep-night);
@@ -40,14 +42,11 @@ body {
     overflow-x: hidden;
     position: relative;
 
-    /* Fundo Complexo Unificado */
-    background-image: 
-        radial-gradient(ellipse at 20% 20%, rgba(26, 35, 126, 0.4) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(13, 71, 161, 0.2) 0%, transparent 50%),
-        linear-gradient(180deg, var(--deep-night) 0%, #101640 100%);
+    /* Gradiente profundo */
+    background: radial-gradient(circle at 50% 0%, #1a237e 0%, var(--deep-night) 60%);
 }
 
-/* Camada de Estrelas Animadas */
+/* Animação de Poeira Estelar */
 body::before {
     content: '';
     position: fixed;
@@ -55,21 +54,18 @@ body::before {
     width: 100%; height: 100%;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.6;
-    
+    opacity: 0.5;
     background-image: 
-        radial-gradient(1.5px 1.5px at 10% 10%, #fff 100%, transparent),
-        radial-gradient(1px 1px at 50% 50%, var(--gold-star) 100%, transparent),
-        radial-gradient(2px 2px at 85% 20%, #fff 100%, transparent),
-        radial-gradient(1px 1px at 15% 80%, var(--moon-glow) 100%, transparent),
-        radial-gradient(1.5px 1.5px at 90% 90%, var(--accent-gold) 100%, transparent);
-    
+        radial-gradient(1px 1px at 10% 10%, #fff 100%, transparent),
+        radial-gradient(2px 2px at 20% 30%, var(--gold-star) 100%, transparent),
+        radial-gradient(1px 1px at 50% 50%, #fff 100%, transparent),
+        radial-gradient(2px 2px at 80% 80%, var(--accent-gold) 100%, transparent);
     background-size: 500px 500px;
-    animation: stars-drift 100s linear infinite;
+    animation: stars-drift 60s linear infinite;
 }
 
 /* =========================================
-   3. Moldura Externa (Overlay)
+   3. Moldura Externa Pulsante
    ========================================= */
 .container::after {
     content: '';
@@ -77,10 +73,9 @@ body::before {
     top: 20px; right: 20px; bottom: 20px; left: 20px;
     z-index: 10;
     pointer-events: none;
-    border: 1px solid rgba(197, 160, 89, 0.3);
-    
-    /* Brilho pulsante na borda */
-    box-shadow: inset 0 0 20px rgba(197, 160, 89, 0.05);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    box-shadow: inset 0 0 30px rgba(197, 160, 89, 0.05);
+    animation: border-breathe 4s ease-in-out infinite;
 }
 
 .container {
@@ -101,18 +96,20 @@ body::before {
     letter-spacing: 0.6em;
     margin-bottom: 4rem;
     text-align: center;
-    position: relative;
     font-weight: 300;
-    text-shadow: 0 0 10px rgba(232, 234, 246, 0.3);
+    text-shadow: 0 0 15px rgba(232, 234, 246, 0.4);
 }
 
+/* Linha decorativa dourada */
 .title::after {
     content: '';
     display: block;
-    width: 100px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
-    margin: 15px auto 0;
+    width: 120px;
+    height: 2px;
+    background: var(--gold-gradient);
+    margin: 20px auto 0;
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--gold-star);
 }
 
 .names {
@@ -128,25 +125,34 @@ body::before {
     color: var(--text-light);
     font-weight: 400;
     letter-spacing: 0.1em;
-    padding: 0.8rem 2.5rem;
+    padding: 1rem 3rem;
     border-radius: 50px;
     
-    /* Glassmorphism Premium */
+    /* Glassmorphism Refinado */
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     
+    transition: all 0.3s ease;
     animation: float-names 6s ease-in-out infinite;
+}
+
+.name:hover {
+    border-color: var(--gold-star);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: translateY(-3px);
 }
 
 .name:nth-child(2) { animation-delay: 1.5s; }
 
 .heart-icon {
-    color: var(--gold-star);
-    font-size: 2rem;
-    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.6));
+    font-size: 2.5rem;
+    /* Coração Dourado Brilhante */
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
     animation: heartbeat 1.5s ease-in-out infinite;
 }
 
@@ -164,48 +170,61 @@ body::before {
 .time-block {
     flex: 1;
     text-align: center;
-    padding: 2.5rem 1rem;
-    border-radius: 16px;
+    padding: 3rem 1rem;
+    border-radius: 20px;
     position: relative;
+    overflow: hidden;
     
-    /* Efeito de Vidro Profundo */
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.3),
-        inset 0 0 20px rgba(255, 255, 255, 0.02);
+    /* Vidro Profundo */
+    background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    
+    transition: transform 0.4s ease;
+}
 
-    transition: transform 0.3s ease;
+/* Brilho que passa pelo card */
+.time-block::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.5s, transform 0.5s;
 }
 
 .time-block:hover {
-    transform: translateY(-5px);
-    border-color: rgba(197, 160, 89, 0.3);
+    transform: translateY(-10px);
+    border-color: var(--border-gold);
+    box-shadow: 0 0 30px rgba(197, 160, 89, 0.2);
+}
+
+.time-block:hover::before {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .number {
     display: block;
     font-family: var(--font-mono);
-    font-size: 10rem; /* Ajustado para caber melhor */
+    font-size: 9rem;
     font-weight: 900;
-    line-height: 0.9;
-    margin-bottom: 0.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
     
     /* Mágica da Imagem no Texto */
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    
-    -webkit-background-clip: text;
     background-clip: text;
-    
-    color: transparent; /* Fallback necessário */
+    -webkit-background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
 
-    /* Filtro para garantir legibilidade contra o fundo escuro */
-    filter: drop-shadow(0 0 15px rgba(0,0,0,0.5)) contrast(1.1);
+    /* Glow Dourado ao redor da Imagem/Texto */
+    filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.6));
 }
 
 /* IDs das Fotos */
@@ -216,12 +235,12 @@ body::before {
 
 .label {
     display: block;
-    font-size: 0.85rem;
-    letter-spacing: 0.4em;
-    color: var(--border-gold);
+    font-size: 1rem;
+    letter-spacing: 0.5em;
+    color: var(--gold-star);
     text-transform: uppercase;
-    margin-top: 1rem;
-    opacity: 0.8;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
 }
 
 /* =========================================
@@ -230,176 +249,146 @@ body::before {
 .message {
     margin-top: 4rem;
     font-family: var(--font-script);
-    font-size: 2.5rem;
-    color: var(--text-light);
-    text-align: center;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-size: 3rem;
     
-    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
-    padding: 1rem;
-    border-radius: 100px;
+    /* Gradiente no texto */
+    background: linear-gradient(to right, #fff, var(--gold-star), #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    text-align: center;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+    animation: shine-text 5s linear infinite;
 }
 
 /* =========================================
-   7. Animações Keyframes
+   7. Animações
    ========================================= */
 @keyframes stars-drift {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-500px); }
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-200px) rotate(5deg); }
 }
 
 @keyframes float-names {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
 }
 
 @keyframes heartbeat {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 15px var(--gold-star); }
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255,215,0,0.5)); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 15px rgba(255,215,0,0.9)); }
+}
+
+@keyframes border-breathe {
+    0%, 100% { border-color: rgba(197, 160, 89, 0.2); }
+    50% { border-color: rgba(197, 160, 89, 0.6); }
+}
+
+@keyframes shine-text {
+    0% { background-position: -200%; }
+    100% { background-position: 200%; }
 }
 
 /* =========================================
-   8. Responsividade
+   8. Modal da Surpresa Premium
    ========================================= */
-@media (max-width: 1200px) {
-    .number { font-size: 8rem; }
-    .container { padding: 2rem; }
-}
-
-@media (max-width: 992px) {
-    .counter { 
-        flex-wrap: wrap; 
-        gap: 1.5rem; 
-    }
-    .time-block { 
-        flex: 1 1 40%; /* 2 por linha */
-    }
-    .number { font-size: 7rem; }
-}
-
-@media (max-width: 600px) {
-    .time-block { 
-        flex: 1 1 100%; /* 1 por linha no mobile */
-        margin-bottom: 1rem;
-    }
-    .number { font-size: 8rem; } /* Maior no mobile pois ocupa a largura toda */
-    .names { 
-        flex-direction: column; 
-        gap: 1rem;
-    }
-    .container::after { top: 10px; right: 10px; bottom: 10px; left: 10px; }
-    .title { font-size: 1.1rem; letter-spacing: 0.4em; }
-}
-/* =========================================
-   9. Modal da Surpresa (NOVO - Integrado ao Tema)
-   ========================================= */
-
-/* Fundo que cobre a tela inteira */
 .modal-surpresa {
-    display: none; /* Controlado via JS */
+    display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: 9999;
-    
-    /* Fundo escuro com blur para focar na mensagem */
-    background-color: rgba(5, 7, 20, 0.95); /* Baseado no --deep-night */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    
+    background-color: rgba(5, 7, 20, 0.96);
+    backdrop-filter: blur(10px);
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    padding: 20px;
 }
 
-/* Classe ativada pelo JS */
 .modal-surpresa.mostrar {
     display: flex;
-    animation: fade-in-zoom 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: fade-in-zoom 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* O Cartão da Mensagem */
 .conteudo-surpresa {
     text-align: center;
-    padding: 3rem;
-    max-width: 600px;
-    width: 100%;
-    position: relative;
-    border-radius: 20px;
-
-    /* Estilo Glassmorphism Premium (igual aos time-blocks) */
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-    border: 1px solid var(--border-gold); /* Borda dourada */
-    box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.5),
-        inset 0 0 30px rgba(197, 160, 89, 0.1); /* Brilho interno dourado */
+    padding: 4rem;
+    background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);
+    border: 1px solid var(--border-gold);
+    border-radius: 30px;
+    box-shadow: 0 0 50px rgba(197, 160, 89, 0.2);
 }
 
-/* Título "Feliz 1º Mês" */
 .texto-pulo {
     font-family: var(--font-serif);
-    font-size: 3.5rem;
-    color: var(--gold-star); /* Dourado vibrante */
+    font-size: 4rem;
+    /* Texto Dourado Metálico */
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 1rem;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-    
-    /* Animação */
     animation: pular 1.5s infinite alternate ease-in-out;
 }
 
-/* Subtítulo "Te amo" */
 .conteudo-surpresa p {
-    font-family: var(--font-script); /* Fonte cursiva */
-    font-size: 3rem;
-    color: var(--moon-glow);
-    margin-bottom: 2.5rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-family: var(--font-script);
+    font-size: 3.5rem;
+    color: #fff;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 10px var(--gold-star);
 }
 
-/* Botão Fechar - Estilo Premium */
 #btn-fechar {
     background: transparent;
-    border: 1px solid var(--border-gold);
-    color: var(--border-gold);
-    padding: 12px 40px;
+    border: 2px solid var(--border-gold);
+    color: var(--gold-star);
+    padding: 15px 50px;
+    font-size: 1.2rem;
     font-family: var(--font-serif);
-    font-size: 1.1rem;
-    letter-spacing: 0.2em;
     text-transform: uppercase;
-    cursor: pointer;
+    letter-spacing: 0.2em;
     border-radius: 50px;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.1);
 }
 
 #btn-fechar:hover {
-    background: var(--border-gold);
+    background: var(--gold-gradient);
     color: var(--deep-night);
-    box-shadow: 0 0 25px rgba(197, 160, 89, 0.6);
-    transform: translateY(-3px);
+    border-color: transparent;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+    transform: scale(1.05);
 }
 
-/* =========================================
-   Animações da Surpresa
-   ========================================= */
-
-/* Entrada suave do modal */
 @keyframes fade-in-zoom {
-    0% { opacity: 0; transform: scale(0.9); }
+    0% { opacity: 0; transform: scale(0.8); }
     100% { opacity: 1; transform: scale(1); }
 }
 
-/* Pulo suave e elegante */
 @keyframes pular {
-    0% { transform: translateY(0); text-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
-    100% { transform: translateY(-15px); text-shadow: 0 0 35px rgba(255, 215, 0, 0.8); }
+    0% { transform: translateY(0); filter: drop-shadow(0 0 5px rgba(255,215,0,0.5)); }
+    100% { transform: translateY(-15px); filter: drop-shadow(0 0 25px rgba(255,215,0,0.8)); }
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
+/* =========================================
+   9. Responsividade
+   ========================================= */
+@media (max-width: 1200px) {
+    .number { font-size: 6rem; }
+    .container { padding: 1rem; }
+}
+
+@media (max-width: 992px) {
+    .counter { flex-wrap: wrap; }
+    .time-block { flex: 1 1 40%; margin-bottom: 2rem; }
+    .number { font-size: 5rem; }
+}
+
+@media (max-width: 600px) {
+    .time-block { flex: 1 1 100%; }
+    .names { flex-direction: column; gap: 1rem; }
+    .title { font-size: 1.2rem; }
     .texto-pulo { font-size: 2.5rem; }
-    .conteudo-surpresa p { font-size: 2rem; }
     .conteudo-surpresa { padding: 2rem; }
+    .conteudo-surpresa p { font-size: 2rem; }
 }
