@@ -10,7 +10,7 @@ def index():
   
     data_inicio_iso = "2025-11-29T00:00:00"
     
-    return render_template('cont.html', n1=nome1, n2=nome2, data=data_inicio_iso)
+    return render_template('index.html', n1=nome1, n2=nome2, data=data_inicio_iso)
 
 # Necessário para deploy e testes locais
 if __name__ == '__main__':
