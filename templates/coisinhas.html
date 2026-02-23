@@ -82,18 +82,28 @@
     <div class="item-list" id="item-list"></div>
 
     <div class="empty-state" id="empty-state">
-      <p>coloca alguma coisa vei</p>
+      <p>Nada por aqui ainda. Que tal adicionar algo novo?</p>
     </div>
   </main>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+      databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const coisinhasRef = ref(db, 'coisinhas');
+
     const form = document.getElementById('add-form');
     const list = document.getElementById('item-list');
     const emptyState = document.getElementById('empty-state');
     const progressFill = document.getElementById('progress-fill');
     const progressCount = document.getElementById('progress-count');
     
-    // Select Customizado
     const customSelect = document.getElementById('custom-category-select');
     const selectTrigger = document.getElementById('select-trigger');
     const selectOptions = document.getElementById('select-options');
@@ -114,28 +124,18 @@
       if (!customSelect.contains(e.target)) customSelect.classList.remove('open');
     });
 
-    // --- LOGICA DE SINCRONIZAÇÃO COM A API ---
     let items = [];
 
-    async function fetchItems() {
-      try {
-        const res = await fetch('/api/coisinhas');
-        items = await res.json();
-        renderItems();
-        updateProgress();
-      } catch (error) { console.error("Erro ao carregar itens:", error); }
-    }
-
-    async function saveItems() {
+    // Listener em tempo real do Firebase
+    onValue(coisinhasRef, (snapshot) => {
+      items = [];
+      snapshot.forEach((childSnapshot) => {
+        items.push({ key: childSnapshot.key, ...childSnapshot.val() });
+      });
+      items.reverse(); // Mais recentes primeiro
+      renderItems(document.querySelector('.ftab.active').dataset.filter);
       updateProgress();
-      try {
-        await fetch('/api/coisinhas', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(items)
-        });
-      } catch (error) { console.error("Erro ao salvar itens:", error); }
-    }
+    });
 
     function updateProgress() {
       const total = items.length;
@@ -152,7 +152,6 @@
       const filteredItems = items.filter(i => filter === 'all' || i.category === filter);
 
       filteredItems.forEach((item) => {
-        const originalIndex = items.indexOf(item);
         const card = document.createElement('div');
         card.className = `item-card ${item.done ? 'done' : ''}`;
         
@@ -162,38 +161,33 @@
         else if(item.category === 'drink') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M12 15v7"></path><path d="m3 3 18 0"></path><path d="m3 3 9 12 9-12"></path></svg>';
         else iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
 
+        const checkIcon = item.done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '';
+
         card.innerHTML = `
-          <div class="i-check ${item.done ? 'checked' : ''}">${item.done ? '✓' : ''}</div>
+          <div class="i-check ${item.done ? 'checked' : ''}" onclick="toggleItem('${item.key}', ${item.done})">${checkIcon}</div>
           <div class="i-info">
             <h3 class="i-title">${item.title}</h3>
             <span class="i-meta">${iconSvg} ${item.category.toUpperCase()}</span>
             ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
           </div>
-          <button class="btn-del" onclick="deleteItem(${originalIndex})">
+          <button class="btn-del" onclick="deleteItem('${item.key}')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         `;
-        
-        card.querySelector('.i-check').addEventListener('click', () => toggleItem(originalIndex));
         list.appendChild(card);
       });
     }
 
-    function toggleItem(index) {
-      items[index].done = !items[index].done;
-      saveItems();
-      renderItems(document.querySelector('.ftab.active').dataset.filter);
-    }
+    window.toggleItem = function(key, currentDone) {
+      update(ref(db, 'coisinhas/' + key), { done: !currentDone });
+    };
 
-    function deleteItem(index) {
-      items.splice(index, 1);
-      saveItems();
-      renderItems(document.querySelector('.ftab.active').dataset.filter);
-    }
+    window.deleteItem = function(key) {
+      remove(ref(db, 'coisinhas/' + key));
+    };
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       if (!categoryInput.value) {
         alert("Por favor, selecione uma categoria.");
         return;
@@ -207,14 +201,11 @@
         date: new Date().toLocaleDateString()
       };
       
-      items.push(newItem);
-      saveItems();
+      await push(coisinhasRef, newItem);
       
       form.reset();
       categoryInput.value = '';
       selectText.innerHTML = 'Selecione...';
-      
-      renderItems(document.querySelector('.ftab.active').dataset.filter);
     });
 
     document.querySelectorAll('.ftab').forEach(tab => {
@@ -224,7 +215,5 @@
         renderItems(tab.dataset.filter);
       });
     });
-
-    fetchItems();
   </script>
 {% endblock %}
