@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Coisinhas · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/coisinhas.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Cabeçalho -->
+  <header class="content-header">
+    <span class="eyebrow">nosso grimório de memórias</span>
+    <h1 class="page-title">Coisinhas <em>para Fazer</em></h1>
+    <p class="page-sub">quero viver tudo com voce</p>
+  </header>
+
+  <!-- Barra de progresso — IDs exatos que app.js usa -->
+  <section class="card progress-card" aria-label="Progresso das coisinhas">
+    <div class="progress-info">
+      <span>Progresso</span>
+      <strong id="progress-count">0/0</strong>
+    </div>
+    <div class="progress-track"
+         role="progressbar"
+         aria-valuenow="0"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         aria-label="Percentagem concluída">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </section>
+
+  <!-- Formulário — app.js escuta submit em #add-form -->
+  <!-- Lê: #title (input), #category (select nativo), #notes (textarea) -->
+  <section class="card" aria-label="Adicionar nova coisinha">
+    <p class="section-title">✦ Adicionar Item</p>
+
+    <form id="add-form" class="form-grid" novalidate>
+
+      <!-- Título -->
+      <div class="form-group span2">
+        <label for="title">O que vamos fazer?</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="ex: fazer um piquenique no parque..."
+          autocomplete="off"
+          required
+        >
+      </div>
+
+      <!-- Categoria — select nativo; app.js lê .value direto -->
+      <div class="form-group">
+        <label for="category">Categoria</label>
+        <select id="category" name="category" required>
+          <option value="" disabled selected>Selecione...</option>
+          <option value="visitar">Visitar Local</option>
+          <option value="receita">Fazer Receita</option>
+          <option value="drink">Experimentar Drink</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+
+      <!-- Notas -->
+      <div class="form-group">
+        <label for="notes">Notas e detalhes</label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows="2"
+          placeholder="Algum detalhe especial..."></textarea>
+      </div>
+
+      <!-- Botão de submit — app.js captura via form submit event -->
+      <div class="form-group span2">
+        <button type="submit" class="btn-submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- Filtros visuais — sem lógica de JS no app.js, puramente visual / extensível -->
+  <div class="filter-container" role="tablist" aria-label="Filtrar itens">
+    <button class="ftab active" role="tab" aria-selected="true">Todos</button>
+    <button class="ftab"        role="tab" aria-selected="false">Pendentes</button>
+    <button class="ftab"        role="tab" aria-selected="false">Feitos</button>
+  </div>
+
+  <!-- Lista — app.js renderiza via id="item-list" -->
+  <div class="item-list" id="item-list" aria-label="Lista de coisinhas" aria-live="polite">
+    <div class="empty-state">
+      <p>✦</p>
+      <p>Carregando...</p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

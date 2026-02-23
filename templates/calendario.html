@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendário 2026 · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendario.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- Cabeçalho da página -->
+  <header class="cal-header">
+    <p class="cal-eyebrow">tamo junto · desde 29 nov 2025</p>
+
+    <h1 class="cal-title">Calendário <span>2026</span></h1>
+
+    <p class="cal-subtitle">cada 29 é um mês a mais de nós</p>
+
+    <!-- Divisória ornamental -->
+    <div class="header-rule" aria-hidden="true">
+      <span class="header-rule-icon">✦</span>
+    </div>
+  </header>
+
+  <!-- Legenda -->
+  <div class="legend" aria-label="Legenda do calendário">
+    <div class="legend-item">
+      <div class="legend-dot dot-today" aria-hidden="true"></div>
+      <span>hoje</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-anniv" aria-hidden="true"></div>
+      <span>♥ mesversário</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-past" aria-hidden="true"></div>
+      <span>passado</span>
+    </div>
+  </div>
+
+  <!-- Grade de meses (gerada via JS) -->
+  <div class="year-grid" id="yearGrid" aria-label="Calendário do ano 2026"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const START      = new Date(2025, 10, 29); // 29 nov 2025
+  const MONTHS     = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const DOW_LABELS = ['D','S','T','Q','Q','S','S'];
+  const today      = new Date();
+
+  function monthsSince(date) {
+    return (date.getFullYear() - START.getFullYear()) * 12
+         + (date.getMonth()    - START.getMonth());
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  const grid = document.getElementById('yearGrid');
+
+  for (let m = 0; m < 12; m++) {
+    const year      = 2026;
+    const firstDay  = new Date(year, m, 1).getDay();
+    const totalDays = new Date(year, m + 1, 0).getDate();
+
+    const anniversaryDay  = 29;
+    const anniversaryDate = new Date(year, m, anniversaryDay);
+    const monthCount      = monthsSince(anniversaryDate);
+    const hasAnniv        = totalDays >= anniversaryDay;
+
+    // ── Card do mês ──
+    const card = document.createElement('article');
+    card.className = 'month-card';
+    card.setAttribute('aria-label', `${MONTHS[m]} ${year}`);
+
+    card.innerHTML = `
+      <div class="month-name">${MONTHS[m]}</div>
+      <div class="month-number">${pad(m + 1)} · ${year}</div>
+
+      <div class="days-header" aria-hidden="true">
+        ${DOW_LABELS.map(d => `<span class="dow">${d}</span>`).join('')}
+      </div>
+
+      <div class="days-grid" id="grid-${m}" role="grid" aria-label="${MONTHS[m]}"></div>
+
+      ${hasAnniv ? `
+        <div class="month-anniv-label" aria-label="${monthCount} meses juntos">
+          <span aria-hidden="true">✦</span>
+          ${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} juntos
+          <span aria-hidden="true">✦</span>
+        </div>
+      ` : ''}
+    `;
+
+    grid.appendChild(card);
+
+    const daysGrid = card.querySelector(`#grid-${m}`);
+
+    // Células vazias antes do dia 1
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'day empty';
+      empty.setAttribute('aria-hidden', 'true');
+      daysGrid.appendChild(empty);
+    }
+
+    // Dias do mês
+    for (let d = 1; d <= totalDays; d++) {
+      const cell     = document.createElement('div');
+      const thisDate = new Date(year, m, d);
+
+      const isToday  = today.getFullYear() === year
+                    && today.getMonth()    === m
+                    && today.getDate()     === d;
+      const isPast   = thisDate < today && !isToday;
+      const isAnniv  = d === anniversaryDay;
+
+      let cls = 'day';
+      if (isToday)       cls += ' today';
+      else if (isAnniv)  cls += ' anniversary';
+      else if (isPast)   cls += ' past';
+      else               cls += ' future';
+
+      cell.className   = cls;
+      cell.textContent = d;
+      cell.setAttribute('role', 'gridcell');
+
+      // Tooltips de acessibilidade
+      if (isToday)  cell.setAttribute('aria-label', `${d} de ${MONTHS[m]} — hoje ♥`);
+      if (isAnniv)  cell.setAttribute('aria-label', `${d} — ${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} juntos ♥`);
+
+      daysGrid.appendChild(cell);
+    }
+  }
+</script>
+{% endblock %}

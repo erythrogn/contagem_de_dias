@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Viagens · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/viagens.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="wrap">
+
+  <!-- Cabeçalho -->
+  <header class="page-header">
+    <span class="eyebrow">lugares para explorar juntos</span>
+    <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
+    <p class="page-sub">cada destino só vai valer a pena pq é com voce</p>
+  </header>
+
+  <!-- Stats — app.js atualiza apenas #s-total -->
+  <div class="stats-bar" aria-label="Estatísticas de viagens">
+    <div class="stat">
+      <div class="stat-num" id="s-total">0</div>
+      <div class="stat-label">Destinos</div>
+    </div>
+  </div>
+
+  <!-- Formulário — app.js lê os IDs exatos abaixo -->
+  <!-- #fDest, #fData, #fStatus, #fQuem, #fNotes -->
+  <!-- Submit via #btn-add-trip (addEventListener no DOMContentLoaded) -->
+  <section class="form-section" aria-label="Adicionar viagem">
+    <p class="form-heading">✦ Adicionar Destino</p>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="fDest">Destino</label>
+        <input
+          type="text"
+          id="fDest"
+          name="fDest"
+          placeholder="ex: Gramado, Portugal..."
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="fData">Quando?</label>
+        <input
+          type="text"
+          id="fData"
+          name="fData"
+          placeholder="ex: julho 2026, em breve..."
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="fStatus">Status</label>
+        <select id="fStatus" name="fStatus">
+          <option value="sonho">✦ Sonho</option>
+          <option value="planejada">◈ Planejada</option>
+          <option value="feita">✓ Feita</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fQuem">Quem quer ir?</label>
+        <input
+          type="text"
+          id="fQuem"
+          name="fQuem"
+          placeholder="hesron, mozi, os dois..."
+        >
+      </div>
+
+      <div class="form-group span2">
+        <label for="fNotes">O que queremos fazer lá?</label>
+        <textarea
+          id="fNotes"
+          name="fNotes"
+          rows="3"
+          placeholder="Restaurantes, pontos turísticos, experiências..."></textarea>
+      </div>
+
+    </div>
+
+    <!-- ID exato que app.js usa para addEventListener -->
+    <button id="btn-add-trip" class="btn-submit" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Adicionar Viagem</span>
+    </button>
+
+  </section>
+
+  <!-- Lista — app.js renderiza via id="tripList" -->
+  <!-- Estrutura gerada: .trip-card > .trip-body + .trip-actions -->
+  <div class="trip-list" id="tripList" aria-label="Lista de viagens" aria-live="polite">
+    <div class="empty-state">
+      <p>✦</p>
+      <p>Carregando...</p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

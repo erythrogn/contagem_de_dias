@@ -1,0 +1,454 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 8.5rem 2rem 7rem;
+  position: relative;
+  z-index: 1;
+}
+
+.content-header {
+  text-align: center;
+  margin-bottom: 4.5rem;
+  opacity: 0;
+  animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+}
+
+/* Aura mágica atrás do header */
+.content-header::before {
+  content: '';
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 150px;
+  background: radial-gradient(ellipse, rgba(122, 26, 46, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(20px);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 1.2rem;
+  opacity: 0.75;
+}
+
+.page-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+}
+
+.page-title em {
+  font-family: var(--font-display);
+  font-style: normal;
+  background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(200, 148, 58, 0.25));
+}
+
+.page-sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text-tertiary);
+  margin-top: 1.2rem;
+  letter-spacing: 0.03em;
+}
+
+/* Cards base */
+.card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: border-color var(--transition-base), background var(--transition-base);
+  position: relative;
+}
+
+.card:hover {
+  border-color: var(--border-gold);
+  background: var(--surface-hover);
+}
+
+/* Cantos ornamentais nos cards */
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--border-gold);
+  border-style: solid;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+.card::before { top: -1px; left: -1px;   border-width: 1px 0 0 1px; }
+.card::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+.card:hover::before,
+.card:hover::after { opacity: 1; }
+
+/* Barra de progresso */
+.progress-card { padding: 2rem 2.5rem; }
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.2rem;
+}
+
+.progress-info span {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.progress-info strong {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+.progress-track {
+  height: 1px;
+  background: var(--border-subtle);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--crimson-dim), var(--gold));
+  transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(200, 148, 58, 0.4);
+}
+
+.section-title {
+  font-family: var(--font-title);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* Formulários */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.8rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.form-group.span2 { grid-column: 1 / -1; }
+
+label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color var(--transition-base);
+}
+
+.form-group:focus-within label { color: var(--gold); }
+
+input, select, textarea {
+  background: transparent;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.6rem 0;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  transition: border-color var(--transition-base);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-bottom-color: var(--gold);
+}
+
+select option { background: var(--surface-color); }
+
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--text-primary);
+  color: var(--bg-deep);
+  padding: 0.85rem 2.2rem;
+  font-family: var(--font-title);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 1.8rem;
+  transition: opacity var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.btn-submit:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(232, 224, 208, 0.15);
+}
+
+/* Filtros */
+.filter-container {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ftab {
+  font-family: var(--font-title);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color var(--transition-base);
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+}
+
+.ftab:first-child { padding-left: 0; }
+
+.ftab.active {
+  color: var(--gold-pale);
+  border-bottom-color: var(--gold);
+}
+
+/* Lista de itens */
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.item-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 1.5rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+  transition: border-color var(--transition-base), background var(--transition-base), transform var(--transition-base);
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+}
+
+.item-card:hover {
+  border-color: var(--border-gold);
+  background: var(--surface-hover);
+  transform: translateX(3px);
+}
+
+.item-card.done { opacity: 0.28; }
+
+.i-check {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all var(--transition-mystical);
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+}
+
+.i-check:hover { border-color: var(--gold); }
+
+.i-check.checked {
+  border-color: var(--crimson-bright);
+  color: var(--gold);
+  background: var(--crimson-glow);
+  box-shadow: 0 0 12px rgba(122, 26, 46, 0.3);
+}
+
+
+/* app.js usa .i-info como wrapper do conteúdo textual */
+.i-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.i-title {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.06em;
+  transition: color var(--transition-base);
+}
+
+.item-card:hover .i-title { color: var(--gold-pale); }
+
+.item-card.done .i-title {
+  text-decoration: line-through;
+  text-decoration-color: var(--text-tertiary);
+}
+
+.i-meta {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.i-notes {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+.btn-del {
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  padding: 0.5rem;
+  transition: color var(--transition-base), transform var(--transition-base);
+  flex-shrink: 0;
+}
+
+.btn-del:hover {
+  color: var(--crimson-bright);
+  transform: scale(1.1);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  border: 1px solid var(--border-subtle);
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .item-card { grid-template-columns: 1fr; gap: 0.8rem; }
+  .i-check { display: none; }
+}
+
+/* ── SELECT CUSTOMIZADO ── */
+.custom-select-wrapper { position: relative; }
+
+.custom-select {
+  position: relative;
+  user-select: none;
+}
+
+.select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: border-color var(--transition-base);
+}
+
+.select-trigger:hover,
+.custom-select.open .select-trigger {
+  border-bottom-color: var(--gold);
+}
+
+.select-text {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+}
+
+.select-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-color);
+  list-style: none;
+  z-index: 20;
+  display: none;
+  box-shadow: var(--shadow-deep);
+}
+
+.custom-select.open .select-options {
+  display: block;
+  animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.select-options li {
+  padding: 0.9rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.select-options li:last-child { border-bottom: none; }
+
+.select-options li:hover {
+  background: var(--crimson-glow);
+  color: var(--gold-pale);
+}
+
+.select-options li svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
