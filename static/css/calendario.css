@@ -1,137 +1,212 @@
 .cal-header {
   text-align: center;
-  padding: 8rem 2rem 4rem;
+  padding: 9rem 2rem 4.5rem;
+  position: relative;
+}
+
+/* Orbe de luz mágica atrás do título */
+.cal-header::before {
+  content: '';
+  position: absolute;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(122, 26, 46, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(20px);
 }
 
 .cal-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--accent-gold);
-  margin-bottom: 1rem;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
   opacity: 0;
-  animation: fadeUp 0.8s forwards;
+  animation: fadeDown 0.8s 0.1s forwards;
+  opacity: 0.75;
 }
 
 .cal-title {
+  font-family: var(--font-title);
   font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
   opacity: 0;
-  animation: fadeUp 0.8s 0.2s forwards;
+  animation: fadeUp 1.1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .cal-title span {
-  color: var(--accent-gold);
-  font-style: italic;
+  font-family: var(--font-display);
+  background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(200, 148, 58, 0.3));
 }
 
 .cal-subtitle {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin-top: 1rem;
+  color: var(--text-tertiary);
+  margin-top: 1.2rem;
   opacity: 0;
-  animation: fadeUp 0.8s 0.4s forwards;
+  animation: fadeUp 0.8s 0.55s forwards;
+  letter-spacing: 0.04em;
 }
 
+/* Divisória ornamental */
 .header-rule {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   opacity: 0;
-  animation: fadeIn 1s 0.6s forwards;
+  animation: fadeIn 1.2s 0.75s forwards;
 }
 
 .header-rule::before,
 .header-rule::after {
   content: '';
-  width: 60px;
+  width: 80px;
   height: 1px;
-  background: var(--border-gold);
+  background: linear-gradient(90deg, transparent, var(--gold-trace));
+}
+
+.header-rule::after {
+  background: linear-gradient(270deg, transparent, var(--gold-trace));
 }
 
 .header-rule-icon {
-  color: var(--accent-gold);
-  font-size: 0.8rem;
+  color: var(--gold);
+  font-size: 0.7rem;
+  opacity: 0.65;
+  animation: float 5s ease-in-out infinite;
 }
 
+/* Legenda */
 .legend {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  padding-bottom: 3rem;
+  gap: 2.5rem;
+  padding-bottom: 3.5rem;
+  opacity: 0;
+  animation: fadeIn 1s 1s forwards;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.7rem;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
 }
 
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.dot-today { background: var(--accent-gold); }
-.dot-anniv { background: var(--text-primary); }
-.dot-past { border: 1px solid var(--border-color); }
+.dot-today {
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(200, 148, 58, 0.6);
+}
+.dot-anniv {
+  background: var(--crimson-bright);
+  box-shadow: 0 0 6px rgba(122, 26, 46, 0.5);
+}
+.dot-past {
+  border: 1px solid var(--border-color);
+}
 
+/* Grade do ano */
 .year-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem 6rem;
-  background: var(--border-color);
+  padding: 0 2rem 7rem;
+  background: var(--border-subtle);
   border: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .month-card {
   background: var(--bg-color);
-  padding: 2rem;
+  padding: 2.2rem;
+  transition: background var(--transition-slow);
+  position: relative;
 }
 
+.month-card:hover {
+  background: var(--surface-color);
+}
+
+/* Cantos decorativos nos cards de mês */
+.month-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-top: 1px solid var(--border-color);
+  border-left: 1px solid var(--border-color);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.month-card:hover::before { opacity: 1; }
+
 .month-name {
-  font-size: 2rem;
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
   color: var(--text-primary);
+  margin-bottom: 0.2rem;
 }
 
 .month-number {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  color: var(--accent-gold);
-  margin-bottom: 1.5rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 1.8rem;
+  opacity: 0.6;
 }
 
 .days-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .dow {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.52rem;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  letter-spacing: 0.08em;
 }
 
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 3px;
 }
 
 .day {
@@ -140,39 +215,54 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
   border-radius: var(--radius-sm);
-  transition: all 0.3s ease;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+  position: relative;
 }
 
 .day.empty { visibility: hidden; }
-.day.past { opacity: 0.3; }
+
+.day.past { opacity: 0.2; }
+
+.day.future { color: var(--text-secondary); }
 
 .day.future:hover {
-  background: var(--surface-hover);
+  background: var(--surface-raised);
   color: var(--text-primary);
+  transform: scale(1.15);
 }
 
+/* Hoje — destaque em chama */
 .day.today {
-  background: var(--accent-gold);
-  color: var(--bg-color);
+  background: var(--crimson);
+  color: var(--gold-pale);
   font-weight: 500;
+  box-shadow: 0 0 16px rgba(122, 26, 46, 0.5), inset 0 0 8px rgba(200, 148, 58, 0.1);
+  animation: bloodPulse 3s ease-in-out infinite;
 }
 
 .day.anniversary {
   background: var(--surface-color);
-  color: var(--text-primary);
+  color: var(--gold-pale);
   border: 1px solid var(--border-gold);
+}
+
+.day.anniversary:hover {
+  border-color: var(--gold-trace);
+  background: var(--gold-glow);
 }
 
 .month-anniv-label {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-subtle);
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 0.9rem;
-  color: var(--accent-gold);
+  color: var(--gold);
   text-align: center;
+  opacity: 0.8;
+  letter-spacing: 0.04em;
 }

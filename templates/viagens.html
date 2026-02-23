@@ -9,159 +9,96 @@
 {% block content %}
 <div class="wrap">
 
+  <!-- Cabeçalho -->
   <header class="page-header">
-    <p class="eyebrow">lugares para explorar juntos</p>
+    <span class="eyebrow">lugares para explorar juntos</span>
     <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
-    <p class="page-sub">sonhos, planos e aventuras compartilhadas</p>
+    <p class="page-sub">cada destino só vai valer a pena pq é com voce</p>
   </header>
 
-  <div class="stats-bar" id="statsBar">
+  <!-- Stats — app.js atualiza apenas #s-total -->
+  <div class="stats-bar" aria-label="Estatísticas de viagens">
     <div class="stat">
-      <div class="stat-num total" id="s-total">0</div>
-      <div class="stat-label">total</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num sonho" id="s-sonho">0</div>
-      <div class="stat-label">sonhos</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num plan" id="s-plan">0</div>
-      <div class="stat-label">planejadas</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num feita" id="s-feita">0</div>
-      <div class="stat-label">feitas</div>
+      <div class="stat-num" id="s-total">0</div>
+      <div class="stat-label">Destinos</div>
     </div>
   </div>
 
-  <section class="form-section">
-    <div class="form-heading">nova viagem</div>
+  <!-- Formulário — app.js lê os IDs exatos abaixo -->
+  <!-- #fDest, #fData, #fStatus, #fQuem, #fNotes -->
+  <!-- Submit via #btn-add-trip (addEventListener no DOMContentLoaded) -->
+  <section class="form-section" aria-label="Adicionar viagem">
+    <p class="form-heading">✦ Adicionar Destino</p>
+
     <div class="form-grid">
+
       <div class="form-group">
-        <label>destino</label>
-        <input type="text" id="fDest" placeholder="ex: Lisboa, Portugal">
+        <label for="fDest">Destino</label>
+        <input
+          type="text"
+          id="fDest"
+          name="fDest"
+          placeholder="ex: Gramado, Portugal..."
+          autocomplete="off"
+        >
       </div>
+
       <div class="form-group">
-        <label>período estimado</label>
-        <input type="text" id="fData" placeholder="ex: julho 2026">
+        <label for="fData">Quando?</label>
+        <input
+          type="text"
+          id="fData"
+          name="fData"
+          placeholder="ex: julho 2026, em breve..."
+        >
       </div>
+
       <div class="form-group">
-        <label>status</label>
-        <select id="fStatus">
-          <option value="sonho">✦ sonho</option>
-          <option value="planejada">◎ planejada</option>
-          <option value="feita">✓ já fomos!</option>
+        <label for="fStatus">Status</label>
+        <select id="fStatus" name="fStatus">
+          <option value="sonho">✦ Sonho</option>
+          <option value="planejada">◈ Planejada</option>
+          <option value="feita">✓ Feita</option>
         </select>
       </div>
+
       <div class="form-group">
-        <label>quem quer mais ir?</label>
-        <input type="text" id="fQuem" placeholder="ex: os dois, mozi, eu...">
+        <label for="fQuem">Quem quer ir?</label>
+        <input
+          type="text"
+          id="fQuem"
+          name="fQuem"
+          placeholder="hesron, mozi, os dois..."
+        >
       </div>
+
       <div class="form-group span2">
-        <label>o que queremos fazer lá</label>
-        <textarea id="fNotes" placeholder="restaurantes, pontos turísticos, vontades..."></textarea>
+        <label for="fNotes">O que queremos fazer lá?</label>
+        <textarea
+          id="fNotes"
+          name="fNotes"
+          rows="3"
+          placeholder="Restaurantes, pontos turísticos, experiências..."></textarea>
       </div>
+
     </div>
-    <button class="btn-submit" onclick="addTrip()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      Adicionar Viagem
+
+    <!-- ID exato que app.js usa para addEventListener -->
+    <button id="btn-add-trip" class="btn-submit" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Adicionar Viagem</span>
     </button>
+
   </section>
 
-  <div class="filter-row">
-    <button class="ftab active" onclick="setFilter('all',this)">todas</button>
-    <button class="ftab" onclick="setFilter('sonho',this)">sonhos</button>
-    <button class="ftab" onclick="setFilter('planejada',this)">planejadas</button>
-    <button class="ftab" onclick="setFilter('feita',this)">feitas ✓</button>
+  <!-- Lista — app.js renderiza via id="tripList" -->
+  <!-- Estrutura gerada: .trip-card > .trip-body + .trip-actions -->
+  <div class="trip-list" id="tripList" aria-label="Lista de viagens" aria-live="polite">
+    <div class="empty-state">
+      <p>✦</p>
+      <p>Carregando...</p>
+    </div>
   </div>
 
-  <div class="trip-list" id="tripList"></div>
-
 </div>
-
-<script>
-  const STATUS_ICON  = { sonho: '✦', planejada: '◎', feita: '✓' };
-  const STATUS_LABEL = { sonho: '✦ sonho', planejada: '◎ planejada', feita: '✓ feita' };
-  const STATUS_CLASS = { sonho: 'badge-sonho', planejada: 'badge-planejada', feita: 'badge-feita' };
-
-  let trips  = JSON.parse(localStorage.getItem('tj_trips') || '[]');
-  let filter = 'all';
-
-  function save() { localStorage.setItem('tj_trips', JSON.stringify(trips)); }
-
-  function updateStats() {
-    document.getElementById('s-total').textContent = trips.length;
-    document.getElementById('s-sonho').textContent = trips.filter(t => t.status === 'sonho').length;
-    document.getElementById('s-plan').textContent  = trips.filter(t => t.status === 'planejada').length;
-    document.getElementById('s-feita').textContent = trips.filter(t => t.status === 'feita').length;
-  }
-
-  function render() {
-    const list = document.getElementById('tripList');
-    list.innerHTML = '';
-    const filtered = trips.filter(t => filter === 'all' || t.status === filter);
-
-    if (!filtered.length) {
-      list.innerHTML = `
-        <div class="empty-state">
-          <strong>✈</strong>
-          ${filter === 'all' ? 'nenhuma viagem ainda... comecem a sonhar juntos!' : 'nada nessa categoria ainda.'}
-        </div>`;
-      return;
-    }
-
-    filtered.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'trip-card';
-      card.dataset.status = t.status;
-      card.innerHTML = `
-        <div class="trip-icon">${STATUS_ICON[t.status]}</div>
-        <div class="trip-body">
-          <div class="trip-dest">${t.dest}</div>
-          <div class="trip-meta">${t.data ? t.data + ' · ' : ''}${t.quem ? 'sugestão: ' + t.quem : ''}</div>
-          ${t.notes ? `<div class="trip-notes">${t.notes}</div>` : ''}
-          <span class="status-badge ${STATUS_CLASS[t.status]}">${STATUS_LABEL[t.status]}</span>
-        </div>
-        <div class="trip-actions">
-          <button class="btn-icon" title="remover" onclick="removeTrip('${t.id}')">✕</button>
-        </div>
-      `;
-      list.appendChild(card);
-    });
-
-    updateStats();
-  }
-
-  function addTrip() {
-    const dest = document.getElementById('fDest').value.trim();
-    if (!dest) { document.getElementById('fDest').focus(); return; }
-    trips.unshift({
-      id:     Date.now().toString(),
-      dest,
-      data:   document.getElementById('fData').value.trim(),
-      status: document.getElementById('fStatus').value,
-      quem:   document.getElementById('fQuem').value.trim(),
-      notes:  document.getElementById('fNotes').value.trim(),
-    });
-    save(); render();
-    ['fDest','fData','fQuem','fNotes'].forEach(id => document.getElementById(id).value = '');
-  }
-
-  function removeTrip(id) {
-    trips = trips.filter(t => t.id !== id);
-    save(); render();
-  }
-
-  function setFilter(f, btn) {
-    filter = f;
-    document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
-  }
-
-  render();
-  updateStats();
-</script>
 {% endblock %}
