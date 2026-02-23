@@ -6,14 +6,21 @@
     justify-content: center;
     text-align: center;
     padding-top: 8rem;
+    padding-right: 0;
     padding-bottom: 4rem;
-    margin-left: auto;
+    padding-left: 0;
+    margin-top: 0;
     margin-right: auto;
+    margin-bottom: 0;
+    margin-left: auto;
     max-width: 800px;
     position: relative;
     z-index: 10;
     opacity: 0;
-    animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-name: fadeUp;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
   }
   .cal-header::before {
     content: "";
@@ -25,7 +32,8 @@
     height: 40vw;
     max-width: 600px;
     max-height: 600px;
-    background: radial-gradient(circle, var(--crimson-glow) 0%, transparent 70%);
+    background-image: radial-gradient(circle, rgba(77, 166, 255, 0.08) 0%, transparent 70%);
+    background-repeat: no-repeat;
     pointer-events: none;
     z-index: -1;
     filter: blur(40px);
@@ -37,7 +45,10 @@
     letter-spacing: 0.4em;
     text-transform: uppercase;
     color: var(--gold);
+    margin-top: 0;
+    margin-right: 0;
     margin-bottom: 1.5rem;
+    margin-left: 0;
     opacity: 0.8;
     display: block;
   }
@@ -48,18 +59,25 @@
     line-height: 1.1;
     letter-spacing: 0.1em;
     color: var(--text-primary);
+    margin-top: 0;
+    margin-right: 0;
     margin-bottom: 0.5rem;
+    margin-left: 0;
   }
   .cal-title span {
     font-family: var(--font-display);
     font-style: normal;
-    background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--gold-bright));
+    background-image: linear-gradient(135deg, #4da6ff 0%, var(--gold) 50%, var(--gold-bright) 100%);
+    background-repeat: no-repeat;
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     filter: drop-shadow(0 0 20px rgba(200, 148, 58, 0.15));
-    animation: shimmer 8s linear infinite;
+    animation-name: shimmer;
+    animation-duration: 8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
   .cal-subtitle {
     font-family: var(--font-serif);
@@ -70,39 +88,53 @@
     letter-spacing: 0.04em;
     color: var(--text-tertiary);
     margin-top: 1rem;
+    margin-right: 0;
     margin-bottom: 2rem;
+    margin-left: 0;
   }
   .header-rule {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     width: 100%;
     max-width: 200px;
     margin-top: 1rem;
+    margin-right: auto;
     margin-bottom: 1rem;
     margin-left: auto;
-    margin-right: auto;
     position: relative;
   }
   .header-rule::before {
     content: "";
     flex-grow: 1;
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold-trace));
+    background-image: linear-gradient(to right, transparent, var(--gold-trace));
+    background-repeat: no-repeat;
+    margin-top: 0;
     margin-right: 1rem;
+    margin-bottom: 0;
+    margin-left: 0;
   }
   .header-rule::after {
     content: "";
     flex-grow: 1;
     height: 1px;
-    background: linear-gradient(to left, transparent, var(--gold-trace));
+    background-image: linear-gradient(to left, transparent, var(--gold-trace));
+    background-repeat: no-repeat;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
     margin-left: 1rem;
   }
   .header-rule-icon {
-    font-size: 0.8rem;
-    color: var(--crimson-bright);
-    filter: drop-shadow(0 0 8px var(--crimson-bright));
-    animation: float 4s ease-in-out infinite;
+    display: inline-flex;
+    color: #4da6ff;
+    filter: drop-shadow(0 0 8px rgba(77, 166, 255, 0.6));
+    animation-name: float;
+    animation-duration: 4s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
   }
   .legend {
     display: flex;
@@ -112,26 +144,42 @@
     justify-content: center;
     gap: 2rem;
     margin-top: 0;
+    margin-right: auto;
     margin-bottom: 4rem;
     margin-left: auto;
-    margin-right: auto;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-top: 1.5rem;
+    padding-right: 2.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 2.5rem;
     max-width: fit-content;
-    background: var(--surface-color);
-    border-top: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-    border-left: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
+    background-color: var(--surface-color);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: var(--border-subtle);
+    border-right-color: var(--border-subtle);
+    border-bottom-color: var(--border-subtle);
+    border-left-color: var(--border-subtle);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
     opacity: 0;
     transform: translateY(20px);
-    animation: fadeUp 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-name: fadeUp;
+    animation-duration: 1s;
+    animation-delay: 0.3s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
   }
   .legend-item {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     gap: 0.75rem;
@@ -145,32 +193,74 @@
   .legend-dot {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
     display: block;
     position: relative;
   }
   .dot-today {
     background-color: transparent;
-    border-top: 1px solid var(--gold);
-    border-right: 1px solid var(--gold);
-    border-bottom: 1px solid var(--gold);
-    border-left: 1px solid var(--gold);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: var(--gold);
+    border-right-color: var(--gold);
+    border-bottom-color: var(--gold);
+    border-left-color: var(--gold);
     box-shadow: 0 0 10px var(--gold-glow);
   }
   .dot-anniv {
-    background-color: var(--crimson-bright);
-    border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid transparent;
-    box-shadow: 0 0 12px var(--crimson-dim);
+    background-color: #4da6ff;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    box-shadow: 0 0 12px rgba(77, 166, 255, 0.25);
+  }
+  .dot-viagem {
+    background-color: var(--gold-bright);
+    width: 6px;
+    height: 6px;
+  }
+  .dot-filme {
+    background-color: #4da6ff;
+    width: 6px;
+    height: 6px;
+  }
+  .dot-coisinha {
+    background-color: #f2f5f8;
+    width: 6px;
+    height: 6px;
   }
   .dot-past {
     background-color: transparent;
-    border-top: 1px dashed var(--text-tertiary);
-    border-right: 1px dashed var(--text-tertiary);
-    border-bottom: 1px dashed var(--text-tertiary);
-    border-left: 1px dashed var(--text-tertiary);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: dashed;
+    border-right-style: dashed;
+    border-bottom-style: dashed;
+    border-left-style: dashed;
+    border-top-color: var(--text-tertiary);
+    border-right-color: var(--text-tertiary);
+    border-bottom-color: var(--text-tertiary);
+    border-left-color: var(--text-tertiary);
     opacity: 0.5;
   }
   .year-grid {
@@ -184,13 +274,13 @@
     width: 100%;
     max-width: 1400px;
     margin-top: 0;
+    margin-right: auto;
     margin-bottom: 6rem;
     margin-left: auto;
-    margin-right: auto;
     padding-top: 0;
+    padding-right: 2rem;
     padding-bottom: 0;
     padding-left: 2rem;
-    padding-right: 2rem;
     position: relative;
     z-index: 5;
   }
@@ -198,14 +288,22 @@
     display: flex;
     flex-direction: column;
     background-color: transparent;
-    border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid transparent;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
     padding-top: 1.5rem;
+    padding-right: 1.5rem;
     padding-bottom: 2rem;
     padding-left: 1.5rem;
-    padding-right: 1.5rem;
     position: relative;
     transition-property: transform, opacity, background-color, border-color, box-shadow;
     transition-duration: var(--transition-slow);
@@ -236,8 +334,12 @@
     left: 0;
     width: 20px;
     height: 20px;
-    border-top: 1px solid var(--border-gold);
-    border-left: 1px solid var(--border-gold);
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: var(--border-gold);
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: var(--border-gold);
     opacity: 0;
     transition-property: opacity, border-color;
     transition-duration: var(--transition-base);
@@ -251,8 +353,12 @@
     right: 0;
     width: 20px;
     height: 20px;
-    border-bottom: 1px solid var(--border-gold);
-    border-right: 1px solid var(--border-gold);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border-gold);
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: var(--border-gold);
     opacity: 0;
     transition-property: opacity, border-color;
     transition-duration: var(--transition-base);
@@ -310,7 +416,9 @@
     justify-content: center;
     width: 100%;
     margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border-subtle);
     padding-bottom: 0.75rem;
   }
   .dow {
@@ -323,7 +431,7 @@
     text-transform: uppercase;
   }
   .dow:first-child {
-    color: var(--crimson-bright);
+    color: #4da6ff;
     opacity: 0.8;
   }
   .dow:last-child {
@@ -340,6 +448,7 @@
   }
   .day {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: var(--font-serif);
@@ -347,11 +456,22 @@
     font-weight: 400;
     color: var(--text-primary);
     background-color: transparent;
-    border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid transparent;
-    border-radius: var(--radius-sm);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-top-left-radius: var(--radius-sm);
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
     position: relative;
     cursor: default;
     transition-property: color, background-color, border-color, transform, box-shadow;
@@ -359,6 +479,37 @@
     transition-timing-function: ease;
     aspect-ratio: 1 / 1;
     width: 100%;
+  }
+  .day-num {
+    display: block;
+    line-height: 1;
+  }
+  .event-dots {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 4px;
+    height: 4px;
+  }
+  .e-dot {
+    width: 4px;
+    height: 4px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    display: inline-block;
+  }
+  .e-dot.viagem {
+    background-color: var(--gold-bright);
+  }
+  .e-dot.filme {
+    background-color: #4da6ff;
+  }
+  .e-dot.coisinha {
+    background-color: #f2f5f8;
   }
   .day:not(.empty):hover {
     background-color: var(--surface-hover);
@@ -387,23 +538,12 @@
   .day.today {
     color: var(--gold-bright);
     font-weight: 500;
-    border-top: 1px solid var(--gold-trace);
-    border-right: 1px solid var(--gold-trace);
-    border-bottom: 1px solid var(--gold-trace);
-    border-left: 1px solid var(--gold-trace);
+    border-top-color: var(--gold-trace);
+    border-right-color: var(--gold-trace);
+    border-bottom-color: var(--gold-trace);
+    border-left-color: var(--gold-trace);
     background-color: var(--gold-glow);
     box-shadow: inset 0 0 10px var(--gold-dim), 0 0 15px var(--gold-glow);
-  }
-  .day.today::after {
-    content: "";
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background-color: var(--gold);
   }
   .day.today:hover {
     background-color: var(--gold-dim);
@@ -416,24 +556,26 @@
   .day.anniversary {
     color: var(--bg-deep);
     font-weight: 500;
-    background-color: var(--crimson-bright);
-    border-top: 1px solid var(--crimson);
-    border-right: 1px solid var(--crimson);
-    border-bottom: 1px solid var(--crimson);
-    border-left: 1px solid var(--crimson);
-    box-shadow: 0 0 15px var(--crimson-dim);
-    animation: heartBeat 3s infinite;
+    background-color: #4da6ff;
+    border-top-color: #336699;
+    border-right-color: #336699;
+    border-bottom-color: #336699;
+    border-left-color: #336699;
+    box-shadow: 0 0 15px rgba(77, 166, 255, 0.25);
+    animation-name: heartBeat;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
   }
   .day.anniversary:hover {
     background-color: var(--text-primary);
-    color: var(--crimson-bright);
+    color: #4da6ff;
     border-top-color: var(--text-primary);
     border-right-color: var(--text-primary);
     border-bottom-color: var(--text-primary);
     border-left-color: var(--text-primary);
     transform: scale(1.2) translateY(-2px);
-    box-shadow: 0 5px 20px var(--crimson-glow);
-    animation: none;
+    box-shadow: 0 5px 20px rgba(77, 166, 255, 0.08);
+    animation-name: none;
   }
   .day[data-tip] {
     position: relative;
@@ -446,9 +588,9 @@
     left: 50%;
     transform: translateX(-50%) translateY(10px);
     padding-top: 0.5rem;
+    padding-right: 0.75rem;
     padding-bottom: 0.5rem;
     padding-left: 0.75rem;
-    padding-right: 0.75rem;
     background-color: var(--surface-raised);
     color: var(--text-primary);
     font-family: var(--font-mono);
@@ -456,11 +598,22 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
-    border-top: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    border-left: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: var(--border-color);
+    border-right-color: var(--border-color);
+    border-bottom-color: var(--border-color);
+    border-left-color: var(--border-color);
+    border-top-left-radius: var(--radius-sm);
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
     box-shadow: var(--shadow-deep);
     opacity: 0;
     visibility: hidden;
@@ -480,17 +633,20 @@
     color: var(--gold-pale);
   }
   .day.anniversary[data-tip]::before {
-    border-bottom-color: var(--crimson-bright);
-    color: var(--crimson-bright);
+    border-bottom-color: #4da6ff;
+    color: #4da6ff;
   }
   .month-anniv-label {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 1px dashed var(--border-subtle);
+    border-top-width: 1px;
+    border-top-style: dashed;
+    border-top-color: var(--border-subtle);
     font-family: var(--font-mono);
     font-size: 0.65rem;
     letter-spacing: 0.15em;
@@ -505,10 +661,9 @@
     opacity: 1;
     color: var(--text-primary);
   }
-  .month-anniv-label span {
-    color: var(--crimson-bright);
-    font-size: 0.8rem;
-    filter: drop-shadow(0 0 5px var(--crimson-dim));
+  .month-anniv-label svg {
+    color: #4da6ff;
+    filter: drop-shadow(0 0 5px rgba(77, 166, 255, 0.25));
   }
   @keyframes slideInUp {
     0% {
@@ -545,8 +700,10 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       column-gap: 2rem;
       row-gap: 3rem;
-      padding-left: 1.5rem;
+      padding-top: 0;
       padding-right: 1.5rem;
+      padding-bottom: 0;
+      padding-left: 1.5rem;
     }
     .cal-title {
       font-size: clamp(2.5rem, 6vw, 4rem);
@@ -561,9 +718,9 @@
       flex-direction: column;
       gap: 1rem;
       padding-top: 1.5rem;
+      padding-right: 1.5rem;
       padding-bottom: 1.5rem;
       padding-left: 1.5rem;
-      padding-right: 1.5rem;
       margin-bottom: 3rem;
       width: 90%;
       max-width: 300px;
@@ -577,15 +734,17 @@
       max-width: 450px;
       column-gap: 0;
       row-gap: 2.5rem;
-      padding-left: 1rem;
+      padding-top: 0;
       padding-right: 1rem;
+      padding-bottom: 0;
+      padding-left: 1rem;
       margin-bottom: 4rem;
     }
     .month-card {
       padding-top: 1rem;
+      padding-right: 1rem;
       padding-bottom: 1.5rem;
       padding-left: 1rem;
-      padding-right: 1rem;
     }
     .day:not(.empty):hover {
       transform: scale(1.05);
@@ -600,8 +759,10 @@
     }
     .cal-subtitle {
       font-size: 1rem;
-      padding-left: 1rem;
+      padding-top: 0;
       padding-right: 1rem;
+      padding-bottom: 0;
+      padding-left: 1rem;
     }
     .days-grid {
       gap: 0.2rem;
@@ -612,7 +773,7 @@
   }
   @media print {
     body {
-      background: white;
+      background-color: white;
       color: black;
     }
     .cal-header::before,
@@ -621,35 +782,41 @@
       display: none;
     }
     .cal-title span {
-      background: none;
+      background-image: none;
       -webkit-text-fill-color: black;
       color: black;
       filter: none;
     }
     .year-grid {
       display: block;
-      margin: 0;
-      padding: 0;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: 0;
+      margin-left: 0;
+      padding-top: 0;
+      padding-right: 0;
+      padding-bottom: 0;
+      padding-left: 0;
     }
     .month-card {
       page-break-inside: avoid;
       break-inside: avoid;
-      border-top: 1px solid #ccc;
-      border-right: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
-      border-left: 1px solid #ccc;
+      border-top-color: #ccc;
+      border-right-color: #ccc;
+      border-bottom-color: #ccc;
+      border-left-color: #ccc;
       margin-bottom: 2rem;
       box-shadow: none;
       transform: none;
       opacity: 1;
-      animation: none;
+      animation-name: none;
     }
     .day {
       color: black;
-      border-top: 1px solid #eee;
-      border-right: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      border-left: 1px solid #eee;
+      border-top-color: #eee;
+      border-right-color: #eee;
+      border-bottom-color: #eee;
+      border-left-color: #eee;
     }
     .day.past {
       color: #999;
@@ -657,19 +824,27 @@
     .day.anniversary {
       background-color: transparent;
       color: black;
-      border-top: 2px solid black;
-      border-right: 2px solid black;
-      border-bottom: 2px solid black;
-      border-left: 2px solid black;
-      animation: none;
+      border-top-width: 2px;
+      border-top-style: solid;
+      border-top-color: black;
+      border-right-width: 2px;
+      border-right-style: solid;
+      border-right-color: black;
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+      border-bottom-color: black;
+      border-left-width: 2px;
+      border-left-style: solid;
+      border-left-color: black;
+      animation-name: none;
     }
     .day.today {
       background-color: #f0f0f0;
       color: black;
-      border-top: 1px solid black;
-      border-right: 1px solid black;
-      border-bottom: 1px solid black;
-      border-left: 1px solid black;
+      border-top-color: black;
+      border-right-color: black;
+      border-bottom-color: black;
+      border-left-color: black;
       box-shadow: none;
     }
   }

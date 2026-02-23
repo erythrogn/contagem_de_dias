@@ -9,14 +9,12 @@
 {% block content %}
 <div class="wrap">
 
-  <!-- Cabeçalho -->
   <header class="page-header">
     <span class="eyebrow">lugares para explorar juntos</span>
     <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
     <p class="page-sub">cada destino só vai valer a pena pq é com voce</p>
   </header>
 
-  <!-- Stats — app.js atualiza apenas #s-total -->
   <div class="stats-bar" aria-label="Estatísticas de viagens">
     <div class="stat">
       <div class="stat-num" id="s-total">0</div>
@@ -24,13 +22,10 @@
     </div>
   </div>
 
-  <!-- Formulário — app.js lê os IDs exatos abaixo -->
-  <!-- #fDest, #fData, #fStatus, #fQuem, #fNotes -->
-  <!-- Submit via #btn-add-trip (addEventListener no DOMContentLoaded) -->
   <section class="form-section" aria-label="Adicionar viagem">
     <p class="form-heading">✦ Adicionar Destino</p>
 
-    <div class="form-grid">
+    <form id="standalone-trip-form" class="form-grid">
 
       <div class="form-group">
         <label for="fDest">Destino</label>
@@ -40,16 +35,17 @@
           name="fDest"
           placeholder="ex: Gramado, Portugal..."
           autocomplete="off"
+          required
         >
       </div>
 
       <div class="form-group">
-        <label for="fData">Quando?</label>
+        <label for="targetDate">Quando (Data Oficial)?</label>
         <input
-          type="text"
-          id="fData"
-          name="fData"
-          placeholder="ex: julho 2026, em breve..."
+          type="date"
+          id="targetDate"
+          name="targetDate"
+          required
         >
       </div>
 
@@ -81,24 +77,108 @@
           placeholder="Restaurantes, pontos turísticos, experiências..."></textarea>
       </div>
 
-    </div>
+      <div class="form-group span2">
+        <button id="btn-add-trip" class="btn-submit" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Adicionar Viagem</span>
+        </button>
+      </div>
 
-    <!-- ID exato que app.js usa para addEventListener -->
-    <button id="btn-add-trip" class="btn-submit" type="button">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <span>Adicionar Viagem</span>
-    </button>
-
+    </form>
   </section>
 
-  <!-- Lista — app.js renderiza via id="tripList" -->
-  <!-- Estrutura gerada: .trip-card > .trip-body + .trip-actions -->
   <div class="trip-list" id="tripList" aria-label="Lista de viagens" aria-live="polite">
     <div class="empty-state">
       <p>✦</p>
-      <p>Carregando...</p>
+      <p>Carregando rotas...</p>
     </div>
   </div>
 
 </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+  const firebaseConfig = {
+    databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const viagensRef = ref(db, 'viagens');
+
+  let trips = [];
+
+  onValue(viagensRef, (snapshot) => {
+    trips = [];
+    snapshot.forEach((childSnapshot) => {
+      trips.push({ key: childSnapshot.key, ...childSnapshot.val() });
+    });
+    trips.reverse();
+    renderTrips();
+  });
+
+  function renderTrips() {
+    const list = document.getElementById('tripList');
+    list.innerHTML = '';
+    document.getElementById('s-total').textContent = trips.length;
+
+    if (!trips.length) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <p>Nenhuma viagem na lista ainda. Comecem a sonhar!</p>
+        </div>`;
+      return;
+    }
+
+    trips.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'trip-card';
+      
+      const iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+      
+      const dateStr = t.targetDate ? t.targetDate.split('-').reverse().join('/') : '';
+      const dateHtml = dateStr ? `<span style="margin-right: 8px; color: var(--gold-pale);">📅 ${dateStr}</span>` : '';
+
+      card.innerHTML = `
+        <div class="trip-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
+        <div class="trip-body">
+          <div class="trip-dest">${t.dest}</div>
+          <div class="trip-meta">
+            ${dateHtml} ${t.quem ? `• ${t.quem}` : ''}
+          </div>
+          ${t.notes ? `<div class="trip-notes">${t.notes}</div>` : ''}
+          <span class="status-badge badge-${t.status}">${t.status.toUpperCase()}</span>
+        </div>
+        <div class="trip-actions">
+          <button class="btn-icon" onclick="window.deleteTrip('${t.key}')">${iconSvg}</button>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  document.getElementById('standalone-trip-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const dest = document.getElementById('fDest').value.trim();
+    if (!dest) return;
+
+    await push(viagensRef, {
+      dest,
+      targetDate: document.getElementById('targetDate').value,
+      status: document.getElementById('fStatus').value,
+      quem: document.getElementById('fQuem').value.trim(),
+      notes: document.getElementById('fNotes').value.trim()
+    });
+
+    document.getElementById('standalone-trip-form').reset();
+  });
+
+  window.deleteTrip = function(key) {
+    remove(ref(db, 'viagens/' + key));
+  };
+</script>
 {% endblock %}

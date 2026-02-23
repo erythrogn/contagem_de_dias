@@ -9,17 +9,27 @@
 {% block content %}
 
   <div class="bg-grid" aria-hidden="true">
-    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto1.jpg') }}" alt=""></div>
-    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto3.jpg') }}" alt=""></div>
-    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto4.jpg') }}" alt=""></div>
-    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto2.jpg') }}" alt=""></div>
+    <div class="bg-cell cell-1">
+      <img src="{{ url_for('static', filename='img/foto1.jpg') }}" alt="" class="bg-img">
+    </div>
+    <div class="bg-cell cell-2">
+      <img src="{{ url_for('static', filename='img/foto3.jpg') }}" alt="" class="bg-img">
+    </div>
+    <div class="bg-cell cell-3">
+      <img src="{{ url_for('static', filename='img/foto4.jpg') }}" alt="" class="bg-img">
+    </div>
+    <div class="bg-cell cell-4">
+      <img src="{{ url_for('static', filename='img/foto2.jpg') }}" alt="" class="bg-img">
+    </div>
   </div>
   <div class="bg-vignette" aria-hidden="true"></div>
 
   <div class="stage">
 
     <p class="date-label" aria-label="Data de início do relacionamento">
-      <span class="date-rune">✦</span> 29 · nov · 2025 <span class="date-rune">✦</span>
+      <svg class="date-rune" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>29 · nov · 2025</span>
+      <svg class="date-rune" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
     </p>
 
     <div class="corner-stamp" aria-label="Dias juntos">
@@ -36,9 +46,9 @@
     </div>
 
     <div class="ha-line" aria-hidden="true">
-      <div class="ha-rule"></div>
+      <div class="ha-rule left-rule"></div>
       <span class="ha-text">há</span>
-      <div class="ha-rule"></div>
+      <div class="ha-rule right-rule"></div>
     </div>
 
     <div class="counter" role="timer" aria-live="polite" aria-label="Tempo juntos">
@@ -60,7 +70,22 @@
       </div>
     </div>
 
-    <p class="love-msg">te amo, mozi <span class="love-heart">♥</span></p>
+    <p class="love-msg">
+      te amo, mozi 
+      <span class="love-heart">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </span>
+    </p>
+
+    <div class="noti-panel" aria-label="Próximas Atividades">
+      <h2 class="noti-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        Próximas Memórias
+      </h2>
+      <div class="noti-grid" id="notiList">
+        <div class="noti-empty">Procurando atividades agendadas...</div>
+      </div>
+    </div>
 
   </div>
 {% endblock %}
@@ -69,7 +94,9 @@
 <script>
   const START = new Date("2025-11-29T00:01:00");
 
-  function pad(n) { return String(n).padStart(2, '0'); }
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
 
   function tick() {
     const diff    = Date.now() - START.getTime();
@@ -97,5 +124,115 @@
 
   tick();
   setInterval(tick, 1000);
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+  const firebaseConfig = {
+    databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const localDate = new Date();
+  localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
+  const todayISO = localDate.toISOString().split('T')[0];
+
+  let nextEvents = {
+    viagem: null,
+    filme: null,
+    coisinha: null
+  };
+
+  const notiList = document.getElementById('notiList');
+
+  const ICONS = {
+    viagem: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+    filme: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>',
+    coisinha: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'
+  };
+
+  function formatDateBR(isoString) {
+    if (!isoString) return '';
+    const [y, m, d] = isoString.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function processNext(data, isDoneFn, titleField) {
+    if (!data) return null;
+    let upcoming = [];
+    Object.values(data).forEach(item => {
+      if (!isDoneFn(item) && item.targetDate && item.targetDate >= todayISO) {
+        upcoming.push(item);
+      }
+    });
+    upcoming.sort((a, b) => a.targetDate.localeCompare(b.targetDate));
+    return upcoming.length ? { title: upcoming[0][titleField], date: upcoming[0].targetDate } : null;
+  }
+
+  function renderNotis() {
+    let html = '';
+    
+    if (nextEvents.viagem) {
+      html += `
+        <div class="noti-card">
+          <div class="noti-icon">${ICONS.viagem}</div>
+          <div class="noti-info">
+            <span class="noti-type">Próxima Viagem</span>
+            <span class="noti-title">${nextEvents.viagem.title}</span>
+          </div>
+          <div class="noti-date">${formatDateBR(nextEvents.viagem.date)}</div>
+        </div>`;
+    }
+
+    if (nextEvents.filme) {
+      html += `
+        <div class="noti-card">
+          <div class="noti-icon">${ICONS.filme}</div>
+          <div class="noti-info">
+            <span class="noti-type">Próximo Filme</span>
+            <span class="noti-title">${nextEvents.filme.title}</span>
+          </div>
+          <div class="noti-date">${formatDateBR(nextEvents.filme.date)}</div>
+        </div>`;
+    }
+
+    if (nextEvents.coisinha) {
+      html += `
+        <div class="noti-card">
+          <div class="noti-icon">${ICONS.coisinha}</div>
+          <div class="noti-info">
+            <span class="noti-type">Próxima Coisinha</span>
+            <span class="noti-title">${nextEvents.coisinha.title}</span>
+          </div>
+          <div class="noti-date">${formatDateBR(nextEvents.coisinha.date)}</div>
+        </div>`;
+    }
+
+    if (!html) {
+      html = `<div class="noti-empty">Nenhuma atividade agendada. Que tal planejar algo?</div>`;
+    }
+
+    notiList.innerHTML = html;
+  }
+
+  onValue(ref(db, 'viagens'), snap => {
+    nextEvents.viagem = processNext(snap.val(), v => v.status === 'feita', 'dest');
+    renderNotis();
+  });
+
+  onValue(ref(db, 'filmes'), snap => {
+    nextEvents.filme = processNext(snap.val(), f => f.watched === true, 'title');
+    renderNotis();
+  });
+
+  onValue(ref(db, 'coisinhas'), snap => {
+    nextEvents.coisinha = processNext(snap.val(), c => c.done === true, 'title');
+    renderNotis();
+  });
+
 </script>
 {% endblock %}

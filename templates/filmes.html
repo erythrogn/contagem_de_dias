@@ -45,7 +45,7 @@
       <form id="standalone-movie-form" class="form-layout" novalidate>
         <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
           <div style="flex:1;">
-            <label for="fTitle" class="field-label">Título do Filme</label>
+            <label for="fTitle" class="field-label">Título do Filme (Busca a capa sozinho)</label>
             <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
           </div>
           <div id="poster-preview-box" style="flex-shrink:0; width:80px; height:120px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition: all 0.3s ease;">
@@ -53,25 +53,26 @@
             <img id="poster-preview-img" src="" alt="Capa" style="display:none; width:100%; height:100%; object-fit:cover;">
           </div>
         </div>
+        
+        <div class="field-group">
+          <label for="targetDate" class="field-label">Quando vamos assistir?</label>
+          <input type="date" id="targetDate" class="field-input" required>
+        </div>
         <div class="field-group">
           <label for="fGenre" class="field-label">Gênero</label>
           <input type="text" id="fGenre" class="field-input" placeholder="ex: Sci-Fi, Drama...">
         </div>
         <div class="field-group">
-          <label for="fYear" class="field-label">Ano</label>
+          <label for="fYear" class="field-label">Ano Lançamento (Ajuda na busca)</label>
           <input type="text" id="fYear" class="field-input" placeholder="ex: 2014" maxlength="4">
         </div>
         <div class="field-group">
           <label for="fWho" class="field-label">Quem indicou?</label>
           <input type="text" id="fWho" class="field-input" placeholder="hesron ou mozi">
         </div>
-        <div class="field-group">
+        <div class="field-group span-full">
           <label for="fWhere" class="field-label">Onde assistir?</label>
           <input type="text" id="fWhere" class="field-input" placeholder="ex: Netflix, Prime...">
-        </div>
-        <div class="field-group span-full">
-          <label for="fReason" class="field-label">Por que assistir?</label>
-          <input type="text" id="fReason" class="field-input" placeholder="ex: indicado por amigos...">
         </div>
         <div class="field-group span-full">
           <button class="btn-submit" id="btn-standalone-add" type="submit">
@@ -186,7 +187,7 @@
         list.innerHTML = `
           <div class="empty-state" style="grid-column: 1 / -1;">
             <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-            <p class="empty-text">Nenhum filme encontrado nesta categoria.</p>
+            <p class="empty-text">Nenhum filme encontrado.</p>
           </div>`;
         return;
       }
@@ -198,6 +199,9 @@
         const tagsHTML = m.genre ? m.genre.split(',').map(g => `<span class="movie-tag">${g.trim()}</span>`).join('') : '';
         const fallbackImg = "https://placehold.co/300x450/1a1c23/4da6ff?text=Sem+Capa";
         let finalPoster = m.poster && m.poster !== "N/A" ? m.poster : fallbackImg;
+        
+        const dateStr = m.targetDate ? m.targetDate.split('-').reverse().join('/') : '';
+        const dateHtml = dateStr ? `<span style="color:var(--gold-bright);">📅 ${dateStr}</span>` : '';
 
         card.innerHTML = `
           <div class="movie-poster-box">
@@ -214,7 +218,7 @@
           <div class="movie-info-box">
             <h3 class="movie-title">${m.title}</h3>
             <div class="movie-meta-row">
-              <span>${m.year || '----'}</span>
+              ${dateHtml}
               ${m.where ? `<span> • ${m.where}</span>` : ''}
             </div>
             ${m.who ? `<div class="movie-meta-row" style="color:var(--gold)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> ${m.who}</div>` : ''}
@@ -240,12 +244,10 @@
 
         if (data.results && data.results.length > 0) {
           const posterPath = data.results[0].poster_path;
-          if (posterPath) {
-            return `https://image.tmdb.org/t/p/w500${posterPath}`;
-          }
+          if (posterPath) return `https://image.tmdb.org/t/p/w500${posterPath}`;
         }
       } catch(e) {
-        console.error("Erro na busca de imagem:", e);
+        console.error("Erro na busca de imagem", e);
       }
       return "";
     }
@@ -289,6 +291,7 @@
       if (!title) return;
 
       const year = document.getElementById('fYear').value.trim();
+      const targetDate = document.getElementById('targetDate').value;
       const btn = document.getElementById('btn-standalone-add');
       const originalText = btn.innerHTML;
       btn.innerHTML = '<span>Buscando Capa...</span>';
@@ -298,10 +301,10 @@
       await push(filmesRef, {
         title,
         year,
+        targetDate,
         genre: document.getElementById('fGenre').value.trim(),
         who: document.getElementById('fWho').value.trim(),
         where: document.getElementById('fWhere').value.trim(),
-        reason: document.getElementById('fReason').value.trim(),
         poster: posterUrl,
         watched: false
       });
