@@ -7,231 +7,274 @@
 {% endblock %}
 
 {% block content %}
-
-  <!-- Barra marquee de topo -->
-  <div class="marquee-bar" aria-hidden="true">
-    <div class="marquee-inner">
-      <span>Nossa lista de filmes</span>
-      <span>bastante pipoca</span>
-      <span>quero assistir minha vida com voce</span>
-      <span>te amo.</span>
+  <div class="marquee-wrapper" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-text">Nossa lista de filmes</span>
+      <span class="marquee-text">bastante pipoca</span>
+      <span class="marquee-text">quero assistir minha vida com voce</span>
+      <span class="marquee-text">te amo</span>
+      <span class="marquee-text">Nossa lista de filmes</span>
+      <span class="marquee-text">bastante pipoca</span>
+      <span class="marquee-text">quero assistir minha vida com voce</span>
+      <span class="marquee-text">te amo</span>
     </div>
   </div>
 
-  <div class="wrap">
-
-    <!-- Cabeçalho -->
-    <header class="page-header">
-      <span class="eyebrow">o que vamos assistir juntos</span>
-      <h1 class="page-title">nossa lista de <span class="accent">filmes</span></h1>
-      <p class="page-sub">coloca um filme p nos mozi</p>
+  <main class="filmes-container">
+    <header class="filmes-header">
+      <span class="filmes-eyebrow">o que vamos assistir juntos</span>
+      <h1 class="filmes-title">nossa lista de <span class="filmes-accent">filmes</span></h1>
+      <p class="filmes-subtitle">coloca um filme p nos mozi</p>
     </header>
 
-    <!-- Barra de progresso -->
-    <div class="watch-progress" aria-label="Progresso de filmes assistidos">
-      <div class="progress-label">
-        <span>Assistidos</span>
-        <strong id="progressLabel">0 / 0</strong>
+    <section class="progress-wrapper" aria-label="Progresso de filmes assistidos">
+      <div class="progress-details">
+        <span class="progress-label-text">Assistidos</span>
+        <strong class="progress-number" id="progressLabel">0 / 0</strong>
       </div>
       <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-fill" id="progressFill" style="width:0%"></div>
       </div>
-    </div>
-
-    <!-- Formulário -->
-    <section class="form-section" aria-label="Adicionar filme">
-      <p class="form-heading">✦ Adicionar Filme</p>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="fTitle">Título</label>
-          <input type="text" id="fTitle" placeholder="ex: Eternal Sunshine..." autocomplete="off">
-        </div>
-
-        <div class="form-group">
-          <label for="fGenre">Gênero</label>
-          <input type="text" id="fGenre" placeholder="ex: Drama, Fantasia...">
-        </div>
-
-        <div class="form-group">
-          <label for="fYear">Ano</label>
-          <input type="text" id="fYear" placeholder="ex: 2004" maxlength="4">
-        </div>
-
-        <div class="form-group">
-          <label for="fWho">Quem indicou?</label>
-          <input type="text" id="fWho" placeholder="hesron ou mozi">
-        </div>
-
-        <div class="form-group">
-          <label for="fWhere">Onde assistir?</label>
-          <input type="text" id="fWhere" placeholder="ex: Netflix, Prime...">
-        </div>
-
-        <div class="form-group">
-          <label for="fReason">Por que assistir?</label>
-          <input type="text" id="fReason" placeholder="ex: indicado por amigos...">
-        </div>
-      </div>
-
-      <button class="btn-submit" onclick="addMovie()">
-        <span>▶</span>
-        <span>Adicionar Filme</span>
-      </button>
     </section>
 
-    <!-- Filtros de status -->
-    <div class="filter-row" role="tablist" aria-label="Filtrar filmes">
-      <button class="ftab active" role="tab" aria-selected="true"  onclick="filterMovies('todos',     this)">Todos</button>
-      <button class="ftab"        role="tab" aria-selected="false" onclick="filterMovies('assistir',  this)">Para Assistir</button>
-      <button class="ftab"        role="tab" aria-selected="false" onclick="filterMovies('assistido', this)">Assistidos</button>
+    <section class="form-wrapper" aria-label="Adicionar filme">
+      <h2 class="form-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        Adicionar Filme
+      </h2>
+      <form id="movie-form" class="form-layout" novalidate>
+        <div class="field-group span-full">
+          <label for="fTitle" class="field-label">Título do Filme</label>
+          <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
+        </div>
+        <div class="field-group">
+          <label for="fGenre" class="field-label">Gênero</label>
+          <input type="text" id="fGenre" class="field-input" placeholder="ex: Sci-Fi, Drama...">
+        </div>
+        <div class="field-group">
+          <label for="fYear" class="field-label">Ano (Opcional, ajuda na busca)</label>
+          <input type="text" id="fYear" class="field-input" placeholder="ex: 2014" maxlength="4">
+        </div>
+        <div class="field-group">
+          <label for="fWho" class="field-label">Quem indicou?</label>
+          <input type="text" id="fWho" class="field-input" placeholder="hesron ou mozi">
+        </div>
+        <div class="field-group">
+          <label for="fWhere" class="field-label">Onde assistir?</label>
+          <input type="text" id="fWhere" class="field-input" placeholder="ex: Netflix, Prime...">
+        </div>
+        <div class="field-group span-full">
+          <label for="fReason" class="field-label">Por que assistir?</label>
+          <input type="text" id="fReason" class="field-input" placeholder="ex: indicado por amigos...">
+        </div>
+        <div class="field-group span-full">
+          <button class="btn-submit" id="btn-add-movie" type="submit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Adicionar Filme</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <nav class="filter-wrapper" role="tablist" aria-label="Filtrar filmes">
+      <button class="ftab active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
+      <button class="ftab" data-filter="assistir" role="tab" aria-selected="false">Para Assistir</button>
+      <button class="ftab" data-filter="assistido" role="tab" aria-selected="false">Assistidos</button>
+    </nav>
+
+    <div class="genre-wrapper" id="genreRow" aria-label="Filtrar por gênero">
+      <button class="gtag active" data-genre="todos">Todos os Gêneros</button>
     </div>
 
-    <!-- Filtros de gênero -->
-    <div class="genre-row" id="genreRow" aria-label="Filtrar por gênero"></div>
+    <section class="movies-grid" id="movieList" aria-label="Lista de filmes" aria-live="polite">
+      <div class="empty-state" style="grid-column: 1 / -1;">
+        <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+        <p class="empty-text">Aguardando filmes...</p>
+      </div>
+    </section>
 
-    <!-- Lista de filmes -->
-    <div class="movie-list" id="movieList" aria-label="Lista de filmes" aria-live="polite"></div>
+  </main>
 
-  </div>
-{% endblock %}
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-{% block scripts %}
-<script>
-  let movies       = JSON.parse(localStorage.getItem('filmes') || '[]');
-  let activeFilter = 'todos';
-  let activeGenre  = 'todos';
+    const firebaseConfig = {
+      databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
+    };
 
-  function saveMovies() { localStorage.setItem('filmes', JSON.stringify(movies)); }
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const filmesRef = ref(db, 'filmes');
 
-  // ── Adicionar ───────────────────────────────────────────────────────
-  function addMovie() {
-    const title  = document.getElementById('fTitle').value.trim();
-    const genre  = document.getElementById('fGenre').value.trim();
-    const year   = document.getElementById('fYear').value.trim();
-    const who    = document.getElementById('fWho').value.trim();
-    const where  = document.getElementById('fWhere').value.trim();
-    const reason = document.getElementById('fReason').value.trim();
+    let movies = [];
+    let currentFilter = 'todos';
+    let currentGenre = 'todos';
 
-    if (!title) { document.getElementById('fTitle').focus(); return; }
-
-    movies.push({ id: Date.now(), title, genre, year, who, where, reason, watched: false });
-    saveMovies();
-
-    // Reset
-    ['fTitle','fGenre','fYear','fWho','fWhere','fReason'].forEach(id => {
-      document.getElementById(id).value = '';
+    onValue(filmesRef, (snapshot) => {
+      movies = [];
+      snapshot.forEach((childSnapshot) => {
+        movies.push({ key: childSnapshot.key, ...childSnapshot.val() });
+      });
+      movies.reverse();
+      updateProgress();
+      renderGenres();
+      renderMovies();
     });
 
-    renderAll();
-  }
-
-  // ── Toggle assistido ────────────────────────────────────────────────
-  function toggleWatched(id) {
-    const m = movies.find(m => m.id === id);
-    if (m) { m.watched = !m.watched; saveMovies(); renderAll(); }
-  }
-
-  // ── Deletar ─────────────────────────────────────────────────────────
-  function deleteMovie(id) {
-    movies = movies.filter(m => m.id !== id);
-    saveMovies();
-    renderAll();
-  }
-
-  // ── Filtros ─────────────────────────────────────────────────────────
-  function filterMovies(filter, btn) {
-    activeFilter = filter;
-    document.querySelectorAll('.filter-row .ftab').forEach(t => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    btn.classList.add('active');
-    btn.setAttribute('aria-selected', 'true');
-    renderMovies();
-  }
-
-  function filterGenre(genre, btn) {
-    activeGenre = genre;
-    document.querySelectorAll('.gtag').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    renderMovies();
-  }
-
-  // ── Render gêneros ──────────────────────────────────────────────────
-  function renderGenres() {
-    const genres = ['todos', ...new Set(movies.map(m => m.genre).filter(Boolean))];
-    const row    = document.getElementById('genreRow');
-    row.innerHTML = genres.map(g => `
-      <button class="gtag ${g === activeGenre ? 'active' : ''}"
-              onclick="filterGenre('${g}', this)"
-              aria-pressed="${g === activeGenre}">
-        ${g === 'todos' ? 'Todos os gêneros' : g}
-      </button>
-    `).join('');
-  }
-
-  // ── Render progresso ────────────────────────────────────────────────
-  function renderProgress() {
-    const total   = movies.length;
-    const watched = movies.filter(m => m.watched).length;
-    const pct     = total ? Math.round((watched / total) * 100) : 0;
-
-    document.getElementById('progressLabel').textContent   = `${watched} / ${total}`;
-    document.getElementById('progressFill').style.width    = pct + '%';
-    document.querySelector('.progress-track').setAttribute('aria-valuenow', pct);
-  }
-
-  // ── Render lista ────────────────────────────────────────────────────
-  function renderMovies() {
-    const list = document.getElementById('movieList');
-
-    let filtered = movies;
-    if (activeFilter === 'assistir')  filtered = filtered.filter(m => !m.watched);
-    if (activeFilter === 'assistido') filtered = filtered.filter(m => m.watched);
-    if (activeGenre !== 'todos')      filtered = filtered.filter(m => m.genre === activeGenre);
-
-    if (!filtered.length) {
-      list.innerHTML = `
-        <div class="empty-state">
-          <p>✦</p>
-          <p>Nenhum filme aqui ainda.<br>Adicione o primeiro da lista!</p>
-        </div>`;
-      return;
+    function updateProgress() {
+      const total = movies.length;
+      const watched = movies.filter(m => m.watched).length;
+      const pct = total ? Math.round((watched / total) * 100) : 0;
+      document.getElementById('progressLabel').textContent = `${watched} / ${total}`;
+      document.getElementById('progressFill').style.width = `${pct}%`;
     }
 
-    list.innerHTML = filtered.map(m => `
-      <div class="movie-card ${m.watched ? 'watched' : ''}">
-        <div class="m-check ${m.watched ? 'checked' : ''}"
-             onclick="toggleWatched(${m.id})"
-             role="checkbox"
-             aria-checked="${m.watched}"
-             aria-label="${m.watched ? 'Marcar como não assistido' : 'Marcar como assistido'}"
-             tabindex="0">
-          ${m.watched ? '✓' : ''}
-        </div>
-        <div>
-          <div class="m-title">${m.title}</div>
-          <div class="m-meta">${[m.year, m.where, m.who ? '↳ ' + m.who : ''].filter(Boolean).join(' · ')}</div>
-          ${(m.genre || m.reason) ? `
-            <div class="m-tags">
-              ${m.genre  ? `<span class="m-tag">${m.genre}</span>` : ''}
-              ${m.reason ? `<span class="m-tag">${m.reason}</span>` : ''}
-            </div>` : ''}
-        </div>
-        <button class="btn-del" onclick="deleteMovie(${m.id})" aria-label="Remover ${m.title}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-        </button>
-      </div>
-    `).join('');
-  }
+    function renderGenres() {
+      const genreSet = new Set();
+      movies.forEach(m => {
+        if (m.genre) {
+          m.genre.split(',').forEach(g => {
+            const cleanG = g.trim().toLowerCase();
+            if (cleanG) genreSet.add(cleanG);
+          });
+        }
+      });
+      
+      const genresArray = Array.from(genreSet).sort();
+      const row = document.getElementById('genreRow');
+      let html = `<button class="gtag ${currentGenre === 'todos' ? 'active' : ''}" data-genre="todos">Todos os Gêneros</button>`;
+      
+      genresArray.forEach(g => {
+        html += `<button class="gtag ${currentGenre === g ? 'active' : ''}" data-genre="${g}">${g}</button>`;
+      });
+      
+      row.innerHTML = html;
 
-  function renderAll() {
-    renderProgress();
-    renderGenres();
-    renderMovies();
-  }
+      document.querySelectorAll('.gtag').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          currentGenre = e.target.dataset.genre;
+          renderGenres();
+          renderMovies();
+        });
+      });
+    }
 
-  renderAll();
-</script>
+    function renderMovies() {
+      const list = document.getElementById('movieList');
+      list.innerHTML = '';
+
+      const filtered = movies.filter(m => {
+        if (currentFilter === 'assistido' && !m.watched) return false;
+        if (currentFilter === 'assistir' && m.watched) return false;
+        
+        if (currentGenre !== 'todos') {
+          if (!m.genre) return false;
+          const mGenres = m.genre.toLowerCase().split(',').map(g => g.trim());
+          if (!mGenres.includes(currentGenre)) return false;
+        }
+        return true;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+            <p class="empty-text">Nenhum filme encontrado nesta categoria.</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(m => {
+        const card = document.createElement('div');
+        card.className = `movie-card ${m.watched ? 'watched' : ''}`;
+
+        const tagsHTML = m.genre ? m.genre.split(',').map(g => `<span class="movie-tag">${g.trim()}</span>`).join('') : '';
+        const fallbackImg = "https://via.placeholder.com/300x450/1a1c23/4da6ff?text=Sem+Capa";
+        const finalPoster = m.poster || fallbackImg;
+
+        card.innerHTML = `
+          <div class="movie-poster-box">
+            <img src="${finalPoster}" class="movie-poster-img" alt="${m.title}">
+            <div class="movie-overlay">
+              <button class="movie-action-btn check" onclick="window.toggleMovie('${m.key}', ${m.watched})">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </button>
+              <button class="movie-action-btn delete" onclick="window.deleteMovie('${m.key}')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+          <div class="movie-info-box">
+            <h3 class="movie-title">${m.title}</h3>
+            <div class="movie-meta-row">
+              <span>${m.year || '----'}</span>
+              ${m.where ? `<span> • ${m.where}</span>` : ''}
+            </div>
+            ${m.who ? `<div class="movie-meta-row" style="color:var(--gold)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> ${m.who}</div>` : ''}
+            <div class="movie-tag-list">${tagsHTML}</div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    async function fetchPoster(title, year) {
+      try {
+        const queryYear = year ? `&y=${year}` : '';
+        const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}${queryYear}&apikey=thewdb`);
+        const data = await res.json();
+        if (data.Response === "True" && data.Poster && data.Poster !== "N/A") {
+          return data.Poster;
+        }
+      } catch(e) {
+        console.log("Erro ao buscar capa");
+      }
+      return "";
+    }
+
+    document.getElementById('movie-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('fTitle').value.trim();
+      if (!title) return;
+
+      const year = document.getElementById('fYear').value.trim();
+      const btn = document.getElementById('btn-add-movie');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span>Buscando Capa...</span>';
+      
+      const posterUrl = await fetchPoster(title, year);
+
+      await push(filmesRef, {
+        title,
+        year,
+        genre: document.getElementById('fGenre').value.trim(),
+        who: document.getElementById('fWho').value.trim(),
+        where: document.getElementById('fWhere').value.trim(),
+        reason: document.getElementById('fReason').value.trim(),
+        poster: posterUrl,
+        watched: false
+      });
+
+      document.getElementById('movie-form').reset();
+      btn.innerHTML = originalText;
+    });
+
+    window.toggleMovie = function(key, isWatched) {
+      update(ref(db, 'filmes/' + key), { watched: !isWatched });
+    };
+
+    window.deleteMovie = function(key) {
+      remove(ref(db, 'filmes/' + key));
+    };
+
+    document.querySelectorAll('.ftab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderMovies();
+      });
+    });
+  </script>
 {% endblock %}

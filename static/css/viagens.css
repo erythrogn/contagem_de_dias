@@ -213,31 +213,87 @@ input:focus, select:focus, textarea:focus {
 
 select option { background: var(--surface-color); }
 
-.btn-submit {
+/* =========================================
+   BOTÃO DE ADICIONAR PADRÃO (TEMA AZUL)
+   ========================================= */
+.btn-submit,
+.submit-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
-  background: linear-gradient(135deg, var(--crimson), #5a0f1f);
+  justify-content: center;
+  gap: 0.75rem;
+  background: transparent;
   color: var(--gold-pale);
-  padding: 0.9rem 2.2rem;
+  border: 1px solid var(--border-gold);
+  padding: 1rem 2.5rem;
   font-family: var(--font-title);
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-size: 0.7rem;
   font-weight: 500;
-  margin-top: 2rem;
-  transition: opacity var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
-  border: 1px solid var(--border-crimson);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  margin-top: 1.5rem;
 }
 
-.btn-submit:hover {
-  opacity: 0.9;
+.btn-submit::before,
+.submit-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(90deg, #336699 0%, #1a334d 100%);
+  background-repeat: no-repeat;
+  transform: translateX(-101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.btn-submit:hover,
+.submit-button:hover {
+  color: var(--text-primary);
+  border-color: #4da6ff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(122, 26, 46, 0.35);
+  box-shadow: 0 10px 30px rgba(77, 166, 255, 0.2);
 }
 
-.btn-submit:active { transform: translateY(0); }
+.btn-submit:hover::before,
+.submit-button:hover::before {
+  transform: translateX(0);
+}
 
+.btn-submit svg, 
+.btn-submit span,
+.submit-button svg,
+.submit-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-submit:focus-visible,
+.submit-button:focus-visible {
+  outline: 2px solid #4da6ff;
+  outline-offset: 4px;
+}
+
+.btn-submit:active,
+.submit-button:active {
+  transform: translateY(0);
+  opacity: 0.8;
+}
+
+/* Largura total no celular para todos os botões */
+@media (max-width: 480px) {
+  .btn-submit,
+  .submit-button {
+    width: 100%;
+  }
+}
+/* ========================================= */
 /* Filtros */
 .filter-row {
   display: flex;

@@ -1,3 +1,19 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAkmYoQKSUD1brrYL47RBZB9nHy5WaaSiw",
+  authDomain: "contagem-de-dias.firebaseapp.com",
+  databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com",
+  projectId: "contagem-de-dias",
+  storageBucket: "contagem-de-dias.firebasestorage.app",
+  messagingSenderId: "1086679329538",
+  appId: "1:1086679329538:web:a13279892d895a6591b01b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 class UIController {
     constructor() {
         this.createToastContainer();
@@ -21,8 +37,7 @@ class UIController {
                     <button class="btn-cancel" id="btn-cancel">Cancelar</button>
                     <button class="btn-confirm" id="btn-confirm">Excluir</button>
                 </div>
-            </div>
-        `;
+            </div>`;
         document.body.appendChild(this.modalOverlay);
         document.getElementById('btn-cancel').addEventListener('click', () => this.closeModal());
     }
@@ -66,161 +81,197 @@ const ICONS = {
     check: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
 };
 
-async function apiFetch(endpoint) {
-    try {
-        const res = await fetch(`/api/${endpoint}`);
-        if (!res.ok) throw new Error('Falha na rede');
-        return await res.json();
-    } catch (e) {
-        ui.showToast(`Erro ao carregar dados: ${e.message}`, 'error');
-        return [];
-    }
-}
-
-async function apiSync(endpoint, data) {
-    try {
-        const res = await fetch(`/api/${endpoint}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('Falha ao salvar');
-        ui.showToast('Sincronizado com sucesso', 'success');
-    } catch (e) {
-        ui.showToast(`Erro ao salvar: ${e.message}`, 'error');
-    }
-}
-
-let coisinhas = [];
-async function initCoisinhas() {
-    coisinhas = await apiFetch('coisinhas');
-    renderCoisinhas();
-}
-
-function renderCoisinhas() {
-    const list = document.getElementById('item-list');
-    if (!list) return;
-    list.innerHTML = '';
-    coisinhas.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = `item-card ${item.done ? 'done' : ''}`;
-        card.innerHTML = `
-            <div class="i-check ${item.done ? 'checked' : ''}" onclick="toggleCoisinha(${index})">
-                ${item.done ? ICONS.check : ''}
-            </div>
-            <div class="i-info">
-                <h3 class="i-title">${item.title}</h3>
-                <span class="i-meta">${ICONS[item.category] || ICONS.outro} ${item.category.toUpperCase()}</span>
-                ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
-            </div>
-            <button class="btn-del" onclick="reqDeleteCoisinha(${index})">${ICONS.del}</button>
-        `;
-        list.appendChild(card);
+// ── MÓDULO: COISINHAS ──────────────────────────────────────────────
+function initCoisinhas() {
+    const listRef = ref(db, 'coisinhas');
+    onValue(listRef, (snapshot) => {
+        const data = snapshot.val();
+        const list = document.getElementById('item-list');
+        if (!list) return;
+        list.innerHTML = '';
+        
+        let total = 0, doneCount = 0;
+        
+        if (data) {
+            Object.keys(data).forEach(key => {
+                const item = data[key];
+                total++;
+                if (item.done) doneCount++;
+                
+                const card = document.createElement('div');
+                card.className = `item-card ${item.done ? 'done' : ''}`;
+                card.innerHTML = `
+                    <div class="i-check ${item.done ? 'checked' : ''}" onclick="window.toggleCoisinha('${key}', ${item.done})">
+                        ${item.done ? ICONS.check : ''}
+                    </div>
+                    <div class="i-info">
+                        <h3 class="i-title">${item.title}</h3>
+                        <span class="i-meta">${ICONS[item.category] || ICONS.outro} ${item.category.toUpperCase()}</span>
+                        ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
+                    </div>
+                    <button class="btn-del" onclick="window.reqDeleteCoisinha('${key}')">${ICONS.del}</button>`;
+                list.appendChild(card);
+            });
+        }
+        updateProgress('progress-fill', 'progress-count', doneCount, total);
     });
-    const total = coisinhas.length;
-    const done = coisinhas.filter(c => c.done).length;
-    const pct = total ? (done / total) * 100 : 0;
-    const fill = document.getElementById('progress-fill');
-    if (fill) fill.style.width = `${pct}%`;
-    const text = document.getElementById('progress-count');
-    if (text) text.textContent = `${done}/${total}`;
 }
 
-async function addCoisinha() {
+window.addCoisinha = () => {
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
-    if (!title || !category) {
-        ui.showToast('Preencha os campos obrigatórios', 'error');
-        return;
-    }
-    coisinhas.push({ title, category, notes: document.getElementById('notes').value.trim(), done: false });
-    await apiSync('coisinhas', coisinhas);
-    renderCoisinhas();
-    document.getElementById('add-form').reset();
-}
+    if (!title || !category) return ui.showToast('Preencha os campos obrigatórios', 'error');
 
-async function toggleCoisinha(index) {
-    coisinhas[index].done = !coisinhas[index].done;
-    await apiSync('coisinhas', coisinhas);
-    renderCoisinhas();
-}
+    push(ref(db, 'coisinhas'), {
+        title, category, notes: document.getElementById('notes').value.trim(), done: false
+    }).then(() => {
+        ui.showToast('Coisinha salva!', 'success');
+        document.getElementById('add-form').reset();
+    });
+};
 
-function reqDeleteCoisinha(index) {
-    ui.confirmAction('Tem certeza que deseja excluir esta coisinha?', async () => {
-        coisinhas.splice(index, 1);
-        await apiSync('coisinhas', coisinhas);
-        renderCoisinhas();
+window.toggleCoisinha = (key, currentStatus) => {
+    update(ref(db, `coisinhas/${key}`), { done: !currentStatus });
+};
+
+window.reqDeleteCoisinha = (key) => {
+    ui.confirmAction('Remover esta coisinha?', () => remove(ref(db, `coisinhas/${key}`)));
+};
+
+// ── MÓDULO: VIAGENS ────────────────────────────────────────────────
+function initViagens() {
+    const listRef = ref(db, 'viagens');
+    onValue(listRef, (snapshot) => {
+        const data = snapshot.val();
+        const list = document.getElementById('tripList');
+        if (!list) return;
+        list.innerHTML = '';
+        
+        if (data) {
+            Object.keys(data).forEach(key => {
+                const t = data[key];
+                const card = document.createElement('div');
+                card.className = 'trip-card';
+                card.innerHTML = `
+                    <div class="trip-body">
+                        <div class="trip-dest">${t.dest}</div>
+                        <div class="trip-meta">
+                            ${t.data || 'A definir'} · ${t.quem || 'Nós'}
+                        </div>
+                        ${t.notes ? `<div class="trip-notes">${t.notes}</div>` : ''}
+                        <span class="status-badge badge-${t.status}">${t.status.toUpperCase()}</span>
+                    </div>
+                    <button class="btn-icon" onclick="window.reqDeleteTrip('${key}')">${ICONS.del}</button>`;
+                list.appendChild(card);
+            });
+            document.getElementById('s-total').textContent = Object.keys(data).length;
+        }
     });
 }
 
-let trips = [];
-async function initViagens() {
-    trips = await apiFetch('viagens');
-    renderViagens();
-}
-
-function renderViagens() {
-    const list = document.getElementById('tripList');
-    if (!list) return;
-    list.innerHTML = '';
-    trips.forEach(t => {
-        const card = document.createElement('div');
-        card.className = 'trip-card';
-        card.innerHTML = `
-            <div class="trip-body">
-                <div class="trip-dest">${t.dest}</div>
-                <div class="trip-meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    ${t.data || 'A definir'}
-                    &nbsp;&nbsp;&nbsp;
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    ${t.quem || 'Nós'}
-                </div>
-                ${t.notes ? `<div class="trip-notes">${t.notes}</div>` : ''}
-                <span class="status-badge badge-${t.status}">${t.status.toUpperCase()}</span>
-            </div>
-            <div class="trip-actions">
-                <button class="btn-icon" onclick="reqDeleteTrip('${t.id}')">${ICONS.del}</button>
-            </div>
-        `;
-        list.appendChild(card);
-    });
-    const sTotal = document.getElementById('s-total');
-    if (sTotal) sTotal.textContent = trips.length;
-}
-
-async function addTrip() {
+window.addTrip = () => {
     const dest = document.getElementById('fDest').value.trim();
-    if (!dest) {
-        ui.showToast('O destino é obrigatório', 'error');
-        return;
-    }
-    trips.unshift({
-        id: Date.now().toString(),
+    if (!dest) return ui.showToast('Destino obrigatório', 'error');
+
+    push(ref(db, 'viagens'), {
         dest,
         data: document.getElementById('fData').value.trim(),
         status: document.getElementById('fStatus').value,
         quem: document.getElementById('fQuem').value.trim(),
         notes: document.getElementById('fNotes').value.trim()
+    }).then(() => {
+        ui.showToast('Viagem planejada!', 'success');
+        document.querySelectorAll('.form-section input, .form-section textarea').forEach(i => i.value = '');
     });
-    await apiSync('viagens', trips);
-    renderViagens();
-    document.querySelectorAll('.form-section input, .form-section textarea').forEach(i => i.value = '');
+};
+
+window.reqDeleteTrip = (key) => {
+    ui.confirmAction('Excluir viagem?', () => remove(ref(db, `viagens/${key}`)));
+};
+
+// ── MÓDULO: FILMES ─────────────────────────────────────────────────
+function initFilmes() {
+    const listRef = ref(db, 'filmes');
+    onValue(listRef, (snapshot) => {
+        const data = snapshot.val();
+        const list = document.getElementById('movieList');
+        if (!list) return;
+        list.innerHTML = '';
+        
+        let total = 0, watchedCount = 0;
+
+        if (data) {
+            Object.keys(data).forEach(key => {
+                const m = data[key];
+                total++;
+                if (m.watched) watchedCount++;
+
+                const card = document.createElement('div');
+                card.className = `movie-card ${m.watched ? 'watched' : ''}`;
+                card.innerHTML = `
+                    <div class="m-check ${m.watched ? 'checked' : ''}" onclick="window.toggleMovie('${key}', ${m.watched})">
+                        ${m.watched ? ICONS.check : ''}
+                    </div>
+                    <div style="flex:1">
+                        <div class="m-title">${m.title}</div>
+                        <div class="m-meta">${m.year || ''} · ${m.where || ''}</div>
+                        ${m.genre ? `<span class="status-badge">${m.genre}</span>` : ''}
+                    </div>
+                    <button class="btn-del" onclick="window.reqDeleteMovie('${key}')">${ICONS.del}</button>`;
+                list.appendChild(card);
+            });
+        }
+        updateProgress('progressFill', 'progressLabel', watchedCount, total);
+    });
 }
 
-function reqDeleteTrip(id) {
-    ui.confirmAction('Tem certeza que deseja excluir esta viagem?', async () => {
-        trips = trips.filter(t => t.id !== id);
-        await apiSync('viagens', trips);
-        renderViagens();
+window.addMovie = () => {
+    const title = document.getElementById('fTitle').value.trim();
+    if (!title) return ui.showToast('Título obrigatório', 'error');
+
+    push(ref(db, 'filmes'), {
+        title,
+        genre: document.getElementById('fGenre').value.trim(),
+        year: document.getElementById('fYear').value.trim(),
+        who: document.getElementById('fWho').value.trim(),
+        where: document.getElementById('fWhere').value.trim(),
+        reason: document.getElementById('fReason').value.trim(),
+        watched: false
+    }).then(() => {
+        ui.showToast('Filme adicionado!', 'success');
+        document.querySelectorAll('.form-section input').forEach(i => i.value = '');
     });
+};
+
+window.toggleMovie = (key, currentStatus) => {
+    update(ref(db, `filmes/${key}`), { watched: !currentStatus });
+};
+
+window.reqDeleteMovie = (key) => {
+    ui.confirmAction('Remover filme?', () => remove(ref(db, `filmes/${key}`)));
+};
+
+// ── UTILITÁRIOS ────────────────────────────────────────────────────
+function updateProgress(fillId, textId, current, total) {
+    const fill = document.getElementById(fillId);
+    const text = document.getElementById(textId);
+    const pct = total ? Math.round((current / total) * 100) : 0;
+    if (fill) fill.style.width = `${pct}%`;
+    if (text) text.textContent = textId === 'progressLabel' ? `${current} / ${total}` : `${current}/${total}`;
 }
 
+// ── BOOTSTRAP ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('item-list')) initCoisinhas();
     if (document.getElementById('tripList')) initViagens();
+    if (document.getElementById('movieList')) initFilmes();
+
     const formC = document.getElementById('add-form');
-    if (formC) formC.addEventListener('submit', (e) => { e.preventDefault(); addCoisinha(); });
+    if (formC) formC.addEventListener('submit', (e) => { e.preventDefault(); window.addCoisinha(); });
+    
     const btnTrip = document.getElementById('btn-add-trip');
-    if (btnTrip) btnTrip.addEventListener('click', addTrip);
+    if (btnTrip) btnTrip.addEventListener('click', window.addTrip);
+
+    const btnMovie = document.getElementById('btn-add-movie');
+    if (btnMovie) btnMovie.addEventListener('click', window.addMovie);
 });

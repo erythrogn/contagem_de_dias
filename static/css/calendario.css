@@ -1,268 +1,684 @@
-.cal-header {
-  text-align: center;
-  padding: 9rem 2rem 4.5rem;
-  position: relative;
-}
-
-/* Orbe de luz mágica atrás do título */
-.cal-header::before {
-  content: '';
-  position: absolute;
-  top: 5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 200px;
-  background: radial-gradient(ellipse, rgba(122, 26, 46, 0.12) 0%, transparent 70%);
-  pointer-events: none;
-  filter: blur(20px);
-}
-
-.cal-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1.2rem;
-  opacity: 0;
-  animation: fadeDown 0.8s 0.1s forwards;
-  opacity: 0.75;
-}
-
-.cal-title {
-  font-family: var(--font-title);
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  opacity: 0;
-  animation: fadeUp 1.1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.cal-title span {
-  font-family: var(--font-display);
-  background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--gold-bright));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 20px rgba(200, 148, 58, 0.3));
-}
-
-.cal-subtitle {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--text-tertiary);
-  margin-top: 1.2rem;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.55s forwards;
-  letter-spacing: 0.04em;
-}
-
-/* Divisória ornamental */
-.header-rule {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2.5rem;
-  opacity: 0;
-  animation: fadeIn 1.2s 0.75s forwards;
-}
-
-.header-rule::before,
-.header-rule::after {
-  content: '';
-  width: 80px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-trace));
-}
-
-.header-rule::after {
-  background: linear-gradient(270deg, transparent, var(--gold-trace));
-}
-
-.header-rule-icon {
-  color: var(--gold);
-  font-size: 0.7rem;
-  opacity: 0.65;
-  animation: float 5s ease-in-out infinite;
-}
-
-/* Legenda */
-.legend {
-  display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  padding-bottom: 3.5rem;
-  opacity: 0;
-  animation: fadeIn 1s 1s forwards;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-
-.legend-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dot-today {
-  background: var(--gold);
-  box-shadow: 0 0 8px rgba(200, 148, 58, 0.6);
-}
-.dot-anniv {
-  background: var(--crimson-bright);
-  box-shadow: 0 0 6px rgba(122, 26, 46, 0.5);
-}
-.dot-past {
-  border: 1px solid var(--border-color);
-}
-
-/* Grade do ano */
-.year-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem 7rem;
-  background: var(--border-subtle);
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-}
-
-.month-card {
-  background: var(--bg-color);
-  padding: 2.2rem;
-  transition: background var(--transition-slow);
-  position: relative;
-}
-
-.month-card:hover {
-  background: var(--surface-color);
-}
-
-/* Cantos decorativos nos cards de mês */
-.month-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  border-top: 1px solid var(--border-color);
-  border-left: 1px solid var(--border-color);
-  opacity: 0;
-  transition: opacity var(--transition-base);
-}
-
-.month-card:hover::before { opacity: 1; }
-
-.month-name {
-  font-family: var(--font-title);
-  font-size: 1.8rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
-}
-
-.month-number {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.2em;
-  color: var(--gold);
-  margin-bottom: 1.8rem;
-  opacity: 0.6;
-}
-
-.days-header {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 0.6rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.dow {
-  font-family: var(--font-mono);
-  font-size: 0.52rem;
-  text-align: center;
-  color: var(--text-tertiary);
-  letter-spacing: 0.08em;
-}
-
-.days-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
-}
-
-.day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-tertiary);
-  border-radius: var(--radius-sm);
-  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
-  position: relative;
-}
-
-.day.empty { visibility: hidden; }
-
-.day.past { opacity: 0.2; }
-
-.day.future { color: var(--text-secondary); }
-
-.day.future:hover {
-  background: var(--surface-raised);
-  color: var(--text-primary);
-  transform: scale(1.15);
-}
-
-/* Hoje — destaque em chama */
-.day.today {
-  background: var(--crimson);
-  color: var(--gold-pale);
-  font-weight: 500;
-  box-shadow: 0 0 16px rgba(122, 26, 46, 0.5), inset 0 0 8px rgba(200, 148, 58, 0.1);
-  animation: bloodPulse 3s ease-in-out infinite;
-}
-
-.day.anniversary {
-  background: var(--surface-color);
-  color: var(--gold-pale);
-  border: 1px solid var(--border-gold);
-}
-
-.day.anniversary:hover {
-  border-color: var(--gold-trace);
-  background: var(--gold-glow);
-}
-
-.month-anniv-label {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-subtle);
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.9rem;
-  color: var(--gold);
-  text-align: center;
-  opacity: 0.8;
-  letter-spacing: 0.04em;
+@layer components {
+  .cal-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 8rem;
+    padding-bottom: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .cal-header::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40vw;
+    height: 40vw;
+    max-width: 600px;
+    max-height: 600px;
+    background: radial-gradient(circle, var(--crimson-glow) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(40px);
+  }
+  .cal-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+    display: block;
+  }
+  .cal-title {
+    font-family: var(--font-title);
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+  .cal-title span {
+    font-family: var(--font-display);
+    font-style: normal;
+    background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--gold-bright));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(200, 148, 58, 0.15));
+    animation: shimmer 8s linear infinite;
+  }
+  .cal-subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  .header-rule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .header-rule::before {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-trace));
+    margin-right: 1rem;
+  }
+  .header-rule::after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(to left, transparent, var(--gold-trace));
+    margin-left: 1rem;
+  }
+  .header-rule-icon {
+    font-size: 0.8rem;
+    color: var(--crimson-bright);
+    filter: drop-shadow(0 0 8px var(--crimson-bright));
+    animation: float 4s ease-in-out infinite;
+  }
+  .legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 0;
+    margin-bottom: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: fit-content;
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    border-left: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+    position: relative;
+  }
+  .dot-today {
+    background-color: transparent;
+    border-top: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    border-left: 1px solid var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow);
+  }
+  .dot-anniv {
+    background-color: var(--crimson-bright);
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-left: 1px solid transparent;
+    box-shadow: 0 0 12px var(--crimson-dim);
+  }
+  .dot-past {
+    background-color: transparent;
+    border-top: 1px dashed var(--text-tertiary);
+    border-right: 1px dashed var(--text-tertiary);
+    border-bottom: 1px dashed var(--text-tertiary);
+    border-left: 1px dashed var(--text-tertiary);
+    opacity: 0.5;
+  }
+  .year-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: min-content;
+    column-gap: 2.5rem;
+    row-gap: 3.5rem;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
+    margin-top: 0;
+    margin-bottom: 6rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    position: relative;
+    z-index: 5;
+  }
+  .month-card {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-left: 1px solid transparent;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    position: relative;
+    transition-property: transform, opacity, background-color, border-color, box-shadow;
+    transition-duration: var(--transition-slow);
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: translateY(40px);
+    animation-name: slideInUp;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
+  }
+  .month-card:nth-child(1) { animation-delay: 0.40s; }
+  .month-card:nth-child(2) { animation-delay: 0.45s; }
+  .month-card:nth-child(3) { animation-delay: 0.50s; }
+  .month-card:nth-child(4) { animation-delay: 0.55s; }
+  .month-card:nth-child(5) { animation-delay: 0.60s; }
+  .month-card:nth-child(6) { animation-delay: 0.65s; }
+  .month-card:nth-child(7) { animation-delay: 0.70s; }
+  .month-card:nth-child(8) { animation-delay: 0.75s; }
+  .month-card:nth-child(9) { animation-delay: 0.80s; }
+  .month-card:nth-child(10) { animation-delay: 0.85s; }
+  .month-card:nth-child(11) { animation-delay: 0.90s; }
+  .month-card:nth-child(12) { animation-delay: 0.95s; }
+  .month-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-top: 1px solid var(--border-gold);
+    border-left: 1px solid var(--border-gold);
+    opacity: 0;
+    transition-property: opacity, border-color;
+    transition-duration: var(--transition-base);
+    transition-timing-function: ease;
+    pointer-events: none;
+  }
+  .month-card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-bottom: 1px solid var(--border-gold);
+    border-right: 1px solid var(--border-gold);
+    opacity: 0;
+    transition-property: opacity, border-color;
+    transition-duration: var(--transition-base);
+    transition-timing-function: ease;
+    pointer-events: none;
+  }
+  .month-card:hover {
+    background-color: var(--surface-color);
+    border-top-color: var(--border-subtle);
+    border-right-color: var(--border-subtle);
+    border-bottom-color: var(--border-subtle);
+    border-left-color: var(--border-subtle);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+  .month-card:hover::before {
+    opacity: 1;
+    border-top-color: var(--gold-trace);
+    border-left-color: var(--gold-trace);
+  }
+  .month-card:hover::after {
+    opacity: 1;
+    border-bottom-color: var(--gold-trace);
+    border-right-color: var(--gold-trace);
+  }
+  .month-name {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+    text-transform: capitalize;
+    margin-bottom: 0.25rem;
+    transition-property: color;
+    transition-duration: var(--transition-base);
+    transition-timing-function: ease;
+  }
+  .month-card:hover .month-name {
+    color: var(--gold-pale);
+  }
+  .month-number {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--text-tertiary);
+    margin-bottom: 2rem;
+    display: block;
+  }
+  .days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.75rem;
+  }
+  .dow {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  .dow:first-child {
+    color: var(--crimson-bright);
+    opacity: 0.8;
+  }
+  .dow:last-child {
+    color: var(--gold);
+    opacity: 0.8;
+  }
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 0.4rem;
+    width: 100%;
+    aspect-ratio: 7 / 6;
+  }
+  .day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    background-color: transparent;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    position: relative;
+    cursor: default;
+    transition-property: color, background-color, border-color, transform, box-shadow;
+    transition-duration: var(--transition-fast);
+    transition-timing-function: ease;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+  }
+  .day:not(.empty):hover {
+    background-color: var(--surface-hover);
+    border-top-color: var(--border-color);
+    border-right-color: var(--border-color);
+    border-bottom-color: var(--border-color);
+    border-left-color: var(--border-color);
+    transform: scale(1.1);
+    z-index: 2;
+  }
+  .day.empty {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .day.past {
+    color: var(--text-tertiary);
+    opacity: 0.6;
+  }
+  .day.past:hover {
+    color: var(--text-secondary);
+    opacity: 1;
+  }
+  .day.future {
+    color: var(--text-primary);
+  }
+  .day.today {
+    color: var(--gold-bright);
+    font-weight: 500;
+    border-top: 1px solid var(--gold-trace);
+    border-right: 1px solid var(--gold-trace);
+    border-bottom: 1px solid var(--gold-trace);
+    border-left: 1px solid var(--gold-trace);
+    background-color: var(--gold-glow);
+    box-shadow: inset 0 0 10px var(--gold-dim), 0 0 15px var(--gold-glow);
+  }
+  .day.today::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: var(--gold);
+  }
+  .day.today:hover {
+    background-color: var(--gold-dim);
+    border-top-color: var(--gold);
+    border-right-color: var(--gold);
+    border-bottom-color: var(--gold);
+    border-left-color: var(--gold);
+    transform: scale(1.15);
+  }
+  .day.anniversary {
+    color: var(--bg-deep);
+    font-weight: 500;
+    background-color: var(--crimson-bright);
+    border-top: 1px solid var(--crimson);
+    border-right: 1px solid var(--crimson);
+    border-bottom: 1px solid var(--crimson);
+    border-left: 1px solid var(--crimson);
+    box-shadow: 0 0 15px var(--crimson-dim);
+    animation: heartBeat 3s infinite;
+  }
+  .day.anniversary:hover {
+    background-color: var(--text-primary);
+    color: var(--crimson-bright);
+    border-top-color: var(--text-primary);
+    border-right-color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+    border-left-color: var(--text-primary);
+    transform: scale(1.2) translateY(-2px);
+    box-shadow: 0 5px 20px var(--crimson-glow);
+    animation: none;
+  }
+  .day[data-tip] {
+    position: relative;
+    cursor: help;
+  }
+  .day[data-tip]::before {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background-color: var(--surface-raised);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-deep);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 100;
+    transition-property: opacity, transform, visibility;
+    transition-duration: var(--transition-base);
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .day[data-tip]:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .day.today[data-tip]::before {
+    border-bottom-color: var(--gold);
+    color: var(--gold-pale);
+  }
+  .day.anniversary[data-tip]::before {
+    border-bottom-color: var(--crimson-bright);
+    color: var(--crimson-bright);
+  }
+  .month-anniv-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    opacity: 0.8;
+    transition-property: opacity, color;
+    transition-duration: var(--transition-base);
+    transition-timing-function: ease;
+  }
+  .month-card:hover .month-anniv-label {
+    opacity: 1;
+    color: var(--text-primary);
+  }
+  .month-anniv-label span {
+    color: var(--crimson-bright);
+    font-size: 0.8rem;
+    filter: drop-shadow(0 0 5px var(--crimson-dim));
+  }
+  @keyframes slideInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes heartBeat {
+    0% {
+      transform: scale(1);
+    }
+    14% {
+      transform: scale(1.08);
+    }
+    28% {
+      transform: scale(1);
+    }
+    42% {
+      transform: scale(1.08);
+    }
+    70% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    .year-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      column-gap: 2rem;
+      row-gap: 3rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    .cal-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .cal-header {
+      padding-top: 6rem;
+      padding-bottom: 3rem;
+    }
+    .legend {
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      margin-bottom: 3rem;
+      width: 90%;
+      max-width: 300px;
+    }
+    .legend-item {
+      width: 100%;
+      justify-content: center;
+    }
+    .year-grid {
+      grid-template-columns: 1fr;
+      max-width: 450px;
+      column-gap: 0;
+      row-gap: 2.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-bottom: 4rem;
+    }
+    .month-card {
+      padding-top: 1rem;
+      padding-bottom: 1.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .day:not(.empty):hover {
+      transform: scale(1.05);
+    }
+    .day[data-tip]::before {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    .cal-title {
+      font-size: 2.2rem;
+    }
+    .cal-subtitle {
+      font-size: 1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .days-grid {
+      gap: 0.2rem;
+    }
+    .day {
+      font-size: 0.9rem;
+    }
+  }
+  @media print {
+    body {
+      background: white;
+      color: black;
+    }
+    .cal-header::before,
+    .header-rule-icon,
+    .legend {
+      display: none;
+    }
+    .cal-title span {
+      background: none;
+      -webkit-text-fill-color: black;
+      color: black;
+      filter: none;
+    }
+    .year-grid {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+    .month-card {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      border-top: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      margin-bottom: 2rem;
+      box-shadow: none;
+      transform: none;
+      opacity: 1;
+      animation: none;
+    }
+    .day {
+      color: black;
+      border-top: 1px solid #eee;
+      border-right: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      border-left: 1px solid #eee;
+    }
+    .day.past {
+      color: #999;
+    }
+    .day.anniversary {
+      background-color: transparent;
+      color: black;
+      border-top: 2px solid black;
+      border-right: 2px solid black;
+      border-bottom: 2px solid black;
+      border-left: 2px solid black;
+      animation: none;
+    }
+    .day.today {
+      background-color: #f0f0f0;
+      color: black;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      box-shadow: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
