@@ -42,17 +42,23 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
         Adicionar Filme
       </h2>
-      <form id="movie-form" class="form-layout" novalidate>
-        <div class="field-group span-full">
-          <label for="fTitle" class="field-label">Título do Filme (Busca automática de capa)</label>
-          <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
+      <form id="standalone-movie-form" class="form-layout" novalidate>
+        <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
+          <div style="flex:1;">
+            <label for="fTitle" class="field-label">Título do Filme</label>
+            <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
+          </div>
+          <div id="poster-preview-box" style="flex-shrink:0; width:80px; height:120px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition: all 0.3s ease;">
+            <svg id="poster-placeholder-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+            <img id="poster-preview-img" src="" alt="Capa" style="display:none; width:100%; height:100%; object-fit:cover;">
+          </div>
         </div>
         <div class="field-group">
           <label for="fGenre" class="field-label">Gênero</label>
           <input type="text" id="fGenre" class="field-input" placeholder="ex: Sci-Fi, Drama...">
         </div>
         <div class="field-group">
-          <label for="fYear" class="field-label">Ano (Opcional, ajuda na busca)</label>
+          <label for="fYear" class="field-label">Ano</label>
           <input type="text" id="fYear" class="field-input" placeholder="ex: 2014" maxlength="4">
         </div>
         <div class="field-group">
@@ -68,7 +74,7 @@
           <input type="text" id="fReason" class="field-input" placeholder="ex: indicado por amigos...">
         </div>
         <div class="field-group span-full">
-          <button class="btn-submit" id="btn-add-movie" type="submit">
+          <button class="btn-submit" id="btn-standalone-add" type="submit">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             <span>Adicionar Filme</span>
           </button>
@@ -219,11 +225,19 @@
       });
     }
 
+    const TMDB_API_KEY = "15d2ea6d0dc1d476efbcaa3bf5146885";
+
     async function fetchPoster(title, year) {
       try {
         const queryYear = year ? `&primary_release_year=${year}` : '';
-        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbcaa3bf5146885&query=${encodeURIComponent(title)}&language=pt-BR${queryYear}`);
-        const data = await res.json();
+        let res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=pt-BR${queryYear}`);
+        let data = await res.json();
+        
+        if (!data.results || data.results.length === 0) {
+          res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=en-US${queryYear}`);
+          data = await res.json();
+        }
+
         if (data.results && data.results.length > 0) {
           const posterPath = data.results[0].poster_path;
           if (posterPath) {
@@ -231,18 +245,51 @@
           }
         }
       } catch(e) {
-        console.log("Erro ao buscar capa");
+        console.error("Erro na busca de imagem:", e);
       }
       return "";
     }
 
-    document.getElementById('movie-form').addEventListener('submit', async (e) => {
+    let debounceTimer;
+    const titleInput = document.getElementById('fTitle');
+    const yearInput = document.getElementById('fYear');
+    const previewBox = document.getElementById('poster-preview-box');
+    const previewImg = document.getElementById('poster-preview-img');
+    const placeholderIcon = document.getElementById('poster-placeholder-icon');
+
+    function triggerPreview() {
+      clearTimeout(debounceTimer);
+      const title = titleInput.value.trim();
+      if (!title) {
+        previewImg.style.display = 'none';
+        placeholderIcon.style.display = 'block';
+        return;
+      }
+      debounceTimer = setTimeout(async () => {
+        previewBox.style.opacity = '0.5';
+        const url = await fetchPoster(title, yearInput.value.trim());
+        previewBox.style.opacity = '1';
+        if (url) {
+          previewImg.src = url;
+          previewImg.style.display = 'block';
+          placeholderIcon.style.display = 'none';
+        } else {
+          previewImg.style.display = 'none';
+          placeholderIcon.style.display = 'block';
+        }
+      }, 700);
+    }
+
+    titleInput.addEventListener('input', triggerPreview);
+    yearInput.addEventListener('input', triggerPreview);
+
+    document.getElementById('standalone-movie-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const title = document.getElementById('fTitle').value.trim();
       if (!title) return;
 
       const year = document.getElementById('fYear').value.trim();
-      const btn = document.getElementById('btn-add-movie');
+      const btn = document.getElementById('btn-standalone-add');
       const originalText = btn.innerHTML;
       btn.innerHTML = '<span>Buscando Capa...</span>';
       
@@ -259,7 +306,9 @@
         watched: false
       });
 
-      document.getElementById('movie-form').reset();
+      document.getElementById('standalone-movie-form').reset();
+      previewImg.style.display = 'none';
+      placeholderIcon.style.display = 'block';
       btn.innerHTML = originalText;
     });
 
