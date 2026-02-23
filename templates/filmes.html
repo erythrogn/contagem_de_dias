@@ -29,7 +29,7 @@
     <header class="page-header">
       <p class="eyebrow">lista de sessão · para assistir juntos</p>
       <h1 class="page-title">nossa<br>lista de<br><span class="accent">filmes</span></h1>
-      <p class="page-sub">cada filme é uma noite especial</p>
+      <p class="page-sub">coloca um filme ai mozi</p>
     </header>
 
     <div class="watch-progress" id="progressWrap">
@@ -223,4 +223,30 @@
       });
 
       ['fTitle','fYear','fGenre','fWho','fWhere','fReason'].forEach(id =>
-        document.getElementById(id
+        document.getElementById(id).value = ''
+      );
+    }
+
+    window.toggle = function(key, isWatched) {
+      update(ref(db, 'filmes/' + key), { watched: !isWatched });
+    }
+
+    window.removeMovie = function(key) {
+      remove(ref(db, 'filmes/' + key));
+    }
+
+    window.setFilter = function(f, btn) {
+      currentFilter = f;
+      document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    window.setGenre = function(g, btn) {
+      genreFilter = g;
+      document.querySelectorAll('.gtag').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+  </script>
+{% endblock %}
