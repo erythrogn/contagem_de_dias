@@ -12,7 +12,7 @@
   <header class="page-header">
     <p class="eyebrow">lugares para explorar juntos</p>
     <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
-    <p class="page-sub">sonhos, planos e aventuras compartilhadas</p>
+    <p class="page-sub">os destinos só valheram a pena pq é com voce</p>
   </header>
 
   <div class="stats-bar" id="statsBar">
@@ -86,10 +86,27 @@
   const STATUS_LABEL = { sonho: '✦ sonho', planejada: '◎ planejada', feita: '✓ feita' };
   const STATUS_CLASS = { sonho: 'badge-sonho', planejada: 'badge-planejada', feita: 'badge-feita' };
 
-  let trips  = JSON.parse(localStorage.getItem('tj_trips') || '[]');
+  let trips  = [];
   let filter = 'all';
 
-  function save() { localStorage.setItem('tj_trips', JSON.stringify(trips)); }
+  // --- LOGICA DE SINCRONIZAÇÃO COM A API ---
+  async function fetchTrips() {
+    try {
+      const res = await fetch('/api/viagens');
+      trips = await res.json();
+      render();
+    } catch (e) { console.error("Erro ao carregar viagens", e); }
+  }
+
+  async function save() {
+    try {
+      await fetch('/api/viagens', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(trips)
+      });
+    } catch (e) { console.error("Erro ao salvar viagens", e); }
+  }
 
   function updateStats() {
     document.getElementById('s-total').textContent = trips.length;
@@ -161,7 +178,7 @@
     render();
   }
 
-  render();
-  updateStats();
+  // Iniciar buscando da API
+  fetchTrips();
 </script>
 {% endblock %}

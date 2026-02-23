@@ -11,7 +11,7 @@
     <header class="content-header">
       <span class="eyebrow">Lista de Desejos</span>
       <h1 class="page-title">Coisinhas <em>para Fazer</em></h1>
-      <p class="page-sub">Ideias aleatórias para aventuras cotidianas: visitas, receitas, drinks e mais.</p>
+      <p class="page-sub">tudo que eu puder fazer eu farei, e farei com voce</p>
     </header>
 
     <section class="card progress-card">
@@ -100,9 +100,7 @@
     const categoryInput = document.getElementById('category');
     const selectText = selectTrigger.querySelector('.select-text');
 
-    selectTrigger.addEventListener('click', () => {
-      customSelect.classList.toggle('open');
-    });
+    selectTrigger.addEventListener('click', () => customSelect.classList.toggle('open'));
 
     selectOptions.querySelectorAll('li').forEach(option => {
       option.addEventListener('click', () => {
@@ -113,17 +111,30 @@
     });
 
     document.addEventListener('click', (e) => {
-      if (!customSelect.contains(e.target)) {
-        customSelect.classList.remove('open');
-      }
+      if (!customSelect.contains(e.target)) customSelect.classList.remove('open');
     });
 
-    // Persistência
-    let items = JSON.parse(localStorage.getItem('coisinhas_list')) || [];
+    // --- LOGICA DE SINCRONIZAÇÃO COM A API ---
+    let items = [];
 
-    function saveItems() {
-      localStorage.setItem('coisinhas_list', JSON.stringify(items));
+    async function fetchItems() {
+      try {
+        const res = await fetch('/api/coisinhas');
+        items = await res.json();
+        renderItems();
+        updateProgress();
+      } catch (error) { console.error("Erro ao carregar itens:", error); }
+    }
+
+    async function saveItems() {
       updateProgress();
+      try {
+        await fetch('/api/coisinhas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(items)
+        });
+      } catch (error) { console.error("Erro ao salvar itens:", error); }
     }
 
     function updateProgress() {
@@ -140,7 +151,7 @@
       list.innerHTML = '';
       const filteredItems = items.filter(i => filter === 'all' || i.category === filter);
 
-      filteredItems.forEach((item, index) => {
+      filteredItems.forEach((item) => {
         const originalIndex = items.indexOf(item);
         const card = document.createElement('div');
         card.className = `item-card ${item.done ? 'done' : ''}`;
@@ -195,6 +206,7 @@
         done: false,
         date: new Date().toLocaleDateString()
       };
+      
       items.push(newItem);
       saveItems();
       
@@ -202,7 +214,7 @@
       categoryInput.value = '';
       selectText.innerHTML = 'Selecione...';
       
-      renderItems();
+      renderItems(document.querySelector('.ftab.active').dataset.filter);
     });
 
     document.querySelectorAll('.ftab').forEach(tab => {
@@ -213,7 +225,6 @@
       });
     });
 
-    renderItems();
-    updateProgress();
+    fetchItems();
   </script>
 {% endblock %}

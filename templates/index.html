@@ -198,3 +198,13 @@
 </body>
 </html>
 >>>>>>> 49a6e1275ae5f6d7a8a63038f4fee0285ac01364
+rs);
+    document.getElementById('cMinutes').textContent = pad(minutes);
+    secEl.textContent                               = next;
+    document.getElementById('stampDays').textContent = pad(days);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+{% endblock %}

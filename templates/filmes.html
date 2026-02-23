@@ -90,11 +90,28 @@
   </div>
 
   <script>
-    let movies     = JSON.parse(localStorage.getItem('tj_movies') || '[]');
-    let filter     = 'all';
+    let movies = [];
+    let filter = 'all';
     let genreFilter = '';
 
-    function save() { localStorage.setItem('tj_movies', JSON.stringify(movies)); }
+    // --- LOGICA DE SINCRONIZAÇÃO COM A API ---
+    async function fetchMovies() {
+      try {
+        const res = await fetch('/api/filmes');
+        movies = await res.json();
+        render();
+      } catch (e) { console.error("Erro ao carregar filmes", e); }
+    }
+
+    async function save() {
+      try {
+        await fetch('/api/filmes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(movies)
+        });
+      } catch (e) { console.error("Erro ao salvar filmes", e); }
+    }
 
     function allGenres() {
       const set = new Set();
@@ -151,7 +168,6 @@
       }
 
       filtered.forEach(m => {
-        const realIdx = movies.findIndex(x => x.id === m.id);
         const card = document.createElement('div');
         card.className = `movie-card${m.watched ? ' watched' : ''}`;
 
@@ -225,8 +241,7 @@
       render();
     }
 
-    render();
-    updateProgress();
-    updateGenreRow();
+    // Iniciar buscando da API
+    fetchMovies();
   </script>
 {% endblock %}

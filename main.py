@@ -1,63 +1,50 @@
-from flask import Flask, render_template
-from datetime import datetime, timedelta
+from flask import Flask, render_template, request, jsonify
+import json
+import os
 
 app = Flask(__name__)
 
-# ── configurações do casal ──────────────────
-DATA_INICIO = datetime(2025, 11, 29, 0, 1, 0)
+# Caminho temporário para salvar os dados na Vercel
+DATA_FILE = '/tmp/tj_data.json'
 
+def load_data():
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            pass
+    return {"coisinhas": [], "filmes": [], "viagens": []}
 
-def tempo_juntos():
-    """Retorna um dict com dias, horas, minutos, segundos desde o início."""
-    agora     = datetime.utcnow() - timedelta(hours=3)  # horário de Brasília
-    diff      = agora - DATA_INICIO
-    total_seg = int(diff.total_seconds())
+def save_data(data):
+    with open(DATA_FILE, 'w') as f:
+        json.dump(data, f)
 
-    return {
-        "dias":     diff.days,
-        "horas":    (total_seg % 86400) // 3600,
-        "minutos":  (total_seg % 3600)  // 60,
-        "segundos": total_seg % 60,
-        "data_iso": DATA_INICIO.strftime("%Y-%m-%dT%H:%M:%S"),
-    }
+# Rotas das Páginas
+@app.route('/')
+def index(): return render_template('index.html')
 
+@app.route('/calendario')
+def calendario(): return render_template('calendario.html')
 
-# ── rotas ───────────────────────────────────
+@app.route('/viagens')
+def viagens(): return render_template('viagens.html')
 
-@app.route("/")
-def index():
-    ctx = tempo_juntos()
-    agora_br        = datetime.utcnow() - timedelta(hours=3)
-    ctx["surpresa"] = (agora_br.day == 29)   # surpresa todo dia 29
-    return render_template("index.html", **ctx)
+@app.route('/filmes')
+def filmes(): return render_template('filmes.html')
 
+@app.route('/coisinhas')
+def coisinhas(): return render_template('coisinhas.html')
 
-@app.route("/base")
-def base():
-    return render_template("base.html", **tempo_juntos())
+# Rotas da API (Sincronização)
+@app.route('/api/<list_name>', methods=['GET', 'POST'])
+def api_list(list_name):
+    data = load_data()
+    if request.method == 'POST':
+        data[list_name] = request.json
+        save_data(data)
+        return jsonify({"status": "success"})
+    return jsonify(data.get(list_name, []))
 
-
-@app.route("/calendario")
-def calendario():
-    return render_template("calendario.html", **tempo_juntos())
-
-
-@app.route("/viagens")
-def viagens():
-    return render_template("viagens.html", **tempo_juntos())
-
-
-@app.route("/filmes")
-def filmes():
-    return render_template("filmes.html", **tempo_juntos())
-
-
-@app.route("/coisinhas")
-def coisinhas():
-    return render_template("coisinhas.html", **tempo_juntos())
-
-
-# ── run ─────────────────────────────────────
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
