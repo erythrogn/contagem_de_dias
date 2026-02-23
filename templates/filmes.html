@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}Filmes · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="marquee-bar">
+    <div class="marquee-inner">
+      <span>sessão a dois</span>
+      <span>pipoca e você</span>
+      <span>nossa lista</span>
+      <span>próximo da fila</span>
+      <span>sessão a dois</span>
+      <span>pipoca e você</span>
+      <span>nossa lista</span>
+      <span>próximo da fila</span>
+      <span>sessão a dois</span>
+      <span>pipoca e você</span>
+      <span>nossa lista</span>
+      <span>próximo da fila</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <header class="page-header">
+      <p class="eyebrow">lista de sessão · para assistir juntos</p>
+      <h1 class="page-title">nossa<br>lista de<br><span class="accent">filmes</span></h1>
+      <p class="page-sub">cada filme é uma noite especial</p>
+    </header>
+
+    <div class="watch-progress" id="progressWrap">
+      <div class="progress-label">
+        <span>progresso</span>
+        <strong id="progressPct">0%</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <section class="form-section">
+      <div class="form-heading">+ adicionar filme</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>título do filme</label>
+          <input type="text" id="fTitle" placeholder="ex: La La Land...">
+        </div>
+        <div class="form-group">
+          <label>ano</label>
+          <input type="text" id="fYear" placeholder="ex: 2024">
+        </div>
+        <div class="form-group">
+          <label>gênero</label>
+          <input type="text" id="fGenre" placeholder="ex: romance, terror, comédia...">
+        </div>
+        <div class="form-group">
+          <label>quem indicou</label>
+          <input type="text" id="fWho" placeholder="você, mozi ou os dois?">
+        </div>
+        <div class="form-group">
+          <label>onde assistir</label>
+          <input type="text" id="fWhere" placeholder="ex: Netflix, Prime, cinema...">
+        </div>
+        <div class="form-group">
+          <label>motivo</label>
+          <input type="text" id="fReason" placeholder="por que querem assistir?">
+        </div>
+      </div>
+      <button class="btn-submit" onclick="addMovie()">
+        ▶ &nbsp;Adicionar
+      </button>
+    </section>
+
+    <div class="filter-row">
+      <button class="ftab active" onclick="setFilter('all',this)">todos</button>
+      <button class="ftab" onclick="setFilter('pending',this)">pra ver</button>
+      <button class="ftab" onclick="setFilter('watched',this)">assistidos</button>
+    </div>
+
+    <div class="genre-row" id="genreRow">
+      <button class="gtag active" onclick="setGenre('',this)">todos os gêneros</button>
+    </div>
+
+    <div class="movie-list" id="movieList"></div>
+
+  </div>
+
+  <script>
+    let movies     = JSON.parse(localStorage.getItem('tj_movies') || '[]');
+    let filter     = 'all';
+    let genreFilter = '';
+
+    function save() { localStorage.setItem('tj_movies', JSON.stringify(movies)); }
+
+    function allGenres() {
+      const set = new Set();
+      movies.forEach(m => { if (m.genre) m.genre.split(',').forEach(g => set.add(g.trim().toLowerCase())); });
+      return [...set].sort();
+    }
+
+    function updateGenreRow() {
+      const row = document.getElementById('genreRow');
+      const active = genreFilter;
+      row.innerHTML = `<button class="gtag ${active===''?'active':''}" onclick="setGenre('',this)">todos os gêneros</button>`;
+      allGenres().forEach(g => {
+        const btn = document.createElement('button');
+        btn.className = `gtag ${active===g?'active':''}`;
+        btn.textContent = g;
+        btn.onclick = function() { setGenre(g, this); };
+        row.appendChild(btn);
+      });
+    }
+
+    function updateProgress() {
+      const total   = movies.length;
+      const watched = movies.filter(m => m.watched).length;
+      const pct     = total ? Math.round((watched / total) * 100) : 0;
+      document.getElementById('progressPct').textContent = pct + '%';
+      document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    function render() {
+      const list = document.getElementById('movieList');
+      list.innerHTML = '';
+
+      let filtered = movies.filter(m => {
+        if (filter === 'watched') return m.watched;
+        if (filter === 'pending') return !m.watched;
+        return true;
+      });
+
+      if (genreFilter) {
+        filtered = filtered.filter(m =>
+          m.genre && m.genre.toLowerCase().split(',').map(s=>s.trim()).includes(genreFilter)
+        );
+      }
+
+      if (!filtered.length) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <span class="big">▶</span>
+            ${filter==='watched' ? 'ainda não assistiram nenhum...' :
+              filter==='pending' ? 'lista vazia! adicionem um filme.' :
+              'nenhum filme ainda. comecem a lista!'}
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(m => {
+        const realIdx = movies.findIndex(x => x.id === m.id);
+        const card = document.createElement('div');
+        card.className = `movie-card${m.watched ? ' watched' : ''}`;
+
+        const tags = [];
+        if (m.genre) m.genre.split(',').forEach(g => {
+          tags.push(`<span class="m-tag genre">${g.trim()}</span>`);
+        });
+        if (m.who) tags.push(`<span class="m-tag quem">✦ ${m.who}</span>`);
+        if (m.where) tags.push(`<span class="m-tag">${m.where}</span>`);
+
+        card.innerHTML = `
+          <div class="m-check ${m.watched?'checked':''}" onclick="toggle('${m.id}')">
+            ${m.watched ? '✓' : ''}
+          </div>
+          <div class="m-info">
+            <div class="m-title">${m.title}</div>
+            <div class="m-meta">${m.year || '—'}${m.reason ? ' · ' + m.reason : ''}</div>
+            ${tags.length ? `<div class="m-tags">${tags.join('')}</div>` : ''}
+          </div>
+          <div class="m-actions">
+            <button class="btn-del" title="remover" onclick="remove('${m.id}')">✕</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      updateProgress();
+      updateGenreRow();
+    }
+
+    function addMovie() {
+      const title = document.getElementById('fTitle').value.trim();
+      if (!title) { document.getElementById('fTitle').focus(); return; }
+      movies.unshift({
+        id:     Date.now().toString(),
+        title,
+        year:    document.getElementById('fYear').value.trim(),
+        genre:   document.getElementById('fGenre').value.trim(),
+        who:     document.getElementById('fWho').value.trim(),
+        where:   document.getElementById('fWhere').value.trim(),
+        reason:  document.getElementById('fReason').value.trim(),
+        watched: false,
+      });
+      save(); render();
+      ['fTitle','fYear','fGenre','fWho','fWhere','fReason'].forEach(id =>
+        document.getElementById(id).value = ''
+      );
+    }
+
+    function toggle(id) {
+      const m = movies.find(x => x.id === id);
+      if (m) { m.watched = !m.watched; save(); render(); }
+    }
+
+    function remove(id) {
+      movies = movies.filter(x => x.id !== id);
+      save(); render();
+    }
+
+    function setFilter(f, btn) {
+      filter = f;
+      document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    function setGenre(g, btn) {
+      genreFilter = g;
+      document.querySelectorAll('.gtag').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    render();
+    updateProgress();
+    updateGenreRow();
+  </script>
+{% endblock %}

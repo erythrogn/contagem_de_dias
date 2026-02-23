@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}Coisinhas · Nossas Coisas{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/coisinhas.css') }}">
+{% endblock %}
+
+{% block content %}
+  <main class="container">
+    <header class="content-header">
+      <span class="eyebrow">Lista de Desejos</span>
+      <h1 class="page-title">Coisinhas <em>para Fazer</em></h1>
+      <p class="page-sub">Ideias aleatórias para aventuras cotidianas: visitas, receitas, drinks e mais.</p>
+    </header>
+
+    <section class="card progress-card">
+      <div class="progress-info">
+        <span>Seu progresso atual</span>
+        <strong id="progress-count">0/0</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </section>
+
+    <section class="card form-section">
+      <h2 class="section-title">Adicionar Nova Coisinha</h2>
+      <form id="add-form" class="form-grid">
+        <div class="form-group">
+          <label for="title">Título</label>
+          <input type="text" id="title" placeholder="ex: Experimentar um drink novo" required>
+        </div>
+        
+        <div class="form-group custom-select-wrapper">
+          <label>Categoria</label>
+          <input type="hidden" id="category" name="category" required>
+          
+          <div class="custom-select" id="custom-category-select">
+            <div class="select-trigger" id="select-trigger">
+              <span class="select-text">Selecione...</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            
+            <ul class="select-options" id="select-options">
+              <li data-value="visitar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Visitar um Local
+              </li>
+              <li data-value="receita">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
+                Fazer uma Receita
+              </li>
+              <li data-value="drink">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M12 15v7"></path><path d="m3 3 18 0"></path><path d="m3 3 9 12 9-12"></path></svg>
+                Experimentar um Drink
+              </li>
+              <li data-value="outro">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Outro
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="form-group span2">
+          <label for="notes">Notas</label>
+          <textarea id="notes" rows="2" placeholder="Detalhes ou ideias..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Adicionar Item</button>
+      </form>
+    </section>
+
+    <div class="filter-container">
+      <button class="ftab active" data-filter="all">Todas</button>
+      <button class="ftab" data-filter="visitar">Visitar</button>
+      <button class="ftab" data-filter="receita">Receitas</button>
+      <button class="ftab" data-filter="drink">Drinks</button>
+      <button class="ftab" data-filter="outro">Outros</button>
+    </div>
+
+    <div class="item-list" id="item-list"></div>
+
+    <div class="empty-state" id="empty-state">
+      <p>Nada por aqui ainda. Que tal adicionar algo novo?</p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('add-form');
+    const list = document.getElementById('item-list');
+    const emptyState = document.getElementById('empty-state');
+    const progressFill = document.getElementById('progress-fill');
+    const progressCount = document.getElementById('progress-count');
+    
+    // Select Customizado
+    const customSelect = document.getElementById('custom-category-select');
+    const selectTrigger = document.getElementById('select-trigger');
+    const selectOptions = document.getElementById('select-options');
+    const categoryInput = document.getElementById('category');
+    const selectText = selectTrigger.querySelector('.select-text');
+
+    selectTrigger.addEventListener('click', () => {
+      customSelect.classList.toggle('open');
+    });
+
+    selectOptions.querySelectorAll('li').forEach(option => {
+      option.addEventListener('click', () => {
+        categoryInput.value = option.dataset.value;
+        selectText.innerHTML = option.innerHTML;
+        customSelect.classList.remove('open');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!customSelect.contains(e.target)) {
+        customSelect.classList.remove('open');
+      }
+    });
+
+    // Persistência
+    let items = JSON.parse(localStorage.getItem('coisinhas_list')) || [];
+
+    function saveItems() {
+      localStorage.setItem('coisinhas_list', JSON.stringify(items));
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = items.length;
+      const done = items.filter(i => i.done).length;
+      const percent = total ? (done / total) * 100 : 0;
+      
+      progressFill.style.width = `${percent}%`;
+      progressCount.textContent = `${done}/${total}`;
+      emptyState.style.display = total ? 'none' : 'block';
+    }
+
+    function renderItems(filter = 'all') {
+      list.innerHTML = '';
+      const filteredItems = items.filter(i => filter === 'all' || i.category === filter);
+
+      filteredItems.forEach((item, index) => {
+        const originalIndex = items.indexOf(item);
+        const card = document.createElement('div');
+        card.className = `item-card ${item.done ? 'done' : ''}`;
+        
+        let iconSvg = '';
+        if(item.category === 'visitar') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
+        else if(item.category === 'receita') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>';
+        else if(item.category === 'drink') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M12 15v7"></path><path d="m3 3 18 0"></path><path d="m3 3 9 12 9-12"></path></svg>';
+        else iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+
+        card.innerHTML = `
+          <div class="i-check ${item.done ? 'checked' : ''}">${item.done ? '✓' : ''}</div>
+          <div class="i-info">
+            <h3 class="i-title">${item.title}</h3>
+            <span class="i-meta">${iconSvg} ${item.category.toUpperCase()}</span>
+            ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
+          </div>
+          <button class="btn-del" onclick="deleteItem(${originalIndex})">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        `;
+        
+        card.querySelector('.i-check').addEventListener('click', () => toggleItem(originalIndex));
+        list.appendChild(card);
+      });
+    }
+
+    function toggleItem(index) {
+      items[index].done = !items[index].done;
+      saveItems();
+      renderItems(document.querySelector('.ftab.active').dataset.filter);
+    }
+
+    function deleteItem(index) {
+      items.splice(index, 1);
+      saveItems();
+      renderItems(document.querySelector('.ftab.active').dataset.filter);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (!categoryInput.value) {
+        alert("Por favor, selecione uma categoria.");
+        return;
+      }
+
+      const newItem = {
+        title: document.getElementById('title').value,
+        category: categoryInput.value,
+        notes: document.getElementById('notes').value,
+        done: false,
+        date: new Date().toLocaleDateString()
+      };
+      items.push(newItem);
+      saveItems();
+      
+      form.reset();
+      categoryInput.value = '';
+      selectText.innerHTML = 'Selecione...';
+      
+      renderItems();
+    });
+
+    document.querySelectorAll('.ftab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderItems(tab.dataset.filter);
+      });
+    });
+
+    renderItems();
+    updateProgress();
+  </script>
+{% endblock %}

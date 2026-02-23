@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Início · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="bg-grid">
+    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto1.jpg') }}" alt=""></div>
+    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto3.jpg') }}" alt=""></div>
+    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto4.jpg') }}" alt=""></div>
+    <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto2.jpg') }}" alt=""></div>
+  </div>
+  <div class="bg-vignette"></div>
+  <div class="bg-grain"></div>
+
+  <div class="stage">
+
+    <p class="date-label" style="top:5.5rem;">29 · nov · 2025</p>
+
+    <div class="corner-stamp">
+      <div class="stamp-box">
+        <span class="stamp-top">junto há</span>
+        <span class="stamp-num" id="stampDays">00</span>
+        <span class="stamp-bot">dias</span>
+      </div>
+    </div>
+
+    <div class="title-stack">
+      <span class="word-tamo">TAMO</span>
+      <span class="word-junto">juntos</span>
+    </div>
+
+    <div class="ha-line">
+      <div class="ha-rule"></div>
+      <span class="ha-text">há</span>
+      <div class="ha-rule right"></div>
+    </div>
+
+    <div class="counter">
+      <div class="c-unit">
+        <span class="c-number" id="cDays">00</span>
+        <span class="c-label">dias</span>
+      </div>
+      <div class="c-unit">
+        <span class="c-number" id="cHours">00</span>
+        <span class="c-label">horas</span>
+      </div>
+      <div class="c-unit">
+        <span class="c-number" id="cMinutes">00</span>
+        <span class="c-label">minutos</span>
+      </div>
+      <div class="c-unit">
+        <span class="c-number" id="cSeconds">00</span>
+        <span class="c-label">segundos</span>
+      </div>
+    </div>
+
+    <p class="love-msg">te amo, mozi ♥</p>
+
+    <div class="deco-mark"><span>♥</span></div>
+
+  </div>
+
+  <script>
+    const START = new Date("2025-11-29T00:01:00");
+
+    let prevSec = -1;
+
+    function tick() {
+      const diff    = Date.now() - START.getTime();
+      const days    = Math.floor(diff / 86400000)+1;
+      const hours   = Math.floor((diff % 86400000) / 3600000);
+      const minutes = Math.floor((diff % 3600000)  / 60000);
+      const seconds = Math.floor((diff % 60000)    / 1000);
+
+      const pad = n => String(n).padStart(2, '0');
+
+      document.getElementById('cDays').textContent    = pad(days);
+      document.getElementById('cHours').textContent   = pad(hours);
+      document.getElementById('cMinutes').textContent = pad(minutes);
+      document.getElementById('stampDays').textContent = pad(days);
+
+      // flash on second change
+      const secEl = document.getElementById('cSeconds');
+      secEl.textContent = pad(seconds);
+      if (seconds !== prevSec) {
+        secEl.classList.remove('tick');
+        void secEl.offsetWidth; // reflow
+        secEl.classList.add('tick');
+        setTimeout(() => secEl.classList.remove('tick'), 200);
+        prevSec = seconds;
+      }
+    }
+
+    tick();
+    setInterval(tick, 500);
+  </script>
+{% endblock %}

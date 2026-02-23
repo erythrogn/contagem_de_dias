@@ -1,0 +1,74 @@
+<header class="navbar" id="navbar">
+  <div class="nav-container">
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+   <header class="navbar" id="navbar">
+  <div class="nav-container">
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="nav-menu" id="navMenu">
+      <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Início
+      </a>
+      <a href="{{ url_for('calendario') }}" class="nav-link {% if request.endpoint == 'calendario' %}active{% endif %}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        Calendário
+      </a>
+      <a href="{{ url_for('viagens') }}" class="nav-link {% if request.endpoint == 'viagens' %}active{% endif %}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        Viagens
+      </a>
+      <a href="{{ url_for('filmes') }}" class="nav-link {% if request.endpoint == 'filmes' %}active{% endif %}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+        Filmes
+      </a>
+      <a href="{{ url_for('coisinhas') }}" class="nav-link {% if request.endpoint == 'coisinhas' %}active{% endif %}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        Coisinhas
+      </a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<script>
+  function toggleMenu() {
+    const toggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const overlay = document.getElementById('overlay');
+    const body = document.body;
+    
+    toggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+    body.classList.toggle('no-scroll');
+  }
+</script>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<script>
+  function toggleMenu() {
+    const toggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const overlay = document.getElementById('overlay');
+    const body = document.body;
+    
+    toggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+    body.classList.toggle('no-scroll');
+  }
+</script>

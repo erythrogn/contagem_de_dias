@@ -1,0 +1,340 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 8rem 2rem 6rem;
+}
+
+.content-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  opacity: 0;
+  animation: fadeUp 0.8s forwards;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1.1;
+}
+
+.page-title em {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
+.page-sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.progress-card {
+  padding: 2rem 2.5rem;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.progress-info span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.progress-info strong {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--accent-gold);
+}
+
+.progress-track {
+  height: 2px;
+  background: var(--border-color);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-gold);
+  transition: width 0.8s ease;
+}
+
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group.span2 {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+input, select, textarea {
+  background: transparent;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-bottom-color: var(--accent-gold);
+}
+
+select option {
+  background: var(--surface-color);
+}
+
+.btn-submit {
+  display: inline-block;
+  background: var(--text-primary);
+  color: var(--bg-color);
+  padding: 0.8rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  transition: opacity 0.3s;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+.filter-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+
+.ftab {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.3s;
+}
+
+.ftab.active {
+  color: var(--accent-gold);
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 1.5rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+  transition: border-color 0.3s, opacity 0.3s;
+}
+
+.item-card:hover {
+  border-color: var(--border-gold);
+}
+
+.item-card.done {
+  opacity: 0.4;
+}
+
+.i-check {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.3rem;
+}
+
+.i-check.checked {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.i-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.item-card.done .i-title {
+  text-decoration: line-through;
+}
+
+.i-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.i-notes {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.btn-del {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  padding: 0.5rem;
+  transition: color 0.3s;
+}
+
+.btn-del:hover {
+  color: #ef4444;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  border: 1px dashed var(--border-color);
+}
+
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .item-card { grid-template-columns: 1fr; gap: 1rem; }
+  .i-check { display: none; }
+}
+/* ── SELECT CUSTOMIZADO (COM ÍCONES SVG) ── */
+.custom-select-wrapper {
+  position: relative;
+}
+
+.custom-select {
+  position: relative;
+  user-select: none;
+}
+
+.select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: border-color 0.3s;
+}
+
+.select-trigger:hover,
+.custom-select.open .select-trigger {
+  border-bottom-color: var(--accent-gold);
+}
+
+.select-text {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+}
+
+.select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  list-style: none;
+  z-index: 20;
+  display: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.custom-select.open .select-options {
+  display: block;
+  animation: fadeUp 0.2s forwards;
+}
+
+.select-options li {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.select-options li:hover {
+  background: var(--surface-hover);
+  color: var(--accent-gold);
+}
+
+.select-options li svg {
+  flex-shrink: 0;
+}
