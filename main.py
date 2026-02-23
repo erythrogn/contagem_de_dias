@@ -30,6 +30,8 @@ def index():
     agora_br        = datetime.utcnow() - timedelta(hours=3)
     ctx["surpresa"] = (agora_br.day == 29)   # surpresa todo dia 29
     return render_template("index.html", **ctx)
+
+
 @app.route("/base")
 def base():
     return render_template("base.html", **tempo_juntos())
@@ -48,6 +50,8 @@ def viagens():
 @app.route("/filmes")
 def filmes():
     return render_template("filmes.html", **tempo_juntos())
+
+
 @app.route("/coisinhas")
 def coisinhas():
     return render_template("coisinhas.html", **tempo_juntos())

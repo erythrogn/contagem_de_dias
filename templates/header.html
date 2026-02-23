@@ -7,15 +7,6 @@
       <span></span>
     </button>
 
-   <header class="navbar" id="navbar">
-  <div class="nav-container">
-
-    <button class="menu-toggle" id="menuToggle" aria-label="Menu" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
     <nav class="nav-menu" id="navMenu">
       <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -40,22 +31,6 @@
     </nav>
   </div>
 </header>
-
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-<script>
-  function toggleMenu() {
-    const toggle = document.getElementById('menuToggle');
-    const navMenu = document.getElementById('navMenu');
-    const overlay = document.getElementById('overlay');
-    const body = document.body;
-    
-    toggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
-    overlay.classList.toggle('active');
-    body.classList.toggle('no-scroll');
-  }
-</script>
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
