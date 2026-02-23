@@ -275,3 +275,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnMovie = document.getElementById('btn-add-movie');
     if (btnMovie) btnMovie.addEventListener('click', window.addMovie);
 });
+// 1. Cole a sua chave do TMDB aqui dentro das aspas!
+    const TMDB_API_KEY = "COLE_SUA_CHAVE_AQUI";
+
+    async function fetchPoster(title, year) {
+      try {
+        const queryYear = year ? `&primary_release_year=${year}` : '';
+        // 2. Faz a busca exata no banco de dados que o Letterboxd usa, em Português
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=pt-BR${queryYear}`);
+        const data = await res.json();
+        
+        if (data.results && data.results.length > 0) {
+          const posterPath = data.results[0].poster_path;
+          if (posterPath) {
+            // Retorna a imagem em alta resolução
+            return `https://image.tmdb.org/t/p/w500${posterPath}`;
+          }
+        }
+      } catch(e) {
+        console.error("Erro na comunicação com o TMDB:", e);
+      }
+      return ""; // Se não achar nada, retorna vazio para o HTML usar a imagem genérica
+    }

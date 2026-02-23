@@ -44,7 +44,7 @@
       </h2>
       <form id="movie-form" class="form-layout" novalidate>
         <div class="field-group span-full">
-          <label for="fTitle" class="field-label">Título do Filme</label>
+          <label for="fTitle" class="field-label">Título do Filme (Busca automática de capa)</label>
           <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
         </div>
         <div class="field-group">
@@ -190,12 +190,12 @@
         card.className = `movie-card ${m.watched ? 'watched' : ''}`;
 
         const tagsHTML = m.genre ? m.genre.split(',').map(g => `<span class="movie-tag">${g.trim()}</span>`).join('') : '';
-        const fallbackImg = "https://via.placeholder.com/300x450/1a1c23/4da6ff?text=Sem+Capa";
-        const finalPoster = m.poster || fallbackImg;
+        const fallbackImg = "https://placehold.co/300x450/1a1c23/4da6ff?text=Sem+Capa";
+        let finalPoster = m.poster && m.poster !== "N/A" ? m.poster : fallbackImg;
 
         card.innerHTML = `
           <div class="movie-poster-box">
-            <img src="${finalPoster}" class="movie-poster-img" alt="${m.title}">
+            <img src="${finalPoster}" onerror="this.onerror=null;this.src='${fallbackImg}';" class="movie-poster-img" alt="${m.title}">
             <div class="movie-overlay">
               <button class="movie-action-btn check" onclick="window.toggleMovie('${m.key}', ${m.watched})">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -221,11 +221,14 @@
 
     async function fetchPoster(title, year) {
       try {
-        const queryYear = year ? `&y=${year}` : '';
-        const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}${queryYear}&apikey=thewdb`);
+        const queryYear = year ? `&primary_release_year=${year}` : '';
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbcaa3bf5146885&query=${encodeURIComponent(title)}&language=pt-BR${queryYear}`);
         const data = await res.json();
-        if (data.Response === "True" && data.Poster && data.Poster !== "N/A") {
-          return data.Poster;
+        if (data.results && data.results.length > 0) {
+          const posterPath = data.results[0].poster_path;
+          if (posterPath) {
+            return `https://image.tmdb.org/t/p/w500${posterPath}`;
+          }
         }
       } catch(e) {
         console.log("Erro ao buscar capa");
