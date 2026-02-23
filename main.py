@@ -21,7 +21,7 @@ def save_data(data):
         json.dump(data, f)
 
 # Rotas das Páginas
-@app.route('/')
+@app.route('/index.html')
 def index(): return render_template('index.html')
 
 @app.route('/calendario')

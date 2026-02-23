@@ -71,7 +71,7 @@
 
     function tick() {
       const diff    = Date.now() - START.getTime();
-      const days    = Math.floor(diff / 86400000)+1;
+      const days    = Math.floor(diff / 86400000) + 1;
       const hours   = Math.floor((diff % 86400000) / 3600000);
       const minutes = Math.floor((diff % 3600000)  / 60000);
       const seconds = Math.floor((diff % 60000)    / 1000);
@@ -98,113 +98,4 @@
     tick();
     setInterval(tick, 500);
   </script>
-{% endblock %}
-=======
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tempo Juntos</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@600&family=Cascadia+Code:wght@900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div id="preloader">
-    <div class="ocean">
-        <div class="boat">
-            <i class="fa-solid fa-paper-plane boat-icon"></i>
-            <div class="base"></div>
-        </div>
-        <div class="wave"></div>
-    </div>
-</div>
-    <div class="particle particle-1"></div>
-    <div class="particle particle-2"></div>
-    
-    <div class="container">
-        <h1 class="title">tamo juntos há:</h1>
-        
-        <div class="names">
-            <span class="name">{{ n1 }}</span> 
-            <i class="fas fa-heart heart-icon"></i> 
-            <span class="name">{{ n2 }}</span>
-        </div>
-        
-        <div class="counter">
-            <div class="time-block">
-                <span class="number" id="days">0</span>
-                <span class="label">Dias</span>
-            </div>
-            <div class="time-block">
-                <span class="number" id="hours">0</span>
-                <span class="label">Horas</span>
-            </div>
-            <div class="time-block">
-                <span class="number" id="minutes">0</span>
-                <span class="label">Minutos</span>
-            </div>
-            <div class="time-block">
-                <span class="number" id="seconds">0</span>
-                <span class="label">Segundos</span>
-            </div>
-        </div>
-        
-        <div class="message">amo voce mozi</div>
-    </div>
-
-    {% if surpresa %}
-    <div id="surpresa-mes" class="modal-surpresa mostrar">
-        <div class="conteudo-surpresa">
-            <h1 class="texto-pulo"> feliz 1 mes</h1>
-            <p>te amo.</p>
-            <button id="btn-fechar" onclick="document.getElementById('surpresa-mes').style.display='none'">FECHAR</button>
-        </div>
-    </div>
-    {% endif %}
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          
-            const dataInicio = new Date("{{ data }}");
-            
-            function atualizarContador() {
-                const agora = new Date();
-                const diferenca = agora - dataInicio;
-                const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24) + 1); // +1 para contagem inclusiva
-                const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
-                const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
-                document.getElementById('days').textContent = dias;
-                document.getElementById('hours').textContent = horas.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutos.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = segundos.toString().padStart(2, '0');
-            }
-            
-            atualizarContador();
-            setInterval(atualizarContador, 1000);
-        });
-        window.addEventListener('load', function() {
-    const preloader = document.getElementById('preloader');
-    
-    // Espera 3.5 segundos (tempo da animação do barco) e remove o loader
-    setTimeout(() => {
-        preloader.classList.add('fade-out');
-    }, 3500);
-});
-    </script>
-</body>
-</html>
->>>>>>> 49a6e1275ae5f6d7a8a63038f4fee0285ac01364
-rs);
-    document.getElementById('cMinutes').textContent = pad(minutes);
-    secEl.textContent                               = next;
-    document.getElementById('stampDays').textContent = pad(days);
-  }
-
-  tick();
-  setInterval(tick, 1000);
-</script>
 {% endblock %}
