@@ -70,7 +70,7 @@
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
               </div>
               <span class="type-card-name">Pergunta</span>
-              <span class="type-card-desc">o oto responde pessoa</span>
+              <span class="type-card-desc">o oto responde</span>
             </div>
           </label>
         </div>
@@ -328,12 +328,20 @@
     return h;
   }
 
-  function getThemeImage(title, seed) {
-    const safeTitle = (title || 'magia').trim();
-    const prompt = safeTitle + " cinematic dark fantasy atmospheric realistic";
-    const seedNum = Math.abs(hashCode(seed || safeTitle));
-    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seedNum}&width=1600&height=900`;
-  }
+function getThemeImage(title, seed) {
+  const safeTitle = (title || 'grimório').trim();
+  
+  const cleanTitle = safeTitle
+    .replace(/["'<>]/g, '')   
+    .substring(0, 90);      
+
+ 
+  const prompt = `grimório antigo dark fantasy, página mística do grimório com cena inspirada em "${cleanTitle}", atmosfera mágica densa, iluminação cinematográfica volumétrica, god rays dourados, névoa etérea, detalhes intrincados em ouro e preto, estilo realista épico, arte de fantasia sombria, 8k, altamente detalhado`;
+
+  const seedNum = Math.abs(hashCode(seed || safeTitle));
+
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seedNum}&width=1600&height=1080`;
+}
 
   function renderInterface() {
     const list       = document.getElementById('notesList');
