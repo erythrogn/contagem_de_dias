@@ -36,14 +36,7 @@
     <form id="add-form" class="form-grid" novalidate>
       <div class="form-group span2">
         <label for="title">O que vamos fazer?</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          placeholder="ex: fazer um piquenique no parque..."
-          autocomplete="off"
-          required
-        >
+        <input type="text" id="title" name="title" placeholder="ex: fazer um piquenique no parque..." autocomplete="off" required>
       </div>
 
       <div class="form-group">
@@ -60,21 +53,12 @@
 
       <div class="form-group">
         <label for="targetDate">Data Planejada</label>
-        <input
-          type="date"
-          id="targetDate"
-          name="targetDate"
-          required
-        >
+        <input type="date" id="targetDate" name="targetDate" required>
       </div>
 
       <div class="form-group span2">
         <label for="notes">Notas e detalhes</label>
-        <textarea
-          id="notes"
-          name="notes"
-          rows="2"
-          placeholder="Algum detalhe especial..."></textarea>
+        <textarea id="notes" name="notes" rows="2" placeholder="Algum detalhe especial..."></textarea>
       </div>
 
       <div class="form-group span2">
@@ -104,19 +88,55 @@
 
 </div>
 
+<dialog id="edit-dialog" aria-labelledby="edit-dialog-title">
+  <div class="dialog-header">
+    <h3 id="edit-dialog-title" style="margin: 0;">Editar Coisinha</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()" aria-label="Fechar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="edit-form" class="form-grid" novalidate>
+    <input type="hidden" id="edit-key">
+    <div class="form-group span2">
+      <label for="edit-title">O que vamos fazer?</label>
+      <input type="text" id="edit-title" required>
+    </div>
+    <div class="form-group">
+      <label for="edit-category">Categoria</label>
+      <select id="edit-category" required>
+        <option value="visitar">Visitar Local</option>
+        <option value="comida">Comida</option>
+        <option value="receita">Fazer Receita</option>
+        <option value="drink">Experimentar Drink</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="edit-targetDate">Data Planejada</label>
+      <input type="date" id="edit-targetDate" required>
+    </div>
+    <div class="form-group span2">
+      <label for="edit-notes">Notas e detalhes</label>
+      <textarea id="edit-notes" rows="2"></textarea>
+    </div>
+    <div class="form-group span2">
+      <button type="submit" class="btn-submit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <span>Salvar Alterações</span>
+      </button>
+    </div>
+  </form>
+</dialog>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { db } from "/static/js/app.js";
 
-  const firebaseConfig = {
-    databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
   const coisinhasRef = ref(db, 'coisinhas');
 
   const form = document.getElementById('add-form');
+  const editForm = document.getElementById('edit-form');
+  const editDialog = document.getElementById('edit-dialog');
   const list = document.getElementById('item-list');
   const progressFill = document.getElementById('progress-fill');
   const progressCount = document.getElementById('progress-count');
@@ -146,14 +166,12 @@
     const total = items.length;
     const done = items.filter(i => i.done).length;
     const percent = total ? (done / total) * 100 : 0;
-    
     progressFill.style.width = `${percent}%`;
     progressCount.textContent = `${done}/${total}`;
   }
 
   function renderItems() {
     list.innerHTML = '';
-    
     const filteredItems = items.filter(i => currentFilter === 'all' || i.category === currentFilter);
 
     if (filteredItems.length === 0) {
@@ -174,9 +192,9 @@
       const checkIcon = item.done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '';
 
       const dateStr = item.targetDate ? item.targetDate.split('-').reverse().join('/') : '';
-      const dateHtml = dateStr ? `<span style="margin-left: 8px; color: var(--gold-pale);">
+      const dateHtml = dateStr ? `<time datetime="${item.targetDate}" style="margin-left: 8px; color: var(--gold-pale);">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        ${dateStr}</span>` : '';
+        ${dateStr}</time>` : '';
 
       card.innerHTML = `
         <div class="i-check ${item.done ? 'checked' : ''}" onclick="window.toggleItem('${item.key}', ${item.done})">
@@ -187,9 +205,14 @@
           <div class="i-meta">${iconSvg} ${item.category.toUpperCase()} ${dateHtml}</div>
           ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
         </div>
-        <button class="btn-del" onclick="window.deleteItem('${item.key}')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
+        <div class="card-actions">
+          <button class="btn-action edit" onclick="window.openEdit('${item.key}')" aria-label="Editar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="btn-action del" onclick="window.deleteItem('${item.key}')" aria-label="Excluir">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
       `;
       list.appendChild(card);
     });
@@ -203,9 +226,21 @@
     remove(ref(db, 'coisinhas/' + key));
   };
 
+  window.openEdit = function(key) {
+    const item = items.find(i => i.key === key);
+    if (!item) return;
+    
+    document.getElementById('edit-key').value = item.key;
+    document.getElementById('edit-title').value = item.title || '';
+    document.getElementById('edit-category').value = item.category || 'outro';
+    document.getElementById('edit-targetDate').value = item.targetDate || '';
+    document.getElementById('edit-notes').value = item.notes || '';
+    
+    editDialog.showModal();
+  };
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
     const categoryVal = document.getElementById('category').value;
     if (!categoryVal) return;
 
@@ -216,9 +251,22 @@
       notes: document.getElementById('notes').value.trim(),
       done: false
     };
-    
     await push(coisinhasRef, newItem);
     form.reset();
+  });
+
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = document.getElementById('edit-key').value;
+    const updatedItem = {
+      title: document.getElementById('edit-title').value.trim(),
+      category: document.getElementById('edit-category').value,
+      targetDate: document.getElementById('edit-targetDate').value,
+      notes: document.getElementById('edit-notes').value.trim(),
+    };
+    
+    await update(ref(db, 'coisinhas/' + key), updatedItem);
+    editDialog.close();
   });
 
   document.querySelectorAll('.ftab').forEach(tab => {

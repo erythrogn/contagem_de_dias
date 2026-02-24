@@ -3,12 +3,10 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-# ── configurações do casal ──────────────────
 DATA_INICIO = datetime(2025, 11, 29, 0, 1, 0)
 
 def tempo_juntos():
-    """Retorna um dict com dias, horas, minutos, segundos desde o início."""
-    agora = datetime.utcnow() - timedelta(hours=3)  # horário de Brasília
+    agora = datetime.utcnow() - timedelta(hours=3)
     diff = agora - DATA_INICIO
     total_seg = int(diff.total_seconds())
 
@@ -19,8 +17,6 @@ def tempo_juntos():
         "segundos": total_seg % 60,
         "data_iso": DATA_INICIO.strftime("%Y-%m-%dT%H:%M:%S"),
     }
-
-# ── rotas de páginas ─────────────────────────
 
 @app.route("/")
 def index():
@@ -45,7 +41,9 @@ def filmes():
 def coisinhas():
     return render_template("coisinhas.html", **tempo_juntos())
 
-# Remover as rotas /api/ pois o app.js já fala direto com o Firebase
+@app.route("/bloco")
+def bloco():
+    return render_template("bloco.html", **tempo_juntos())
 
 if __name__ == "__main__":
     app.run(debug=True)
