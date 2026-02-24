@@ -328,20 +328,17 @@
     return h;
   }
 
-function getThemeImage(title, seed) {
-  const safeTitle = (title || 'grimório').trim();
-  
-  const cleanTitle = safeTitle
-    .replace(/["'<>]/g, '')   
-    .substring(0, 90);      
+  // Otimizado para melhor resposta da IA Pollinations (Inglês misto e sanitização severa)
+  function getThemeImage(title, seed) {
+    const safeTitle = (title || 'mystery').trim()
+      .replace(/[^\w\sÀ-ÿ]/gi, '')
+      .substring(0, 50);      
+   
+    const prompt = `dark fantasy epic concept art, mystical grimoire page, ${safeTitle}, cinematic volumetric lighting, glowing gold runes, ethereal fog, 8k resolution, masterpiece`;
+    const seedNum = Math.abs(hashCode(seed || safeTitle));
 
- 
-  const prompt = `grimório antigo dark fantasy, página mística do grimório com cena inspirada em "${cleanTitle}", atmosfera mágica densa, iluminação cinematográfica volumétrica, god rays dourados, névoa etérea, detalhes intrincados em ouro e preto, estilo realista épico, arte de fantasia sombria, 8k, altamente detalhado`;
-
-  const seedNum = Math.abs(hashCode(seed || safeTitle));
-
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seedNum}&width=1600&height=1080`;
-}
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seedNum}&width=1600&height=1080`;
+  }
 
   function renderInterface() {
     const list       = document.getElementById('notesList');
@@ -392,8 +389,9 @@ function getThemeImage(title, seed) {
 
         const li = document.createElement('li');
         li.className = 'carousel-item';
+        // Adicionado onload handler para animação suave da imagem
         li.innerHTML = `
-          <img class="carousel-bg" src="${bg}" alt="">
+          <img class="carousel-bg" src="${bg}" alt="" onload="this.classList.add('loaded')">
           <div class="carousel-content">
             <div class="cc-who">${n.author || 'Alguém'} perguntou:</div>
             <div class="cc-title">${n.title}</div>
@@ -415,7 +413,7 @@ function getThemeImage(title, seed) {
         const th = document.createElement('div');
         th.className = 'c-thumb';
         th.innerHTML = `
-          <img src="${bg}" alt="">
+          <img src="${bg}" alt="" onload="this.classList.add('loaded')">
           <div class="c-thumb-info">
             <span class="c-thumb-author">${n.author || '?'}</span>
             <span class="c-thumb-title">${n.title.substring(0, 30)}${n.title.length > 30 ? '…' : ''}</span>
@@ -428,7 +426,8 @@ function getThemeImage(title, seed) {
       } else if (!isQMode) {
         const card = document.createElement('article');
         card.className = `note-card type-${n.type}`;
-        card.style.animationDelay = `${i * 0.05}s`;
+        // Efeito cascata como o do calendário
+        card.style.animationDelay = `${i * 0.08}s`;
 
         let contentHtml = '';
         if (n.type === 'lista') {
