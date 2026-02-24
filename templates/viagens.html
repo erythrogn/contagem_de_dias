@@ -10,100 +10,114 @@
 <div class="wrap">
 
   <header class="page-header">
-    <p class="eyebrow">lugares para explorar juntos</p>
+    <span class="eyebrow">lugares para explorar juntos</span>
     <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
-    <p class="page-sub">os destinos só valheram a pena pq é com voce</p>
+    <p class="page-sub">cada destino só vai valer a pena pq é com voce</p>
   </header>
 
-  <div class="stats-bar" id="statsBar">
+  <div class="stats-bar" aria-label="Estatísticas de viagens">
     <div class="stat">
-      <div class="stat-num total" id="s-total">0</div>
-      <div class="stat-label">total</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num sonho" id="s-sonho">0</div>
-      <div class="stat-label">sonhos</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num plan" id="s-plan">0</div>
-      <div class="stat-label">planejadas</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num feita" id="s-feita">0</div>
-      <div class="stat-label">feitas</div>
+      <div class="stat-num" id="s-total">0</div>
+      <div class="stat-label">Destinos</div>
     </div>
   </div>
 
-  <section class="form-section">
-    <div class="form-heading">nova viagem</div>
-    <div class="form-grid">
+  <section class="form-section" aria-label="Adicionar viagem">
+    <p class="form-heading">✦ Adicionar Destino</p>
+
+    <form id="standalone-trip-form" class="form-grid">
       <div class="form-group">
-        <label>destino</label>
-        <input type="text" id="fDest" placeholder="ex: Lisboa, Portugal">
+        <label for="fDest">Destino</label>
+        <input type="text" id="fDest" name="fDest" placeholder="ex: Gramado, Portugal..." autocomplete="off" required>
       </div>
       <div class="form-group">
-        <label>período estimado</label>
-        <input type="text" id="fData" placeholder="ex: julho 2026">
+        <label for="targetDate">Quando (Data Oficial)?</label>
+        <input type="date" id="targetDate" name="targetDate" required>
       </div>
       <div class="form-group">
-        <label>status</label>
-        <select id="fStatus">
-          <option value="sonho">sonho</option>
-          <option value="planejada">planejada</option>
-          <option value="feita">já fomos!</option>
+        <label for="fStatus">Status</label>
+        <select id="fStatus" name="fStatus">
+          <option value="sonho">✦ Sonho</option>
+          <option value="planejada">◈ Planejada</option>
+          <option value="feita">✓ Feita</option>
         </select>
       </div>
       <div class="form-group">
-        <label>quem quer mais ir?</label>
-        <input type="text" id="fQuem" placeholder="ex: os dois, mozi, eu...">
+        <label for="fQuem">Quem quer ir?</label>
+        <input type="text" id="fQuem" name="fQuem" placeholder="hesron, mozi, os dois...">
       </div>
       <div class="form-group span2">
-        <label>o que queremos fazer lá</label>
-        <textarea id="fNotes" placeholder="restaurantes, pontos turísticos, vontades..."></textarea>
+        <label for="fNotes">O que queremos fazer lá?</label>
+        <textarea id="fNotes" name="fNotes" rows="3" placeholder="Restaurantes, pontos turísticos, experiências..."></textarea>
       </div>
-    </div>
-    <button class="btn-submit" onclick="addTrip()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      Adicionar Viagem
-    </button>
+      <div class="form-group span2">
+        <button id="btn-add-trip" class="btn-submit" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Adicionar Viagem</span>
+        </button>
+      </div>
+    </form>
   </section>
 
-  <div class="filter-row">
-    <button class="ftab active" onclick="setFilter('all',this)">todas</button>
-    <button class="ftab" onclick="setFilter('sonho',this)">sonhos</button>
-    <button class="ftab" onclick="setFilter('planejada',this)">planejadas</button>
-    <button class="ftab" onclick="setFilter('feita',this)">feitas</button>
+  <div class="trip-list" id="tripList" aria-label="Lista de viagens" aria-live="polite">
+    <div class="empty-state">
+      <p>✦</p>
+      <p>Carregando rotas...</p>
+    </div>
   </div>
-
-  <div class="trip-list" id="tripList"></div>
 
 </div>
 
+<dialog id="edit-dialog-trip" aria-labelledby="edit-trip-title">
+  <div class="dialog-header">
+    <h3 id="edit-trip-title" style="margin: 0;">Editar Viagem</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-trip').close()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="edit-trip-form" class="form-grid" novalidate>
+    <input type="hidden" id="edit-tKey">
+    <div class="form-group">
+      <label for="edit-tDest">Destino</label>
+      <input type="text" id="edit-tDest" required>
+    </div>
+    <div class="form-group">
+      <label for="edit-tTargetDate">Quando?</label>
+      <input type="date" id="edit-tTargetDate" required>
+    </div>
+    <div class="form-group">
+      <label for="edit-tStatus">Status</label>
+      <select id="edit-tStatus">
+        <option value="sonho">✦ Sonho</option>
+        <option value="planejada">◈ Planejada</option>
+        <option value="feita">✓ Feita</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="edit-tQuem">Quem quer ir?</label>
+      <input type="text" id="edit-tQuem">
+    </div>
+    <div class="form-group span2">
+      <label for="edit-tNotes">O que queremos fazer lá?</label>
+      <textarea id="edit-tNotes" rows="3"></textarea>
+    </div>
+    <div class="form-group span2">
+      <button class="btn-submit" type="submit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <span>Salvar Alterações</span>
+      </button>
+    </div>
+  </form>
+</dialog>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { db } from "/static/js/app.js";
 
-  const firebaseConfig = {
-    databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
   const viagensRef = ref(db, 'viagens');
 
-  const ICONS = {
-    sonho: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>`,
-    planejada: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg>`,
-    feita: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
-  };
-
-  const LABELS = { sonho: 'sonho', planejada: 'planejada', feita: 'feita' };
-  const CLASS  = { sonho: 'badge-sonho', planejada: 'badge-planejada', feita: 'badge-feita' };
-
-  let trips  = [];
-  let currentFilter = 'all';
+  let trips = [];
+  const editDialog = document.getElementById('edit-dialog-trip');
 
   onValue(viagensRef, (snapshot) => {
     trips = [];
@@ -111,80 +125,103 @@
       trips.push({ key: childSnapshot.key, ...childSnapshot.val() });
     });
     trips.reverse();
-    render();
+    renderTrips();
   });
 
-  function updateStats() {
-    document.getElementById('s-total').textContent = trips.length;
-    document.getElementById('s-sonho').textContent = trips.filter(t => t.status === 'sonho').length;
-    document.getElementById('s-plan').textContent  = trips.filter(t => t.status === 'planejada').length;
-    document.getElementById('s-feita').textContent = trips.filter(t => t.status === 'feita').length;
-  }
-
-  function render() {
+  function renderTrips() {
     const list = document.getElementById('tripList');
     list.innerHTML = '';
-    const filtered = trips.filter(t => currentFilter === 'all' || t.status === currentFilter);
+    document.getElementById('s-total').textContent = trips.length;
 
-    if (!filtered.length) {
-      const emptySvg = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5; margin-bottom: 12px;"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21.5 4s-2 .5-3.5 2L14.5 9.5 6.3 7.7c-.5-.1-.9.1-1.1.5l-1.3 2.6c-.2.4-.1.8.3 1l4.4 2.2L6.4 16.2l-2.4-.6c-.4-.1-.8.1-1 .5L1.5 19l4.5 1.5 1.5 4.5 2.9-1.5c.4-.2.6-.6.5-1l-.6-2.4 2.2-2.2 2.2 4.4c.2.4.6.5 1 .3l2.6-1.3c.4-.2.6-.6.5-1.1z"></path></svg>`;
+    if (!trips.length) {
       list.innerHTML = `
         <div class="empty-state">
-          ${emptySvg}<br>
-          ${currentFilter === 'all' ? 'nenhuma viagem ainda... comecem a sonhar juntos!' : 'nada nessa categoria ainda.'}
+          <p>Nenhuma viagem na lista ainda. Comecem a sonhar!</p>
         </div>`;
       return;
     }
 
-    filtered.forEach(t => {
+    trips.forEach(t => {
       const card = document.createElement('div');
       card.className = 'trip-card';
-      card.dataset.status = t.status;
       
-      const crossSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+      const dateStr = t.targetDate ? t.targetDate.split('-').reverse().join('/') : '';
+      const dateHtml = dateStr ? `<time datetime="${t.targetDate}" style="margin-right: 8px; color: var(--gold-pale); display:inline-flex; align-items:center; gap:4px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 
+        ${dateStr}</time>` : '';
 
       card.innerHTML = `
-        <div class="trip-icon">${ICONS[t.status]}</div>
+        <div class="trip-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
         <div class="trip-body">
           <div class="trip-dest">${t.dest}</div>
-          <div class="trip-meta">${t.data ? t.data + ' · ' : ''}${t.quem ? 'sugestão: ' + t.quem : ''}</div>
+          <div class="trip-meta">
+            ${dateHtml} ${t.quem ? `• ${t.quem}` : ''}
+          </div>
           ${t.notes ? `<div class="trip-notes">${t.notes}</div>` : ''}
-          <span class="status-badge ${CLASS[t.status]}">${ICONS[t.status]} ${LABELS[t.status]}</span>
+          <span class="status-badge badge-${t.status}">${t.status.toUpperCase()}</span>
         </div>
         <div class="trip-actions">
-          <button class="btn-icon" title="remover" onclick="removeTrip('${t.key}')">${crossSvg}</button>
+          <button class="btn-icon edit" onclick="window.openEditTrip('${t.key}')" aria-label="Editar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="btn-icon del" onclick="window.deleteTrip('${t.key}')" aria-label="Excluir">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
         </div>
       `;
       list.appendChild(card);
     });
-
-    updateStats();
   }
 
-  window.addTrip = async function() {
+  document.getElementById('standalone-trip-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
     const dest = document.getElementById('fDest').value.trim();
-    if (!dest) { document.getElementById('fDest').focus(); return; }
-    
+    if (!dest) return;
+
     await push(viagensRef, {
       dest,
-      data:   document.getElementById('fData').value.trim(),
+      targetDate: document.getElementById('targetDate').value,
       status: document.getElementById('fStatus').value,
-      quem:   document.getElementById('fQuem').value.trim(),
-      notes:  document.getElementById('fNotes').value.trim(),
+      quem: document.getElementById('fQuem').value.trim(),
+      notes: document.getElementById('fNotes').value.trim()
     });
 
-    ['fDest','fData','fQuem','fNotes'].forEach(id => document.getElementById(id).value = '');
-  }
+    document.getElementById('standalone-trip-form').reset();
+  });
 
-  window.removeTrip = function(key) {
+  window.deleteTrip = function(key) {
     remove(ref(db, 'viagens/' + key));
-  }
+  };
 
-  window.setFilter = function(f, btn) {
-    currentFilter = f;
-    document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
-  }
+  window.openEditTrip = function(key) {
+    const t = trips.find(trip => trip.key === key);
+    if (!t) return;
+
+    document.getElementById('edit-tKey').value = t.key;
+    document.getElementById('edit-tDest').value = t.dest || '';
+    document.getElementById('edit-tTargetDate').value = t.targetDate || '';
+    document.getElementById('edit-tStatus').value = t.status || 'sonho';
+    document.getElementById('edit-tQuem').value = t.quem || '';
+    document.getElementById('edit-tNotes').value = t.notes || '';
+
+    editDialog.showModal();
+  };
+
+  document.getElementById('edit-trip-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = document.getElementById('edit-tKey').value;
+    
+    await update(ref(db, 'viagens/' + key), {
+      dest: document.getElementById('edit-tDest').value.trim(),
+      targetDate: document.getElementById('edit-tTargetDate').value,
+      status: document.getElementById('edit-tStatus').value,
+      quem: document.getElementById('edit-tQuem').value.trim(),
+      notes: document.getElementById('edit-tNotes').value.trim()
+    });
+
+    editDialog.close();
+  });
 </script>
 {% endblock %}

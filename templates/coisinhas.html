@@ -1,219 +1,282 @@
 {% extends 'base.html' %}
 
-{% block title %}Coisinhas · Nossas Coisas{% endblock %}
+{% block title %}Coisinhas · tamo junto{% endblock %}
 
 {% block styles %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/coisinhas.css') }}">
 {% endblock %}
 
 {% block content %}
-  <main class="container">
-    <header class="content-header">
-      <span class="eyebrow">Lista de Desejos</span>
-      <h1 class="page-title">Coisinhas <em>para Fazer</em></h1>
-      <p class="page-sub">tudo que eu puder fazer eu farei, e farei com voce</p>
-    </header>
+<div class="container">
 
-    <section class="card progress-card">
-      <div class="progress-info">
-        <span>Seu progresso atual</span>
-        <strong id="progress-count">0/0</strong>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-    </section>
+  <header class="content-header">
+    <span class="eyebrow">nosso grimório de memórias</span>
+    <h1 class="page-title">Coisinhas <em>para Fazer</em></h1>
+    <p class="page-sub">quero viver tudo com voce pq é com voce</p>
+  </header>
 
-    <section class="card form-section">
-      <h2 class="section-title">Adicionar Nova Coisinha</h2>
-      <form id="add-form" class="form-grid">
-        <div class="form-group">
-          <label for="title">Título</label>
-          <input type="text" id="title" placeholder="ex: Experimentar um drink novo" required>
-        </div>
-        
-        <div class="form-group custom-select-wrapper">
-          <label>Categoria</label>
-          <input type="hidden" id="category" name="category" required>
-          
-          <div class="custom-select" id="custom-category-select">
-            <div class="select-trigger" id="select-trigger">
-              <span class="select-text">Selecione...</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </div>
-            
-            <ul class="select-options" id="select-options">
-              <li data-value="visitar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Visitar um Local
-              </li>
-              <li data-value="receita">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
-                Fazer uma Receita
-              </li>
-              <li data-value="drink">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M12 15v7"></path><path d="m3 3 18 0"></path><path d="m3 3 9 12 9-12"></path></svg>
-                Experimentar um Drink
-              </li>
-              <li data-value="outro">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                Outro
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="form-group span2">
-          <label for="notes">Notas</label>
-          <textarea id="notes" rows="2" placeholder="Detalhes ou ideias..."></textarea>
-        </div>
-        <button type="submit" class="btn-submit">Adicionar Item</button>
-      </form>
-    </section>
-
-    <div class="filter-container">
-      <button class="ftab active" data-filter="all">Todas</button>
-      <button class="ftab" data-filter="visitar">Visitar</button>
-      <button class="ftab" data-filter="receita">Receitas</button>
-      <button class="ftab" data-filter="drink">Drinks</button>
-      <button class="ftab" data-filter="outro">Outros</button>
+  <section class="card progress-card" aria-label="Progresso das coisinhas">
+    <div class="progress-info">
+      <span>Progresso</span>
+      <strong id="progress-count">0/0</strong>
     </div>
-
-    <div class="item-list" id="item-list"></div>
-
-    <div class="empty-state" id="empty-state">
-      <p>Nada por aqui ainda. Que tal adicionar algo novo?</p>
+    <div class="progress-track"
+         role="progressbar"
+         aria-valuenow="0"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         aria-label="Percentagem concluída">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
     </div>
-  </main>
+  </section>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  <section class="card" aria-label="Adicionar nova coisinha">
+    <p class="section-title">✦ Adicionar Item</p>
 
-    const firebaseConfig = {
-      databaseURL: "https://contagem-de-dias-default-rtdb.firebaseio.com/"
-    };
+    <form id="add-form" class="form-grid" novalidate>
+      <div class="form-group span2">
+        <label for="title">O que vamos fazer?</label>
+        <input type="text" id="title" name="title" placeholder="ex: fazer um piquenique no parque..." autocomplete="off" required>
+      </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const coisinhasRef = ref(db, 'coisinhas');
+      <div class="form-group">
+        <label for="category">Categoria</label>
+        <select id="category" name="category" required>
+          <option value="" disabled selected>Selecione...</option>
+          <option value="visitar">Visitar Local</option>
+          <option value="comida">Comida</option>
+          <option value="receita">Fazer Receita</option>
+          <option value="drink">Experimentar Drink</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
 
-    const form = document.getElementById('add-form');
-    const list = document.getElementById('item-list');
-    const emptyState = document.getElementById('empty-state');
-    const progressFill = document.getElementById('progress-fill');
-    const progressCount = document.getElementById('progress-count');
-    
-    const customSelect = document.getElementById('custom-category-select');
-    const selectTrigger = document.getElementById('select-trigger');
-    const selectOptions = document.getElementById('select-options');
-    const categoryInput = document.getElementById('category');
-    const selectText = selectTrigger.querySelector('.select-text');
+      <div class="form-group">
+        <label for="targetDate">Data Planejada</label>
+        <input type="date" id="targetDate" name="targetDate" required>
+      </div>
 
-    selectTrigger.addEventListener('click', () => customSelect.classList.toggle('open'));
+      <div class="form-group span2">
+        <label for="notes">Notas e detalhes</label>
+        <textarea id="notes" name="notes" rows="2" placeholder="Algum detalhe especial..."></textarea>
+      </div>
 
-    selectOptions.querySelectorAll('li').forEach(option => {
-      option.addEventListener('click', () => {
-        categoryInput.value = option.dataset.value;
-        selectText.innerHTML = option.innerHTML;
-        customSelect.classList.remove('open');
-      });
+      <div class="form-group span2">
+        <button type="submit" class="btn-submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Adicionar</span>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <div class="filter-container" role="tablist" aria-label="Filtrar itens">
+    <button class="ftab active" role="tab" aria-selected="true" data-filter="all">Todos</button>
+    <button class="ftab" role="tab" aria-selected="false" data-filter="visitar">Visitar</button>
+    <button class="ftab" role="tab" aria-selected="false" data-filter="comida">Comida</button>
+    <button class="ftab" role="tab" aria-selected="false" data-filter="receita">Receitas</button>
+    <button class="ftab" role="tab" aria-selected="false" data-filter="drink">Drinks</button>
+    <button class="ftab" role="tab" aria-selected="false" data-filter="outro">Outros</button>
+  </div>
+
+  <div class="item-list" id="item-list" aria-label="Lista de coisinhas" aria-live="polite">
+    <div class="empty-state">
+      <p>✦</p>
+      <p>Carregando memórias...</p>
+    </div>
+  </div>
+
+</div>
+
+<dialog id="edit-dialog" aria-labelledby="edit-dialog-title">
+  <div class="dialog-header">
+    <h3 id="edit-dialog-title" style="margin: 0;">Editar Coisinha</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()" aria-label="Fechar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="edit-form" class="form-grid" novalidate>
+    <input type="hidden" id="edit-key">
+    <div class="form-group span2">
+      <label for="edit-title">O que vamos fazer?</label>
+      <input type="text" id="edit-title" required>
+    </div>
+    <div class="form-group">
+      <label for="edit-category">Categoria</label>
+      <select id="edit-category" required>
+        <option value="visitar">Visitar Local</option>
+        <option value="comida">Comida</option>
+        <option value="receita">Fazer Receita</option>
+        <option value="drink">Experimentar Drink</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="edit-targetDate">Data Planejada</label>
+      <input type="date" id="edit-targetDate" required>
+    </div>
+    <div class="form-group span2">
+      <label for="edit-notes">Notas e detalhes</label>
+      <textarea id="edit-notes" rows="2"></textarea>
+    </div>
+    <div class="form-group span2">
+      <button type="submit" class="btn-submit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <span>Salvar Alterações</span>
+      </button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module">
+  import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  // Importando o banco de dados do arquivo central
+  import { db } from "/static/js/app.js"; 
+
+  const coisinhasRef = ref(db, 'coisinhas');
+
+  const form = document.getElementById('add-form');
+  const editForm = document.getElementById('edit-form');
+  const editDialog = document.getElementById('edit-dialog');
+  const list = document.getElementById('item-list');
+  const progressFill = document.getElementById('progress-fill');
+  const progressCount = document.getElementById('progress-count');
+  
+  let items = [];
+  let currentFilter = 'all';
+
+  const ICONS = {
+    visitar: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+    receita: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>',
+    drink: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M12 15v7"></path><path d="m3 3 18 0"></path><path d="m3 3 12 15 9-15"></path></svg>',
+    comida: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>',
+    outro: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'
+  };
+
+  onValue(coisinhasRef, (snapshot) => {
+    items = [];
+    snapshot.forEach((childSnapshot) => {
+      items.push({ key: childSnapshot.key, ...childSnapshot.val() });
     });
+    items.reverse(); 
+    updateProgress();
+    renderItems();
+  });
 
-    document.addEventListener('click', (e) => {
-      if (!customSelect.contains(e.target)) customSelect.classList.remove('open');
-    });
+  function updateProgress() {
+    const total = items.length;
+    const done = items.filter(i => i.done).length;
+    const percent = total ? (done / total) * 100 : 0;
+    progressFill.style.width = `${percent}%`;
+    progressCount.textContent = `${done}/${total}`;
+  }
 
-    let items = [];
+  function renderItems() {
+    list.innerHTML = '';
+    const filteredItems = items.filter(i => currentFilter === 'all' || i.category === currentFilter);
 
-    // Listener em tempo real do Firebase
-    onValue(coisinhasRef, (snapshot) => {
-      items = [];
-      snapshot.forEach((childSnapshot) => {
-        items.push({ key: childSnapshot.key, ...childSnapshot.val() });
-      });
-      items.reverse(); // Mais recentes primeiro
-      renderItems(document.querySelector('.ftab.active').dataset.filter);
-      updateProgress();
-    });
-
-    function updateProgress() {
-      const total = items.length;
-      const done = items.filter(i => i.done).length;
-      const percent = total ? (done / total) * 100 : 0;
-      
-      progressFill.style.width = `${percent}%`;
-      progressCount.textContent = `${done}/${total}`;
-      emptyState.style.display = total ? 'none' : 'block';
+    if (filteredItems.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <p>✦</p>
+          <p>Nenhuma coisinha encontrada nesta categoria.</p>
+        </div>
+      `;
+      return;
     }
 
-    function renderItems(filter = 'all') {
-      list.innerHTML = '';
-      const filteredItems = items.filter(i => filter === 'all' || i.category === filter);
+    filteredItems.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = `item-card ${item.done ? 'done' : ''}`;
+      
+      const iconSvg = ICONS[item.category] || ICONS['outro'];
+      const checkIcon = item.done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '';
 
-      filteredItems.forEach((item) => {
-        const card = document.createElement('div');
-        card.className = `item-card ${item.done ? 'done' : ''}`;
-        
-        let iconSvg = '';
-        if(item.category === 'visitar') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
-        else if(item.category === 'receita') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>';
-        else if(item.category === 'drink') iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M12 15v7"></path><path d="m3 3 18 0"></path><path d="m3 3 9 12 9-12"></path></svg>';
-        else iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+      const dateStr = item.targetDate ? item.targetDate.split('-').reverse().join('/') : '';
+      const dateHtml = dateStr ? `<time datetime="${item.targetDate}" style="margin-left: 8px; color: var(--gold-pale);">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        ${dateStr}</time>` : '';
 
-        const checkIcon = item.done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '';
-
-        card.innerHTML = `
-          <div class="i-check ${item.done ? 'checked' : ''}" onclick="toggleItem('${item.key}', ${item.done})">${checkIcon}</div>
-          <div class="i-info">
-            <h3 class="i-title">${item.title}</h3>
-            <span class="i-meta">${iconSvg} ${item.category.toUpperCase()}</span>
-            ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
-          </div>
-          <button class="btn-del" onclick="deleteItem('${item.key}')">
+      card.innerHTML = `
+        <div class="i-check ${item.done ? 'checked' : ''}" onclick="window.toggleItem('${item.key}', ${item.done})">
+          ${checkIcon}
+        </div>
+        <div class="i-info">
+          <h3 class="i-title">${item.title}</h3>
+          <div class="i-meta">${iconSvg} ${item.category.toUpperCase()} ${dateHtml}</div>
+          ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
+        </div>
+        <div class="card-actions">
+          <button class="btn-action edit" onclick="window.openEdit('${item.key}')" aria-label="Editar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="btn-action del" onclick="window.deleteItem('${item.key}')" aria-label="Excluir">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
-        `;
-        list.appendChild(card);
-      });
-    }
-
-    window.toggleItem = function(key, currentDone) {
-      update(ref(db, 'coisinhas/' + key), { done: !currentDone });
-    };
-
-    window.deleteItem = function(key) {
-      remove(ref(db, 'coisinhas/' + key));
-    };
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!categoryInput.value) {
-        alert("Por favor, selecione uma categoria.");
-        return;
-      }
-
-      const newItem = {
-        title: document.getElementById('title').value,
-        category: categoryInput.value,
-        notes: document.getElementById('notes').value,
-        done: false,
-        date: new Date().toLocaleDateString()
-      };
-      
-      await push(coisinhasRef, newItem);
-      
-      form.reset();
-      categoryInput.value = '';
-      selectText.innerHTML = 'Selecione...';
+        </div>
+      `;
+      list.appendChild(card);
     });
+  }
 
-    document.querySelectorAll('.ftab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        renderItems(tab.dataset.filter);
-      });
+  window.toggleItem = function(key, currentDone) {
+    update(ref(db, 'coisinhas/' + key), { done: !currentDone });
+  };
+
+  window.deleteItem = function(key) {
+    remove(ref(db, 'coisinhas/' + key));
+  };
+
+  window.openEdit = function(key) {
+    const item = items.find(i => i.key === key);
+    if (!item) return;
+    
+    document.getElementById('edit-key').value = item.key;
+    document.getElementById('edit-title').value = item.title || '';
+    document.getElementById('edit-category').value = item.category || 'outro';
+    document.getElementById('edit-targetDate').value = item.targetDate || '';
+    document.getElementById('edit-notes').value = item.notes || '';
+    
+    editDialog.showModal();
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const categoryVal = document.getElementById('category').value;
+    if (!categoryVal) return;
+
+    const newItem = {
+      title: document.getElementById('title').value.trim(),
+      category: categoryVal,
+      targetDate: document.getElementById('targetDate').value,
+      notes: document.getElementById('notes').value.trim(),
+      done: false
+    };
+    await push(coisinhasRef, newItem);
+    form.reset();
+  });
+
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = document.getElementById('edit-key').value;
+    const updatedItem = {
+      title: document.getElementById('edit-title').value.trim(),
+      category: document.getElementById('edit-category').value,
+      targetDate: document.getElementById('edit-targetDate').value,
+      notes: document.getElementById('edit-notes').value.trim(),
+    };
+    
+    await update(ref(db, 'coisinhas/' + key), updatedItem);
+    editDialog.close();
+  });
+
+  document.querySelectorAll('.ftab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      currentFilter = e.target.dataset.filter;
+      renderItems();
     });
-  </script>
+  });
+</script>
 {% endblock %}

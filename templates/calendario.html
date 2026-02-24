@@ -7,104 +7,183 @@
 {% endblock %}
 
 {% block content %}
+
   <header class="cal-header">
     <p class="cal-eyebrow">tamo junto · desde 29 nov 2025</p>
+
     <h1 class="cal-title">Calendário <span>2026</span></h1>
+
     <p class="cal-subtitle">cada 29 é um mês a mais de nós</p>
-    <div class="header-rule"><span class="header-rule-icon">♥</span></div>
+
+    <div class="header-rule" aria-hidden="true">
+      <span class="header-rule-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      </span>
+    </div>
   </header>
 
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot dot-today"></div> hoje</div>
-    <div class="legend-item"><div class="legend-dot dot-anniv"></div> ♥ mês de namoro</div>
-    <div class="legend-item"><div class="legend-dot dot-past"></div> dia passado</div>
+  <div class="legend" aria-label="Legenda do calendário">
+    <div class="legend-item">
+      <div class="legend-dot dot-today" aria-hidden="true"></div>
+      <span>hoje</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-anniv" aria-hidden="true"></div>
+      <span>mesversário</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-viagem" aria-hidden="true"></div>
+      <span>viagem</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-filme" aria-hidden="true"></div>
+      <span>filme</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-coisinha" aria-hidden="true"></div>
+      <span>coisinha</span>
+    </div>
   </div>
 
-  <div class="year-grid" id="yearGrid"></div>
+  <div class="year-grid" id="yearGrid" aria-label="Calendário do ano 2026"></div>
 
-  <script>
-    const START      = new Date(2025, 10, 29); // nov = 10 (0-indexed)
-    const MONTHS     = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                        'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-    const DOW_LABELS = ['D','S','T','Q','Q','S','S'];
-    const today      = new Date();
+{% endblock %}
 
-    function monthsSince(date) {
-      return (date.getFullYear() - START.getFullYear()) * 12
-           + (date.getMonth() - START.getMonth());
-    }
+{% block scripts %}
+<script type="module">
+  import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { db } from "/static/js/app.js";
 
-    function pad(n) { return String(n).padStart(2, '0'); }
+  const START = new Date(2025, 10, 29);
+  const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const DOW_LABELS = ['D','S','T','Q','Q','S','S'];
+  const today = new Date();
 
+  let rawData = { viagens: null, filmes: null, coisinhas: null };
+  let allEvents = {};
+
+  renderCalendar();
+
+  onValue(ref(db, 'viagens'), snap => { rawData.viagens = snap.val(); processEvents(); });
+  onValue(ref(db, 'filmes'), snap => { rawData.filmes = snap.val(); processEvents(); });
+  onValue(ref(db, 'coisinhas'), snap => { rawData.coisinhas = snap.val(); processEvents(); });
+
+  function processEvents() {
+    allEvents = {};
+    const add = (data, type, titleField, doneCheck) => {
+      if(!data) return;
+      Object.values(data).forEach(item => {
+        if(item.targetDate && !doneCheck(item)) {
+          if(!allEvents[item.targetDate]) allEvents[item.targetDate] = [];
+          allEvents[item.targetDate].push({ type, title: item[titleField] });
+        }
+      });
+    };
+
+    add(rawData.viagens, 'viagem', 'dest', i => i.status === 'feita');
+    add(rawData.filmes, 'filme', 'title', i => i.watched === true);
+    add(rawData.coisinhas, 'coisinha', 'title', i => i.done === true);
+
+    renderCalendar();
+  }
+
+  function monthsSince(date) {
+    return (date.getFullYear() - START.getFullYear()) * 12 + (date.getMonth() - START.getMonth());
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function renderCalendar() {
     const grid = document.getElementById('yearGrid');
+    grid.innerHTML = '';
 
     for (let m = 0; m < 12; m++) {
-      const year      = 2026;
-      const firstDay  = new Date(year, m, 1).getDay();
+      const year = 2026;
+      const firstDay = new Date(year, m, 1).getDay();
       const totalDays = new Date(year, m + 1, 0).getDate();
 
-      // anniversary day: 29th
       const anniversaryDay = 29;
       const anniversaryDate = new Date(year, m, anniversaryDay);
-      const monthCount      = monthsSince(anniversaryDate);
+      const monthCount = monthsSince(anniversaryDate);
+      const hasAnniv = totalDays >= anniversaryDay;
 
-      const card = document.createElement('div');
+      const card = document.createElement('article');
       card.className = 'month-card';
+      card.setAttribute('aria-label', `${MONTHS[m]} ${year}`);
+
+      let annivHtml = '';
+      if(hasAnniv) {
+        annivHtml = `
+          <div class="month-anniv-label" aria-label="${monthCount} meses juntos">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            ${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} juntos
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+        `;
+      }
 
       card.innerHTML = `
         <div class="month-name">${MONTHS[m]}</div>
         <div class="month-number">${pad(m + 1)} · ${year}</div>
-        <div class="days-header">
+        <div class="days-header" aria-hidden="true">
           ${DOW_LABELS.map(d => `<span class="dow">${d}</span>`).join('')}
         </div>
-        <div class="days-grid" id="grid-${m}"></div>
-        ${totalDays >= anniversaryDay ? `
-          <div class="month-anniv-label">
-            <span>♥</span> ${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} juntos
-          </div>
-        ` : ''}
+        <div class="days-grid" id="grid-${m}" role="grid" aria-label="${MONTHS[m]}"></div>
+        ${annivHtml}
       `;
 
       grid.appendChild(card);
 
       const daysGrid = card.querySelector(`#grid-${m}`);
 
-      // empty cells before 1st
       for (let i = 0; i < firstDay; i++) {
         const empty = document.createElement('div');
         empty.className = 'day empty';
+        empty.setAttribute('aria-hidden', 'true');
         daysGrid.appendChild(empty);
       }
 
       for (let d = 1; d <= totalDays; d++) {
         const cell = document.createElement('div');
-        cell.textContent = d;
-
         const thisDate = new Date(year, m, d);
-        const isToday  = today.getFullYear() === year
-                      && today.getMonth() === m
-                      && today.getDate() === d;
-        const isPast   = thisDate < today && !isToday;
-        const isAnniv  = d === anniversaryDay;
+        const dateString = `${year}-${pad(m + 1)}-${pad(d)}`;
+        const dayEvents = allEvents[dateString] || [];
+
+        const isToday = today.getFullYear() === year && today.getMonth() === m && today.getDate() === d;
+        const isPast = thisDate < today && !isToday;
+        const isAnniv = d === anniversaryDay;
 
         let cls = 'day';
-        if (isToday)       cls += ' today';
-        else if (isAnniv)  cls += ' anniversary';
-        else if (isPast)   cls += ' past';
-        else               cls += ' future';
+        if (isToday) cls += ' today';
+        else if (isAnniv) cls += ' anniversary';
+        else if (isPast) cls += ' past';
+        else cls += ' future';
 
         cell.className = cls;
-
-        if (isAnniv) {
-          cell.dataset.tip = `♥ ${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} juntos`;
+        cell.setAttribute('role', 'gridcell');
+        
+        let innerHTML = `<span class="day-num">${d}</span>`;
+        
+        if (dayEvents.length > 0) {
+            let tooltips = dayEvents.map(e => e.title).join(' • ');
+            if (isToday) tooltips = `Hoje | ` + tooltips;
+            cell.setAttribute('data-tip', tooltips);
+            
+            let dotsHtml = `<div class="event-dots">`;
+            dayEvents.forEach(e => {
+                dotsHtml += `<span class="e-dot dot-${e.type}"></span>`;
+            });
+            dotsHtml += `</div>`;
+            innerHTML += dotsHtml;
+        } else {
+            if (isToday) cell.setAttribute('data-tip', 'Hoje');
+            else if (isAnniv) cell.setAttribute('data-tip', `${monthCount} meses juntos`);
         }
 
-        if (isToday) {
-          cell.dataset.tip = 'hoje ♥';
-        }
-
+        cell.innerHTML = innerHTML;
         daysGrid.appendChild(cell);
       }
     }
-  </script>
+  }
+</script>
 {% endblock %}
