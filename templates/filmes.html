@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Filmes · tamo junto{% endblock %}
+{% block title %}Nossa Lista · tamo junto{% endblock %}
 
 {% block styles %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes.css') }}">
@@ -13,140 +13,330 @@
       <span class="marquee-text">bastante pipoca</span>
       <span class="marquee-text">quero assistir minha vida com voce</span>
       <span class="marquee-text">te amo</span>
+      <span class="marquee-text">séries e mais séries</span>
+      <span class="marquee-text">jogando junto</span>
       <span class="marquee-text">Nossa lista de filmes</span>
       <span class="marquee-text">bastante pipoca</span>
       <span class="marquee-text">quero assistir minha vida com voce</span>
       <span class="marquee-text">te amo</span>
+      <span class="marquee-text">séries e mais séries</span>
+      <span class="marquee-text">jogando junto</span>
     </div>
   </div>
 
   <main class="filmes-container">
-    <header class="filmes-header">
-      <span class="filmes-eyebrow">o que vamos assistir juntos</span>
-      <h1 class="filmes-title">nossa lista de <span class="filmes-accent">filmes</span></h1>
-      <p class="filmes-subtitle">coloca um filme p nos mozi</p>
-    </header>
 
-    <section class="progress-wrapper" aria-label="Progresso de filmes assistidos">
-      <div class="progress-details">
-        <span class="progress-label-text">Assistidos</span>
-        <strong class="progress-number" id="progressLabel">0 / 0</strong>
-      </div>
-      <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-fill" id="progressFill" style="width:0%"></div>
-      </div>
-    </section>
-
-    <section class="form-wrapper" aria-label="Adicionar filme">
-      <h2 class="form-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-        Adicionar Filme
-      </h2>
-      <form id="standalone-movie-form" class="form-layout" novalidate>
-        <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
-          <div style="flex:1;">
-            <label for="fTitle" class="field-label">Título do Filme</label>
-            <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
-          </div>
-          <div id="poster-preview-box" style="flex-shrink:0; width:80px; height:120px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition: all 0.3s ease;">
-            <svg id="poster-placeholder-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
-            <img id="poster-preview-img" src="" alt="Capa" style="display:none; width:100%; height:100%; object-fit:cover;">
-          </div>
-        </div>
-        
-        <div class="field-group">
-          <label for="targetDate" class="field-label">Quando vamos assistir?</label>
-          <input type="date" id="targetDate" class="field-input" required>
-        </div>
-        <div class="field-group">
-          <label for="fGenre" class="field-label">Gênero</label>
-          <input type="text" id="fGenre" class="field-input" placeholder="ex: terror, animação...">
-        </div>
-        <div class="field-group">
-          <label for="fYear" class="field-label">Ano Lançamento</label>
-          <input type="text" id="fYear" class="field-input" placeholder="ex: 2011" maxlength="4">
-        </div>
-        <div class="field-group">
-          <label for="fWho" class="field-label">Quem indicou?</label>
-          <input type="text" id="fWho" class="field-input" placeholder="hesrin ou mozi">
-        </div>
-        <div class="field-group span-full">
-          <label for="fWhere" class="field-label">Onde assistir?</label>
-          <input type="text" id="fWhere" class="field-input" placeholder="ex: Locadoras Digitais">
-        </div>
-        <div class="field-group span-full">
-          <button class="btn-submit" id="btn-standalone-add" type="submit">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>Adicionar Filme</span>
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <nav class="filter-wrapper" role="tablist" aria-label="Filtrar filmes">
-      <button class="ftab active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
-      <button class="ftab" data-filter="assistir" role="tab" aria-selected="false">Para Assistir</button>
-      <button class="ftab" data-filter="assistido" role="tab" aria-selected="false">Assistidos</button>
+    <!-- ===== MAIN TABS (Filmes / Séries / Jogos) ===== -->
+    <nav class="main-tabs-wrapper" role="tablist" aria-label="Tipo de mídia">
+      <button class="main-tab active" data-section="filmes" role="tab" aria-selected="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+        Filmes
+      </button>
+      <button class="main-tab" data-section="series" role="tab" aria-selected="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+        Séries
+      </button>
+      <button class="main-tab" data-section="jogos" role="tab" aria-selected="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="currentColor"></circle><circle cx="17" cy="11" r="1" fill="currentColor"></circle><path d="M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2Z"></path></svg>
+        Jogos
+      </button>
     </nav>
 
-    <div class="genre-wrapper" id="genreRow" aria-label="Filtrar por gênero">
-      <button class="gtag active" data-genre="todos">Todos os Gêneros</button>
-    </div>
+    <!-- ===================================================== -->
+    <!-- SECTION: FILMES                                        -->
+    <!-- ===================================================== -->
+    <section id="section-filmes" class="media-section active">
+      <header class="filmes-header">
+        <span class="filmes-eyebrow">o que vamo assistir</span>
+        <h1 class="filmes-title">nossa lista de <span class="filmes-accent">filmes</span></h1>
+        <p class="filmes-subtitle">coloca um filme p nos mozi</p>
+      </header>
 
-    <section class="slider-section">
-      <button id="slider-prev" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-      
-      <div class="slider-track" id="movieList" aria-live="polite">
-        <div class="empty-state">
-          <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-          <p class="empty-text">falta filmes ein</p>
+      <section class="progress-wrapper" aria-label="Progresso de filmes assistidos">
+        <div class="progress-details">
+          <span class="progress-label-text">Assistidos</span>
+          <strong class="progress-number" id="progressLabel-filmes">0 / 0</strong>
         </div>
+        <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-fill" id="progressFill-filmes" style="width:0%"></div>
+        </div>
+      </section>
+
+      <section class="form-wrapper" aria-label="Adicionar filme">
+        <h2 class="form-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          Adicionar Filme
+        </h2>
+        <form id="form-filmes" class="form-layout" novalidate>
+          <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="flex:1;">
+              <label for="fTitle" class="field-label">Título do Filme (Busca a capa sozinho)</label>
+              <input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
+            </div>
+            <div id="poster-preview-box-filmes" style="flex-shrink:0; width:80px; height:120px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition: all 0.3s ease;">
+              <svg id="poster-placeholder-icon-filmes" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+              <img id="poster-preview-img-filmes" src="" alt="Capa" style="display:none; width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="fTargetDate" class="field-label">Quando vamos assistir?</label>
+            <input type="date" id="fTargetDate" class="field-input">
+          </div>
+          <div class="field-group">
+            <label for="fGenre" class="field-label">Gênero</label>
+            <input type="text" id="fGenre" class="field-input" placeholder="ex: Sci-Fi, Drama...">
+          </div>
+          <div class="field-group">
+            <label for="fYear" class="field-label">Ano Lançamento (Ajuda na busca)</label>
+            <input type="text" id="fYear" class="field-input" placeholder="ex: 2014" maxlength="4">
+          </div>
+          <div class="field-group">
+            <label for="fWho" class="field-label">Quem indicou?</label>
+            <input type="text" id="fWho" class="field-input" placeholder="hesron ou mozi">
+          </div>
+          <div class="field-group span-full">
+            <label for="fWhere" class="field-label">Onde assistir?</label>
+            <input type="text" id="fWhere" class="field-input" placeholder="ex: Netflix, Prime...">
+          </div>
+          <div class="field-group span-full">
+            <button class="btn-submit" id="btn-add-filmes" type="submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Adicionar Filme</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <nav class="filter-wrapper" role="tablist" aria-label="Filtrar filmes">
+        <button class="ftab active" data-filter="todos" data-section="filmes" role="tab">Todos</button>
+        <button class="ftab" data-filter="assistir" data-section="filmes" role="tab">Para Assistir</button>
+        <button class="ftab" data-filter="assistido" data-section="filmes" role="tab">Assistidos</button>
+      </nav>
+
+      <div class="genre-wrapper" id="genreRow-filmes" aria-label="Filtrar por gênero">
+        <button class="gtag active" data-genre="todos">Todos os Gêneros</button>
       </div>
 
-      <button id="slider-next" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
+      <section class="slider-section">
+        <button id="slider-prev-filmes" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide('filmes')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="slider-track" id="list-filmes" aria-live="polite">
+          <div class="empty-state">
+            <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+            <p class="empty-text">Aguardando filmes...</p>
+          </div>
+        </div>
+        <button id="slider-next-filmes" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide('filmes')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </section>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- SECTION: SÉRIES                                        -->
+    <!-- ===================================================== -->
+    <section id="section-series" class="media-section">
+      <header class="filmes-header">
+        <span class="filmes-eyebrow">o que estamos acompanhando</span>
+        <h1 class="filmes-title">nossa lista de <span class="filmes-accent series-accent">séries</span></h1>
+        <p class="filmes-subtitle">uma série p cada noite</p>
+      </header>
+
+      <section class="progress-wrapper" aria-label="Progresso de séries assistidas">
+        <div class="progress-details">
+          <span class="progress-label-text">Concluídas</span>
+          <strong class="progress-number" id="progressLabel-series">0 / 0</strong>
+        </div>
+        <div class="progress-track" role="progressbar">
+          <div class="progress-fill" id="progressFill-series" style="width:0%"></div>
+        </div>
+      </section>
+
+      <section class="form-wrapper" aria-label="Adicionar série">
+        <h2 class="form-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          Adicionar Série
+        </h2>
+        <form id="form-series" class="form-layout" novalidate>
+          <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="flex:1;">
+              <label for="sTitle" class="field-label">Título da Série (Busca a capa sozinho)</label>
+              <input type="text" id="sTitle" class="field-input" placeholder="ex: Breaking Bad..." autocomplete="off" required>
+            </div>
+            <div id="poster-preview-box-series" style="flex-shrink:0; width:80px; height:120px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition: all 0.3s ease;">
+              <svg id="poster-placeholder-icon-series" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              <img id="poster-preview-img-series" src="" alt="Capa" style="display:none; width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="sTargetDate" class="field-label">Quando vamos começar?</label>
+            <input type="date" id="sTargetDate" class="field-input">
+          </div>
+          <div class="field-group">
+            <label for="sGenre" class="field-label">Gênero</label>
+            <input type="text" id="sGenre" class="field-input" placeholder="ex: Drama, Thriller...">
+          </div>
+          <div class="field-group">
+            <label for="sYear" class="field-label">Ano Lançamento (Ajuda na busca)</label>
+            <input type="text" id="sYear" class="field-input" placeholder="ex: 2008" maxlength="4">
+          </div>
+          <div class="field-group">
+            <label for="sWho" class="field-label">Quem indicou?</label>
+            <input type="text" id="sWho" class="field-input" placeholder="hesron ou mozi">
+          </div>
+          <div class="field-group span-full">
+            <label for="sWhere" class="field-label">Onde assistir?</label>
+            <input type="text" id="sWhere" class="field-input" placeholder="ex: Netflix, HBO Max...">
+          </div>
+          <div class="field-group span-full">
+            <button class="btn-submit" id="btn-add-series" type="submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Adicionar Série</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <nav class="filter-wrapper" role="tablist" aria-label="Filtrar séries">
+        <button class="ftab active" data-filter="todos" data-section="series" role="tab">Todas</button>
+        <button class="ftab" data-filter="assistir" data-section="series" role="tab">Para Assistir</button>
+        <button class="ftab" data-filter="assistido" data-section="series" role="tab">Concluídas</button>
+      </nav>
+
+      <div class="genre-wrapper" id="genreRow-series" aria-label="Filtrar por gênero">
+        <button class="gtag active" data-genre="todos">Todos os Gêneros</button>
+      </div>
+
+      <section class="slider-section">
+        <button id="slider-prev-series" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide('series')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="slider-track" id="list-series" aria-live="polite">
+          <div class="empty-state">
+            <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+            <p class="empty-text">Aguardando séries...</p>
+          </div>
+        </div>
+        <button id="slider-next-series" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide('series')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </section>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- SECTION: JOGOS                                         -->
+    <!-- ===================================================== -->
+    <section id="section-jogos" class="media-section">
+      <header class="filmes-header">
+        <span class="filmes-eyebrow">o que vamo jogar ein</span>
+        <h1 class="filmes-title">nossa lista de <span class="filmes-accent jogos-accent">jogos</span></h1>
+        <p class="filmes-subtitle">vem jogar debaixo da coberta</p>
+      </header>
+
+      <section class="progress-wrapper" aria-label="Progresso de jogos zerados">
+        <div class="progress-details">
+          <span class="progress-label-text">Zerados</span>
+          <strong class="progress-number" id="progressLabel-jogos">0 / 0</strong>
+        </div>
+        <div class="progress-track" role="progressbar">
+          <div class="progress-fill" id="progressFill-jogos" style="width:0%"></div>
+        </div>
+      </section>
+
+      <section class="form-wrapper" aria-label="Adicionar jogo">
+        <h2 class="form-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          Adicionar Jogo
+        </h2>
+        <form id="form-jogos" class="form-layout" novalidate>
+          <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="flex:1;">
+              <label for="jTitle" class="field-label">Título do Jogo (Busca a capa sozinho)</label>
+              <input type="text" id="jTitle" class="field-input" placeholder="ex: Stardew Valley..." autocomplete="off" required>
+            </div>
+            <div id="poster-preview-box-jogos" style="flex-shrink:0; width:80px; height:120px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition: all 0.3s ease;">
+              <svg id="poster-placeholder-icon-jogos" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="rgba(255,255,255,0.2)"></circle><circle cx="17" cy="11" r="1" fill="rgba(255,255,255,0.2)"></circle><path d="M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2Z"></path></svg>
+              <img id="poster-preview-img-jogos" src="" alt="Capa" style="display:none; width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="jTargetDate" class="field-label">Quando vamos jogar?</label>
+            <input type="date" id="jTargetDate" class="field-input">
+          </div>
+          <div class="field-group">
+            <label for="jGenre" class="field-label">Gênero</label>
+            <input type="text" id="jGenre" class="field-input" placeholder="ex: RPG, Puzzle...">
+          </div>
+          <div class="field-group">
+            <label for="jYear" class="field-label">Ano Lançamento (Ajuda na busca)</label>
+            <input type="text" id="jYear" class="field-input" placeholder="ex: 2023" maxlength="4">
+          </div>
+          <div class="field-group">
+            <label for="jWho" class="field-label">Quem indicou?</label>
+            <input type="text" id="jWho" class="field-input" placeholder="hesron ou mozi">
+          </div>
+          <div class="field-group span-full">
+            <label for="jWhere" class="field-label">Plataforma</label>
+            <input type="text" id="jWhere" class="field-input" placeholder="ex: PC, PS5, Nintendo Switch...">
+          </div>
+          <div class="field-group span-full">
+            <button class="btn-submit" id="btn-add-jogos" type="submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Adicionar Jogo</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <nav class="filter-wrapper" role="tablist" aria-label="Filtrar jogos">
+        <button class="ftab active" data-filter="todos" data-section="jogos" role="tab">Todos</button>
+        <button class="ftab" data-filter="assistir" data-section="jogos" role="tab">Para Jogar</button>
+        <button class="ftab" data-filter="assistido" data-section="jogos" role="tab">Zerados</button>
+      </nav>
+
+      <div class="genre-wrapper" id="genreRow-jogos" aria-label="Filtrar por gênero">
+        <button class="gtag active" data-genre="todos">Todos os Gêneros</button>
+      </div>
+
+      <section class="slider-section">
+        <button id="slider-prev-jogos" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide('jogos')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="slider-track" id="list-jogos" aria-live="polite">
+          <div class="empty-state">
+            <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="currentColor"></circle><circle cx="17" cy="11" r="1" fill="currentColor"></circle><path d="M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2Z"></path></svg>
+            <p class="empty-text">Aguardando jogos...</p>
+          </div>
+        </div>
+        <button id="slider-next-jogos" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide('jogos')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </section>
     </section>
 
   </main>
 
-  <dialog id="edit-dialog-movie" aria-labelledby="edit-movie-title">
+  <!-- ===== EDIT DIALOGS ===== -->
+
+  <!-- Edit Filmes -->
+  <dialog id="edit-dialog-filmes" aria-labelledby="edit-filmes-title">
     <div class="dialog-header">
-      <h3 id="edit-movie-title" style="margin: 0; font-family: var(--font-display, sans-serif);">Editar Filme</h3>
-      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-movie').close()">
+      <h3 id="edit-filmes-title" style="margin:0; font-family:var(--font-display, sans-serif);">Editar Filme</h3>
+      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-filmes').close()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
-    <form id="edit-movie-form" class="form-layout" novalidate>
-      <input type="hidden" id="edit-mKey">
+    <form id="edit-form-filmes" class="form-layout" novalidate>
+      <input type="hidden" id="edit-filmes-key">
+      <div class="field-group span-full"><label for="edit-filmes-title-input" class="field-label">Título</label><input type="text" id="edit-filmes-title-input" class="field-input" required></div>
+      <div class="field-group"><label for="edit-filmes-date" class="field-label">Data</label><input type="date" id="edit-filmes-date" class="field-input"></div>
+      <div class="field-group"><label for="edit-filmes-genre" class="field-label">Gênero</label><input type="text" id="edit-filmes-genre" class="field-input"></div>
+      <div class="field-group"><label for="edit-filmes-year" class="field-label">Ano</label><input type="text" id="edit-filmes-year" class="field-input" maxlength="4"></div>
+      <div class="field-group"><label for="edit-filmes-who" class="field-label">Quem indicou?</label><input type="text" id="edit-filmes-who" class="field-input"></div>
+      <div class="field-group span-full"><label for="edit-filmes-where" class="field-label">Onde assistir?</label><input type="text" id="edit-filmes-where" class="field-input"></div>
       <div class="field-group span-full">
-        <label for="edit-mTitle" class="field-label">Título</label>
-        <input type="text" id="edit-mTitle" class="field-input" required>
-      </div>
-      <div class="field-group">
-        <label for="edit-mTargetDate" class="field-label">Data</label>
-        <input type="date" id="edit-mTargetDate" class="field-input" required>
-      </div>
-      <div class="field-group">
-        <label for="edit-mGenre" class="field-label">Gênero</label>
-        <input type="text" id="edit-mGenre" class="field-input">
-      </div>
-      <div class="field-group">
-        <label for="edit-mYear" class="field-label">Ano</label>
-        <input type="text" id="edit-mYear" class="field-input" maxlength="4">
-      </div>
-      <div class="field-group">
-        <label for="edit-mWho" class="field-label">Quem indicou?</label>
-        <input type="text" id="edit-mWho" class="field-input">
-      </div>
-      <div class="field-group span-full">
-        <label for="edit-mWhere" class="field-label">Onde assistir?</label>
-        <input type="text" id="edit-mWhere" class="field-input">
-      </div>
-      <div class="field-group span-full">
-        <button class="btn-submit" id="btn-edit-movie-submit" type="submit">
+        <button class="btn-submit" id="btn-edit-filmes-submit" type="submit">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
           <span>Salvar Alterações</span>
         </button>
@@ -154,350 +344,440 @@
     </form>
   </dialog>
 
- <script type="module">
-  import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-  import { db } from "/static/js/app.js";
+  <!-- Edit Séries -->
+  <dialog id="edit-dialog-series" aria-labelledby="edit-series-title">
+    <div class="dialog-header">
+      <h3 id="edit-series-title" style="margin:0; font-family:var(--font-display, sans-serif);">Editar Série</h3>
+      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-series').close()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <form id="edit-form-series" class="form-layout" novalidate>
+      <input type="hidden" id="edit-series-key">
+      <div class="field-group span-full"><label for="edit-series-title-input" class="field-label">Título</label><input type="text" id="edit-series-title-input" class="field-input" required></div>
+      <div class="field-group"><label for="edit-series-date" class="field-label">Data</label><input type="date" id="edit-series-date" class="field-input"></div>
+      <div class="field-group"><label for="edit-series-genre" class="field-label">Gênero</label><input type="text" id="edit-series-genre" class="field-input"></div>
+      <div class="field-group"><label for="edit-series-year" class="field-label">Ano</label><input type="text" id="edit-series-year" class="field-input" maxlength="4"></div>
+      <div class="field-group"><label for="edit-series-who" class="field-label">Quem indicou?</label><input type="text" id="edit-series-who" class="field-input"></div>
+      <div class="field-group span-full"><label for="edit-series-where" class="field-label">Onde assistir?</label><input type="text" id="edit-series-where" class="field-input"></div>
+      <div class="field-group span-full">
+        <button class="btn-submit" id="btn-edit-series-submit" type="submit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Salvar Alterações</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
 
-  const filmesRef = ref(db, 'filmes');
+  <!-- Edit Jogos -->
+  <dialog id="edit-dialog-jogos" aria-labelledby="edit-jogos-title">
+    <div class="dialog-header">
+      <h3 id="edit-jogos-title" style="margin:0; font-family:var(--font-display, sans-serif);">Editar Jogo</h3>
+      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-jogos').close()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <form id="edit-form-jogos" class="form-layout" novalidate>
+      <input type="hidden" id="edit-jogos-key">
+      <div class="field-group span-full"><label for="edit-jogos-title-input" class="field-label">Título</label><input type="text" id="edit-jogos-title-input" class="field-input" required></div>
+      <div class="field-group"><label for="edit-jogos-date" class="field-label">Data</label><input type="date" id="edit-jogos-date" class="field-input"></div>
+      <div class="field-group"><label for="edit-jogos-genre" class="field-label">Gênero</label><input type="text" id="edit-jogos-genre" class="field-input"></div>
+      <div class="field-group"><label for="edit-jogos-year" class="field-label">Ano</label><input type="text" id="edit-jogos-year" class="field-input" maxlength="4"></div>
+      <div class="field-group"><label for="edit-jogos-who" class="field-label">Quem indicou?</label><input type="text" id="edit-jogos-who" class="field-input"></div>
+      <div class="field-group span-full"><label for="edit-jogos-where" class="field-label">Plataforma</label><input type="text" id="edit-jogos-where" class="field-input"></div>
+      <div class="field-group span-full">
+        <button class="btn-submit" id="btn-edit-jogos-submit" type="submit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Salvar Alterações</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
 
-  let movies = [];
-  let filteredMovies = [];
-  let currentIndex = 0;
-  let currentFilter = 'todos';
-  let currentGenre = 'todos';
-  const TMDB_API_KEY = "d39bbf74a96f6cca570dcb69c8f3059f";
-  const editDialog = document.getElementById('edit-dialog-movie');
+  <script type="module">
+    import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+    import { db } from "/static/js/app.js";
 
-  const FALLBACK_POSTER = "https://placehold.co/300x450/1a1c23/4da6ff?text=Sem+Capa";
+    const TMDB_API_KEY = "15d2ea6d0dc1d476efbcaa3bf5146885";
 
-  onValue(filmesRef, (snapshot) => {
-    movies = [];
-    snapshot.forEach((childSnapshot) => {
-      movies.push({ key: childSnapshot.key, ...childSnapshot.val() });
-    });
-    movies.reverse();
-    updateProgress();
-    renderGenres();
-    renderMovies();
-  });
+    // ─── State per section ───────────────────────────────────────────────────────
+    const state = {
+      filmes: { items: [], filtered: [], currentIndex: 0, filter: 'todos', genre: 'todos' },
+      series: { items: [], filtered: [], currentIndex: 0, filter: 'todos', genre: 'todos' },
+      jogos:  { items: [], filtered: [], currentIndex: 0, filter: 'todos', genre: 'todos' },
+    };
 
-  function updateProgress() {
-    const total = movies.length;
-    const watched = movies.filter(m => m.watched).length;
-    const pct = total ? Math.round((watched / total) * 100) : 0;
-    document.getElementById('progressLabel').textContent = `${watched} / ${total}`;
-    document.getElementById('progressFill').style.width = `${pct}%`;
-  }
+    // ─── Firebase refs ────────────────────────────────────────────────────────────
+    const refs = {
+      filmes: ref(db, 'filmes'),
+      series: ref(db, 'series'),
+      jogos:  ref(db, 'jogos'),
+    };
 
-  function renderGenres() {
-    const genreSet = new Set();
-    movies.forEach(m => {
-      if (m.genre) {
-        m.genre.split(',').forEach(g => {
-          const cleanG = g.trim().toLowerCase();
-          if (cleanG) genreSet.add(cleanG);
-        });
-      }
-    });
-    
-    const genresArray = Array.from(genreSet).sort();
-    const row = document.getElementById('genreRow');
-    let html = `<button class="gtag ${currentGenre === 'todos' ? 'active' : ''}" data-genre="todos">Todos os Gêneros</button>`;
-    
-    genresArray.forEach(g => {
-      html += `<button class="gtag ${currentGenre === g ? 'active' : ''}" data-genre="${g}">${g}</button>`;
-    });
-    
-    row.innerHTML = html;
-
-    document.querySelectorAll('.gtag').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        currentGenre = e.target.dataset.genre;
-        renderGenres();
-        renderMovies();
-      });
-    });
-  }
-
-  function renderMovies() {
-    const track = document.getElementById('movieList');
-    track.innerHTML = '';
-
-    filteredMovies = movies.filter(m => {
-      if (currentFilter === 'assistido' && !m.watched) return false;
-      if (currentFilter === 'assistir' && m.watched) return false;
-      if (currentGenre !== 'todos') {
-        if (!m.genre) return false;
-        const mGenres = m.genre.toLowerCase().split(',').map(g => g.trim());
-        if (!mGenres.includes(currentGenre)) return false;
-      }
-      return true;
-    });
-
-    if (!filteredMovies.length) {
-      track.innerHTML = `
-        <div class="empty-state" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10;">
-          <svg class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem;"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-          <p class="empty-text">Nenhum filme encontrado.</p>
-        </div>`;
-      document.getElementById('slider-prev').style.display = 'none';
-      document.getElementById('slider-next').style.display = 'none';
-      return;
-    }
-
-    document.getElementById('slider-prev').style.display = 'flex';
-    document.getElementById('slider-next').style.display = 'flex';
-
-    filteredMovies.forEach((m, idx) => {
-      const card = document.createElement('div');
-      card.className = `slider-card ${m.watched ? 'watched' : ''}`;
-      
-      // ── MELHORIA PRINCIPAL ────────────────────────────────────────
-      let posterUrl = m.poster;
-      if (!posterUrl || posterUrl === "" || posterUrl === "N/A") {
-        posterUrl = FALLBACK_POSTER;
-      }
-
-      const dateStr = m.targetDate ? m.targetDate.split('-').reverse().join('/') : '';
-
-      card.innerHTML = `
-        <img src="${posterUrl}" 
-             class="movie-poster-img" 
-             alt="${m.title}"
-             onerror="this.src='${FALLBACK_POSTER}'; this.onerror=null;">
-        <div class="movie-info-overlay">
-          <h3 class="movie-title">${m.title}</h3>
-          <div class="movie-meta">
-            ${dateStr} ${m.where ? `• ${m.where}` : ''} ${m.who ? `• indicação: ${m.who}` : ''}
-          </div>
-          <div class="actions-group">
-            <button class="movie-action-btn check ${m.watched ? 'checked' : ''}" onclick="event.stopPropagation(); window.toggleMovie('${m.key}', ${m.watched})" aria-label="Marcar como visto">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </button>
-            <button class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEditMovie('${m.key}')" aria-label="Editar filme">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-            </button>
-            <button class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteMovie('${m.key}')" aria-label="Deletar filme">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-        </div>
-      `;
-
-      card.addEventListener('click', () => {
-        if (idx !== currentIndex) {
-          currentIndex = idx;
-          updateSlider();
+    // ─── TMDB poster fetchers ─────────────────────────────────────────────────────
+    async function fetchMoviePoster(title, year) {
+      try {
+        const y = year ? `&primary_release_year=${year}` : '';
+        let res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=pt-BR${y}`);
+        let data = await res.json();
+        if (!data.results || !data.results.length) {
+          res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=en-US${y}`);
+          data = await res.json();
         }
+        if (data.results && data.results.length > 0 && data.results[0].poster_path)
+          return `https://image.tmdb.org/t/p/w500${data.results[0].poster_path}`;
+      } catch(e) { console.error(e); }
+      return "";
+    }
+
+    async function fetchTVPoster(title, year) {
+      try {
+        const y = year ? `&first_air_date_year=${year}` : '';
+        let res = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=pt-BR${y}`);
+        let data = await res.json();
+        if (!data.results || !data.results.length) {
+          res = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=en-US${y}`);
+          data = await res.json();
+        }
+        if (data.results && data.results.length > 0 && data.results[0].poster_path)
+          return `https://image.tmdb.org/t/p/w500${data.results[0].poster_path}`;
+      } catch(e) { console.error(e); }
+      return "";
+    }
+
+    async function fetchGameCover(title) {
+      // RAWG API – free, no key needed for basic search
+      try {
+        const res = await fetch(`https://api.rawg.io/api/games?key=&search=${encodeURIComponent(title)}&page_size=1`);
+        const data = await res.json();
+        if (data.results && data.results.length > 0 && data.results[0].background_image)
+          return data.results[0].background_image;
+      } catch(e) {}
+      // fallback: IGDB via cors-proxy is tricky, so just return empty
+      return "";
+    }
+
+    // Choose fetch function per section
+    const posterFetcher = {
+      filmes: fetchMoviePoster,
+      series: fetchTVPoster,
+      jogos:  (title, year) => fetchGameCover(title),
+    };
+
+    // ─── Live poster preview (debounced) ─────────────────────────────────────────
+    function setupPreview(titleId, yearId, boxId, imgId, iconId, section) {
+      const titleInput = document.getElementById(titleId);
+      const yearInput  = document.getElementById(yearId);
+      const previewBox = document.getElementById(boxId);
+      const previewImg = document.getElementById(imgId);
+      const icon       = document.getElementById(iconId);
+      let timer;
+
+      async function run() {
+        clearTimeout(timer);
+        const title = titleInput.value.trim();
+        if (!title) { previewImg.style.display = 'none'; icon.style.display = 'block'; return; }
+        timer = setTimeout(async () => {
+          previewBox.style.opacity = '0.5';
+          const url = await posterFetcher[section](title, yearInput ? yearInput.value.trim() : '');
+          previewBox.style.opacity = '1';
+          if (url) { previewImg.src = url; previewImg.style.display = 'block'; icon.style.display = 'none'; }
+          else { previewImg.style.display = 'none'; icon.style.display = 'block'; }
+        }, 700);
+      }
+
+      titleInput.addEventListener('input', run);
+      if (yearInput) yearInput.addEventListener('input', run);
+    }
+
+    setupPreview('fTitle', 'fYear', 'poster-preview-box-filmes', 'poster-preview-img-filmes', 'poster-placeholder-icon-filmes', 'filmes');
+    setupPreview('sTitle', 'sYear', 'poster-preview-box-series', 'poster-preview-img-series', 'poster-placeholder-icon-series', 'series');
+    setupPreview('jTitle', 'jYear', 'poster-preview-box-jogos',  'poster-preview-img-jogos',  'poster-placeholder-icon-jogos',  'jogos');
+
+    // ─── Render helpers ──────────────────────────────────────────────────────────
+    function updateProgress(section) {
+      const s = state[section];
+      const total   = s.items.length;
+      const watched = s.items.filter(m => m.watched).length;
+      const pct     = total ? Math.round((watched / total) * 100) : 0;
+      document.getElementById(`progressLabel-${section}`).textContent = `${watched} / ${total}`;
+      document.getElementById(`progressFill-${section}`).style.width  = `${pct}%`;
+    }
+
+    function renderGenres(section) {
+      const s = state[section];
+      const genreSet = new Set();
+      s.items.forEach(m => {
+        if (m.genre) m.genre.split(',').forEach(g => { const c = g.trim().toLowerCase(); if (c) genreSet.add(c); });
+      });
+      const genres = Array.from(genreSet).sort();
+      const row = document.getElementById(`genreRow-${section}`);
+      let html = `<button class="gtag ${s.genre === 'todos' ? 'active' : ''}" data-genre="todos">Todos os Gêneros</button>`;
+      genres.forEach(g => { html += `<button class="gtag ${s.genre === g ? 'active' : ''}" data-genre="${g}">${g}</button>`; });
+      row.innerHTML = html;
+      row.querySelectorAll('.gtag').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          s.genre = e.target.dataset.genre;
+          renderGenres(section);
+          renderItems(section);
+        });
+      });
+    }
+
+    const fallbackImgs = {
+      filmes: 'https://placehold.co/300x450/1a1c23/4da6ff?text=Sem+Capa',
+      series: 'https://placehold.co/300x450/1a231c/4dff99?text=Sem+Capa',
+      jogos:  'https://placehold.co/300x450/231a1c/ff4d7a?text=Sem+Capa',
+    };
+
+    const actionLabels = {
+      filmes: { done: 'Marcar como assistido', undo: 'Desmarcar', empty: 'Nenhum filme encontrado.' },
+      series: { done: 'Marcar como concluída', undo: 'Desmarcar', empty: 'Nenhuma série encontrada.' },
+      jogos:  { done: 'Marcar como zerado',    undo: 'Desmarcar', empty: 'Nenhum jogo encontrado.' },
+    };
+
+    function renderItems(section) {
+      const s = state[section];
+      const track = document.getElementById(`list-${section}`);
+      track.innerHTML = '';
+
+      s.filtered = s.items.filter(m => {
+        if (s.filter === 'assistido' && !m.watched) return false;
+        if (s.filter === 'assistir'  &&  m.watched) return false;
+        if (s.genre !== 'todos') {
+          if (!m.genre) return false;
+          const mGenres = m.genre.toLowerCase().split(',').map(g => g.trim());
+          if (!mGenres.includes(s.genre)) return false;
+        }
+        return true;
       });
 
-      track.appendChild(card);
-    });
+      const prevBtn = document.getElementById(`slider-prev-${section}`);
+      const nextBtn = document.getElementById(`slider-next-${section}`);
 
-    currentIndex = 0;
-    updateSlider();
-  }
-
-  function updateSlider() {
-    const cards = document.querySelectorAll('.slider-card');
-    cards.forEach((card, idx) => {
-      card.className = `slider-card ${filteredMovies[idx].watched ? 'watched' : ''}`;
-      if (idx === currentIndex) {
-        card.classList.add('active');
-      } else if (idx === currentIndex - 1) {
-        card.classList.add('prev');
-      } else if (idx === currentIndex + 1) {
-        card.classList.add('next');
-      } else {
-        card.classList.add('hidden');
+      if (!s.filtered.length) {
+        track.innerHTML = `<div class="empty-state" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;"><p class="empty-text">${actionLabels[section].empty}</p></div>`;
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        return;
       }
-    });
-  }
 
-  window.prevSlide = function() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateSlider();
-    }
-  };
+      prevBtn.style.display = 'flex';
+      nextBtn.style.display = 'flex';
 
-  window.nextSlide = function() {
-    if (currentIndex < filteredMovies.length - 1) {
-      currentIndex++;
-      updateSlider();
-    }
-  };
+      const fallback = fallbackImgs[section];
 
-  async function fetchPoster(title, year = "") {
-  if (!title?.trim()) return "";
+      s.filtered.forEach((m, idx) => {
+        const card = document.createElement('div');
+        card.className = `slider-card ${m.watched ? 'watched' : ''}`;
+        const poster = m.poster && m.poster !== "N/A" ? m.poster : fallback;
+        const dateStr = m.targetDate ? m.targetDate.split('-').reverse().join('/') : '';
 
-  try {
-    let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title.trim())}&language=pt-BR`;
-    if (year && /^\d{4}$/.test(year)) {
-      url += `&primary_release_year=${year}`;
-    }
+        card.innerHTML = `
+          <img src="${poster}" onerror="this.onerror=null;this.src='${fallback}';" class="movie-poster-img" alt="${m.title}">
+          <div class="movie-info-overlay">
+            <h3 class="movie-title">${m.title}</h3>
+            <div class="movie-meta">
+              ${dateStr} ${m.where ? `• ${m.where}` : ''} ${m.who ? `• indicação: ${m.who}` : ''}
+            </div>
+            <div class="actions-group">
+              <button class="movie-action-btn check ${m.watched ? 'checked' : ''}" onclick="event.stopPropagation(); window.toggleItem('${section}','${m.key}',${m.watched})" aria-label="${actionLabels[section].done}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </button>
+              <button class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEdit('${section}','${m.key}')" aria-label="Editar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+              <button class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteItem('${section}','${m.key}')" aria-label="Deletar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>`;
 
-    let res = await fetch(url);
-    if (!res.ok) {
-      console.error(`TMDB erro HTTP: ${res.status} - ${res.statusText}`);
-      throw new Error('Resposta inválida');
-    }
+        card.addEventListener('click', () => { if (idx !== s.currentIndex) { s.currentIndex = idx; updateSlider(section); } });
+        track.appendChild(card);
+      });
 
-    let data = await res.json();
-
-    if (data?.results?.length > 0 && data.results[0].poster_path) {
-      return `https://image.tmdb.org/t/p/w500${data.results[0].poster_path}`;
-    }
-
-    url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title.trim())}&language=en-US`;
-    if (year && /^\d{4}$/.test(year)) url += `&primary_release_year=${year}`;
-
-    res = await fetch(url);
-    data = await res.json();
-
-    if (data?.results?.length > 0 && data.results[0].poster_path) {
-      return `https://image.tmdb.org/t/p/w500${data.results[0].poster_path}`;
+      s.currentIndex = 0;
+      updateSlider(section);
     }
 
-  } catch (err) {
-    console.error("Erro ao buscar poster do TMDB:", title, year, err);
-  }
-
-  return "";
-}
-
-  // ── Preview ao digitar ────────────────────────────────────────────
-  let debounceTimer;
-  const titleInput = document.getElementById('fTitle');
-  const yearInput = document.getElementById('fYear');
-  const previewBox = document.getElementById('poster-preview-box');
-  const previewImg = document.getElementById('poster-preview-img');
-  const placeholderIcon = document.getElementById('poster-placeholder-icon');
-
-  function triggerPreview() {
-    clearTimeout(debounceTimer);
-    const title = titleInput.value.trim();
-    if (!title) {
-      previewImg.style.display = 'none';
-      placeholderIcon.style.display = 'block';
-      return;
+    function updateSlider(section) {
+      const s = state[section];
+      const cards = document.querySelectorAll(`#list-${section} .slider-card`);
+      cards.forEach((card, idx) => {
+        card.className = `slider-card ${s.filtered[idx].watched ? 'watched' : ''}`;
+        if      (idx === s.currentIndex)     card.classList.add('active');
+        else if (idx === s.currentIndex - 1) card.classList.add('prev');
+        else if (idx === s.currentIndex + 1) card.classList.add('next');
+        else                                 card.classList.add('hidden');
+      });
     }
 
-    debounceTimer = setTimeout(async () => {
-      previewBox.style.opacity = '0.5';
-      const url = await fetchPoster(title, yearInput.value.trim());
-      previewBox.style.opacity = '1';
+    window.prevSlide = function(section) {
+      const s = state[section];
+      if (s.currentIndex > 0) { s.currentIndex--; updateSlider(section); }
+    };
 
-      if (url) {
-        previewImg.src = url;
-        previewImg.style.display = 'block';
-        placeholderIcon.style.display = 'none';
-      } else {
-        previewImg.style.display = 'none';
-        placeholderIcon.style.display = 'block';
-      }
-    }, 700);
-  }
+    window.nextSlide = function(section) {
+      const s = state[section];
+      if (s.currentIndex < s.filtered.length - 1) { s.currentIndex++; updateSlider(section); }
+    };
 
-  titleInput.addEventListener('input', triggerPreview);
-  yearInput.addEventListener('input', triggerPreview);
-
-  
-  document.getElementById('standalone-movie-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = document.getElementById('fTitle').value.trim();
-    if (!title) return;
-
-    const year = document.getElementById('fYear').value.trim();
-    const targetDate = document.getElementById('targetDate').value;
-    const btn = document.getElementById('btn-standalone-add');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<span>Buscando Capa...</span>';
-
-    const posterUrl = await fetchPoster(title, year);
-
-    await push(filmesRef, {
-      title,
-      year,
-      targetDate,
-      genre: document.getElementById('fGenre').value.trim(),
-      who: document.getElementById('fWho').value.trim(),
-      where: document.getElementById('fWhere').value.trim(),
-      poster: posterUrl || "",  
-      watched: false
+    // ─── Firebase listeners ───────────────────────────────────────────────────────
+    ['filmes', 'series', 'jogos'].forEach(section => {
+      onValue(refs[section], (snapshot) => {
+        state[section].items = [];
+        snapshot.forEach(child => { state[section].items.push({ key: child.key, ...child.val() }); });
+        state[section].items.reverse();
+        updateProgress(section);
+        renderGenres(section);
+        renderItems(section);
+      });
     });
 
-    document.getElementById('standalone-movie-form').reset();
-    previewImg.style.display = 'none';
-    placeholderIcon.style.display = 'block';
-    btn.innerHTML = originalText;
-  });
+    // ─── Global actions ───────────────────────────────────────────────────────────
+    window.toggleItem = function(section, key, isWatched) {
+      update(ref(db, `${section}/${key}`), { watched: !isWatched });
+    };
 
-  window.toggleMovie = function(key, isWatched) {
-    update(ref(db, 'filmes/' + key), { watched: !isWatched });
-  };
+    window.deleteItem = function(section, key) {
+      remove(ref(db, `${section}/${key}`));
+    };
 
-  window.deleteMovie = function(key) {
-    if (confirm("Tem certeza que deseja excluir esse filme?")) {
-      remove(ref(db, 'filmes/' + key));
-    }
-  };
+    // ─── Edit dialogs ─────────────────────────────────────────────────────────────
+    window.openEdit = function(section, key) {
+      const m = state[section].items.find(x => x.key === key);
+      if (!m) return;
+      const prefix = `edit-${section}`;
+      document.getElementById(`${prefix}-key`).value           = m.key;
+      document.getElementById(`${prefix}-title-input`).value   = m.title   || '';
+      document.getElementById(`${prefix}-date`).value          = m.targetDate || '';
+      document.getElementById(`${prefix}-genre`).value         = m.genre   || '';
+      document.getElementById(`${prefix}-year`).value          = m.year    || '';
+      document.getElementById(`${prefix}-who`).value           = m.who     || '';
+      document.getElementById(`${prefix}-where`).value         = m.where   || '';
+      document.getElementById(`edit-dialog-${section}`).showModal();
+    };
 
-  window.openEditMovie = function(key) {
-    const m = movies.find(m => m.key === key);
-    if (!m) return;
+    ['filmes', 'series', 'jogos'].forEach(section => {
+      document.getElementById(`edit-form-${section}`).addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const key      = document.getElementById(`edit-${section}-key`).value;
+        const original = state[section].items.find(x => x.key === key);
+        if (!original) return;
 
-    document.getElementById('edit-mKey').value = m.key;
-    document.getElementById('edit-mTitle').value = m.title || '';
-    document.getElementById('edit-mTargetDate').value = m.targetDate || '';
-    document.getElementById('edit-mGenre').value = m.genre || '';
-    document.getElementById('edit-mYear').value = m.year || '';
-    document.getElementById('edit-mWho').value = m.who || '';
-    document.getElementById('edit-mWhere').value = m.where || '';
+        const newTitle = document.getElementById(`edit-${section}-title-input`).value.trim();
+        const newYear  = document.getElementById(`edit-${section}-year`).value.trim();
+        const btn      = document.getElementById(`btn-edit-${section}-submit`);
+        const origHTML = btn.innerHTML;
+        let finalPoster = original.poster;
 
-    editDialog.showModal();
-  };
+        if (newTitle !== original.title || newYear !== original.year) {
+          btn.innerHTML = '<span>Atualizando Capa...</span>';
+          const fetched = await posterFetcher[section](newTitle, newYear);
+          if (fetched) finalPoster = fetched;
+        }
 
-  document.getElementById('edit-movie-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const key = document.getElementById('edit-mKey').value;
-    const originalMovie = movies.find(m => m.key === key);
-    if (!originalMovie) return;
+        await update(ref(db, `${section}/${key}`), {
+          title:      newTitle,
+          year:       newYear,
+          targetDate: document.getElementById(`edit-${section}-date`).value,
+          genre:      document.getElementById(`edit-${section}-genre`).value.trim(),
+          who:        document.getElementById(`edit-${section}-who`).value.trim(),
+          where:      document.getElementById(`edit-${section}-where`).value.trim(),
+          poster:     finalPoster,
+        });
 
-    const newTitle = document.getElementById('edit-mTitle').value.trim();
-    const newYear = document.getElementById('edit-mYear').value.trim();
-    const btn = document.getElementById('btn-edit-movie-submit');
-    const originalText = btn.innerHTML;
-
-    let finalPoster = originalMovie.poster || "";
-
-    if (newTitle !== originalMovie.title || newYear !== (originalMovie.year || "")) {
-      btn.innerHTML = '<span>Atualizando Capa...</span>';
-      const fetchedPoster = await fetchPoster(newTitle, newYear);
-      if (fetchedPoster) finalPoster = fetchedPoster;
-    }
-
-    await update(ref(db, 'filmes/' + key), {
-      title: newTitle,
-      year: newYear,
-      targetDate: document.getElementById('edit-mTargetDate').value,
-      genre: document.getElementById('edit-mGenre').value.trim(),
-      who: document.getElementById('edit-mWho').value.trim(),
-      where: document.getElementById('edit-mWhere').value.trim(),
-      poster: finalPoster
+        btn.innerHTML = origHTML;
+        document.getElementById(`edit-dialog-${section}`).close();
+      });
     });
 
-    btn.innerHTML = originalText;
-    editDialog.close();
-  });
-
-  document.querySelectorAll('.ftab').forEach(tab => {
-    tab.addEventListener('click', (e) => {
-      document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-      e.target.classList.add('active');
-      currentFilter = e.target.dataset.filter;
-      renderMovies();
+    // ─── Add forms ────────────────────────────────────────────────────────────────
+    // Filmes
+    document.getElementById('form-filmes').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('fTitle').value.trim(); if (!title) return;
+      const year  = document.getElementById('fYear').value.trim();
+      const btn   = document.getElementById('btn-add-filmes');
+      const orig  = btn.innerHTML;
+      btn.innerHTML = '<span>Buscando Capa...</span>';
+      const poster = await fetchMoviePoster(title, year);
+      await push(refs.filmes, { title, year, poster, watched: false,
+        targetDate: document.getElementById('fTargetDate').value,
+        genre:      document.getElementById('fGenre').value.trim(),
+        who:        document.getElementById('fWho').value.trim(),
+        where:      document.getElementById('fWhere').value.trim(),
+      });
+      document.getElementById('form-filmes').reset();
+      document.getElementById('poster-preview-img-filmes').style.display = 'none';
+      document.getElementById('poster-placeholder-icon-filmes').style.display = 'block';
+      btn.innerHTML = orig;
     });
-  });
-</script>
+
+    // Séries
+    document.getElementById('form-series').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('sTitle').value.trim(); if (!title) return;
+      const year  = document.getElementById('sYear').value.trim();
+      const btn   = document.getElementById('btn-add-series');
+      const orig  = btn.innerHTML;
+      btn.innerHTML = '<span>Buscando Capa...</span>';
+      const poster = await fetchTVPoster(title, year);
+      await push(refs.series, { title, year, poster, watched: false,
+        targetDate: document.getElementById('sTargetDate').value,
+        genre:      document.getElementById('sGenre').value.trim(),
+        who:        document.getElementById('sWho').value.trim(),
+        where:      document.getElementById('sWhere').value.trim(),
+      });
+      document.getElementById('form-series').reset();
+      document.getElementById('poster-preview-img-series').style.display = 'none';
+      document.getElementById('poster-placeholder-icon-series').style.display = 'block';
+      btn.innerHTML = orig;
+    });
+
+    // Jogos
+    document.getElementById('form-jogos').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('jTitle').value.trim(); if (!title) return;
+      const year  = document.getElementById('jYear').value.trim();
+      const btn   = document.getElementById('btn-add-jogos');
+      const orig  = btn.innerHTML;
+      btn.innerHTML = '<span>Buscando Capa...</span>';
+      const poster = await fetchGameCover(title);
+      await push(refs.jogos, { title, year, poster, watched: false,
+        targetDate: document.getElementById('jTargetDate').value,
+        genre:      document.getElementById('jGenre').value.trim(),
+        who:        document.getElementById('jWho').value.trim(),
+        where:      document.getElementById('jWhere').value.trim(),
+      });
+      document.getElementById('form-jogos').reset();
+      document.getElementById('poster-preview-img-jogos').style.display = 'none';
+      document.getElementById('poster-placeholder-icon-jogos').style.display = 'block';
+      btn.innerHTML = orig;
+    });
+
+    // ─── Filter tabs (Todos / Para Assistir / Assistidos) per section ─────────────
+    document.querySelectorAll('.ftab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        const section = e.target.dataset.section;
+        document.querySelectorAll(`.ftab[data-section="${section}"]`).forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        state[section].filter = e.target.dataset.filter;
+        renderItems(section);
+      });
+    });
+
+    // ─── Main tab switching ───────────────────────────────────────────────────────
+    document.querySelectorAll('.main-tab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        const section = e.currentTarget.dataset.section;
+        document.querySelectorAll('.main-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        e.currentTarget.classList.add('active');
+        e.currentTarget.setAttribute('aria-selected', 'true');
+        document.querySelectorAll('.media-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(`section-${section}`).classList.add('active');
+      });
+    });
+  </script>
 {% endblock %}
