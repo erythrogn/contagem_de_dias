@@ -11,7 +11,7 @@
 
   <header class="page-header">
     <span class="eyebrow">lugares para explorar juntos</span>
-    <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
+    <h1 class="page-title">Nossa lista de<br><em>viagens</em></h1>
     <p class="page-sub">cada destino só vai valer a pena pq é com voce</p>
   </header>
 
@@ -19,6 +19,14 @@
     <div class="stat">
       <div class="stat-num" id="s-total">0</div>
       <div class="stat-label">Destinos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="s-sonhos" style="color: var(--gold-pale);">0</div>
+      <div class="stat-label">Sonhos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="s-feitas" style="color: #4da6ff;">0</div>
+      <div class="stat-label">Realizadas</div>
     </div>
   </div>
 
@@ -28,7 +36,7 @@
     <form id="standalone-trip-form" class="form-grid">
       <div class="form-group">
         <label for="fDest">Destino</label>
-        <input type="text" id="fDest" name="fDest" placeholder="ex: Gramado, Portugal..." autocomplete="off" required>
+        <input type="text" id="fDest" name="fDest" placeholder="ex: Gramado, Paris..." autocomplete="off" required>
       </div>
       <div class="form-group">
         <label for="targetDate">Quando (Data Oficial)?</label>
@@ -36,73 +44,79 @@
       </div>
       <div class="form-group">
         <label for="fStatus">Status</label>
-        <select id="fStatus" name="fStatus">
-          <option value="sonho">✦ Sonho</option>
-          <option value="planejada">◈ Planejada</option>
-          <option value="feita">✓ Feita</option>
+        <select id="fStatus" name="fStatus" required>
+          <option value="sonho">Sonho</option>
+          <option value="planejada">Planejada</option>
+          <option value="feita">Feita</option>
         </select>
       </div>
       <div class="form-group">
-        <label for="fQuem">Quem quer ir?</label>
-        <input type="text" id="fQuem" name="fQuem" placeholder="hesron, mozi, os dois...">
+        <label for="fQuem">De quem foi a ideia?</label>
+        <input type="text" id="fQuem" name="fQuem" placeholder="Hesron ou Tiago">
       </div>
       <div class="form-group span2">
-        <label for="fNotes">O que queremos fazer lá?</label>
-        <textarea id="fNotes" name="fNotes" rows="3" placeholder="Restaurantes, pontos turísticos, experiências..."></textarea>
+        <label for="fNotes">Anotações e Roteiro</label>
+        <textarea id="fNotes" name="fNotes" rows="2" placeholder="Lugares para visitar lá, custos, ideias..."></textarea>
       </div>
       <div class="form-group span2">
-        <button id="btn-add-trip" class="btn-submit" type="submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <button type="submit" class="btn-submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
           <span>Adicionar Viagem</span>
         </button>
       </div>
     </form>
   </section>
 
-  <div class="trip-list" id="tripList" aria-label="Lista de viagens" aria-live="polite">
+  <div class="filter-container" role="tablist">
+    <button class="ftab active" data-filter="all" role="tab">Todas</button>
+    <button class="ftab" data-filter="sonho" role="tab">Sonhos</button>
+    <button class="ftab" data-filter="planejada" role="tab">Planejadas</button>
+    <button class="ftab" data-filter="feita" role="tab">Feitas</button>
+  </div>
+
+  <div class="trip-list" id="tripList" aria-live="polite">
     <div class="empty-state">
-      <p>✦</p>
-      <p>Carregando rotas...</p>
+      <p>Aguardando novos destinos...</p>
     </div>
   </div>
 
 </div>
 
-<dialog id="edit-dialog-trip" aria-labelledby="edit-trip-title">
+<dialog id="edit-dialog" aria-labelledby="edit-dialog-title">
   <div class="dialog-header">
-    <h3 id="edit-trip-title" style="margin: 0;">Editar Viagem</h3>
-    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-trip').close()">
+    <h3 id="edit-dialog-title" style="margin: 0; font-family: var(--font-title); color: var(--gold-pale); font-weight: 400;">Editar Viagem</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
   <form id="edit-trip-form" class="form-grid" novalidate>
     <input type="hidden" id="edit-tKey">
-    <div class="form-group">
+    <div class="form-group span2">
       <label for="edit-tDest">Destino</label>
       <input type="text" id="edit-tDest" required>
     </div>
     <div class="form-group">
-      <label for="edit-tTargetDate">Quando?</label>
+      <label for="edit-tTargetDate">Data</label>
       <input type="date" id="edit-tTargetDate" required>
     </div>
     <div class="form-group">
       <label for="edit-tStatus">Status</label>
-      <select id="edit-tStatus">
-        <option value="sonho">✦ Sonho</option>
-        <option value="planejada">◈ Planejada</option>
-        <option value="feita">✓ Feita</option>
+      <select id="edit-tStatus" required>
+        <option value="sonho">Sonho</option>
+        <option value="planejada">Planejada</option>
+        <option value="feita">Feita</option>
       </select>
     </div>
-    <div class="form-group">
-      <label for="edit-tQuem">Quem quer ir?</label>
+    <div class="form-group span2">
+      <label for="edit-tQuem">De quem foi a ideia?</label>
       <input type="text" id="edit-tQuem">
     </div>
     <div class="form-group span2">
-      <label for="edit-tNotes">O que queremos fazer lá?</label>
-      <textarea id="edit-tNotes" rows="3"></textarea>
+      <label for="edit-tNotes">Anotações e Roteiro</label>
+      <textarea id="edit-tNotes" rows="2"></textarea>
     </div>
     <div class="form-group span2">
-      <button class="btn-submit" type="submit">
+      <button type="submit" class="btn-submit">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
         <span>Salvar Alterações</span>
       </button>
@@ -114,105 +128,133 @@
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
 
-  const viagensRef = ref(db, 'viagens');
-
+  const tripsRef = ref(db, 'viagens');
   let trips = [];
-  const editDialog = document.getElementById('edit-dialog-trip');
+  let currentFilter = 'all';
+  const editDialog = document.getElementById('edit-dialog');
 
-  onValue(viagensRef, (snapshot) => {
-    trips = [];
-    snapshot.forEach((childSnapshot) => {
-      trips.push({ key: childSnapshot.key, ...childSnapshot.val() });
-    });
-    trips.reverse();
-    renderTrips();
-  });
+  function updateStats() {
+    document.getElementById('s-total').textContent = trips.length;
+    document.getElementById('s-sonhos').textContent = trips.filter(t => t.status === 'sonho').length;
+    document.getElementById('s-feitas').textContent = trips.filter(t => t.status === 'feita').length;
+  }
+
+  // Função para gerar um hash numérico único a partir de uma string (nome do destino)
+  function hashCode(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+      h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    }
+    return h;
+  }
+
+  // Gera uma imagem ÚNICA baseada no nome do destino usando uma seed
+  function getDestImage(destName) {
+    const safeName = (destName || 'travel').trim();
+    // Prompt mais rico para garantir qualidade estilo "Pinterest"
+    const prompt = `cinematic travel photography of ${safeName}, famous landmark, dreamy atmosphere, golden hour light, highly detailed, 8k resolution, majestic landscape`;
+    // A seed garante que o mesmo nome gere sempre a mesma imagem, e nomes diferentes gerem imagens diferentes.
+    const seed = Math.abs(hashCode(safeName));
+
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=1200&seed=${seed}`;
+  }
 
   function renderTrips() {
     const list = document.getElementById('tripList');
     list.innerHTML = '';
-    document.getElementById('s-total').textContent = trips.length;
 
-    if (!trips.length) {
-      list.innerHTML = `
-        <div class="empty-state">
-          <p>Nenhuma viagem na lista ainda. Comecem a sonhar!</p>
-        </div>`;
+    const filtered = trips.filter(t => currentFilter === 'all' || t.status === currentFilter);
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><p>Nenhuma viagem encontrada.</p></div>`;
       return;
     }
 
-    trips.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'trip-card';
-      
-      const dateStr = t.targetDate ? t.targetDate.split('-').reverse().join('/') : '';
-      const dateHtml = dateStr ? `<time datetime="${t.targetDate}" style="margin-right: 8px; color: var(--gold-pale); display:inline-flex; align-items:center; gap:4px;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 
-        ${dateStr}</time>` : '';
+    filtered.forEach((trip, index) => {
+      const card = document.createElement('article');
+      card.className = `trip-card status-${trip.status}`;
+      // Animação em cascata para entrada suave
+      card.style.animationDelay = `${index * 0.12}s`;
 
+      const dateStr = trip.targetDate ? trip.targetDate.split('-').reverse().join('/') : '';
+      // Chama a função corrigida para obter a URL da imagem
+      const bgImage = getDestImage(trip.dest);
+      
+      const pinIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
+      
       card.innerHTML = `
-        <div class="trip-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <div class="trip-bg">
+          <img src="${bgImage}" alt="${trip.dest}" onload="this.classList.add('loaded')">
+          <div class="trip-overlay"></div>
         </div>
-        <div class="trip-body">
-          <div class="trip-dest">${t.dest}</div>
-          <div class="trip-meta">
-            ${dateHtml} ${t.quem ? `• ${t.quem}` : ''}
+        
+        <div class="trip-content">
+          <header class="trip-header">
+            <span class="status-badge">${trip.status}</span>
+            <div class="trip-actions">
+              <button class="btn-action edit" onclick="window.openEditTrip('${trip.key}')" title="Editar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+              <button class="btn-action del" onclick="window.deleteTrip('${trip.key}')" title="Excluir">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+          </header>
+
+          <div class="trip-body">
+            ${trip.quem ? `<span class="trip-who">Ideia de: ${trip.quem}</span>` : ''}
+            <h3 class="trip-dest">${pinIcon} ${trip.dest}</h3>
+            ${dateStr ? `<time class="trip-date">${dateStr}</time>` : '<span class="trip-date">Data indefinida</span>'}
+            
+            <div class="trip-notes-container">
+              ${trip.notes ? `<p class="trip-notes">${trip.notes}</p>` : '<p class="trip-notes">Sem anotações.</p>'}
+            </div>
           </div>
-          ${t.notes ? `<div class="trip-notes">${t.notes}</div>` : ''}
-          <span class="status-badge badge-${t.status}">${t.status.toUpperCase()}</span>
-        </div>
-        <div class="trip-actions">
-          <button class="btn-icon edit" onclick="window.openEditTrip('${t.key}')" aria-label="Editar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-          </button>
-          <button class="btn-icon del" onclick="window.deleteTrip('${t.key}')" aria-label="Excluir">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
         </div>
       `;
       list.appendChild(card);
     });
   }
 
+  onValue(tripsRef, (snapshot) => {
+    trips = [];
+    snapshot.forEach(child => {
+      trips.push({ key: child.key, ...child.val() });
+    });
+    trips.reverse();
+    updateStats();
+    renderTrips();
+  });
+
   document.getElementById('standalone-trip-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const dest = document.getElementById('fDest').value.trim();
-    if (!dest) return;
-
-    await push(viagensRef, {
-      dest,
+    await push(tripsRef, {
+      dest: document.getElementById('fDest').value.trim(),
       targetDate: document.getElementById('targetDate').value,
       status: document.getElementById('fStatus').value,
       quem: document.getElementById('fQuem').value.trim(),
       notes: document.getElementById('fNotes').value.trim()
     });
-
     document.getElementById('standalone-trip-form').reset();
   });
 
-  window.deleteTrip = function(key) {
-    remove(ref(db, 'viagens/' + key));
-  };
+  window.deleteTrip = function(key) { remove(ref(db, 'viagens/' + key)); };
 
   window.openEditTrip = function(key) {
     const t = trips.find(trip => trip.key === key);
     if (!t) return;
-
     document.getElementById('edit-tKey').value = t.key;
     document.getElementById('edit-tDest').value = t.dest || '';
     document.getElementById('edit-tTargetDate').value = t.targetDate || '';
     document.getElementById('edit-tStatus').value = t.status || 'sonho';
     document.getElementById('edit-tQuem').value = t.quem || '';
     document.getElementById('edit-tNotes').value = t.notes || '';
-
     editDialog.showModal();
   };
 
   document.getElementById('edit-trip-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const key = document.getElementById('edit-tKey').value;
-    
     await update(ref(db, 'viagens/' + key), {
       dest: document.getElementById('edit-tDest').value.trim(),
       targetDate: document.getElementById('edit-tTargetDate').value,
@@ -220,8 +262,16 @@
       quem: document.getElementById('edit-tQuem').value.trim(),
       notes: document.getElementById('edit-tNotes').value.trim()
     });
-
     editDialog.close();
+  });
+
+  document.querySelectorAll('.ftab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      currentFilter = e.target.dataset.filter;
+      renderTrips();
+    });
   });
 </script>
 {% endblock %}

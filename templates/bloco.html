@@ -15,30 +15,42 @@
     <p class="page-sub">perguntas, listas e pensamentos soltos</p>
   </header>
 
+  <!-- Formulário Multi-Step -->
   <section class="mform-shell" aria-label="Nova anotação">
-
     <div class="mform-progress">
       <div class="mform-progress-fill" id="mformProgress"></div>
       <div class="mform-steps">
         <span class="mstep active" data-step="1">
-          <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+          <span class="mstep-dot">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </span>
           <span class="mstep-label">Tipo</span>
         </span>
         <span class="mstep-line"></span>
         <span class="mstep" data-step="2">
-          <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>
+          <span class="mstep-dot">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/>
+            </svg>
+          </span>
           <span class="mstep-label">Autor</span>
         </span>
         <span class="mstep-line"></span>
         <span class="mstep" data-step="3">
-          <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+          <span class="mstep-dot">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </span>
           <span class="mstep-label">Conteúdo</span>
         </span>
       </div>
     </div>
 
     <form id="note-form" novalidate>
-
+      <!-- Step 1: Tipo -->
       <div class="mform-step active" data-step="1">
         <p class="mform-step-eyebrow">passo 1 de 3</p>
         <h2 class="mform-step-title">O que você quer criar?</h2>
@@ -47,7 +59,12 @@
             <input type="radio" name="nType" id="type-texto" value="texto" checked>
             <div class="type-card-inner">
               <div class="type-card-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
               </div>
               <span class="type-card-name">Texto Livre</span>
               <span class="type-card-desc">Um pensamento, memória ou recado</span>
@@ -57,7 +74,14 @@
             <input type="radio" name="nType" id="type-lista" value="lista">
             <div class="type-card-inner">
               <div class="type-card-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <line x1="8" y1="6" x2="21" y2="6"/>
+                  <line x1="8" y1="12" x2="21" y2="12"/>
+                  <line x1="8" y1="18" x2="21" y2="18"/>
+                  <line x1="3" y1="6" x2="3.01" y2="6"/>
+                  <line x1="3" y1="12" x2="3.01" y2="12"/>
+                  <line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
               </div>
               <span class="type-card-name">Lista</span>
               <span class="type-card-desc">Itens, desejos, planos</span>
@@ -67,7 +91,11 @@
             <input type="radio" name="nType" id="type-pergunta" value="pergunta">
             <div class="type-card-inner">
               <div class="type-card-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
               </div>
               <span class="type-card-name">Pergunta</span>
               <span class="type-card-desc">o oto responde</span>
@@ -77,11 +105,14 @@
         <div class="mform-nav">
           <button type="button" class="mform-btn-next" onclick="window.mformNext()">
             Continuar
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
           </button>
         </div>
       </div>
 
+      <!-- Step 2: Autor -->
       <div class="mform-step" data-step="2">
         <p class="mform-step-eyebrow">passo 2 de 3</p>
         <h2 class="mform-step-title">Quem está escrevendo?</h2>
@@ -103,16 +134,21 @@
         </div>
         <div class="mform-nav">
           <button type="button" class="mform-btn-back" onclick="window.mformBack()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
             Voltar
           </button>
           <button type="button" class="mform-btn-next" onclick="window.mformNext()">
             Continuar
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
           </button>
         </div>
       </div>
 
+      <!-- Step 3: Conteúdo -->
       <div class="mform-step" data-step="3">
         <p class="mform-step-eyebrow">passo 3 de 3</p>
         <h2 class="mform-step-title" id="mform-step3-title">Escreva o conteúdo</h2>
@@ -124,31 +160,37 @@
         </div>
 
         <div id="field-content" class="mform-field-group">
-          <textarea id="nContent" class="mform-input mform-textarea" rows="3" placeholder=" "></textarea>
+          <textarea id="nContent" class="mform-input mform-textarea" rows="4" placeholder=" "></textarea>
           <label for="nContent" class="mform-label" id="label-content">Conteúdo...</label>
           <span class="mform-underline"></span>
         </div>
 
         <div id="field-answer-hint" class="mform-hint-box" style="display:none;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
           <p id="hint-text">A outra pessoa irá responder após salvar.</p>
         </div>
 
         <div class="mform-nav">
           <button type="button" class="mform-btn-back" onclick="window.mformBack()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
             Voltar
           </button>
           <button type="submit" class="mform-btn-submit" id="btn-note-submit">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
             <span>Gravar no Grimório</span>
           </button>
         </div>
       </div>
-
     </form>
   </section>
 
+  <!-- Filtros -->
   <div class="filter-row" role="tablist" aria-label="Filtrar notas">
     <button class="ftab active" data-filter="todos" role="tab">Tudo</button>
     <button class="ftab" data-filter="texto" role="tab">Textos</button>
@@ -156,65 +198,119 @@
     <button class="ftab" data-filter="pergunta" role="tab">Perguntas</button>
   </div>
 
+  <!-- Carrossel 3D para Textos -->
+  <section id="carousel-textos-section" class="carousel-3d-container" style="display: none;">
+    <div class="carousel-3d-track" id="carousel-textos-track"></div>
+    <div class="carousel-3d-controls">
+      <button class="carousel-3d-btn" onclick="window.moveCarousel('textos', 'prev')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="carousel-3d-indicators" id="indicators-textos"></div>
+      <button class="carousel-3d-btn" onclick="window.moveCarousel('textos', 'next')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Carrossel 3D para Listas -->
+  <section id="carousel-listas-section" class="carousel-3d-container" style="display: none;">
+    <div class="carousel-3d-track" id="carousel-listas-track"></div>
+    <div class="carousel-3d-controls">
+      <button class="carousel-3d-btn" onclick="window.moveCarousel('listas', 'prev')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="carousel-3d-indicators" id="indicators-listas"></div>
+      <button class="carousel-3d-btn" onclick="window.moveCarousel('listas', 'next')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Carrossel 3D para Perguntas -->
+  <section id="carousel-perguntas-section" class="carousel-3d-container" style="display: none;">
+    <div class="carousel-3d-track" id="carousel-perguntas-track"></div>
+    <div class="carousel-3d-controls">
+      <button class="carousel-3d-btn" onclick="window.moveCarousel('perguntas', 'prev')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="carousel-3d-indicators" id="indicators-perguntas"></div>
+      <button class="carousel-3d-btn" onclick="window.moveCarousel('perguntas', 'next')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Masonry Grid para visualização "Todos" -->
   <section class="notes-masonry" id="notesList" aria-live="polite">
-    <div class="empty-state" style="grid-column: 1 / -1;">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="margin-bottom: 10px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    <div class="empty-state">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
       <p>O grimório está vazio. Escreva algo...</p>
     </div>
   </section>
 
 </div>
 
-<div class="carousel-container" id="magicSlider" style="display:none;">
-  <ul class="carousel-list" id="carouselList"></ul>
-  <div class="carousel-thumbnails" id="carouselThumbnails"></div>
-  <div class="carousel-arrows">
-    <button id="slider-prev" aria-label="Anterior" onclick="window.moveSlider('prev')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-    </button>
-    <button id="slider-next" aria-label="Próximo" onclick="window.moveSlider('next')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </button>
-  </div>
-  <div class="carousel-counter" id="carouselCounter">1 / 1</div>
-</div>
-
+<!-- Dialog de Edição -->
 <dialog id="edit-dialog-note" aria-labelledby="edit-note-title">
   <div class="dialog-header">
-    <h3 id="edit-note-title" style="margin:0; font-family:var(--font-title); color:var(--gold-pale);">Editar Nota</h3>
+    <h3 id="edit-note-title">Editar Nota</h3>
     <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-note').close()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
     </button>
   </div>
-  <form id="edit-note-form" class="form-grid" novalidate style="margin-top:1.5rem;">
+  <form id="edit-note-form" class="form-grid" novalidate>
     <input type="hidden" id="edit-nKey">
-    <div class="form-group span2 floating-group">
-      <input type="text" id="edit-nTitle" class="floating-input" placeholder=" " required>
-      <label class="floating-label">Título ou Pergunta</label>
+    <div class="mform-field-group">
+      <input type="text" id="edit-nTitle" class="mform-input" placeholder=" " required>
+      <label class="mform-label">Título ou Pergunta</label>
+      <span class="mform-underline"></span>
     </div>
-    <div class="form-group floating-group">
-      <select id="edit-nType" class="floating-input" required>
+    <div class="mform-field-group">
+      <select id="edit-nType" class="mform-input" required>
         <option value="texto">Texto Livre</option>
         <option value="lista">Lista</option>
         <option value="pergunta">Pergunta & Resposta</option>
       </select>
-      <label class="floating-label select-label">Tipo</label>
+      <label class="mform-label select-label">Tipo</label>
     </div>
-    <div class="form-group floating-group">
-      <input type="text" id="edit-nAuthor" class="floating-input" placeholder=" ">
-      <label class="floating-label">Autor</label>
+    <div class="mform-field-group">
+      <input type="text" id="edit-nAuthor" class="mform-input" placeholder=" ">
+      <label class="mform-label">Autor</label>
+      <span class="mform-underline"></span>
     </div>
-    <div class="form-group span2 floating-group" id="edit-field-content">
-      <textarea id="edit-nContent" class="floating-input textarea-expand" rows="3" placeholder=" "></textarea>
-      <label class="floating-label">Conteúdo</label>
+    <div class="mform-field-group" id="edit-field-content">
+      <textarea id="edit-nContent" class="mform-input mform-textarea" rows="4" placeholder=" "></textarea>
+      <label class="mform-label">Conteúdo</label>
+      <span class="mform-underline"></span>
     </div>
-    <div class="form-group span2 floating-group" id="edit-field-answer" style="display:none;">
-      <textarea id="edit-nAnswer" class="floating-input textarea-expand" rows="3" placeholder=" "></textarea>
-      <label class="floating-label">Resposta</label>
+    <div class="mform-field-group" id="edit-field-answer" style="display:none;">
+      <textarea id="edit-nAnswer" class="mform-input mform-textarea" rows="3" placeholder=" "></textarea>
+      <label class="mform-label">Resposta</label>
+      <span class="mform-underline"></span>
     </div>
-    <div class="form-group span2">
-      <button type="submit" class="btn-submit">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+    <div class="mform-nav" style="justify-content: flex-end; margin-top: 1.5rem;">
+      <button type="submit" class="mform-btn-submit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
         <span>Salvar Alterações</span>
       </button>
     </div>
@@ -230,13 +326,22 @@
   let currentFilter = 'todos';
   const editDialog = document.getElementById('edit-dialog-note');
 
-  document.querySelectorAll('.mform-textarea, .textarea-expand').forEach(ta => {
+  // Ícones para cada tipo
+  const ICONS = {
+    texto: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+    lista: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+    pergunta: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+  };
+
+  // Auto-resize textarea
+  document.querySelectorAll('.mform-textarea').forEach(ta => {
     ta.addEventListener('input', function() {
       this.style.height = 'auto';
       this.style.height = this.scrollHeight + 'px';
     });
   });
 
+  // Multi-step form logic
   let currentMStep = 1;
   const TOTAL_STEPS = 3;
 
@@ -244,6 +349,7 @@
     const r = document.querySelector('input[name="nType"]:checked');
     return r ? r.value : 'texto';
   }
+
   function getMSelectedAuthor() {
     const r = document.querySelector('input[name="nAuthor"]:checked');
     return r ? r.value : '';
@@ -253,7 +359,6 @@
     document.querySelectorAll('.mform-step').forEach(s => {
       const n = parseInt(s.dataset.step);
       s.classList.toggle('active', n === currentMStep);
-      s.classList.toggle('done', n < currentMStep);
     });
     
     document.querySelectorAll('.mstep').forEach(s => {
@@ -300,6 +405,7 @@
       updateMFormUI();
     }
   };
+
   window.mformBack = function() {
     if (currentMStep > 1) {
       currentMStep--;
@@ -309,247 +415,310 @@
 
   updateMFormUI();
 
-  const ICONS = {
-    texto:    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
-    lista:    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>',
-    pergunta: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+  // Carrossel 3D logic
+  const carousels = {
+    textos: { items: [], currentIndex: 0 },
+    listas: { items: [], currentIndex: 0 },
+    perguntas: { items: [], currentIndex: 0 }
   };
 
   function getTargetAnswerer(authorName) {
     const n = (authorName || '').toLowerCase().trim();
     if (n === 'hesron') return 'Tiago';
-    if (n === 'tiago')  return 'Hesron';
+    if (n === 'tiago') return 'Hesron';
     return 'Amor';
   }
 
-  function hashCode(str) {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; }
-    return h;
-  }
-
-function getThemeImage(title, seed) {
-  const safeTitle = (title || 'grimório').trim();
-  
-  const cleanTitle = safeTitle
-    .replace(/["'<>]/g, '')   
-    .substring(0, 90);      
-
- 
-  const prompt = `grimório antigo dark fantasy, página mística do grimório com cena inspirada em "${cleanTitle}", atmosfera mágica densa, iluminação cinematográfica volumétrica, god rays dourados, névoa etérea, detalhes intrincados em ouro e preto, estilo realista épico, arte de fantasia sombria, 8k, altamente detalhado`;
-
-  const seedNum = Math.abs(hashCode(seed || safeTitle));
-
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seedNum}&width=1600&height=1080`;
-}
-
-  function renderInterface() {
-    const list       = document.getElementById('notesList');
-    const sliderBox  = document.getElementById('magicSlider');
-    const cList      = document.getElementById('carouselList');
-    const cThumb     = document.getElementById('carouselThumbnails');
-
-    list.innerHTML   = '';
-    cList.innerHTML  = '';
-    cThumb.innerHTML = '';
-
-    const isQMode   = currentFilter === 'pergunta';
-    list.style.display    = isQMode ? 'none' : '';
-    sliderBox.style.display = isQMode ? 'block' : 'none';
-
-    const filtered = notes.filter(n => currentFilter === 'todos' || n.type === currentFilter);
-
-    if (!filtered.length && !isQMode) {
-      list.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="margin-bottom: 10px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><p>O grimório está vazio. Escreva algo...</p></div>`;
+  function renderCarousel(type) {
+    const section = document.getElementById(`carousel-${type}-section`);
+    const track = document.getElementById(`carousel-${type}-track`);
+    const indicators = document.getElementById(`indicators-${type}`);
+    const items = carousels[type].items;
+    
+    if (items.length === 0) {
+      section.style.display = 'none';
       return;
     }
+    
+    section.style.display = 'block';
+    track.innerHTML = '';
+    indicators.innerHTML = '';
 
-    let qIdx = 0;
-
-    filtered.forEach((n, i) => {
-      if (isQMode && n.type === 'pergunta') {
-        const bg       = getThemeImage(n.title, n.key);
-        const expected = getTargetAnswerer(n.author);
-        const hasAns   = (n.answer || '').trim() !== '';
-
-        let answerUI = '';
+    items.forEach((note, idx) => {
+      const card = document.createElement('div');
+      card.className = 'carousel-3d-item';
+      card.dataset.index = idx;
+      
+      let contentHtml = '';
+      if (type === 'textos') {
+        contentHtml = `<p class="note-text">${(note.content || '').replace(/\\n/g, '<br>')}</p>`;
+      } else if (type === 'listas') {
+        const items_list = (note.content || '').split('\\n').filter(x => x.trim());
+        contentHtml = `<ul class="carousel-list">${items_list.map(x => `<li>${x}</li>`).join('')}</ul>`;
+      } else if (type === 'perguntas') {
+        const expected = getTargetAnswerer(note.author);
+        const hasAns = (note.answer || '').trim() !== '';
         if (hasAns) {
-          answerUI = `
-            <div class="c-answer-box">
-              <span class="c-answer-author">✦ Resposta de ${n.answeredBy || expected}</span>
-              <p class="c-answer-text">"${n.answer.replace(/\n/g,'<br>')}"</p>
+          contentHtml = `
+            <div class="carousel-qa-box">
+              <div class="carousel-qa-label">✦ Resposta de ${note.answeredBy || expected}</div>
+              <div class="carousel-qa-answer">"${note.answer.replace(/\\n/g, '<br>')}"</div>
             </div>`;
         } else {
-          answerUI = `
-            <div class="c-form-box">
-              <span class="c-answer-author">✦ ${expected}, sua vez:</span>
-              <form class="c-answer-form" data-key="${n.key}" data-answerer="${expected}">
-                <textarea class="c-input" rows="2" placeholder="Responda aqui, ${expected}..."></textarea>
-                <button type="submit" class="c-btn">Responder</button>
+          contentHtml = `
+            <div class="carousel-qa-box carousel-qa-pending">
+              <div class="carousel-qa-label">Aguardando resposta de ${expected}</div>
+              <form class="inline-answer-form" data-key="${note.key}" data-answerer="${expected}" style="margin-top: 1rem;">
+                <textarea class="mform-input mform-textarea" rows="2" placeholder="${expected}, responda aqui..." style="min-height: 60px; margin-bottom: 0.5rem;"></textarea>
+                <button type="submit" class="mform-btn-next" style="padding: 0.6rem 1.2rem; font-size: 0.6rem;">Responder</button>
               </form>
             </div>`;
         }
+      }
 
-        const li = document.createElement('li');
-        li.className = 'carousel-item';
-        li.innerHTML = `
-          <img class="carousel-bg" src="${bg}" alt="">
-          <div class="carousel-content">
-            <div class="cc-who">${n.author || 'Alguém'} perguntou:</div>
-            <div class="cc-title">${n.title}</div>
-            <div class="cc-answer">${answerUI}</div>
-            <div class="cc-actions">
-              <button class="cc-btn" onclick="window.openEditNote('${n.key}')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                Editar
-              </button>
-              <button class="cc-btn cc-btn-del" onclick="window.deleteNote('${n.key}')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                Excluir
-              </button>
-            </div>
+      card.innerHTML = `
+        <div class="carousel-card-badge">${ICONS[note.type]}</div>
+        <h3 class="carousel-card-title">${note.title}</h3>
+        ${note.author ? `<div class="carousel-card-author">Por: ${note.author}</div>` : ''}
+        <div class="carousel-card-content">${contentHtml}</div>
+        <div class="carousel-card-actions">
+          <button class="carousel-btn-action" onclick="window.openEditNote('${note.key}')" title="Editar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button class="carousel-btn-action delete" onclick="window.deleteNote('${note.key}')" title="Deletar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      `;
+      
+      card.addEventListener('click', () => {
+        carousels[type].currentIndex = idx;
+        updateCarousel(type);
+      });
+      
+      track.appendChild(card);
+
+      // Indicator
+      const dot = document.createElement('div');
+      dot.className = 'carousel-3d-dot';
+      dot.dataset.index = idx;
+      dot.onclick = () => {
+        carousels[type].currentIndex = idx;
+        updateCarousel(type);
+      };
+      indicators.appendChild(dot);
+    });
+
+    updateCarousel(type);
+    bindAnswerForms();
+  }
+
+  function updateCarousel(type) {
+    const items = document.querySelectorAll(`#carousel-${type}-track .carousel-3d-item`);
+    const dots = document.querySelectorAll(`#indicators-${type} .carousel-3d-dot`);
+    const currentIdx = carousels[type].currentIndex;
+    const total = items.length;
+
+    items.forEach((item, idx) => {
+      item.classList.remove('active', 'prev-1', 'next-1', 'prev-2', 'next-2', 'hidden');
+      
+      const diff = idx - currentIdx;
+      
+      if (diff === 0) {
+        item.classList.add('active');
+      } else if (diff === -1 || (currentIdx === 0 && idx === total - 1)) {
+        item.classList.add('prev-1');
+      } else if (diff === 1 || (currentIdx === total - 1 && idx === 0)) {
+        item.classList.add('next-1');
+      } else if (diff === -2 || (currentIdx <= 1 && idx >= total - 2)) {
+        item.classList.add('prev-2');
+      } else if (diff === 2 || (currentIdx >= total - 2 && idx <= 1)) {
+        item.classList.add('next-2');
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentIdx);
+    });
+  }
+
+  window.moveCarousel = function(type, direction) {
+    const carousel = carousels[type];
+    const total = carousel.items.length;
+    
+    if (direction === 'next') {
+      carousel.currentIndex = (carousel.currentIndex + 1) % total;
+    } else {
+      carousel.currentIndex = (carousel.currentIndex - 1 + total) % total;
+    }
+    
+    updateCarousel(type);
+  };
+
+  // Renderização principal
+  function renderInterface() {
+    const list = document.getElementById('notesList');
+    
+    // Esconde todos os carrosséis primeiro
+    document.getElementById('carousel-textos-section').style.display = 'none';
+    document.getElementById('carousel-listas-section').style.display = 'none';
+    document.getElementById('carousel-perguntas-section').style.display = 'none';
+    list.style.display = 'none';
+
+    // Separa as notas por tipo
+    carousels.textos.items = notes.filter(n => n.type === 'texto');
+    carousels.listas.items = notes.filter(n => n.type === 'lista');
+    carousels.perguntas.items = notes.filter(n => n.type === 'pergunta');
+
+    if (currentFilter === 'todos') {
+      // Mostra masonry grid
+      list.style.display = 'block';
+      list.innerHTML = '';
+      
+      if (notes.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <p>O grimório está vazio. Escreva algo...</p>
           </div>`;
-        cList.appendChild(li);
+        return;
+      }
 
-        const capturedIdx = qIdx;
-        const th = document.createElement('div');
-        th.className = 'c-thumb';
-        th.innerHTML = `
-          <img src="${bg}" alt="">
-          <div class="c-thumb-info">
-            <span class="c-thumb-author">${n.author || '?'}</span>
-            <span class="c-thumb-title">${n.title.substring(0, 30)}${n.title.length > 30 ? '…' : ''}</span>
-          </div>`;
-        th.addEventListener('click', () => window.jumpToSlide(capturedIdx));
-        cThumb.appendChild(th);
-
-        qIdx++;
-
-      } else if (!isQMode) {
+      notes.forEach((n, i) => {
         const card = document.createElement('article');
         card.className = `note-card type-${n.type}`;
-        card.style.animationDelay = `${i * 0.05}s`;
+        card.style.animationDelay = `${i * 0.08}s`;
 
         let contentHtml = '';
         if (n.type === 'lista') {
-          const items = (n.content || '').split('\n').filter(x => x.trim());
+          const items = (n.content || '').split('\\n').filter(x => x.trim());
           contentHtml = `<ul class="note-list">${items.map(x => `<li>${x}</li>`).join('')}</ul>`;
         } else if (n.type === 'pergunta') {
           const expected = getTargetAnswerer(n.author);
           const hasAns = (n.answer || '').trim() !== '';
           if (hasAns) {
-            contentHtml = `<div class="note-qa"><div class="note-qa-label">✦ resposta de ${n.answeredBy}</div><div class="note-answer">${n.answer.replace(/\n/g,'<br>')}</div></div>`;
+            contentHtml = `
+              <div class="note-qa">
+                <div class="note-qa-label">✦ resposta de ${n.answeredBy}</div>
+                <div class="note-answer">${n.answer.replace(/\\n/g, '<br>')}</div>
+              </div>`;
           } else {
-            contentHtml = `<div class="note-qa note-qa-pending"><div class="note-qa-label">✦ aguardando resposta de ${expected}</div>
-              <form class="inline-answer-form" data-key="${n.key}" data-answerer="${expected}">
-                <textarea class="inline-answer-input" rows="2" placeholder="${expected}, responda aqui..."></textarea>
-                <button type="submit" class="btn-inline-answer">Responder</button>
-              </form></div>`;
+            contentHtml = `
+              <div class="note-qa note-qa-pending">
+                <div class="note-qa-label">Aguardando resposta de ${expected}</div>
+                <form class="inline-answer-form" data-key="${n.key}" data-answerer="${expected}">
+                  <textarea class="mform-input mform-textarea" rows="2" placeholder="${expected}, responda aqui..." style="min-height: 60px; margin-top: 0.75rem;"></textarea>
+                  <button type="submit" class="mform-btn-next" style="padding: 0.5rem 1rem; font-size: 0.6rem; margin-top: 0.5rem;">Responder</button>
+                </form>
+              </div>`;
           }
         } else {
-          contentHtml = `<p class="note-text">${(n.content||'').replace(/\n/g,'<br>')}</p>`;
+          contentHtml = `<p class="note-text">${(n.content || '').replace(/\\n/g, '<br>')}</p>`;
         }
 
         card.innerHTML = `
-          <div class="note-badge" title="${n.type}">${ICONS[n.type] || ''}</div>
+          <div class="note-badge" title="${n.type}">${ICONS[n.type]}</div>
           <h3 class="note-title">${n.title}</h3>
           ${n.author ? `<div class="note-author">Por: ${n.author}</div>` : ''}
           <div class="note-body">${contentHtml}</div>
           <div class="note-actions">
-            <button class="btn-action edit" onclick="window.openEditNote('${n.key}')" title="Editar">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            <button class="carousel-btn-action" onclick="window.openEditNote('${n.key}')" title="Editar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
             </button>
-            <button class="btn-action del" onclick="window.deleteNote('${n.key}')" title="Deletar">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button class="carousel-btn-action delete" onclick="window.deleteNote('${n.key}')" title="Deletar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
             </button>
-          </div>`;
+          </div>
+        `;
         list.appendChild(card);
-      }
-    });
-
- if (isQMode) {
-      updateCarouselState();
+      });
+    } else if (currentFilter === 'texto') {
+      renderCarousel('textos');
+    } else if (currentFilter === 'lista') {
+      renderCarousel('listas');
+    } else if (currentFilter === 'pergunta') {
+      renderCarousel('perguntas');
     }
+    
     bindAnswerForms();
   }
 
-  let carouselActive = 0;
-
-  function updateCarouselState() {
-    const items  = document.querySelectorAll('#carouselList .carousel-item');
-    const thumbs = document.querySelectorAll('#carouselThumbnails .c-thumb');
-
-    if (!items.length) return;
-
-    items.forEach((item, idx) => {
-      item.classList.remove('active', 'prev', 'next', 'far-prev', 'far-next');
-      const diff = idx - carouselActive;
-      if (diff === 0)        item.classList.add('active');
-      else if (diff === -1)  item.classList.add('prev');
-      else if (diff === 1)   item.classList.add('next');
-      else if (diff < -1)    item.classList.add('far-prev');
-      else                   item.classList.add('far-next');
-    });
-
-    thumbs.forEach((th, idx) => {
-      th.classList.toggle('active', idx === carouselActive);
-    });
-
-    const counter = document.getElementById('carouselCounter');
-    if (counter) counter.textContent = `${carouselActive + 1} / ${items.length}`;
-  }
-
-  window.moveSlider = function(direction) {
-    const items = document.querySelectorAll('#carouselList .carousel-item');
-    if (items.length <= 1) return;
-    if (direction === 'next') carouselActive = (carouselActive + 1) % items.length;
-    else                      carouselActive = (carouselActive - 1 + items.length) % items.length;
-    updateCarouselState();
-  };
-
-  window.jumpToSlide = function(idx) {
-    carouselActive = idx;
-    updateCarouselState();
-  };
-
   function bindAnswerForms() {
-    document.querySelectorAll('.inline-answer-form, .c-answer-form').forEach(form => {
+    document.querySelectorAll('.inline-answer-form').forEach(form => {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const key      = form.dataset.key;
+        const key = form.dataset.key;
         const answerer = form.dataset.answerer;
         const textarea = form.querySelector('textarea');
-        const answer   = textarea.value.trim();
+        const answer = textarea.value.trim();
         if (!answer) return;
+        
         const btn = form.querySelector('button');
-        btn.disabled    = true;
+        const originalText = btn.textContent;
+        btn.disabled = true;
         btn.textContent = 'Enviando...';
-        await update(ref(db, 'bloco/' + key), { answer, answeredBy: answerer, answeredAt: Date.now() });
+        
+        await update(ref(db, 'bloco/' + key), { 
+          answer, 
+          answeredBy: answerer, 
+          answeredAt: Date.now() 
+        });
       });
     });
   }
 
+  // Firebase listener
   onValue(notasRef, (snapshot) => {
     notes = [];
-    snapshot.forEach(child => { notes.push({ key: child.key, ...child.val() }); });
+    snapshot.forEach(child => {
+      notes.push({ key: child.key, ...child.val() });
+    });
     notes.reverse();
-    carouselActive = 0;
+    
+    // Reseta índices dos carrosséis
+    carousels.textos.currentIndex = 0;
+    carousels.listas.currentIndex = 0;
+    carousels.perguntas.currentIndex = 0;
+    
     renderInterface();
   });
 
+  // Submit do formulário
   document.getElementById('note-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const type     = getMSelectedType();
-    const author   = getMSelectedAuthor();
-    const title    = document.getElementById('nTitle').value.trim();
-    const content  = type === 'pergunta' ? '' : (document.getElementById('nContent').value.trim());
+    const type = getMSelectedType();
+    const author = getMSelectedAuthor();
+    const title = document.getElementById('nTitle').value.trim();
+    const content = type === 'pergunta' ? '' : (document.getElementById('nContent').value.trim());
+    
     if (!title || (!content && type !== 'pergunta')) return;
 
     const btn = document.getElementById('btn-note-submit');
     const orig = btn.innerHTML;
     btn.innerHTML = '<span>Gravando...</span>';
 
-    await push(notasRef, { title, type, author, content, answer: '', timestamp: Date.now() });
+    await push(notasRef, { 
+      title, 
+      type, 
+      author, 
+      content, 
+      answer: '', 
+      timestamp: Date.now() 
+    });
 
     document.getElementById('note-form').reset();
     document.querySelectorAll('input[name="nType"]')[0].checked = true;
@@ -560,58 +729,71 @@ function getThemeImage(title, seed) {
     btn.innerHTML = orig;
   });
 
-  window.deleteNote = function(key) { remove(ref(db, 'bloco/' + key)); };
+  // Deletar nota
+  window.deleteNote = function(key) { 
+    remove(ref(db, 'bloco/' + key)); 
+  };
 
+  // Editar nota
   const editNTypeEl = document.getElementById('edit-nType');
   function toggleEditFields() {
     const isP = editNTypeEl.value === 'pergunta';
     document.getElementById('edit-field-content').style.display = isP ? 'none' : '';
-    document.getElementById('edit-field-answer').style.display  = isP ? ''     : 'none';
+    document.getElementById('edit-field-answer').style.display = isP ? '' : 'none';
   }
   editNTypeEl.addEventListener('change', toggleEditFields);
 
   window.openEditNote = function(key) {
     const n = notes.find(x => x.key === key);
     if (!n) return;
-    document.getElementById('edit-nKey').value     = n.key;
-    document.getElementById('edit-nTitle').value   = n.title   || '';
-    document.getElementById('edit-nType').value    = n.type    || 'texto';
-    document.getElementById('edit-nAuthor').value  = n.author  || '';
+    document.getElementById('edit-nKey').value = n.key;
+    document.getElementById('edit-nTitle').value = n.title || '';
+    document.getElementById('edit-nType').value = n.type || 'texto';
+    document.getElementById('edit-nAuthor').value = n.author || '';
     document.getElementById('edit-nContent').value = n.content || '';
-    document.getElementById('edit-nAnswer').value  = n.answer  || '';
+    document.getElementById('edit-nAnswer').value = n.answer || '';
     toggleEditFields();
     editDialog.showModal();
   };
 
   document.getElementById('edit-note-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const key     = document.getElementById('edit-nKey').value;
+    const key = document.getElementById('edit-nKey').value;
     const editType = document.getElementById('edit-nType').value;
-    const isP     = editType === 'pergunta';
+    const isP = editType === 'pergunta';
+    
     await update(ref(db, 'bloco/' + key), {
-      title:   document.getElementById('edit-nTitle').value.trim(),
-      type:    editType,
-      author:  document.getElementById('edit-nAuthor').value.trim(),
+      title: document.getElementById('edit-nTitle').value.trim(),
+      type: editType,
+      author: document.getElementById('edit-nAuthor').value.trim(),
       content: isP ? '' : document.getElementById('edit-nContent').value.trim(),
-      answer:  isP ? document.getElementById('edit-nAnswer').value.trim() : '',
+      answer: isP ? document.getElementById('edit-nAnswer').value.trim() : '',
     });
     editDialog.close();
   });
 
+  // Filtros
   document.querySelectorAll('.ftab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
       e.target.classList.add('active');
       currentFilter = e.target.dataset.filter;
-      carouselActive = 0;
       renderInterface();
     });
   });
 
+  // Navegação por teclado nos carrosséis
   document.addEventListener('keydown', (e) => {
-    if (currentFilter !== 'pergunta') return;
-    if (e.key === 'ArrowRight') window.moveSlider('next');
-    if (e.key === 'ArrowLeft')  window.moveSlider('prev');
+    if (currentFilter === 'texto') {
+      if (e.key === 'ArrowLeft') window.moveCarousel('textos', 'prev');
+      if (e.key === 'ArrowRight') window.moveCarousel('textos', 'next');
+    } else if (currentFilter === 'lista') {
+      if (e.key === 'ArrowLeft') window.moveCarousel('listas', 'prev');
+      if (e.key === 'ArrowRight') window.moveCarousel('listas', 'next');
+    } else if (currentFilter === 'pergunta') {
+      if (e.key === 'ArrowLeft') window.moveCarousel('perguntas', 'prev');
+      if (e.key === 'ArrowRight') window.moveCarousel('perguntas', 'next');
+    }
   });
 </script>
 {% endblock %}

@@ -66,40 +66,48 @@
   const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   const DOW_FULL = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
-  const todayLoad = new Date(); // apenas para referência inicial
+  const todayLoad = new Date();
   let viewMonth = todayLoad.getMonth();
   let viewYear = todayLoad.getFullYear();
 
   let rawData = { viagens: null, filmes: null, coisinhas: null };
   let allEvents = {};
+  let isAnimating = false; // Controle de animação para não quebrar o layout
+  let renderTimeout; // Debounce para chamadas do Firebase
 
   window.prevMonth = function() {
+    if (isAnimating) return;
     viewMonth--;
     if (viewMonth < 0) { viewMonth = 11; viewYear--; }
-    renderCalendar();
+    renderCalendar(true);
   };
 
   window.nextMonth = function() {
+    if (isAnimating) return;
     viewMonth++;
     if (viewMonth > 11) { viewMonth = 0; viewYear++; }
-    renderCalendar();
+    renderCalendar(true);
   };
 
   window.changeMonth = function(val) {
+    if (isAnimating || viewMonth === parseInt(val)) return;
     viewMonth = parseInt(val);
-    renderCalendar();
+    renderCalendar(true);
   };
 
   window.changeYear = function(val) {
+    if (isAnimating || viewYear === parseInt(val)) return;
     viewYear = parseInt(val);
-    renderCalendar();
+    renderCalendar(true);
   };
 
   window.goToToday = function() {
+    if (isAnimating) return;
     const now = new Date();
+    if (viewMonth === now.getMonth() && viewYear === now.getFullYear()) return;
     viewMonth = now.getMonth();
     viewYear = now.getFullYear();
-    renderCalendar();
+    renderCalendar(true);
   };
 
   onValue(ref(db, 'viagens'), snap => { rawData.viagens = snap.val(); processEvents(); });
@@ -107,20 +115,26 @@
   onValue(ref(db, 'coisinhas'), snap => { rawData.coisinhas = snap.val(); processEvents(); });
 
   function processEvents() {
-    allEvents = {};
-    const add = (data, type, titleField, doneCheck) => {
-      if (!data) return;
-      Object.values(data).forEach(item => {
-        if (item.targetDate && !doneCheck(item)) {
-          if (!allEvents[item.targetDate]) allEvents[item.targetDate] = [];
-          allEvents[item.targetDate].push({ type, title: item[titleField] });
-        }
-      });
-    };
-    add(rawData.viagens, 'viagem', 'dest', i => i.status === 'feita');
-    add(rawData.filmes, 'filme', 'title', i => i.watched === true);
-    add(rawData.coisinhas, 'coisinha', 'title', i => i.done === true);
-    renderCalendar();
+    clearTimeout(renderTimeout);
+    
+    // Debounce para esperar todos os dados chegarem antes de renderizar (evita piscar a tela)
+    renderTimeout = setTimeout(() => {
+      allEvents = {};
+      const add = (data, type, titleField, doneCheck) => {
+        if (!data) return;
+        Object.values(data).forEach(item => {
+          if (item.targetDate && !doneCheck(item)) {
+            if (!allEvents[item.targetDate]) allEvents[item.targetDate] = [];
+            allEvents[item.targetDate].push({ type, title: item[titleField] });
+          }
+        });
+      };
+      add(rawData.viagens, 'viagem', 'dest', i => i.status === 'feita');
+      add(rawData.filmes, 'filme', 'title', i => i.watched === true || i.watched === 'true');
+      add(rawData.coisinhas, 'coisinha', 'title', i => i.done === true);
+      
+      renderCalendar(false); // false = sem animação forçada se já estiver visível
+    }, 50);
   }
 
   function pad(n) { return String(n).padStart(2, '0'); }
@@ -139,122 +153,158 @@
     }
   }
 
-  function renderCalendar() {
+  function renderCalendar(animate = true) {
     const grid = document.getElementById('daysGrid');
     const listContainer = document.getElementById('eventsListContainer');
-    grid.innerHTML = '';
-    listContainer.innerHTML = '';
+    const isInitialRender = grid.innerHTML === '';
 
-    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-    const totalDays = new Date(viewYear, viewMonth + 1, 0).getDate();
-    const anniversaryDay = 29;
-    const hasAnniv = totalDays >= anniversaryDay;
-    const monthCount = (viewYear - START.getFullYear()) * 12 + (viewMonth - START.getMonth());
+    // Função interna que reconstrói o DOM
+    const buildDOM = () => {
+      grid.innerHTML = '';
+      listContainer.innerHTML = '';
 
-    let monthEventsRender = [];
-    const now = new Date();
+      const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+      const totalDays = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const anniversaryDay = 29;
+      const hasAnniv = totalDays >= anniversaryDay;
+      const monthCount = (viewYear - START.getFullYear()) * 12 + (viewMonth - START.getMonth());
 
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement('div');
-      empty.className = 'day empty';
-      grid.appendChild(empty);
-    }
+      let monthEventsRender = [];
+      const now = new Date();
 
-    for (let d = 1; d <= totalDays; d++) {
-      const cell = document.createElement('div');
-      const thisDate = new Date(viewYear, viewMonth, d);
-      const dateString = `${viewYear}-${pad(viewMonth + 1)}-${pad(d)}`;
-      const dayEvents = allEvents[dateString] || [];
+      const gridFrag = document.createDocumentFragment();
 
-      const isToday = now.getFullYear() === viewYear && now.getMonth() === viewMonth && now.getDate() === d;
-      const isPast = thisDate < now && !isToday;
-      const isAnniv = d === anniversaryDay && hasAnniv && thisDate >= START;
-
-      let cls = 'day';
-      if (isToday) cls += ' today';
-      else if (isAnniv) cls += ' anniversary';
-      else if (isPast) cls += ' past';
-      else cls += ' future';
-
-      cell.className = cls;
-      let innerHTML = `<span class="day-num">${d}</span>`;
-
-      if (isAnniv) {
-        const annivTitle = monthCount === 0 
-          ? 'Início do nosso namoro' 
-          : `${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} de namoro`;
-        monthEventsRender.push({
-          date: d,
-          dow: DOW_FULL[thisDate.getDay()],
-          type: 'anniv',
-          label: 'Mesversário',
-          title: annivTitle
-        });
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'day empty';
+        gridFrag.appendChild(empty);
       }
 
-      if (dayEvents.length > 0) {
-        let tooltips = dayEvents.map(e => e.title).join(' • ');
-        if (isToday) tooltips = `Hoje | ` + tooltips;
-        cell.setAttribute('data-tip', tooltips);
+      for (let d = 1; d <= totalDays; d++) {
+        const cell = document.createElement('div');
+        const thisDate = new Date(viewYear, viewMonth, d);
+        const dateString = `${viewYear}-${pad(viewMonth + 1)}-${pad(d)}`;
+        const dayEvents = allEvents[dateString] || [];
 
-        let dotsHtml = `<div class="event-dots">`;
-        dayEvents.forEach(e => {
-          dotsHtml += `<span class="e-dot dot-${e.type}"></span>`;
-          const evLabel = e.type === 'viagem' ? 'Viagem' : e.type === 'filme' ? 'Filme' : 'Coisinha';
+        const isToday = now.getFullYear() === viewYear && now.getMonth() === viewMonth && now.getDate() === d;
+        const isPast = thisDate < now && !isToday;
+        const isAnniv = d === anniversaryDay && hasAnniv && thisDate >= START;
+
+        let cls = 'day';
+        if (isToday) cls += ' today';
+        else if (isAnniv) cls += ' anniversary';
+        else if (isPast) cls += ' past';
+        else cls += ' future';
+
+        cell.className = cls;
+        let innerHTML = `<span class="day-num">${d}</span>`;
+
+        if (isAnniv) {
+          const annivTitle = monthCount === 0 
+            ? 'Início do nosso namoro' 
+            : `${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} de namoro`;
           monthEventsRender.push({
             date: d,
             dow: DOW_FULL[thisDate.getDay()],
-            type: e.type,
-            label: evLabel,
-            title: e.title
+            type: 'anniv',
+            label: 'Mesversário',
+            title: annivTitle
           });
-        });
-        dotsHtml += `</div>`;
-        innerHTML += dotsHtml;
-      } else {
-        if (isToday) cell.setAttribute('data-tip', 'Hoje');
-        else if (isAnniv) {
-          const tip = monthCount === 0 ? 'Início do nosso namoro' : `${monthCount} meses juntos`;
-          cell.setAttribute('data-tip', tip);
         }
+
+        if (dayEvents.length > 0) {
+          let tooltips = dayEvents.map(e => e.title).join(' • ');
+          if (isToday) tooltips = `Hoje | ` + tooltips;
+          cell.setAttribute('data-tip', tooltips);
+
+          let dotsHtml = `<div class="event-dots">`;
+          dayEvents.forEach(e => {
+            dotsHtml += `<span class="e-dot dot-${e.type}"></span>`;
+            const evLabel = e.type === 'viagem' ? 'Viagem' : e.type === 'filme' ? 'Filme' : 'Coisinha';
+            monthEventsRender.push({
+              date: d,
+              dow: DOW_FULL[thisDate.getDay()],
+              type: e.type,
+              label: evLabel,
+              title: e.title
+            });
+          });
+          dotsHtml += `</div>`;
+          innerHTML += dotsHtml;
+        } else {
+          if (isToday) cell.setAttribute('data-tip', 'Hoje');
+          else if (isAnniv) {
+            const tip = monthCount === 0 ? 'Início do nosso namoro' : `${monthCount} meses juntos`;
+            cell.setAttribute('data-tip', tip);
+          }
+        }
+
+        cell.innerHTML = innerHTML;
+        gridFrag.appendChild(cell);
       }
+      
+      grid.appendChild(gridFrag);
+      monthEventsRender.sort((a, b) => a.date - b.date);
 
-      cell.innerHTML = innerHTML;
-      grid.appendChild(cell);
-    }
+      const listFrag = document.createDocumentFragment();
+      
+      if (monthEventsRender.length === 0) {
+        listFrag.innerHTML = `<div class="no-events">Nenhum plano ou mesversário marcado para este mês.</div>`;
+        const div = document.createElement('div');
+        div.className = 'no-events';
+        div.textContent = 'Nenhum plano ou mesversário marcado para este mês.';
+        listFrag.appendChild(div);
+      } else {
+        monthEventsRender.forEach((ev, idx) => {
+          const row = document.createElement('div');
+          row.className = 'event-row';
+          // Adiciona um delay em cascata para cada evento que entra
+          row.style.animationDelay = `${idx * 0.08}s`; 
+          row.innerHTML = `
+            <div class="event-date-box">
+              <span class="event-date-num">${pad(ev.date)}</span>
+              <span class="event-date-dow">${ev.dow}</span>
+            </div>
+            <div class="event-details">
+              <span class="event-type-badge">
+                <span class="e-dot dot-${ev.type}"></span> ${ev.label}
+              </span>
+              <span class="event-title">${ev.title}</span>
+            </div>
+          `;
+          listFrag.appendChild(row);
+        });
+      }
+      
+      listContainer.appendChild(listFrag);
 
-    monthEventsRender.sort((a, b) => a.date - b.date);
+      // Sincroniza os selects
+      const monthSelectEl = document.getElementById('monthSelect');
+      const yearSelectEl = document.getElementById('yearSelect');
+      if (monthSelectEl) monthSelectEl.value = viewMonth;
+      if (yearSelectEl) yearSelectEl.value = viewYear;
+    };
 
-    if (monthEventsRender.length === 0) {
-      listContainer.innerHTML = `<div class="no-events">Nenhum plano ou mesversário marcado para este mês.</div>`;
+    // Lógica de Animação de Saída e Entrada
+    if (isInitialRender || !animate) {
+      buildDOM();
     } else {
-      monthEventsRender.forEach(ev => {
-        const row = document.createElement('div');
-        row.className = 'event-row';
-        row.innerHTML = `
-          <div class="event-date-box">
-            <span class="event-date-num">${pad(ev.date)}</span>
-            <span class="event-date-dow">${ev.dow}</span>
-          </div>
-          <div class="event-details">
-            <span class="event-type-badge">
-              <span class="e-dot dot-${ev.type}"></span> ${ev.label}
-            </span>
-            <span class="event-title">${ev.title}</span>
-          </div>
-        `;
-        listContainer.appendChild(row);
-      });
-    }
+      isAnimating = true;
+      grid.classList.add('fading-out');
+      listContainer.classList.add('fading-out');
 
-    // sincroniza os selects com o mês/ano atual
-    const monthSelectEl = document.getElementById('monthSelect');
-    const yearSelectEl = document.getElementById('yearSelect');
-    if (monthSelectEl) monthSelectEl.value = viewMonth;
-    if (yearSelectEl) yearSelectEl.value = viewYear;
+      setTimeout(() => {
+        buildDOM();
+        
+        requestAnimationFrame(() => {
+          grid.classList.remove('fading-out');
+          listContainer.classList.remove('fading-out');
+          setTimeout(() => { isAnimating = false; }, 350);
+        });
+      }, 300); // Tempo igual à transição do CSS
+    }
   }
 
   initViewSelectors();
-  processEvents();
 </script>
 {% endblock %}
