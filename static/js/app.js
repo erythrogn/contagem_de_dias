@@ -38,3 +38,41 @@ export class UIController {
 }
 
 export const ui = new UIController();
+function toggleMenu() {
+  const toggle   = document.getElementById('menuToggle');
+  const menu     = document.getElementById('navMenu');
+  const overlay  = document.getElementById('overlay');
+  
+  const willBeOpen = !menu.classList.contains('active');
+  
+  menu.classList.toggle('active', willBeOpen);
+  toggle.classList.toggle('open', willBeOpen);
+  overlay.classList.toggle('active', willBeOpen);
+  
+  toggle.setAttribute('aria-expanded', willBeOpen);
+  toggle.setAttribute('aria-label', willBeOpen ? 'Fechar menu' : 'Abrir menu');
+  
+  document.body.style.overflow = willBeOpen ? 'hidden' : '';
+  
+  if (willBeOpen) {
+    menu.querySelector('a').focus(); // foco no primeiro link
+  }
+}
+
+document.getElementById('menuToggle').addEventListener('click', toggleMenu);
+document.getElementById('overlay').addEventListener('click', toggleMenu);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('navMenu').classList.contains('active')) {
+    toggleMenu();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 820) {
+    document.getElementById('menuToggle').classList.remove('open');
+    document.getElementById('navMenu').classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
