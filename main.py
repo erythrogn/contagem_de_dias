@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
 
+# Data inicial do relacionamento com o Tiago
 DATA_INICIO = datetime(2025, 11, 29, 0, 1, 0)
 
 def tempo_juntos():
@@ -35,7 +37,11 @@ def viagens():
 
 @app.route("/filmes")
 def filmes():
-    return render_template("filmes.html", **tempo_juntos())
+    ctx = tempo_juntos()
+    # Captura as chaves de API das variaveis de ambiente de forma segura
+    ctx["tmdb_api_key"] = os.environ.get("TMDB_API_KEY", "")
+    ctx["rawg_api_key"] = os.environ.get("RAWG_API_KEY", "")
+    return render_template("filmes.html", **ctx)
 
 @app.route("/coisinhas")
 def coisinhas():
