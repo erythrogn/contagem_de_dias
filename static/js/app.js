@@ -38,6 +38,7 @@ export class UIController {
 }
 
 export const ui = new UIController();
+
 function toggleMenu() {
   const toggle   = document.getElementById('menuToggle');
   const menu     = document.getElementById('navMenu');

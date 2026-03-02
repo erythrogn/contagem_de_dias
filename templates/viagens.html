@@ -159,7 +159,7 @@
     return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=1200&seed=${seed}`;
   }
 
-  function renderTrips() {
+function renderTrips() {
     const list = document.getElementById('tripList');
     list.innerHTML = '';
 
@@ -173,11 +173,11 @@
     filtered.forEach((trip, index) => {
       const card = document.createElement('article');
       card.className = `trip-card status-${trip.status}`;
-      // Animação em cascata para entrada suave
-      card.style.animationDelay = `${index * 0.12}s`;
+      
+      // A LINHA ABAIXO FOI REMOVIDA PARA O GSAP AGIR:
+      // card.style.animationDelay = `${index * 0.12}s`;
 
       const dateStr = trip.targetDate ? trip.targetDate.split('-').reverse().join('/') : '';
-      // Chama a função corrigida para obter a URL da imagem
       const bgImage = getDestImage(trip.dest);
       
       const pinIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
@@ -214,8 +214,23 @@
       `;
       list.appendChild(card);
     });
-  }
 
+    // A MÁGICA DO GSAP ENTRA AQUI, APÓS O LAÇO FOREACH
+    gsap.fromTo(".trip-card", 
+      { 
+        y: 40,         // Começa 40px para baixo
+        opacity: 0     // Começa invisível
+      }, 
+      { 
+        y: 0,          // Volta para a posição original
+        opacity: 1,    // Fica 100% visível
+        duration: 0.6, // Duração de 0.6 segundos por cartão
+        stagger: 0.1,  // Intervalo de 0.1s entre a entrada de cada cartão
+        ease: "power3.out", // Curva de aceleração suave
+        clearProps: "all" // Muito importante: limpa as tags style do HTML ao finalizar para não bugar o CSS de hover depois
+      }
+    );
+  }
   onValue(tripsRef, (snapshot) => {
     trips = [];
     snapshot.forEach(child => {
