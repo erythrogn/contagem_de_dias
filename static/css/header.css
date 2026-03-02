@@ -1,28 +1,13 @@
-/* ==========================================================================
-   Header Flutuante - Efeito de Pergaminho Mágico 3D
-   Estado Padrão: Recolhido (Apenas Ícones)
-   Hover: Expandido (Revela os textos e desenrola o pergaminho)
-   ========================================================================== */
-
 .navbar {
   position: fixed;
   top: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  
-  /* Estado Fechado: Largura reduzida para abraçar apenas logo e ícones */
   width: 280px; 
   height: 70px;
-  
-  /* Bordas levemente arredondadas para os cilindros do pergaminho */
   border-radius: 6px;
-  
-  /* Fundo escuro base */
   background-color: rgba(12, 14, 20, 0.95);
-  
-  /* A Magia do Pergaminho: Cilindros laterais 3D e fibras de papel */
   background-image: 
-    /* Cilindro Esquerdo (Metal/Madeira Escura Dourada) */
     linear-gradient(90deg, 
       #1a1208 0%, 
       var(--gold, #d4aa6a) 4px, 
@@ -30,7 +15,6 @@
       rgba(0, 0, 0, 0.95) 18px, 
       transparent 26px
     ),
-    /* Cilindro Direito */
     linear-gradient(270deg, 
       #1a1208 0%, 
       var(--gold, #d4aa6a) 4px, 
@@ -38,26 +22,22 @@
       rgba(0, 0, 0, 0.95) 18px, 
       transparent 26px
     ),
-    /* Fibras sutiis do papel escuro */
     repeating-linear-gradient(90deg, 
       transparent 0px, 
       transparent 2px, 
       rgba(212, 170, 106, 0.02) 3px, 
       transparent 4px
     ),
-    /* Brilho interno central */
     radial-gradient(ellipse at center, rgba(212, 170, 106, 0.08) 0%, transparent 80%);
   
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   
-  /* Bordas que simulam o corte do papel e a ponta dos cilindros */
   border-top: 1px solid rgba(212, 170, 106, 0.4);
   border-bottom: 1px solid rgba(212, 170, 106, 0.4);
   border-left: 1px solid #1a1208;
   border-right: 1px solid #1a1208;
   
-  /* Sombras que dão o efeito do papel curvando para dentro */
   box-shadow: 
     inset 0 10px 15px -10px rgba(0, 0, 0, 0.8), 
     inset 0 -10px 15px -10px rgba(0, 0, 0, 0.8),
@@ -67,19 +47,16 @@
   display: flex;
   align-items: center;
   z-index: 9999;
-  overflow: hidden; /* Garante que nada saia da forma do rolo */
+  overflow: hidden; 
   
-  /* A transição 'width' afasta os cilindros e desenrola o papel! */
   transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1),
               background-color 0.5s ease,
               box-shadow 0.5s ease;
 }
 
-/* Costura mágica (Borda tracejada interna) contida no papiro */
 .navbar::before {
   content: '';
   position: absolute;
-  /* Espaçamento lateral de 24px impede que a linha passe por cima dos cilindros */
   inset: 6px 24px; 
   border-top: 1px dashed rgba(212, 170, 106, 0.35);
   border-bottom: 1px dashed rgba(212, 170, 106, 0.35);
@@ -90,7 +67,6 @@
   transition: inset 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hover no Pergaminho (Abrindo) */
 .navbar:hover {
   width: 92%;
   max-width: 850px;
@@ -105,7 +81,7 @@
 .nav-container {
   width: 100%;
   margin: 0 auto;
-  padding: 0 2rem; /* Mantém os itens longe dos rolos */
+  padding: 0 2rem; 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -113,7 +89,6 @@
   z-index: 2;
 }
 
-/* Logo da Dimen6 */
 .nav-logo {
   font-family: var(--font-display, serif);
   font-size: 1.3rem;
@@ -136,13 +111,12 @@
   gap: 2.5rem;
 }
 
-/* Links do Menu - Ocultando texto e mantendo o Ícone */
 .nav-link {
   display: inline-flex;
   align-items: center;
   gap: 0;
   max-width: 16px;
-  overflow: hidden; /* Corta o texto perfeitamente até o pergaminho abrir */
+  overflow: hidden; 
   color: transparent;
   font-family: var(--font-mono, monospace);
   font-size: 0.65rem;
@@ -166,7 +140,6 @@
   transition: color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Revelando a tinta do texto quando o pergaminho abre */
 .navbar:hover .nav-link {
   max-width: 150px;
   gap: 0.6rem;
@@ -191,7 +164,6 @@
   color: var(--gold, #d4aa6a);
 }
 
-/* Sublinhado "pintado" ao passar o mouse */
 .nav-link::after {
   content: '';
   position: absolute;
@@ -203,14 +175,11 @@
   box-shadow: 0 0 8px rgba(212, 170, 106, 0.5);
   transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .navbar:hover .nav-link:hover::after, 
 .navbar:hover .nav-link.active::after {
   width: 100%;
 }
-
-/* ==========================================================================
-   Menu Mobile (Hamburguer / Gaveta / Botão Flutuante)
-   ========================================================================== */
 
 .menu-toggle {
   display: none;
@@ -220,8 +189,8 @@
   flex-direction: column;
   gap: 5px;
   padding: 8px;
-  position: relative; /* Adicionado para que o z-index funcione */
-  z-index: 10000;     /* Mantém o botão acima do drawer quando ele abre */
+  position: relative; 
+  z-index: 10000;     
 }
 
 .menu-toggle span {
@@ -240,6 +209,7 @@
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   opacity: 0; pointer-events: none;
   transition: opacity 0.4s ease;
@@ -249,20 +219,22 @@
 .overlay.active { opacity: 1; pointer-events: auto; }
 
 @media (max-width: 768px) {
-  /* No mobile, o Header se transforma em um Botão Flutuante (FAB) no canto inferior */
   .navbar {
     top: auto;
     bottom: 1.5rem;
     left: auto;
     right: 1.5rem;
-    transform: none; /* A remoção do transform previne o bloqueio do `position: fixed` da gaveta */
+    transform: none; 
+    
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    
     width: 56px; 
     height: 56px;
     border-radius: 50%;
-    overflow: visible; /* Crucial para o Menu Lateral poder expandir pela tela */
+    overflow: visible; 
     
-    /* Mantendo a estética de pergaminho mágico em miniatura */
-    background-color: rgba(18, 20, 25, 0.95);
+    background-color: rgba(18, 20, 25, 0.98);
     background-image: 
       radial-gradient(circle at center, rgba(212, 170, 106, 0.15) 0%, transparent 70%),
       linear-gradient(135deg, #1a1208, #0c0e14);
@@ -271,12 +243,11 @@
   }
   
   .navbar:hover, .navbar:active {
-    width: 56px; /* Trava a largura para não desenrolar no mobile */
+    width: 56px; 
     background-color: rgba(18, 20, 25, 1);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 170, 106, 0.3);
   }
   
-  /* Textura interna circular do botão mágico */
   .navbar::before {
     inset: 4px;
     border: 1px dashed rgba(212, 170, 106, 0.4);
@@ -291,7 +262,7 @@
   }
   
   .nav-logo { 
-    display: none; /* Remove a logo para deixar apenas o botão no mobile */
+    display: none; 
   }
   
   .menu-toggle { 
@@ -305,11 +276,10 @@
   }
   
   .menu-toggle span {
-    width: 20px; /* Traços do menu ligeiramente menores no botão */
+    width: 20px; 
     margin: 0 auto;
   }
   
-  /* Menu Lateral (A gaveta) */
   .nav-menu {
     position: fixed; 
     top: 0; 
@@ -317,10 +287,9 @@
     width: 280px; 
     height: 100vh;
     background: rgba(12, 14, 20, 0.98);
-    backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
     
-    /* Um detalhe incrível: O menu lateral mobile também tem o rolo do pergaminho na borda! */
     background-image: linear-gradient(90deg, #1a1208 0px, var(--gold, #d4aa6a) 4px, #4a3015 8px, rgba(0, 0, 0, 0.8) 16px, transparent 24px);
     
     flex-direction: column; 
@@ -334,7 +303,7 @@
   }
   
   .navbar:hover .nav-menu {
-    gap: 1.5rem; /* Trava o espaçamento do menu */
+    gap: 1.5rem; 
   }
   
   .nav-menu.active { 
