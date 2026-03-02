@@ -92,6 +92,43 @@
 
 {% block scripts %}
 <script>
+  // NOVO CÓDIGO GSAP PARA O INDEX
+  document.addEventListener("DOMContentLoaded", () => {
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.fromTo(".date-label", 
+      { y: -20, autoAlpha: 0 }, 
+      { y: 0, autoAlpha: 1, duration: 1 }
+    )
+    .fromTo(".title-stack", 
+      { scale: 0.95, autoAlpha: 0, filter: "blur(8px)" }, 
+      { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 1.2 }, 
+      "-=0.5" 
+    )
+    .fromTo(".ha-line", 
+      { y: 20, autoAlpha: 0 }, 
+      { y: 0, autoAlpha: 1, duration: 1 }, 
+      "-=0.8"
+    )
+    .fromTo(".counter", 
+      { y: 40, autoAlpha: 0 }, 
+      { y: 0, autoAlpha: 1, duration: 1 }, 
+      "-=0.8"
+    )
+    .fromTo(".corner-stamp", 
+      { x: 20, autoAlpha: 0 }, 
+      { x: 0, autoAlpha: 1, duration: 1 }, 
+      "-=0.5"
+    )
+    .fromTo(".noti-panel", 
+      { y: 30, autoAlpha: 0 }, 
+      { y: 0, autoAlpha: 1, duration: 1 },
+      "-=0.8"
+    );
+  });
+</script>
+
+<script>
   const START = new Date("2025-11-29T00:01:00");
 
   function pad(n) {
@@ -235,4 +272,5 @@
   });
 
 </script>
+
 {% endblock %}
