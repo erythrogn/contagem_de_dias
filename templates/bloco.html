@@ -17,7 +17,7 @@
       </svg>
     </div>
     <h2 class="gate-title">Bloco Secreto</h2>
-    <p class="gate-sub">Este espaço é só nosso. <em>Digite a senha da floresta.</em></p>
+    <p class="gate-sub">Este espaço é só nosso. <em>Digite a senha.</em></p>
 
     <div class="gate-field-wrap">
       <input type="password" id="gate-input" class="gate-input"
@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<div id="bloco-content" class="bloco-hidden">
+<div id="bloco-content" class="bloco-hidden" style="opacity: 0; transform: translateY(20px);">
   <div class="wrap">
 
     <header class="page-header">
@@ -254,7 +254,10 @@
       </form>
     </dialog>
 
-  </div> </div> <script type="module">
+  </div> 
+</div> 
+
+<script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
 
@@ -670,7 +673,7 @@
 
   function tryAuth() {
     const pwd = input.value.trim();
-    if (!pwd) { showError('Digite a senha da floresta'); return; }
+    if (!pwd) { showError('Digite a senha'); return; }
 
     btn.disabled = true;
     btn.classList.add('loading');
@@ -704,16 +707,15 @@
 
   function unlock(animate) {
     if (animate) {
-      if (typeof gsap !== 'undefined') {
-        gsap.to(gate, {
-          autoAlpha: 0, scale: 0.95, filter: 'blur(8px)',
-          duration: 0.6, ease: 'power3.in',
-          onComplete: () => { gate.style.display = 'none'; showContent(); }
-        });
-      } else {
+      gate.style.transition = "all 0.6s ease";
+      gate.style.opacity = "0";
+      gate.style.transform = "scale(0.95)";
+      gate.style.filter = "blur(8px)";
+      
+      setTimeout(() => {
         gate.style.display = 'none';
         showContent();
-      }
+      }, 600);
     } else {
       gate.style.display = 'none';
       showContent();
@@ -722,17 +724,21 @@
 
   function showContent() {
     content.classList.remove('bloco-hidden');
-    if (typeof gsap !== 'undefined') {
-      gsap.fromTo(content,
-        { autoAlpha: 0, y: 20 },
-        { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-      );
-    }
+    content.style.display = 'block';
+    
+    // Pequeno atraso (Reflow) para garantir que o browser registou o display: block
+    // MAGIA AQUI! Sem isto a página ficava em branco porque o CSS não disparava a animação.
+    void content.offsetWidth; 
+    
+    content.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+    content.style.opacity = '1';
+    content.style.transform = 'translateY(0)';
   }
 
   btn.addEventListener('click', tryAuth);
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryAuth(); });
-  input.focus();
+  
+  setTimeout(() => input.focus(), 100);
 })();
 </script>
 {% endblock %}
