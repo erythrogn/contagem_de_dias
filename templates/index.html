@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block title %}Início · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="bg-grid" aria-hidden="true">
+    <div class="bg-cell cell-1">
+      <img src="{{ url_for('static', filename='img/foto1.jpg') }}" alt="" class="bg-img">
+    </div>
+    <div class="bg-cell cell-2">
+      <img src="{{ url_for('static', filename='img/foto3.jpg') }}" alt="" class="bg-img">
+    </div>
+    <div class="bg-cell cell-3">
+      <img src="{{ url_for('static', filename='img/foto4.jpg') }}" alt="" class="bg-img">
+    </div>
+    <div class="bg-cell cell-4">
+      <img src="{{ url_for('static', filename='img/foto2.jpg') }}" alt="" class="bg-img">
+    </div>
+  </div>
+  <div class="bg-vignette" aria-hidden="true"></div>
+
+  <div class="stage">
+
+    <p class="date-label" aria-label="Data de início do relacionamento">
+      <svg class="date-rune" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>29 · nov · 2025</span>
+      <svg class="date-rune" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    </p>
+
+    <div class="corner-stamp" aria-label="Dias juntos">
+      <div class="stamp-box">
+        <span class="stamp-top">junto há</span>
+        <span class="stamp-num" id="stampDays">0</span>
+        <span class="stamp-bot">dias</span>
+      </div>
+    </div>
+
+    <div class="title-stack">
+      <span class="word-tamo">TAMO</span>
+      <span class="word-junto">junto</span>
+    </div>
+
+    <div class="ha-line" aria-hidden="true">
+      <div class="ha-rule left-rule"></div>
+      <span class="ha-text">há</span>
+      <div class="ha-rule right-rule"></div>
+    </div>
+
+    <div class="counter" role="timer" aria-live="polite" aria-label="Tempo juntos">
+      <div class="c-unit">
+        <span class="c-number" id="cDays">00</span>
+        <span class="c-label">dias</span>
+      </div>
+      <div class="c-unit">
+        <span class="c-number" id="cHours">00</span>
+        <span class="c-label">horas</span>
+      </div>
+      <div class="c-unit">
+        <span class="c-number" id="cMinutes">00</span>
+        <span class="c-label">min</span>
+      </div>
+      <div class="c-unit">
+        <span class="c-number" id="cSeconds">00</span>
+        <span class="c-label">seg</span>
+      </div>
+    </div>
+
+    <p class="love-msg">
+      te amo, Tiago 
+      <span class="love-heart">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </span>
+    </p>
+
+    <div class="noti-panel" aria-label="Próximas Atividades">
+      <h2 class="noti-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        Próximas Memórias
+      </h2>
+      <div class="noti-grid" id="notiList">
+        <div class="noti-empty">Procurando atividades agendadas no grimório...</div>
+      </div>
+    </div>
+
+  </div>
+
+<script type="module">
+  import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { db } from "/static/js/app.js";
+
+  const START_DATE = new Date('2025-11-29T00:00:00-03:00');
+
+  function updateCounter() {
+    const now = new Date();
+    const diff = now - START_DATE;
+
+    if (diff < 0) return; 
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / 1000 / 60) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('stampDays').textContent = d;
+    document.getElementById('cDays').textContent = d.toString().padStart(2, '0');
+    document.getElementById('cHours').textContent = h.toString().padStart(2, '0');
+    document.getElementById('cMinutes').textContent = m.toString().padStart(2, '0');
+    document.getElementById('cSeconds').textContent = s.toString().padStart(2, '0');
+
+    if (typeof window._pulseSeconds === 'function') {
+      window._pulseSeconds();
+    }
+  }
+
+  setInterval(updateCounter, 1000);
+  updateCounter();
+
+  const dataStore = { coisinhas: [], viagens: [], filmes: [], series: [], jogos: [] };
+  const paths = Object.keys(dataStore);
+
+  const ICONS = {
+    coisinhas: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
+    viagens: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+    filmes: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>',
+    series: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>',
+    jogos: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="currentColor"></circle><circle cx="17" cy="11" r="1" fill="currentColor"></circle></svg>'
+  };
+
+  const LABELS = {
+    coisinhas: 'Coisinha',
+    viagens: 'Viagem',
+    filmes: 'Filme',
+    series: 'Série',
+    jogos: 'Jogo'
+  };
+
+  paths.forEach(path => {
+    onValue(ref(db, path), snapshot => {
+      dataStore[path] = [];
+      snapshot.forEach(child => {
+        const val = child.val();
+        if (val.targetDate) {
+          let isDone = false;
+          if (path === 'coisinhas') isDone = val.done === true;
+          if (path === 'filmes') isDone = (val.watched === true || val.watched === 'true');
+          if (path === 'series') isDone = val.status === 'concluida';
+          if (path === 'jogos') isDone = val.status === 'zerado';
+          if (path === 'viagens') isDone = val.status === 'feita';
+
+          if (!isDone) {
+            dataStore[path].push({ key: child.key, path, ...val });
+          }
+        }
+      });
+      buildNotifications();
+    });
+  });
+
+  function buildNotifications() {
+    let allEvents = [];
+    paths.forEach(path => { allEvents = allEvents.concat(dataStore[path]); });
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    allEvents = allEvents.filter(ev => ev.targetDate >= todayStr);
+    allEvents.sort((a, b) => a.targetDate.localeCompare(b.targetDate));
+    
+    const topEvents = allEvents.slice(0, 3);
+    const notiList = document.getElementById('notiList');
+    notiList.innerHTML = '';
+
+    if (topEvents.length === 0) {
+      notiList.innerHTML = '<div class="noti-empty">Nenhum plano futuro agendado. Vamos marcar algo?</div>';
+      return;
+    }
+
+    topEvents.forEach((ev, idx) => {
+      const dateParts = ev.targetDate.split('-');
+      const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+      
+      const card = document.createElement('div');
+      card.className = 'noti-card';
+      card.innerHTML = `
+        <div class="noti-icon">${ICONS[ev.path]}</div>
+        <div class="noti-info">
+          <span class="noti-type">${LABELS[ev.path]}</span>
+          <span class="noti-title">${ev.title || ev.destiny || 'Sem título'}</span>
+        </div>
+        <div class="noti-date">${formattedDate}</div>
+      `;
+      notiList.appendChild(card);
+
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo(card, 
+          { x: -20, opacity: 0 }, 
+          { x: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.5)', delay: idx * 0.1 }
+        );
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    gsap.set([".date-label",".title-stack",".ha-line",".counter",
+               ".corner-stamp",".love-msg",".noti-panel"], { autoAlpha: 0 });
+
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    tl.fromTo(".date-label",
+        { y: -20, autoAlpha: 0, filter: "blur(4px)" },
+        { y: 0, autoAlpha: 1, filter: "blur(0)", duration: 0.9 })
+      .fromTo(".title-stack",
+        { scale: 0.9, autoAlpha: 0, filter: "blur(20px)" },
+        { scale: 1, autoAlpha: 1, filter: "blur(0)", duration: 1.4, ease: "expo.out" },
+        "-=0.5")
+      .fromTo(".ha-line",
+        { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.7 }, "-=0.7")
+      .fromTo(".counter",
+        { y: 40, autoAlpha: 0, filter: "blur(12px)" },
+        { y: 0, autoAlpha: 1, filter: "blur(0)", duration: 1 }, "-=0.5")
+      .fromTo(".c-unit",
+        { y: 18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.08 }, "-=0.8")
+      .fromTo(".corner-stamp",
+        { x: 24, autoAlpha: 0, rotation: 4 },
+        { x: 0, autoAlpha: 1, rotation: 0, duration: 0.9, ease: "back.out(1.5)" }, "-=0.8")
+      .fromTo(".love-msg",
+        { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, "-=0.5")
+      .fromTo(".noti-panel",
+        { y: 30, autoAlpha: 0, filter: "blur(8px)" },
+        { y: 0, autoAlpha: 1, filter: "blur(0)", duration: 1 }, "-=0.4");
+
+    const stage = document.querySelector(".stage");
+    if (stage) {
+      stage.addEventListener("mousemove", (e) => {
+        const dx = (e.clientX - window.innerWidth/2) / window.innerWidth;
+        const dy = (e.clientY - window.innerHeight/2) / window.innerHeight;
+        gsap.to(".word-tamo", { x: dx * -12, y: dy * -5, duration: 1.4, ease: "power2.out" });
+        gsap.to(".word-junto", { x: dx * 16, y: dy * 8, duration: 1.4, ease: "power2.out" });
+        gsap.to(".counter",   { x: dx * 5, y: dy * 3, duration: 1.8, ease: "power2.out" });
+      });
+      stage.addEventListener("mouseleave", () => {
+        gsap.to([".word-tamo",".word-junto",".counter"],
+          { x: 0, y: 0, duration: 1.8, ease: "elastic.out(1, 0.45)" });
+      });
+    }
+
+    document.querySelectorAll(".c-unit").forEach(unit => {
+      const num = unit.querySelector(".c-number");
+      unit.addEventListener("mouseenter", () => gsap.to(num, { scale: 1.07, duration: 0.3, ease: "back.out(2)" }));
+      unit.addEventListener("mouseleave", () => gsap.to(num, { scale: 1, duration: 0.4, ease: "power2.out" }));
+    });
+
+    window._pulseSeconds = () => {
+      gsap.fromTo("#cSeconds",
+        { scale: 1.1, color: "var(--amber-bright)", textShadow: "0 0 20px rgba(240,180,41,0.6)" },
+        { scale: 1, color: "var(--text-primary)", textShadow: "0 0 0px rgba(240,180,41,0)", duration: 0.45, ease: "power2.out" });
+    };
+  });
+</script>
+{% endblock %}
