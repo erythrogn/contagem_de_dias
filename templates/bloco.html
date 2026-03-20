@@ -17,7 +17,7 @@
       </svg>
     </div>
     <h2 class="gate-title">Bloco Secreto</h2>
-    <p class="gate-sub">Este espaço é só nosso. <em>Digite a senha</em></p>
+    <p class="gate-sub">Este espaço é só nosso. <em>Digite a senha da floresta.</em></p>
 
     <div class="gate-field-wrap">
       <input type="password" id="gate-input" class="gate-input"
@@ -646,18 +646,16 @@
 
 <script>
 // ═══════════════════════════════════════════
-// BLOCO GATE — PBKDF2 
+// BLOCO GATE — Base64
 // ═══════════════════════════════════════════
-(async function initGate() {
+(function initGate() {
   const gate    = document.getElementById('bloco-gate');
   const content = document.getElementById('bloco-content');
   const input   = document.getElementById('gate-input');
   const btn     = document.getElementById('gate-btn');
   const errEl   = document.getElementById('gate-error');
 
-  const EXPECTED_HASH = "fbcb7c0cd568ae6649f77c140893a52c23f5555fefc2f9e8041bd06e9bd8b52"; 
-  const SALT = "dimen6_forest_salt_v1";
-  const ITERATIONS = 100000;
+  const EXPECTED_HASH = "b2dhaXR1ZW0=";
 
   if (sessionStorage.getItem('bloco_auth') === 'true') { 
     unlock(false); 
@@ -666,19 +664,11 @@
 
   gate.classList.add('gate-visible');
 
-  async function pbkdf2(password) {
-    const enc = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey(
-      "raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveBits"]
-    );
-    const buffer = await crypto.subtle.deriveBits(
-      { name: "PBKDF2", salt: enc.encode(SALT), iterations: ITERATIONS, hash: "SHA-256" },
-      keyMaterial, 256
-    );
-    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+  function encodePwd(str) {
+    return btoa(str.split('').reverse().join(''));
   }
 
-  async function tryAuth() {
+  function tryAuth() {
     const pwd = input.value.trim();
     if (!pwd) { showError('Digite a senha da floresta'); return; }
 
@@ -687,8 +677,8 @@
     errEl.textContent = '';
 
     try {
-      const hash = await pbkdf2(pwd);
-
+      const hash = encodePwd(pwd);
+      
       if (hash === EXPECTED_HASH) {
         sessionStorage.setItem('bloco_auth', 'true');
         unlock(true);
@@ -700,7 +690,7 @@
         input.focus();
       }
     } catch(e) {
-      showError('Erro criptográfico. Rode via Live Server ou Vercel.');
+      showError('Erro na verificação. Tente novamente.');
     } finally {
       btn.disabled = false;
       btn.classList.remove('loading');
