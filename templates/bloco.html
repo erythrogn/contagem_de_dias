@@ -648,17 +648,21 @@
 </script>
 
 <script>
-(function initGate() {
+// ═══════════════════════════════════════════
+// BLOCO GATE — PBKDF2 Setup Mode 🔐
+// ═══════════════════════════════════════════
+(async function initGate() {
   const gate    = document.getElementById('bloco-gate');
   const content = document.getElementById('bloco-content');
   const input   = document.getElementById('gate-input');
   const btn     = document.getElementById('gate-btn');
   const errEl   = document.getElementById('gate-error');
 
-  // A senha real ("dimen6") foi encriptada localmente (Base64 + Reverso)
-  // Isso evita qualquer erro de "crypto.subtle" (que exige HTTPS) 
-  // e roda 100% liso no navegador ou testando em IP local.
-  const EXPECTED_HASH = "Nm5lbWlk";
+  // 1. O código inicia com EXPECTED_HASH vazio para o Setup Mode.
+  // 2. Cole aqui o Hash que o sistema vai te mostrar!
+  const EXPECTED_HASH = ""; 
+  const SALT = "dimen6_forest_salt_v1";
+  const ITERATIONS = 100000;
 
   if (sessionStorage.getItem('bloco_auth') === 'true') { 
     unlock(false); 
@@ -667,11 +671,20 @@
 
   gate.classList.add('gate-visible');
 
-  function encodePwd(str) {
-    return btoa(str.split('').reverse().join(''));
+  // Função de derivação de chave super segura (PBKDF2 nativo do navegador)
+  async function pbkdf2(password) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveBits"]
+    );
+    const buffer = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", salt: enc.encode(SALT), iterations: ITERATIONS, hash: "SHA-256" },
+      keyMaterial, 256
+    );
+    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  function tryAuth() {
+  async function tryAuth() {
     const pwd = input.value.trim();
     if (!pwd) { showError('Digite a senha da floresta'); return; }
 
@@ -680,8 +693,18 @@
     errEl.textContent = '';
 
     try {
-      const hash = encodePwd(pwd);
+      const hash = await pbkdf2(pwd);
       
+      // MODO DE SETUP AUTOMÁTICO
+      // Se a variável EXPECTED_HASH estiver vazia, revela o hash processado
+      // para a senha digitada e impede o acesso até que seja configurado.
+      if (EXPECTED_HASH === "") {
+         prompt("Modo Setup PBKDF2 🔐\n\nCopie o Hash abaixo e cole na constante EXPECTED_HASH dentro do arquivo bloco.html:\n", hash);
+         showError('Hash gerado! Cole no código e recarregue a página.');
+         input.value = '';
+         return;
+      }
+
       if (hash === EXPECTED_HASH) {
         sessionStorage.setItem('bloco_auth', 'true');
         unlock(true);
@@ -693,7 +716,7 @@
         input.focus();
       }
     } catch(e) {
-      showError('Erro na verificação. Tente novamente.');
+      showError('Erro criptográfico. Rode via Live Server ou Vercel.');
     } finally {
       btn.disabled = false;
       btn.classList.remove('loading');
