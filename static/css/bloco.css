@@ -47,7 +47,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.1);
   border-right-color: rgba(255, 255, 255, 0.1);
   border-bottom-color: rgba(255, 255, 255, 0.1);
@@ -93,7 +96,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(34, 211, 238, 0.18);
   border-right-color: rgba(34, 211, 238, 0.18);
   border-bottom-color: rgba(34, 211, 238, 0.18);
@@ -149,7 +155,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -268,7 +277,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(240, 180, 41, 0.28);
   border-right-color: rgba(240, 180, 41, 0.28);
   border-bottom-color: rgba(240, 180, 41, 0.28);
@@ -463,7 +475,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -556,7 +571,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -688,7 +706,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -743,7 +764,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -807,7 +831,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -861,7 +888,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.1);
   border-right-color: rgba(255, 255, 255, 0.1);
   border-bottom-color: rgba(255, 255, 255, 0.1);
@@ -928,7 +958,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -1039,7 +1072,10 @@
   border-right-width: 0px;
   border-bottom-width: 1px;
   border-left-width: 0px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -1115,7 +1151,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -1174,7 +1213,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(240, 180, 41, 0.28);
   border-right-color: rgba(240, 180, 41, 0.28);
   border-bottom-color: rgba(240, 180, 41, 0.28);
@@ -1222,7 +1264,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(240, 180, 41, 0.28);
   border-right-color: rgba(240, 180, 41, 0.28);
   border-bottom-color: rgba(240, 180, 41, 0.28);
@@ -1296,7 +1341,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: transparent;
@@ -1345,7 +1393,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -1424,7 +1475,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -1544,7 +1598,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(168, 85, 247, 0.15);
   border-right-color: rgba(168, 85, 247, 0.15);
   border-bottom-color: rgba(168, 85, 247, 0.15);
@@ -1602,7 +1659,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -1653,7 +1713,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(34, 211, 238, 0.25);
   border-right-color: rgba(34, 211, 238, 0.25);
   border-bottom-color: rgba(34, 211, 238, 0.25);
@@ -1704,7 +1767,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -1751,7 +1817,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: dashed;
+  border-top-style: dashed;
+  border-right-style: dashed;
+  border-bottom-style: dashed;
+  border-left-style: dashed;
   border-top-color: rgba(255, 255, 255, 0.06);
   border-right-color: rgba(255, 255, 255, 0.06);
   border-bottom-color: rgba(255, 255, 255, 0.06);
@@ -1827,7 +1896,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -1935,7 +2007,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.1);
   border-right-color: rgba(255, 255, 255, 0.1);
   border-bottom-color: rgba(255, 255, 255, 0.1);
@@ -1982,7 +2057,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -2009,7 +2087,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -2031,7 +2112,7 @@
   outline-style: none;
   outline-color: transparent;
   transition-property: border-color;
-  transition-duration: 0.4s;
+  transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 0s;
 }
@@ -2060,7 +2141,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(240, 180, 41, 0.28);
   border-right-color: rgba(240, 180, 41, 0.28);
   border-bottom-color: rgba(240, 180, 41, 0.28);
@@ -2068,7 +2152,7 @@
   color: var(--amber-pale);
   cursor: pointer;
   transition-property: all;
-  transition-duration: 0.4s;
+  transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 0s;
 }
@@ -2108,7 +2192,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.1);
   border-right-color: rgba(255, 255, 255, 0.1);
   border-bottom-color: rgba(255, 255, 255, 0.1);
@@ -2116,7 +2203,7 @@
   color: var(--text-secondary);
   cursor: pointer;
   transition-property: all;
-  transition-duration: 0.4s;
+  transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 0s;
 }
@@ -2158,7 +2245,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.08);
   border-right-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -2171,7 +2261,7 @@
   justify-content: center;
   cursor: pointer;
   transition-property: all;
-  transition-duration: 0.4s;
+  transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 0s;
   backdrop-filter: blur(10px);
@@ -2227,7 +2317,10 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.07);
   border-right-color: rgba(255, 255, 255, 0.07);
   border-bottom-color: rgba(255, 255, 255, 0.07);
@@ -2307,7 +2400,10 @@ dialog {
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
   border-top-color: rgba(255, 255, 255, 0.09);
   border-right-color: rgba(255, 255, 255, 0.09);
   border-bottom-color: rgba(255, 255, 255, 0.09);
@@ -2372,8 +2468,14 @@ dialog::backdrop {
   border-right-width: 0px;
   border-bottom-width: 0px;
   border-left-width: 0px;
-  border-style: none;
-  border-color: transparent;
+  border-top-style: none;
+  border-right-style: none;
+  border-bottom-style: none;
+  border-left-style: none;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
   color: var(--text-muted);
   cursor: pointer;
   display: flex;
@@ -2402,8 +2504,7 @@ dialog::backdrop {
     padding-bottom: 2rem;
     padding-left: 1.25rem;
   }
-  .type-cards,
-  .author-cards {
+  .type-cards, .author-cards {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
   .notes-masonry {

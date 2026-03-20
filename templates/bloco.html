@@ -42,222 +42,219 @@
 </div>
 
 <div id="bloco-content" class="bloco-hidden">
-<div class="wrap">
+  <div class="wrap">
 
-  <header class="page-header">
-    <span class="eyebrow">nossos registros e ideias</span>
-    <h1 class="page-title">Bloco de<br><em>Notas</em></h1>
-    <p class="page-sub">perguntas, listas e pensamentos soltos</p>
-  </header>
+    <header class="page-header">
+      <span class="eyebrow">nossos registros e ideias</span>
+      <h1 class="page-title">Bloco de<br><em>Notas</em></h1>
+      <p class="page-sub">perguntas, listas e pensamentos soltos</p>
+    </header>
 
-  <section class="mform-shell" aria-label="Nova anotação">
+    <section class="mform-shell" aria-label="Nova anotação">
 
-    <div class="mform-progress">
-      <div class="mform-progress-fill" id="mformProgress"></div>
-      <div class="mform-steps">
-        <span class="mstep active" data-step="1">
-          <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
-          <span class="mstep-label">Tipo</span>
-        </span>
-        <span class="mstep-line"></span>
-        <span class="mstep" data-step="2">
-          <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>
-          <span class="mstep-label">Autor</span>
-        </span>
-        <span class="mstep-line"></span>
-        <span class="mstep" data-step="3">
-          <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-          <span class="mstep-label">Conteúdo</span>
-        </span>
+      <div class="mform-progress">
+        <div class="mform-progress-fill" id="mformProgress"></div>
+        <div class="mform-steps">
+          <span class="mstep active" data-step="1">
+            <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+            <span class="mstep-label">Tipo</span>
+          </span>
+          <span class="mstep-line"></span>
+          <span class="mstep" data-step="2">
+            <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>
+            <span class="mstep-label">Autor</span>
+          </span>
+          <span class="mstep-line"></span>
+          <span class="mstep" data-step="3">
+            <span class="mstep-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+            <span class="mstep-label">Conteúdo</span>
+          </span>
+        </div>
       </div>
-    </div>
 
-    <form id="note-form" novalidate>
+      <form id="note-form" novalidate>
 
-      <div class="mform-step active" data-step="1">
-        <p class="mform-step-eyebrow">passo 1 de 3</p>
-        <h2 class="mform-step-title">O que você quer criar?</h2>
-        <div class="type-cards">
-          <label class="type-card" for="type-texto">
-            <input type="radio" name="nType" id="type-texto" value="texto" checked>
-            <div class="type-card-inner">
-              <div class="type-card-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <div class="mform-step active" data-step="1">
+          <p class="mform-step-eyebrow">passo 1 de 3</p>
+          <h2 class="mform-step-title">O que você quer criar?</h2>
+          <div class="type-cards">
+            <label class="type-card" for="type-texto">
+              <input type="radio" name="nType" id="type-texto" value="texto" checked>
+              <div class="type-card-inner">
+                <div class="type-card-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </div>
+                <span class="type-card-name">Texto Livre</span>
+                <span class="type-card-desc">Um pensamento, memória ou recado</span>
               </div>
-              <span class="type-card-name">Texto Livre</span>
-              <span class="type-card-desc">Um pensamento, memória ou recado</span>
-            </div>
-          </label>
-          <label class="type-card" for="type-lista">
-            <input type="radio" name="nType" id="type-lista" value="lista">
-            <div class="type-card-inner">
-              <div class="type-card-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            </label>
+            <label class="type-card" for="type-lista">
+              <input type="radio" name="nType" id="type-lista" value="lista">
+              <div class="type-card-inner">
+                <div class="type-card-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </div>
+                <span class="type-card-name">Lista</span>
+                <span class="type-card-desc">Itens, desejos, planos</span>
               </div>
-              <span class="type-card-name">Lista</span>
-              <span class="type-card-desc">Itens, desejos, planos</span>
-            </div>
-          </label>
-          <label class="type-card" for="type-pergunta">
-            <input type="radio" name="nType" id="type-pergunta" value="pergunta">
-            <div class="type-card-inner">
-              <div class="type-card-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </label>
+            <label class="type-card" for="type-pergunta">
+              <input type="radio" name="nType" id="type-pergunta" value="pergunta">
+              <div class="type-card-inner">
+                <div class="type-card-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <span class="type-card-name">Pergunta</span>
+                <span class="type-card-desc">o oto responde</span>
               </div>
-              <span class="type-card-name">Pergunta</span>
-              <span class="type-card-desc">o oto responde</span>
-            </div>
-          </label>
+            </label>
+          </div>
+          <div class="mform-nav">
+            <button type="button" class="mform-btn-next" onclick="window.mformNext()">
+              Continuar
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
         </div>
-        <div class="mform-nav">
-          <button type="button" class="mform-btn-next" onclick="window.mformNext()">
-            Continuar
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
+
+        <div class="mform-step" data-step="2">
+          <p class="mform-step-eyebrow">passo 2 de 3</p>
+          <h2 class="mform-step-title">Quem está escrevendo?</h2>
+          <div class="author-cards">
+            <label class="author-card" for="author-hesron">
+              <input type="radio" name="nAuthor" id="author-hesron" value="Hesron">
+              <div class="author-card-inner">
+                <div class="author-avatar">H</div>
+                <span class="author-name">Hesron</span>
+              </div>
+            </label>
+            <label class="author-card" for="author-tiago">
+              <input type="radio" name="nAuthor" id="author-tiago" value="Tiago">
+              <div class="author-card-inner">
+                <div class="author-avatar">T</div>
+                <span class="author-name">Tiago</span>
+              </div>
+            </label>
+          </div>
+          <div class="mform-nav">
+            <button type="button" class="mform-btn-back" onclick="window.mformBack()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              Voltar
+            </button>
+            <button type="button" class="mform-btn-next" onclick="window.mformNext()">
+              Continuar
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
         </div>
+
+        <div class="mform-step" data-step="3">
+          <p class="mform-step-eyebrow">passo 3 de 3</p>
+          <h2 class="mform-step-title" id="mform-step3-title">Escreva o conteúdo</h2>
+
+          <div class="mform-field-group">
+            <input type="text" id="nTitle" class="mform-input" placeholder=" " autocomplete="off" required>
+            <label for="nTitle" class="mform-label">Título ou Pergunta</label>
+            <span class="mform-underline"></span>
+          </div>
+
+          <div id="field-content" class="mform-field-group">
+            <textarea id="nContent" class="mform-input mform-textarea" rows="3" placeholder=" "></textarea>
+            <label for="nContent" class="mform-label" id="label-content">Conteúdo...</label>
+            <span class="mform-underline"></span>
+          </div>
+
+          <div id="field-answer-hint" class="mform-hint-box" style="display:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <p id="hint-text">A outra pessoa irá responder após salvar.</p>
+          </div>
+
+          <div class="mform-nav">
+            <button type="button" class="mform-btn-back" onclick="window.mformBack()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              Voltar
+            </button>
+            <button type="submit" class="mform-btn-submit" id="btn-note-submit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              <span>Gravar no Grimório</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </section>
+
+    <div class="filter-row" role="tablist" aria-label="Filtrar notas">
+      <button class="ftab active" data-filter="todos" role="tab">Tudo</button>
+      <button class="ftab" data-filter="texto" role="tab">Textos</button>
+      <button class="ftab" data-filter="lista" role="tab">Listas</button>
+      <button class="ftab" data-filter="pergunta" role="tab">Perguntas</button>
+    </div>
+
+    <section class="notes-masonry" id="notesList" aria-live="polite">
+      <div class="empty-state" style="grid-column: 1 / -1;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 10px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <p>O grimório está vazio. Escreva algo...</p>
       </div>
+    </section>
 
-      <div class="mform-step" data-step="2">
-        <p class="mform-step-eyebrow">passo 2 de 3</p>
-        <h2 class="mform-step-title">Quem está escrevendo?</h2>
-        <div class="author-cards">
-          <label class="author-card" for="author-hesron">
-            <input type="radio" name="nAuthor" id="author-hesron" value="Hesron">
-            <div class="author-card-inner">
-              <div class="author-avatar">H</div>
-              <span class="author-name">Hesron</span>
-            </div>
-          </label>
-          <label class="author-card" for="author-tiago">
-            <input type="radio" name="nAuthor" id="author-tiago" value="Tiago">
-            <div class="author-card-inner">
-              <div class="author-avatar">T</div>
-              <span class="author-name">Tiago</span>
-            </div>
-          </label>
-        </div>
-        <div class="mform-nav">
-          <button type="button" class="mform-btn-back" onclick="window.mformBack()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            Voltar
-          </button>
-          <button type="button" class="mform-btn-next" onclick="window.mformNext()">
-            Continuar
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-        </div>
+    <div class="carousel-container" id="magicSlider" style="display:none;">
+      <ul class="carousel-list" id="carouselList"></ul>
+      <div class="carousel-thumbnails" id="carouselThumbnails"></div>
+      <div class="carousel-arrows">
+        <button id="slider-prev" aria-label="Anterior" onclick="window.moveSlider('prev')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button id="slider-next" aria-label="Próximo" onclick="window.moveSlider('next')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
       </div>
+      <div class="carousel-counter" id="carouselCounter">1 / 1</div>
+    </div>
 
-      <div class="mform-step" data-step="3">
-        <p class="mform-step-eyebrow">passo 3 de 3</p>
-        <h2 class="mform-step-title" id="mform-step3-title">Escreva o conteúdo</h2>
-
-        <div class="mform-field-group">
-          <input type="text" id="nTitle" class="mform-input" placeholder=" " autocomplete="off" required>
-          <label for="nTitle" class="mform-label">Título ou Pergunta</label>
-          <span class="mform-underline"></span>
-        </div>
-
-        <div id="field-content" class="mform-field-group">
-          <textarea id="nContent" class="mform-input mform-textarea" rows="3" placeholder=" "></textarea>
-          <label for="nContent" class="mform-label" id="label-content">Conteúdo...</label>
-          <span class="mform-underline"></span>
-        </div>
-
-        <div id="field-answer-hint" class="mform-hint-box" style="display:none;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          <p id="hint-text">A outra pessoa irá responder após salvar.</p>
-        </div>
-
-        <div class="mform-nav">
-          <button type="button" class="mform-btn-back" onclick="window.mformBack()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            Voltar
-          </button>
-          <button type="submit" class="mform-btn-submit" id="btn-note-submit">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-            <span>Gravar no Grimório</span>
-          </button>
-        </div>
+    <dialog id="edit-dialog-note" aria-labelledby="edit-note-title">
+      <div class="dialog-header">
+        <h3 id="edit-note-title" style="margin:0; font-family:var(--font-display); font-style:italic;">Editar Nota</h3>
+        <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-note').close()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
+      <form id="edit-note-form" class="form-grid" novalidate style="margin-top:1.5rem;">
+        <input type="hidden" id="edit-nKey">
+        <div class="form-group span2 floating-group">
+          <input type="text" id="edit-nTitle" class="floating-input" placeholder=" " required>
+          <label class="floating-label">Título ou Pergunta</label>
+        </div>
+        <div class="form-group floating-group">
+          <select id="edit-nType" class="floating-input" required>
+            <option value="texto">Texto Livre</option>
+            <option value="lista">Lista</option>
+            <option value="pergunta">Pergunta & Resposta</option>
+          </select>
+          <label class="floating-label select-label">Tipo</label>
+        </div>
+        <div class="form-group floating-group">
+          <input type="text" id="edit-nAuthor" class="floating-input" placeholder=" ">
+          <label class="floating-label">Autor</label>
+        </div>
+        <div class="form-group span2 floating-group" id="edit-field-content">
+          <textarea id="edit-nContent" class="floating-input textarea-expand" rows="3" placeholder=" "></textarea>
+          <label class="floating-label">Conteúdo</label>
+        </div>
+        <div class="form-group span2 floating-group" id="edit-field-answer" style="display:none;">
+          <textarea id="edit-nAnswer" class="floating-input textarea-expand" rows="3" placeholder=" "></textarea>
+          <label class="floating-label">Resposta</label>
+        </div>
+        <div class="form-group span2">
+          <button type="submit" class="btn-submit">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>Salvar Alterações</span>
+          </button>
+        </div>
+      </form>
+    </dialog>
 
-    </form>
-  </section>
-
-  <div class="filter-row" role="tablist" aria-label="Filtrar notas">
-    <button class="ftab active" data-filter="todos" role="tab">Tudo</button>
-    <button class="ftab" data-filter="texto" role="tab">Textos</button>
-    <button class="ftab" data-filter="lista" role="tab">Listas</button>
-    <button class="ftab" data-filter="pergunta" role="tab">Perguntas</button>
-  </div>
-
-  <section class="notes-masonry" id="notesList" aria-live="polite">
-    <div class="empty-state" style="grid-column: 1 / -1;">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 10px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-      <p>O grimório está vazio. Escreva algo...</p>
-    </div>
-  </section>
-
-</div>
-
-<div class="carousel-container" id="magicSlider" style="display:none;">
-  <ul class="carousel-list" id="carouselList"></ul>
-  <div class="carousel-thumbnails" id="carouselThumbnails"></div>
-  <div class="carousel-arrows">
-    <button id="slider-prev" aria-label="Anterior" onclick="window.moveSlider('prev')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-    </button>
-    <button id="slider-next" aria-label="Próximo" onclick="window.moveSlider('next')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </button>
-  </div>
-  <div class="carousel-counter" id="carouselCounter">1 / 1</div>
-</div>
-
-<dialog id="edit-dialog-note" aria-labelledby="edit-note-title">
-  <div class="dialog-header">
-    <h3 id="edit-note-title" style="margin:0; font-family:var(--font-display); font-style:italic;">Editar Nota</h3>
-    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-note').close()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
-  </div>
-  <form id="edit-note-form" class="form-grid" novalidate style="margin-top:1.5rem;">
-    <input type="hidden" id="edit-nKey">
-    <div class="form-group span2 floating-group">
-      <input type="text" id="edit-nTitle" class="floating-input" placeholder=" " required>
-      <label class="floating-label">Título ou Pergunta</label>
-    </div>
-    <div class="form-group floating-group">
-      <select id="edit-nType" class="floating-input" required>
-        <option value="texto">Texto Livre</option>
-        <option value="lista">Lista</option>
-        <option value="pergunta">Pergunta & Resposta</option>
-      </select>
-      <label class="floating-label select-label">Tipo</label>
-    </div>
-    <div class="form-group floating-group">
-      <input type="text" id="edit-nAuthor" class="floating-input" placeholder=" ">
-      <label class="floating-label">Autor</label>
-    </div>
-    <div class="form-group span2 floating-group" id="edit-field-content">
-      <textarea id="edit-nContent" class="floating-input textarea-expand" rows="3" placeholder=" "></textarea>
-      <label class="floating-label">Conteúdo</label>
-    </div>
-    <div class="form-group span2 floating-group" id="edit-field-answer" style="display:none;">
-      <textarea id="edit-nAnswer" class="floating-input textarea-expand" rows="3" placeholder=" "></textarea>
-      <label class="floating-label">Resposta</label>
-    </div>
-    <div class="form-group span2">
-      <button type="submit" class="btn-submit">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        <span>Salvar Alterações</span>
-      </button>
-    </div>
-  </form>
-</dialog>
-</div>
-
-<script type="module">
+  </div> </div> <script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
 
@@ -648,14 +645,19 @@
 </script>
 
 <script>
-(function initGate() {
+// ═══════════════════════════════════════════
+// BLOCO GATE — PBKDF2 
+// ═══════════════════════════════════════════
+(async function initGate() {
   const gate    = document.getElementById('bloco-gate');
   const content = document.getElementById('bloco-content');
   const input   = document.getElementById('gate-input');
   const btn     = document.getElementById('gate-btn');
   const errEl   = document.getElementById('gate-error');
 
-  const EXPECTED_HASH = "b2dhaXR1ZW0=";
+  const EXPECTED_HASH = "fbcb7c0cd568ae6649f77c140893a52c23f5555fefc2f9e8041bd06e9bd8b52"; 
+  const SALT = "dimen6_forest_salt_v1";
+  const ITERATIONS = 100000;
 
   if (sessionStorage.getItem('bloco_auth') === 'true') { 
     unlock(false); 
@@ -664,11 +666,19 @@
 
   gate.classList.add('gate-visible');
 
-  function encodePwd(str) {
-    return btoa(str.split('').reverse().join(''));
+  async function pbkdf2(password) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveBits"]
+    );
+    const buffer = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", salt: enc.encode(SALT), iterations: ITERATIONS, hash: "SHA-256" },
+      keyMaterial, 256
+    );
+    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  function tryAuth() {
+  async function tryAuth() {
     const pwd = input.value.trim();
     if (!pwd) { showError('Digite a senha da floresta'); return; }
 
@@ -677,8 +687,8 @@
     errEl.textContent = '';
 
     try {
-      const hash = encodePwd(pwd);
-      
+      const hash = await pbkdf2(pwd);
+
       if (hash === EXPECTED_HASH) {
         sessionStorage.setItem('bloco_auth', 'true');
         unlock(true);
@@ -690,7 +700,7 @@
         input.focus();
       }
     } catch(e) {
-      showError('Erro na verificação. Tente novamente.');
+      showError('Erro criptográfico. Rode via Live Server ou Vercel.');
     } finally {
       btn.disabled = false;
       btn.classList.remove('loading');
