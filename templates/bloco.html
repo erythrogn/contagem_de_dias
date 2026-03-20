@@ -658,9 +658,7 @@
   const btn     = document.getElementById('gate-btn');
   const errEl   = document.getElementById('gate-error');
 
-  // 1. O código inicia com EXPECTED_HASH vazio para o Setup Mode.
-  // 2. Cole aqui o Hash que o sistema vai te mostrar!
-  const EXPECTED_HASH = ""; 
+  const EXPECTED_HASH = "fbcb7c0cd568ae6649f77c140893a52c23f5555fefc2f9e8041bd06e9bd8b52"; 
   const SALT = "dimen6_forest_salt_v1";
   const ITERATIONS = 100000;
 
@@ -671,7 +669,6 @@
 
   gate.classList.add('gate-visible');
 
-  // Função de derivação de chave super segura (PBKDF2 nativo do navegador)
   async function pbkdf2(password) {
     const enc = new TextEncoder();
     const keyMaterial = await crypto.subtle.importKey(
@@ -695,9 +692,6 @@
     try {
       const hash = await pbkdf2(pwd);
       
-      // MODO DE SETUP AUTOMÁTICO
-      // Se a variável EXPECTED_HASH estiver vazia, revela o hash processado
-      // para a senha digitada e impede o acesso até que seja configurado.
       if (EXPECTED_HASH === "") {
          prompt("Modo Setup PBKDF2 🔐\n\nCopie o Hash abaixo e cole na constante EXPECTED_HASH dentro do arquivo bloco.html:\n", hash);
          showError('Hash gerado! Cole no código e recarregue a página.');
