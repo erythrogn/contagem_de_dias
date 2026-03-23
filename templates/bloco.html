@@ -266,7 +266,6 @@
   let currentFilter = 'todos';
   const editDialog = document.getElementById('edit-dialog-note');
   
-  // Imagem de fallback confiável caso a pesquisa do Bing não encontre nada
   const fallbackImg = 'https://placehold.co/1600x1080/1a1c23/4da6ff?text=Mystical+Memory';
 
   document.querySelectorAll('.mform-textarea, .textarea-expand').forEach(ta => {
@@ -361,11 +360,19 @@
     return 'Amor';
   }
 
-  // Novo gerador de fundo usando o proxy do Bing para evitar falhas e timeouts da IA
+  function hashCode(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+      h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    }
+    return h;
+  }
+
   function getThemeImage(title) {
     const safeTitle = (title || '').trim();
-    const query = `dark aesthetic mysterious ${safeTitle} wallpaper`;
-    return `https://tse2.mm.bing.net/th?q=${encodeURIComponent(query)}&w=1600&h=1080&c=7&rs=1&p=0`;
+    const prompt = `Dark aesthetic moody mysterious background representing ${safeTitle}, minimalist elegant wallpaper, cinematic lighting, 8k resolution`;
+    const seed = Math.abs(hashCode(safeTitle));
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=1600&height=1080&seed=${seed}`;
   }
 
   function renderInterface() {
