@@ -553,14 +553,8 @@ border-top-width: 0px;
 border-right-width: 0px;
 border-bottom-width: 1px;
 border-left-width: 0px;
-border-top-style: none;
-border-right-style: none;
-border-bottom-style: solid;
-border-left-style: none;
-border-top-color: transparent;
-border-right-color: transparent;
+border-style: none none solid none;
 border-bottom-color: rgba(255, 255, 255, 0.1);
-border-left-color: transparent;
 padding-top: 0.75rem;
 padding-right: 0;
 padding-bottom: 0.75rem;
@@ -1098,9 +1092,9 @@ border-bottom-color: transparent;
 border-left-color: transparent;
 opacity: 0.4;
 transition-property: opacity, border-color, transform, box-shadow, filter;
-transition-duration: 0.4s, 0.4s, 0.4s, 0.4s, 0.4s;
-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1);
-transition-delay: 0s, 0s, 0s, 0s, 0s;
+transition-duration: 0.4s;
+transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+transition-delay: 0s;
 overflow-x: hidden;
 overflow-y: hidden;
 background-color: var(--bg-soft);
@@ -1113,6 +1107,10 @@ opacity: 0.8;
 filter: grayscale(0.2);
 transform: scale(1.02);
 }
+.slider-card.watched:not(.active) {
+filter: grayscale(100%) brightness(0.4);
+opacity: 0.6;
+}
 .slider-card.active {
 opacity: 1;
 border-left-width: 4px;
@@ -1121,8 +1119,10 @@ box-shadow: 0 8px 24px -5px rgba(0, 0, 0, 0.6), 0 0 16px 0 rgba(240, 180, 41, 0.
 transform: scale(1.04) translateX(-4px);
 filter: grayscale(0);
 }
-.slider-card.watched:not(.active) {
-filter: brightness(0.5) saturate(0.3) grayscale(0.5);
+.slider-card.watched.active {
+filter: grayscale(100%) brightness(0.8);
+border-left-color: var(--text-muted);
+box-shadow: 0 8px 24px -5px rgba(0, 0, 0, 0.8), 0 0 16px 0 rgba(255, 255, 255, 0.1);
 }
 .slider-card-img {
 width: 100%;
@@ -1320,8 +1320,8 @@ box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9), inset 0 1px 0 0 rgba(255, 255
 opacity: 0;
 transform: scale(0.95) translateY(20px);
 transition-property: opacity, transform, display;
-transition-duration: 0.5s, 0.5s, 0.5s;
-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1);
+transition-duration: 0.5s;
+transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 transition-behavior: allow-discrete;
 }
 dialog[open] {
@@ -1340,8 +1340,8 @@ backdrop-filter: blur(16px);
 -webkit-backdrop-filter: blur(16px);
 opacity: 0;
 transition-property: opacity, display;
-transition-duration: 0.5s, 0.5s;
-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1);
+transition-duration: 0.5s;
+transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 transition-behavior: allow-discrete;
 }
 dialog[open]::backdrop {
@@ -1483,9 +1483,9 @@ padding-bottom: 1.5rem;
 padding-left: 1.5rem;
 box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 0 rgba(0, 0, 0, 0.2);
 transition-property: transform, box-shadow, border-color;
-transition-duration: 0.5s, 0.5s, 0.5s;
-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1);
-transition-delay: 0s, 0s, 0s;
+transition-duration: 0.5s;
+transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+transition-delay: 0s;
 display: flex;
 flex-direction: column;
 flex-wrap: nowrap;
@@ -1618,6 +1618,9 @@ border-top-width: 4px;
 border-left-width: 0px;
 border-top-color: var(--amber);
 transform: scale(1.04) translateY(4px);
+}
+.slider-card.watched.active {
+border-top-color: var(--text-muted);
 }
 .slider-btn {
 width: 40px;

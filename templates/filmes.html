@@ -221,7 +221,7 @@ Adicionar Série
 </div>
 <div id="section-jogos" class="media-section">
 <header class="filmes-header">
-<span class="filmes-eyebrow">player 1 &amp; player 2</span>
+<span class="filmes-eyebrow">player 1 & player 2</span>
 <h1 class="filmes-title">nossos <span class="filmes-accent jogos-accent">jogos</span></h1>
 <p class="filmes-subtitle">vem p debaixo da coberta jogar cmg</p>
 </header>
@@ -333,7 +333,7 @@ Adicionar Playlist
 </div>
 <div class="field-group span-full">
 <label for="mLink" class="field-label">Código Iframe ou Link Embed</label>
-<input type="text" id="mLink" class="field-input" placeholder="Cole o código <iframe...> fornecido pela Apple Music ou Spotify" required>
+<input type="text" id="mLink" class="field-input" placeholder="Cole o link do Spotify, YouTube ou Apple Music" required>
 </div>
 <div class="field-group span-full">
 <button class="btn-submit btn-submit-musica" id="btn-add-musicas" type="submit">
@@ -595,7 +595,6 @@ document.getElementById(`edit-${section}-status`).value   = m.status || 'quero j
 }
 document.getElementById(`edit-dialog-${section}`).showModal();
 };
-
 function renderItems(section) {
 const s = state[section];
 const track = document.getElementById(`list-${section}`);
@@ -639,8 +638,8 @@ const card = document.createElement('div');
 card.className = `slider-card ${isDone ? 'watched' : ''}`;
 const poster = (m.poster && m.poster.trim() !== "" && m.poster !== "N/A") ? m.poster : fallbackImgs[section];
 
-// Aplica o grayscale via style no thumbnail se estiver assistido
-card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" style="${isDone ? 'filter: grayscale(100%);' : ''}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
+// Adiciona um inline style para garantir o preto e branco na miniatura se já estiver concluído
+card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" style="${isDone ? 'filter: grayscale(100%) opacity(0.8);' : ''}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
 card.addEventListener('click', () => { if (idx !== s.currentIndex) { s.currentIndex = idx; updateSlider(section); } });
 track.appendChild(card);
 });
@@ -655,7 +654,6 @@ s.currentIndex = 0;
 
 updateSlider(section);
 }
-
 function updateSlider(section) {
 const s = state[section];
 const cards = document.querySelectorAll(`#list-${section} .slider-card`);
@@ -699,11 +697,11 @@ if (typeof gsap !== 'undefined') {
 const img = mainView.querySelector('.gallery-main-img');
 const overlay = mainView.querySelector('.gallery-main-overlay');
 
-// Trata os filtros de preto e branco no GSAP se estiver assistido
-const startFilter = isDone ? 'brightness(0.5) grayscale(100%)' : 'brightness(0.5) grayscale(0%)';
-const endFilter = isDone ? 'brightness(1) grayscale(100%)' : 'brightness(1) grayscale(0%)';
+// Mantém o GSAP respeitando o preto e branco para itens já assistidos
+const startF = isDone ? 'brightness(0.5) grayscale(100%)' : 'brightness(0.5) grayscale(0%)';
+const endF = isDone ? 'brightness(1) grayscale(100%)' : 'brightness(1) grayscale(0%)';
 
-gsap.fromTo(img, { opacity: 0, scale: 1.05, filter: startFilter }, { opacity: 1, scale: 1, filter: endFilter, duration: 0.6, ease: 'power2.out' });
+gsap.fromTo(img, { opacity: 0, scale: 1.05, filter: startF }, { opacity: 1, scale: 1, filter: endF, duration: 0.6, ease: 'power2.out' });
 gsap.fromTo(overlay, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.1 });
 }
 const activeThumb = cards[s.currentIndex];
@@ -712,7 +710,6 @@ activeThumb.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'cente
 }
 window.startAutoplay(section);
 }
-
 const total = s.filtered.length;
 const prev  = document.getElementById(`slider-prev-${section}`);
 const next  = document.getElementById(`slider-next-${section}`);
@@ -878,7 +875,7 @@ document.getElementById('poster-placeholder-icon-jogos').style.display = 'block'
 btn.innerHTML = orig;
 });
 
-// Conversor de links inteligentes para embeds de música
+// Conversor inteligente de links para iframes
 function extractIframeSrc(input) {
 const match = input.match(/src=["'](.*?)["']/);
 if (match) return match[1];
@@ -889,15 +886,15 @@ if (!url.startsWith('http')) return '';
 try {
 const urlObj = new URL(url);
 
-// Spotify
+// Conversão Spotify
 if (urlObj.hostname.includes('spotify.com') && !urlObj.pathname.startsWith('/embed/')) {
 return `https://open.spotify.com/embed${urlObj.pathname}`;
 }
-// Apple Music
+// Conversão Apple Music
 if (urlObj.hostname.includes('music.apple.com')) {
 return `https://embed.music.apple.com${urlObj.pathname}${urlObj.search}`;
 }
-// YouTube (Video or Playlist)
+// Conversão YouTube (Vídeo ou Playlist)
 if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
 let videoId = urlObj.searchParams.get('v');
 if (urlObj.hostname.includes('youtu.be')) videoId = urlObj.pathname.slice(1);
