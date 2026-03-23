@@ -40,6 +40,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="currentColor"></circle><circle cx="17" cy="11" r="1" fill="currentColor"></circle><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"></path></svg>
         Jogos
       </button>
+      <button class="main-tab" data-section="musicas" role="tab" aria-selected="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        Músicas
+      </button>
     </nav>
 
     <div id="section-filmes" class="media-section active">
@@ -332,6 +336,43 @@
       </section>
     </div>
 
+    <div id="section-musicas" class="media-section">
+      <header class="filmes-header">
+        <span class="filmes-eyebrow">nossa trilha sonora</span>
+        <h1 class="filmes-title">nossas <span class="filmes-accent musica-accent">músicas</span></h1>
+        <p class="filmes-subtitle">playlists pra ouvir juntinhos</p>
+      </header>
+
+      <section class="form-wrapper" aria-label="Adicionar playlist">
+        <h2 class="form-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          Adicionar Playlist
+        </h2>
+        <form id="form-musicas" class="form-layout" novalidate>
+          <div class="field-group span-full">
+            <label for="mTitle" class="field-label">Título da Playlist</label>
+            <input type="text" id="mTitle" class="field-input" placeholder="ex: vibes de domingo..." autocomplete="off" required>
+          </div>
+          <div class="field-group span-full">
+            <label for="mLink" class="field-label">Código Iframe ou Link Embed</label>
+            <input type="text" id="mLink" class="field-input" placeholder="Cole o código <iframe...> fornecido pela Apple Music ou Spotify" required>
+          </div>
+          <div class="field-group span-full">
+            <button class="btn-submit btn-submit-musica" id="btn-add-musicas" type="submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Adicionar Playlist</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="musicas-grid-container">
+        <div class="musicas-grid" id="list-musicas" aria-live="polite">
+          <div class="empty-state"><p class="empty-text" style="grid-column-start:1;grid-column-end:-1;">Aguardando playlists...</p></div>
+        </div>
+      </section>
+    </div>
+
   </main>
 
   <dialog id="edit-dialog-filmes" aria-labelledby="edit-filmes-label">
@@ -433,12 +474,14 @@
     filmes: { items: [], filtered: [], currentIndex: 0, filter: 'todos', genre: 'todos' },
     series: { items: [], filtered: [], currentIndex: 0, filter: 'todos', genre: 'todos' },
     jogos:  { items: [], filtered: [], currentIndex: 0, filter: 'todos', genre: 'todos' },
+    musicas: { items: [] },
   };
 
   const refs = {
     filmes: ref(db, 'filmes'),
     series: ref(db, 'series'),
     jogos:  ref(db, 'jogos'),
+    musicas: ref(db, 'musicas'),
   };
 
   async function fetchMoviePoster(title, year) {
@@ -872,13 +915,82 @@
     btn.innerHTML = orig;
   });
 
+  // Músicas - Extrair link Iframe
+  function extractIframeSrc(input) {
+    const match = input.match(/src=["'](.*?)["']/);
+    if (match) return match[1];
+    if (input.startsWith('http')) return input;
+    return '';
+  }
+
+  // Músicas - Submit Form
+  document.getElementById('form-musicas').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('mTitle').value.trim();
+    const linkInput = document.getElementById('mLink').value.trim();
+    if (!title || !linkInput) return;
+    
+    const src = extractIframeSrc(linkInput);
+    if (!src) { alert('URL ou código iframe inválido.'); return; }
+
+    const btn = document.getElementById('btn-add-musicas');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span>Adicionando...</span>';
+
+    await push(refs.musicas, { title, src, timestamp: Date.now() });
+    document.getElementById('form-musicas').reset();
+    btn.innerHTML = orig;
+  });
+
+  // Músicas - Render
+  function renderMusicas() {
+    const track = document.getElementById('list-musicas');
+    const items = state.musicas.items;
+
+    if (!items.length) {
+      track.innerHTML = `<div class="empty-state" style="grid-column-start:1;grid-column-end:-1;"><p class="empty-text">Aguardando playlists...</p></div>`;
+      return;
+    }
+
+    track.innerHTML = '';
+    items.forEach((m, idx) => {
+      const card = document.createElement('div');
+      card.className = 'musica-card';
+      card.innerHTML = `
+        <div class="musica-card-header">
+          <h3 class="musica-title">${m.title}</h3>
+          <button class="movie-action-btn delete" onclick="window.deleteItem('musicas','${m.key}')" aria-label="Deletar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="musica-iframe-wrapper">
+          <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="${m.src}"></iframe>
+        </div>
+      `;
+      track.appendChild(card);
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: idx * 0.1 });
+      }
+    });
+  }
+
+  // Músicas - Listener
+  onValue(refs.musicas, (snapshot) => {
+    state.musicas.items = [];
+    snapshot.forEach(child => { state.musicas.items.push({ key: child.key, ...child.val() }); });
+    state.musicas.items.reverse();
+    renderMusicas();
+  });
+
   document.querySelectorAll('.ftab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       const section = e.target.dataset.section;
-      document.querySelectorAll(`.ftab[data-section="${section}"]`).forEach(t => t.classList.remove('active'));
-      e.target.classList.add('active');
-      state[section].filter = e.target.dataset.filter;
-      renderItems(section);
+      if(section !== 'musicas'){
+         document.querySelectorAll(`.ftab[data-section="${section}"]`).forEach(t => t.classList.remove('active'));
+         e.target.classList.add('active');
+         state[section].filter = e.target.dataset.filter;
+         renderItems(section);
+      }
     });
   });
 
