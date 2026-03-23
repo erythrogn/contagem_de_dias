@@ -599,6 +599,10 @@ function renderItems(section) {
 const s = state[section];
 const track = document.getElementById(`list-${section}`);
 const mainView = document.getElementById(`gallery-main-${section}`);
+
+// Guarda a chave do item atual antes de filtrar
+const activeKey = (s.filtered && s.filtered[s.currentIndex]) ? s.filtered[s.currentIndex].key : null;
+
 s.filtered = s.items.filter(m => {
 const isDone = section === 'filmes' ? (m.watched === true || m.watched === 'true') : (m.status === (section === 'series' ? 'concluida' : 'zerado'));
 if (section === 'filmes') {
@@ -614,6 +618,7 @@ if (!mGenres.includes(s.genre)) return false;
 }
 return true;
 });
+
 if (!s.filtered.length) {
 track.innerHTML = '';
 mainView.innerHTML = `<div class="empty-state" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;"><p class="empty-text">${actionLabels[section].empty}</p></div>`;
@@ -622,9 +627,11 @@ document.getElementById(`slider-next-${section}`).style.display = 'none';
 window.stopAutoplay(section);
 return;
 }
+
 document.getElementById(`slider-prev-${section}`).style.display = 'flex';
 document.getElementById(`slider-next-${section}`).style.display = 'flex';
 track.innerHTML = '';
+
 s.filtered.forEach((m, idx) => {
 const isDone = section === 'filmes' ? (m.watched === true || m.watched === 'true') : (m.status === (section === 'series' ? 'concluida' : 'zerado'));
 const card = document.createElement('div');
@@ -634,7 +641,15 @@ card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" on
 card.addEventListener('click', () => { if (idx !== s.currentIndex) { s.currentIndex = idx; updateSlider(section); } });
 track.appendChild(card);
 });
+
+// Restaura o índice baseado na chave guardada
+if (activeKey) {
+const newIndex = s.filtered.findIndex(m => m.key === activeKey);
+s.currentIndex = newIndex !== -1 ? newIndex : 0;
+} else {
 s.currentIndex = 0;
+}
+
 updateSlider(section);
 }
 function updateSlider(section) {
