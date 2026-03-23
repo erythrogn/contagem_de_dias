@@ -395,9 +395,6 @@
   75% { opacity: 0.8; transform: translate(7px, -26px) scale(1.2); }
   100% { opacity: 0; transform: translate(2px, -35px) scale(0.5); }
 }
-.bloco-hidden {
-  display: none !important;
-}
 .wrap {
   max-width: 1000px;
   margin-top: 0;

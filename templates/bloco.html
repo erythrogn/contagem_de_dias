@@ -17,7 +17,7 @@
       </svg>
     </div>
     <h2 class="gate-title">Bloco Secreto</h2>
-    <p class="gate-sub">Este espaço é só nosso. <em>Digite a senha.</em></p>
+    <p class="gate-sub">Este espaço é só nosso. <em>Digite a senha da floresta.</em></p>
 
     <div class="gate-field-wrap">
       <input type="password" id="gate-input" class="gate-input"
@@ -265,6 +265,9 @@
   let notes = [];
   let currentFilter = 'todos';
   const editDialog = document.getElementById('edit-dialog-note');
+  
+  // Imagem de fallback confiável caso a pesquisa do Bing não encontre nada
+  const fallbackImg = 'https://placehold.co/1600x1080/1a1c23/4da6ff?text=Mystical+Memory';
 
   document.querySelectorAll('.mform-textarea, .textarea-expand').forEach(ta => {
     ta.addEventListener('input', function() {
@@ -358,21 +361,11 @@
     return 'Amor';
   }
 
-  function hashCode(str) {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; }
-    return h;
-  }
-
-  function getThemeImage(title, seed) {
-    const safeTitle = (title || 'mystery').trim()
-      .replace(/[^\w\sÀ-ÿ]/gi, '')
-      .substring(0, 50);      
-   
-    const prompt = `dark fantasy epic concept art, mystical grimoire page, ${safeTitle}, cinematic volumetric lighting, glowing gold runes, ethereal fog, 8k resolution, masterpiece`;
-    const seedNum = Math.abs(hashCode(seed || safeTitle));
-
-    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seedNum}&width=1600&height=1080`;
+  // Novo gerador de fundo usando o proxy do Bing para evitar falhas e timeouts da IA
+  function getThemeImage(title) {
+    const safeTitle = (title || '').trim();
+    const query = `dark aesthetic mysterious ${safeTitle} wallpaper`;
+    return `https://tse2.mm.bing.net/th?q=${encodeURIComponent(query)}&w=1600&h=1080&c=7&rs=1&p=0`;
   }
 
   function renderInterface() {
@@ -400,7 +393,7 @@
 
     filtered.forEach((n, i) => {
       if (isQMode && n.type === 'pergunta') {
-        const bg       = getThemeImage(n.title, n.key);
+        const bg       = getThemeImage(n.title);
         const expected = getTargetAnswerer(n.author);
         const hasAns   = (n.answer || '').trim() !== '';
 
@@ -425,7 +418,7 @@
         const li = document.createElement('li');
         li.className = 'carousel-item';
         li.innerHTML = `
-          <img class="carousel-bg" src="${bg}" alt="" onload="this.classList.add('loaded')">
+          <img class="carousel-bg" src="${bg}" alt="" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='${fallbackImg}';this.classList.add('loaded');">
           <div class="carousel-content">
             <div class="cc-who">${n.author || 'Alguém'} perguntou:</div>
             <div class="cc-title">${n.title}</div>
@@ -447,7 +440,7 @@
         const th = document.createElement('div');
         th.className = 'c-thumb';
         th.innerHTML = `
-          <img src="${bg}" alt="" onload="this.classList.add('loaded')">
+          <img src="${bg}" alt="" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='${fallbackImg}';this.classList.add('loaded');">
           <div class="c-thumb-info">
             <span class="c-thumb-author">${n.author || '?'}</span>
             <span class="c-thumb-title">${n.title.substring(0, 30)}${n.title.length > 30 ? '…' : ''}</span>
@@ -658,7 +651,7 @@
   const btn     = document.getElementById('gate-btn');
   const errEl   = document.getElementById('gate-error');
 
-  const EXPECTED_HASH = "b2dhaXR1ZW0=";
+  const EXPECTED_HASH = "b2dhaXR1ZW0="; // Senha: "meutiago"
 
   if (sessionStorage.getItem('bloco_auth') === 'true') { 
     unlock(false); 
@@ -673,7 +666,7 @@
 
   function tryAuth() {
     const pwd = input.value.trim();
-    if (!pwd) { showError('Digite a senha'); return; }
+    if (!pwd) { showError('Digite a senha da floresta'); return; }
 
     btn.disabled = true;
     btn.classList.add('loading');
@@ -727,10 +720,8 @@
     content.style.display = 'block';
     
     // Pequeno atraso (Reflow) para garantir que o browser registou o display: block
-    // MAGIA AQUI! Sem isto a página ficava em branco porque o CSS não disparava a animação.
     void content.offsetWidth; 
     
-    content.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
     content.style.opacity = '1';
     content.style.transform = 'translateY(0)';
   }
