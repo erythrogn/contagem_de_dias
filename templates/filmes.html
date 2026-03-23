@@ -595,6 +595,7 @@ document.getElementById(`edit-${section}-status`).value   = m.status || 'quero j
 }
 document.getElementById(`edit-dialog-${section}`).showModal();
 };
+
 function renderItems(section) {
 const s = state[section];
 const track = document.getElementById(`list-${section}`);
@@ -637,7 +638,9 @@ const isDone = section === 'filmes' ? (m.watched === true || m.watched === 'true
 const card = document.createElement('div');
 card.className = `slider-card ${isDone ? 'watched' : ''}`;
 const poster = (m.poster && m.poster.trim() !== "" && m.poster !== "N/A") ? m.poster : fallbackImgs[section];
-card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
+
+// Aplica o grayscale via style no thumbnail se estiver assistido
+card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" style="${isDone ? 'filter: grayscale(100%);' : ''}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
 card.addEventListener('click', () => { if (idx !== s.currentIndex) { s.currentIndex = idx; updateSlider(section); } });
 track.appendChild(card);
 });
@@ -652,6 +655,7 @@ s.currentIndex = 0;
 
 updateSlider(section);
 }
+
 function updateSlider(section) {
 const s = state[section];
 const cards = document.querySelectorAll(`#list-${section} .slider-card`);
@@ -694,7 +698,12 @@ mainView.innerHTML = `
 if (typeof gsap !== 'undefined') {
 const img = mainView.querySelector('.gallery-main-img');
 const overlay = mainView.querySelector('.gallery-main-overlay');
-gsap.fromTo(img, { opacity: 0, scale: 1.05, filter: 'brightness(0.5)' }, { opacity: 1, scale: 1, filter: 'brightness(1)', duration: 0.6, ease: 'power2.out' });
+
+// Trata os filtros de preto e branco no GSAP se estiver assistido
+const startFilter = isDone ? 'brightness(0.5) grayscale(100%)' : 'brightness(0.5) grayscale(0%)';
+const endFilter = isDone ? 'brightness(1) grayscale(100%)' : 'brightness(1) grayscale(0%)';
+
+gsap.fromTo(img, { opacity: 0, scale: 1.05, filter: startFilter }, { opacity: 1, scale: 1, filter: endFilter, duration: 0.6, ease: 'power2.out' });
 gsap.fromTo(overlay, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.1 });
 }
 const activeThumb = cards[s.currentIndex];
@@ -703,6 +712,7 @@ activeThumb.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'cente
 }
 window.startAutoplay(section);
 }
+
 const total = s.filtered.length;
 const prev  = document.getElementById(`slider-prev-${section}`);
 const next  = document.getElementById(`slider-next-${section}`);
@@ -867,12 +877,42 @@ document.getElementById('poster-preview-img-jogos').style.display = 'none';
 document.getElementById('poster-placeholder-icon-jogos').style.display = 'block';
 btn.innerHTML = orig;
 });
+
+// Conversor de links inteligentes para embeds de música
 function extractIframeSrc(input) {
 const match = input.match(/src=["'](.*?)["']/);
 if (match) return match[1];
-if (input.startsWith('http')) return input;
+
+let url = input.trim();
+if (!url.startsWith('http')) return '';
+
+try {
+const urlObj = new URL(url);
+
+// Spotify
+if (urlObj.hostname.includes('spotify.com') && !urlObj.pathname.startsWith('/embed/')) {
+return `https://open.spotify.com/embed${urlObj.pathname}`;
+}
+// Apple Music
+if (urlObj.hostname.includes('music.apple.com')) {
+return `https://embed.music.apple.com${urlObj.pathname}${urlObj.search}`;
+}
+// YouTube (Video or Playlist)
+if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
+let videoId = urlObj.searchParams.get('v');
+if (urlObj.hostname.includes('youtu.be')) videoId = urlObj.pathname.slice(1);
+
+let listId = urlObj.searchParams.get('list');
+if (videoId) return `https://www.youtube.com/embed/${videoId}${listId ? '?list='+listId : ''}`;
+if (listId) return `https://www.youtube.com/embed/videoseries?list=${listId}`;
+}
+
+return url;
+} catch(e) {
 return '';
 }
+}
+
 document.getElementById('form-musicas').addEventListener('submit', async (e) => {
 e.preventDefault();
 const title = document.getElementById('mTitle').value.trim();
