@@ -991,6 +991,9 @@
   transform: scale(1.04) translateX(-4px);
   filter: grayscale(0);
 }
+.slider-card.watched:not(.active) {
+  filter: brightness(0.5) saturate(0.3) grayscale(0.5);
+}
 .slider-card-img {
   width: 100%;
   height: 100%;
@@ -1114,9 +1117,6 @@
   background-color: rgba(248, 113, 113, 0.25);
   transform: scale(1.15);
   box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
-}
-.slider-card.watched:not(.active) {
-  filter: brightness(0.5) saturate(0.3) grayscale(0.5);
 }
 .empty-state {
   text-align: center;
@@ -1276,115 +1276,6 @@ dialog[open]::backdrop {
   border-left-color: rgba(240, 180, 41, 0.25);
   box-shadow: 0 4px 12px rgba(240, 180, 41, 0.2);
 }
-@media (max-width: 768px) {
-  .filmes-container {
-    padding-top: 5.5rem;
-    padding-right: 1rem;
-    padding-bottom: 5rem;
-    padding-left: 1rem;
-  }
-  .main-tabs-wrapper {
-    width: 100%;
-  }
-  .main-tab {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0%;
-    justify-content: center;
-    padding-top: 0.75rem;
-    padding-right: 0.75rem;
-    padding-bottom: 0.75rem;
-    padding-left: 0.75rem;
-    font-size: 0.75rem;
-  }
-  .gallery-layout {
-    flex-direction: column;
-    height: auto;
-  }
-  .gallery-main {
-    height: 420px;
-    width: 100%;
-  }
-  .gallery-main-title {
-    font-size: 2.2rem;
-  }
-  .gallery-side {
-    width: 100%;
-    flex-direction: row;
-    height: 120px;
-  }
-  .slider-track {
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  }
-  .slider-card {
-    width: 80px;
-    height: 100%;
-  }
-  .slider-card.active {
-    border-top-width: 4px;
-    border-left-width: 0px;
-    border-top-color: var(--amber);
-    transform: scale(1.04) translateY(4px);
-  }
-  .slider-btn {
-    width: 40px;
-    height: 100%;
-  }
-  .slider-btn.prev svg {
-    transform: rotate(-90deg);
-  }
-  .slider-btn.next svg {
-    transform: rotate(-90deg);
-  }
-  .form-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .field-group.span-full {
-    grid-column-start: auto;
-    grid-column-end: auto;
-  }
-  dialog {
-    padding-top: 1.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: 1.5rem;
-    padding-left: 1.5rem;
-    border-radius: var(--r-lg);
-  }
-}
-@keyframes riseUpFilmes {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-    filter: blur(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-@keyframes sectionEnterFilmes {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes gradientShiftFilmes {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
 .musica-accent {
   background-image: linear-gradient(135deg, #10b981 0%, var(--cyan-bright) 100%);
   background-size: 200% auto;
@@ -1524,4 +1415,116 @@ dialog[open]::backdrop {
   border-style: none;
   border-color: transparent;
   display: block;
+}
+@media (max-width: 768px) {
+  .filmes-container {
+    padding-top: 5.5rem;
+    padding-right: 1rem;
+    padding-bottom: 6rem;
+    padding-left: 1rem;
+  }
+  .main-tabs-wrapper {
+    width: 100%;
+  }
+  .main-tab {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    justify-content: center;
+    padding-top: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 0.75rem;
+    font-size: 0.75rem;
+  }
+  .gallery-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  .gallery-main {
+    height: 420px;
+    width: 100%;
+  }
+  .gallery-main-title {
+    font-size: 2.2rem;
+  }
+  .gallery-side {
+    width: 100%;
+    flex-direction: row;
+    height: 120px;
+  }
+  .slider-track {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+  .slider-card {
+    width: 80px;
+    height: 100%;
+  }
+  .slider-card.active {
+    border-top-width: 4px;
+    border-left-width: 0px;
+    border-top-color: var(--amber);
+    transform: scale(1.04) translateY(4px);
+  }
+  .slider-btn {
+    width: 40px;
+    height: 100%;
+  }
+  .slider-btn.prev svg {
+    transform: rotate(-90deg);
+  }
+  .slider-btn.next svg {
+    transform: rotate(-90deg);
+  }
+  .form-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .field-group.span-full {
+    grid-column-start: auto;
+    grid-column-end: auto;
+  }
+  dialog {
+    padding-top: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    border-top-left-radius: var(--r-lg);
+    border-top-right-radius: var(--r-lg);
+    border-bottom-right-radius: var(--r-lg);
+    border-bottom-left-radius: var(--r-lg);
+  }
+}
+@keyframes riseUpFilmes {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+@keyframes sectionEnterFilmes {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gradientShiftFilmes {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }

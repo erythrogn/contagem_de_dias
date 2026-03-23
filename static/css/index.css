@@ -689,6 +689,11 @@
     margin-left: 0;
   }
 }
+@media (max-width: 768px) {
+  .stage {
+    padding-bottom: 6rem;
+  }
+}
 @media (max-width: 600px) {
   .stage {
     padding-top: 5rem;
