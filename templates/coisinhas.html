@@ -8,42 +8,108 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+  <main class="coisinhas-container">
 
-  <header class="content-header">
-    <span class="eyebrow">nosso grimório de memórias(sou mt gay)</span>
-    <h1 class="page-title">Coisinhas <em>para Fazer</em></h1>
-    <p class="page-sub">quero viver tudo com voce pq é com voce</p>
-  </header>
+    <header class="page-header">
+      <span class="page-eyebrow">nosso grimório de memórias</span>
+      <h1 class="page-title">Coisinhas <span class="page-accent coisinhas-accent">para Fazer</span></h1>
+      <p class="page-subtitle">quero viver tudo com voce pq é com voce</p>
+    </header>
 
-  <section class="card progress-card" aria-label="Progresso das coisinhas">
-    <div class="progress-info">
-      <span>Progresso</span>
-      <strong id="progress-count">0/0</strong>
-    </div>
-    <div class="progress-track"
-         role="progressbar"
-         aria-valuenow="0"
-         aria-valuemin="0"
-         aria-valuemax="100"
-         aria-label="Percentagem concluída">
-      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-    </div>
-  </section>
+    <section class="progress-wrapper" aria-label="Progresso das coisinhas">
+      <div class="progress-details">
+        <span class="progress-label-text">Concluídas</span>
+        <strong class="progress-number" id="progress-count">0 / 0</strong>
+      </div>
+      <div class="progress-track" role="progressbar">
+        <div class="progress-fill progress-fill-coisinhas" id="progress-fill" style="width:0%"></div>
+      </div>
+    </section>
 
-  <section class="card" aria-label="Adicionar nova coisinha">
-    <p class="section-title">✦ Adicionar Item</p>
+    <section class="form-wrapper" aria-label="Adicionar nova coisinha">
+      <h2 class="form-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        Adicionar Item
+      </h2>
+      <form id="add-form" class="form-layout" novalidate>
+        <div class="field-group span-full">
+          <label for="title" class="field-label">O que vamos fazer?</label>
+          <input type="text" id="title" name="title" class="field-input" placeholder="ex: fazer um piquenique no parque..." autocomplete="off" required>
+        </div>
 
-    <form id="add-form" class="form-grid" novalidate>
-      <div class="form-group span2">
-        <label for="title">O que vamos fazer?</label>
-        <input type="text" id="title" name="title" placeholder="ex: fazer um piquenique no parque..." autocomplete="off" required>
+        <div class="field-group">
+          <label for="category" class="field-label">Categoria</label>
+          <select id="category" name="category" class="field-input field-select" required>
+            <option value="visitar">Visitar Local</option>
+            <option value="comida">Comida</option>
+            <option value="receita">Fazer Receita</option>
+            <option value="drink">Experimentar Drink</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="targetDate" class="field-label">Data Planejada</label>
+          <input type="date" id="targetDate" name="targetDate" class="field-input">
+        </div>
+
+        <div class="field-group span-full">
+          <label for="notes" class="field-label">Notas e detalhes</label>
+          <textarea id="notes" name="notes" rows="2" class="field-input" placeholder="Algum detalhe especial..."></textarea>
+        </div>
+
+        <div class="field-group span-full">
+          <button type="submit" class="btn-submit btn-submit-coisinhas" id="btn-add-coisinhas">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Adicionar Coisinha</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <nav class="filter-wrapper" id="filter-coisinhas" role="tablist" aria-label="Filtrar itens">
+      <button class="ftab active" data-filter="all" role="tab">Todos</button>
+      <button class="ftab" data-filter="visitar" role="tab">Visitar</button>
+      <button class="ftab" data-filter="comida" role="tab">Comida</button>
+      <button class="ftab" data-filter="receita" role="tab">Receitas</button>
+      <button class="ftab" data-filter="drink" role="tab">Drinks</button>
+      <button class="ftab" data-filter="outro" role="tab">Outros</button>
+    </nav>
+
+    <section class="minimal-slider-section">
+      <button id="slider-prev-coisinhas" class="min-nav-btn prev" aria-label="Anterior" onclick="window.prevSlide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="min-track-container" id="track-container">
+        <div class="min-track" id="list-coisinhas" aria-live="polite">
+          <div class="empty-state"><p class="empty-text">Aguardando memórias...</p></div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="category">Categoria</label>
-        <select id="category" name="category" required>
-          <option value="" disabled selected>Selecione...</option>
+      <button id="slider-next-coisinhas" class="min-nav-btn next" aria-label="Próximo" onclick="window.nextSlide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </section>
+
+  </main>
+
+  <dialog id="edit-dialog" aria-labelledby="edit-dialog-label">
+    <div class="dialog-header">
+      <h3 id="edit-dialog-label" style="margin:0;font-family:var(--font-display,sans-serif);">Editar Coisinha</h3>
+      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <form id="edit-form" class="form-layout" novalidate>
+      <input type="hidden" id="edit-key">
+      <div class="field-group span-full">
+        <label class="field-label">O que vamos fazer?</label>
+        <input type="text" id="edit-title" class="field-input" required>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Categoria</label>
+        <select id="edit-category" class="field-input field-select" required>
           <option value="visitar">Visitar Local</option>
           <option value="comida">Comida</option>
           <option value="receita">Fazer Receita</option>
@@ -51,99 +117,35 @@
           <option value="outro">Outro</option>
         </select>
       </div>
-
-      <div class="form-group">
-        <label for="targetDate">Data Planejada</label>
-        <input type="date" id="targetDate" name="targetDate" required>
+      <div class="field-group">
+        <label class="field-label">Data Planejada</label>
+        <input type="date" id="edit-targetDate" class="field-input">
       </div>
-
-      <div class="form-group span2">
-        <label for="notes">Notas e detalhes</label>
-        <textarea id="notes" name="notes" rows="2" placeholder="Algum detalhe especial..."></textarea>
+      <div class="field-group span-full">
+        <label class="field-label">Notas e detalhes</label>
+        <textarea id="edit-notes" class="field-input" rows="2"></textarea>
       </div>
-
-      <div class="form-group span2">
-        <button type="submit" class="btn-submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span>Adicionar</span>
+      <div class="field-group span-full">
+        <button class="btn-submit btn-submit-coisinhas" type="submit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Salvar Alterações</span>
         </button>
       </div>
     </form>
-  </section>
-
-  <div class="filter-container" role="tablist" aria-label="Filtrar itens">
-    <button class="ftab active" role="tab" aria-selected="true" data-filter="all">Todos</button>
-    <button class="ftab" role="tab" aria-selected="false" data-filter="visitar">Visitar</button>
-    <button class="ftab" role="tab" aria-selected="false" data-filter="comida">Comida</button>
-    <button class="ftab" role="tab" aria-selected="false" data-filter="receita">Receitas</button>
-    <button class="ftab" role="tab" aria-selected="false" data-filter="drink">Drinks</button>
-    <button class="ftab" role="tab" aria-selected="false" data-filter="outro">Outros</button>
-  </div>
-
-  <div class="item-list" id="item-list" aria-label="Lista de coisinhas" aria-live="polite">
-    <div class="empty-state">
-      <p>✦</p>
-      <p>Carregando memórias...</p>
-    </div>
-  </div>
-
-</div>
-
-<dialog id="edit-dialog" aria-labelledby="edit-dialog-title">
-  <div class="dialog-header">
-    <h3 id="edit-dialog-title" style="margin: 0; font-family: var(--font-title); color: var(--gold-pale); font-weight: 400;">Editar Coisinha</h3>
-    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()" aria-label="Fechar">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
-  </div>
-  <form id="edit-form" class="form-grid" novalidate>
-    <input type="hidden" id="edit-key">
-    <div class="form-group span2">
-      <label for="edit-title">O que vamos fazer?</label>
-      <input type="text" id="edit-title" required>
-    </div>
-    <div class="form-group">
-      <label for="edit-category">Categoria</label>
-      <select id="edit-category" required>
-        <option value="visitar">Visitar Local</option>
-        <option value="comida">Comida</option>
-        <option value="receita">Fazer Receita</option>
-        <option value="drink">Experimentar Drink</option>
-        <option value="outro">Outro</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="edit-targetDate">Data Planejada</label>
-      <input type="date" id="edit-targetDate" required>
-    </div>
-    <div class="form-group span2">
-      <label for="edit-notes">Notas e detalhes</label>
-      <textarea id="edit-notes" rows="2"></textarea>
-    </div>
-    <div class="form-group span2">
-      <button type="submit" class="btn-submit">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        <span>Salvar Alterações</span>
-      </button>
-    </div>
-  </form>
-</dialog>
+  </dialog>
 
 <script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
 
-  const coisinhasRef = ref(db, 'coisinhas');
+  const state = {
+    items: [],
+    filtered: [],
+    currentIndex: 0,
+    filter: 'all'
+  };
 
-  const form = document.getElementById('add-form');
-  const editForm = document.getElementById('edit-form');
-  const editDialog = document.getElementById('edit-dialog');
-  const list = document.getElementById('item-list');
-  const progressFill = document.getElementById('progress-fill');
-  const progressCount = document.getElementById('progress-count');
-  
-  let items = [];
-  let currentFilter = 'all';
+  const coisinhasRef = ref(db, 'coisinhas');
 
   const ICONS = {
     visitar: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
@@ -154,86 +156,21 @@
   };
 
   onValue(coisinhasRef, (snapshot) => {
-    items = [];
+    state.items = [];
     snapshot.forEach((childSnapshot) => {
-      items.push({ key: childSnapshot.key, ...childSnapshot.val() });
+      state.items.push({ key: childSnapshot.key, ...childSnapshot.val() });
     });
-    items.reverse(); 
+    state.items.reverse(); 
     updateProgress();
     renderItems();
   });
 
   function updateProgress() {
-    const total = items.length;
-    const done = items.filter(i => i.done).length;
-    const percent = total ? (done / total) * 100 : 0;
-    progressFill.style.width = `${percent}%`;
-    progressCount.textContent = `${done}/${total}`;
-  }
-
-  function renderItems() {
-    list.innerHTML = '';
-    const filteredItems = items.filter(i => currentFilter === 'all' || i.category === currentFilter);
-
-    if (filteredItems.length === 0) {
-      list.innerHTML = `
-        <div class="empty-state" style="grid-column: 1 / -1;">
-          <p>✦</p>
-          <p>Nenhuma coisinha encontrada nesta categoria.</p>
-        </div>
-      `;
-      return;
-    }
-
-    filteredItems.forEach((item, index) => {
-      const card = document.createElement('div');
-      card.className = `item-card ${item.done ? 'done' : ''}`;
-      
-      const iconSvg = ICONS[item.category] || ICONS['outro'];
-      
-      const checkIcon = item.done 
-        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Feito'
-        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg> Marcar Feito';
-
-      const dateStr = item.targetDate ? item.targetDate.split('-').reverse().join('/') : '';
-      const dateHtml = dateStr ? `
-        <div class="i-date">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          ${dateStr}
-        </div>` : '';
-
-      card.innerHTML = `
-        <div class="card-header">
-          <div class="i-meta">${iconSvg} <span>${item.category}</span></div>
-          <div class="card-actions">
-            <button class="btn-action edit" onclick="window.openEdit('${item.key}')" aria-label="Editar">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-            </button>
-            <button class="btn-action del" onclick="window.deleteItem('${item.key}')" aria-label="Excluir">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-        </div>
-        <div class="card-body">
-          <h3 class="i-title">${item.title}</h3>
-          ${dateHtml}
-          ${item.notes ? `<p class="i-notes">${item.notes}</p>` : ''}
-        </div>
-        <div class="card-footer">
-          <button class="btn-toggle-done ${item.done ? 'checked' : ''}" onclick="window.toggleItem('${item.key}', ${item.done})">
-            ${checkIcon}
-          </button>
-        </div>
-      `;
-      list.appendChild(card);
-      
-      if (typeof gsap !== 'undefined') {
-        gsap.fromTo(card, 
-          { opacity: 0, y: 30, scale: 0.95, rotationX: 10 }, 
-          { opacity: 1, y: 0, scale: 1, rotationX: 0, duration: 0.7, ease: 'back.out(1.5)', delay: index * 0.08 }
-        );
-      }
-    });
+    const total = state.items.length;
+    const done = state.items.filter(i => i.done).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progress-fill').style.width = `${pct}%`;
+    document.getElementById('progress-count').textContent = `${done} / ${total}`;
   }
 
   window.toggleItem = function(key, currentDone) {
@@ -245,53 +182,194 @@
   };
 
   window.openEdit = function(key) {
-    const item = items.find(i => i.key === key);
+    const item = state.items.find(i => i.key === key);
     if (!item) return;
-    
     document.getElementById('edit-key').value = item.key;
     document.getElementById('edit-title').value = item.title || '';
     document.getElementById('edit-category').value = item.category || 'outro';
     document.getElementById('edit-targetDate').value = item.targetDate || '';
     document.getElementById('edit-notes').value = item.notes || '';
-    
-    editDialog.showModal();
+    document.getElementById('edit-dialog').showModal();
   };
 
-  form.addEventListener('submit', async (e) => {
+  function renderItems() {
+    const track = document.getElementById('list-coisinhas');
+    state.filtered = state.items.filter(i => state.filter === 'all' || i.category === state.filter);
+
+    if (!state.filtered.length) {
+      track.innerHTML = `<div class="empty-state"><p class="empty-text">Nenhuma coisinha encontrada.</p></div>`;
+      document.getElementById('slider-prev-coisinhas').style.display = 'none';
+      document.getElementById('slider-next-coisinhas').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('slider-prev-coisinhas').style.display = 'flex';
+    document.getElementById('slider-next-coisinhas').style.display = 'flex';
+    track.innerHTML = '';
+
+    state.filtered.forEach((m, idx) => {
+      const card = document.createElement('div');
+      card.className = `min-card ${m.done ? 'watched' : ''}`;
+      
+      const iconSvg = ICONS[m.category] || ICONS['outro'];
+      const dateStr = m.targetDate ? String(m.targetDate).split('-').reverse().join('/') : '';
+      
+      card.innerHTML = `
+        <div class="min-card-header">
+          <div class="min-card-meta">${iconSvg} <span>${m.category}</span></div>
+        </div>
+        <div class="min-card-body">
+          <h3 class="min-card-title ${m.done ? 'strikethrough' : ''}">${m.title}</h3>
+          ${dateStr ? `<p class="min-card-date">${dateStr}</p>` : ''}
+          ${m.notes ? `<p class="min-card-notes">${m.notes}</p>` : ''}
+        </div>
+        <div class="min-card-footer">
+          <div class="actions-group">
+            <button class="movie-action-btn check ${m.done ? 'checked' : ''}" onclick="event.stopPropagation(); window.toggleItem('${m.key}',${m.done})" aria-label="Marcar como feito">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEdit('${m.key}')" aria-label="Editar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteItem('${m.key}')" aria-label="Deletar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => { 
+        if (idx !== state.currentIndex) { 
+          state.currentIndex = idx; 
+          updateSlider(); 
+        } 
+      });
+      track.appendChild(card);
+    });
+
+    state.currentIndex = 0;
+    updateSlider();
+  }
+
+  function updateSlider() {
+    const cards = document.querySelectorAll('.min-card');
+    const track = document.getElementById('track-container');
+
+    cards.forEach((card, idx) => {
+      if (idx === state.currentIndex) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+
+    const activeCard = cards[state.currentIndex];
+    if (activeCard && track) {
+      const trackWidth = track.offsetWidth;
+      const cardWidth = activeCard.offsetWidth;
+      const cardLeft = activeCard.offsetLeft;
+      const scrollPos = cardLeft - (trackWidth / 2) + (cardWidth / 2);
+      
+      track.scrollTo({ left: scrollPos, behavior: 'smooth' });
+    }
+
+    const total = state.filtered.length;
+    const prev  = document.getElementById('slider-prev-coisinhas');
+    const next  = document.getElementById('slider-next-coisinhas');
+    if (prev) prev.setAttribute('aria-disabled', state.currentIndex === 0);
+    if (next) next.setAttribute('aria-disabled', state.currentIndex === total - 1);
+  }
+
+  window.prevSlide = function() {
+    if (state.currentIndex > 0) {
+      state.currentIndex--;
+      updateSlider();
+      if (typeof gsap !== 'undefined') {
+        const btn = document.getElementById('slider-prev-coisinhas');
+        if (btn) gsap.fromTo(btn, { x: -4 }, { x: 0, duration: 0.35, ease: 'back.out(2)' });
+      }
+    }
+  };
+
+  window.nextSlide = function() {
+    if (state.currentIndex < state.filtered.length - 1) {
+      state.currentIndex++;
+      updateSlider();
+      if (typeof gsap !== 'undefined') {
+        const btn = document.getElementById('slider-next-coisinhas');
+        if (btn) gsap.fromTo(btn, { x: 4 }, { x: 0, duration: 0.35, ease: 'back.out(2)' });
+      }
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') window.prevSlide();
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') window.nextSlide();
+  });
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const trackContainer = document.getElementById('track-container');
+  if (trackContainer) {
+    trackContainer.addEventListener('touchstart', e => { 
+      touchStartX = e.touches[0].clientX; 
+      touchStartY = e.touches[0].clientY; 
+    }, { passive: true });
+    trackContainer.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx < -50) window.nextSlide();
+        else if (dx > 50) window.prevSlide();
+      }
+    });
+  }
+
+  document.getElementById('add-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const titleVal = document.getElementById('title').value.trim();
     const categoryVal = document.getElementById('category').value;
-    if (!categoryVal) return;
+    if (!titleVal || !categoryVal) return;
+
+    const btn = document.getElementById('btn-add-coisinhas');
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '<span>Adicionando...</span>';
 
     const newItem = {
-      title: document.getElementById('title').value.trim(),
+      title: titleVal,
       category: categoryVal,
       targetDate: document.getElementById('targetDate').value,
       notes: document.getElementById('notes').value.trim(),
       done: false
     };
+    
     await push(coisinhasRef, newItem);
-    form.reset();
+    document.getElementById('add-form').reset();
+    btn.innerHTML = origHTML;
   });
 
-  editForm.addEventListener('submit', async (e) => {
+  document.getElementById('edit-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const key = document.getElementById('edit-key').value;
+    const newTitle = document.getElementById('edit-title').value.trim();
+    const newCategory = document.getElementById('edit-category').value;
+
     const updatedItem = {
-      title: document.getElementById('edit-title').value.trim(),
-      category: document.getElementById('edit-category').value,
+      title: newTitle,
+      category: newCategory,
       targetDate: document.getElementById('edit-targetDate').value,
-      notes: document.getElementById('edit-notes').value.trim(),
+      notes: document.getElementById('edit-notes').value.trim()
     };
     
     await update(ref(db, 'coisinhas/' + key), updatedItem);
-    editDialog.close();
+    document.getElementById('edit-dialog').close();
   });
 
   document.querySelectorAll('.ftab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
       e.target.classList.add('active');
-      currentFilter = e.target.dataset.filter;
+      state.filter = e.target.dataset.filter;
       renderItems();
     });
   });
