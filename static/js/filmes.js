@@ -4,7 +4,6 @@ import { db } from "/static/js/app.js";
 // ─── Configuração ────────────────────────────────────────────────────────────
 const TMDB_API_KEY  = "d39bbf74a96f6cca570dcb69c8f3059f";
 const RAWG_API_KEY  = "4a8f946edbb943dda1ee452b412e8eb0";
-const AUTOPLAY_MS   = 6000;
 const DEBOUNCE_MS   = 700;
 
 // ─── Cache de API ─────────────────────────────────────────────────────────────
@@ -27,40 +26,6 @@ const dbRefs = {
   series:  ref(db, "series"),
   jogos:   ref(db, "jogos"),
   musicas: ref(db, "musicas"),
-};
-
-// ─── Autoplay Seguro ──────────────────────────────────────────────────────────
-const autoplayTimers = {};
-
-window.startAutoplay = function (section) {
-  clearTimeout(autoplayTimers[section]);
-  
-  const sectionEl = document.getElementById(`section-${section}`);
-  if (!sectionEl || !sectionEl.classList.contains("active")) return;
-
-  const s = state[section];
-  if (!s?.filtered?.length || s.filtered.length <= 1) return;
-
-  const bar = document.getElementById(`autoplay-bar-${section}`);
-  if (bar && typeof gsap !== "undefined") {
-    gsap.killTweensOf(bar);
-    gsap.fromTo(bar, { width: "0%" }, { width: "100%", duration: AUTOPLAY_MS / 1000, ease: "none" });
-  }
-
-  autoplayTimers[section] = setTimeout(() => {
-    const cur = state[section];
-    cur.currentIndex = (cur.currentIndex + 1) % cur.filtered.length;
-    updateSlider(section);
-  }, AUTOPLAY_MS);
-};
-
-window.stopAutoplay = function (section) {
-  clearTimeout(autoplayTimers[section]);
-  const bar = document.getElementById(`autoplay-bar-${section}`);
-  if (bar && typeof gsap !== "undefined") {
-    gsap.killTweensOf(bar);
-    gsap.set(bar, { width: "0%" });
-  }
 };
 
 // ─── Busca de dados externos ──────────────────────────────────────────────────
@@ -327,7 +292,6 @@ function renderItems(section) {
       </div>`;
     if (prevBtn) prevBtn.style.display = "none";
     if (nextBtn) nextBtn.style.display = "none";
-    window.stopAutoplay(section);
     return;
   }
 
@@ -346,8 +310,9 @@ function renderItems(section) {
     card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${m.title}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
     card.addEventListener("click", () => {
       if (idx !== s.currentIndex) {
+        const direction = idx > s.currentIndex ? 1 : -1;
         s.currentIndex = idx;
-        updateSlider(section);
+        updateSlider(section, direction);
       }
     });
     fragment.appendChild(card);
@@ -358,7 +323,7 @@ function renderItems(section) {
   const newIndex = activeKey ? s.filtered.findIndex(m => m.key === activeKey) : -1;
   s.currentIndex = newIndex !== -1 ? newIndex : 0;
 
-  updateSlider(section);
+  updateSlider(section, 0);
 }
 
 // ─── Estrelas de Avaliação Premium (Cores Dinâmicas) ──────────────────────────
@@ -368,13 +333,12 @@ function createStars(score, name) {
   let stars = '';
   let colorVar = '';
 
-  // Define a cor baseada na nota da avaliação
   switch(num) {
-    case 1: colorVar = '#ef4444'; break; // 1 - Vermelho
-    case 2: colorVar = '#f59e0b'; break; // 2 - Laranja / Vermelho Esverdeado
-    case 3: colorVar = '#10b981'; break; // 3 - Verde
-    case 4: colorVar = '#06b6d4'; break; // 4 - Ciano / Verde Azulado
-    case 5: colorVar = '#3b82f6'; break; // 5 - Azul
+    case 1: colorVar = '#ef4444'; break;
+    case 2: colorVar = '#f59e0b'; break;
+    case 3: colorVar = '#10b981'; break;
+    case 4: colorVar = '#06b6d4'; break;
+    case 5: colorVar = '#3b82f6'; break;
     default: colorVar = '#f59e0b'; 
   }
   
@@ -425,7 +389,6 @@ function buildMainHTML(section, m) {
   const esc = (v) => String(v ?? "").replace(/'/g, "\\'");
 
   return `
-    <div class="autoplay-bar" id="autoplay-bar-${section}"></div>
     <img src="${bgImage}" class="gallery-main-img" alt="${m.title}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">
     <div class="gallery-main-overlay">
       <h3 class="gallery-main-title">${m.title}</h3>
@@ -445,7 +408,7 @@ function buildMainHTML(section, m) {
     </div>`;
 }
 
-function updateSlider(section) {
+function updateSlider(section, direction = 0) {
   const s        = state[section];
   const mainView = document.getElementById(`gallery-main-${section}`);
   const cards    = document.querySelectorAll(`#list-${section} .slider-card`);
@@ -462,11 +425,20 @@ function updateSlider(section) {
     const img     = mainView.querySelector(".gallery-main-img");
     const overlay = mainView.querySelector(".gallery-main-overlay");
     const done    = isDoneItem(section, m);
+    
     const filter  = done ? "brightness(1) grayscale(100%)" : "brightness(1) grayscale(0%)";
     const filterStart = done ? "brightness(0.5) grayscale(100%)" : "brightness(0.5) grayscale(0%)";
+    const xOffset = direction !== 0 ? direction * 40 : 0;
 
-    if (img)     gsap.fromTo(img,     { opacity: 0, scale: 1.05, filter: filterStart }, { opacity: 1, scale: 1,    filter, duration: 0.6, ease: "power2.out" });
-    if (overlay) gsap.fromTo(overlay, { opacity: 0, y: 20 },                            { opacity: 1, y: 0,                 duration: 0.6, ease: "power2.out", delay: 0.1 });
+    if (img) gsap.fromTo(img, 
+      { opacity: 0, x: xOffset, filter: filterStart }, 
+      { opacity: 1, x: 0, filter, duration: 0.5, ease: "power2.out" }
+    );
+    
+    if (overlay) gsap.fromTo(overlay, 
+      { opacity: 0, y: 15, x: xOffset * 0.5 }, 
+      { opacity: 1, y: 0, x: 0, duration: 0.5, ease: "power2.out", delay: 0.05 }
+    );
   }
 
   cards[s.currentIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
@@ -476,16 +448,14 @@ function updateSlider(section) {
   const nextBtn = document.getElementById(`slider-next-${section}`);
   if (prevBtn) prevBtn.setAttribute("aria-disabled", String(s.currentIndex === 0));
   if (nextBtn) nextBtn.setAttribute("aria-disabled", String(s.currentIndex === total - 1));
-
-  window.startAutoplay(section);
 }
 
-// ─── Navegação de slides ──────────────────────────────────────────────────────
+// ─── Navegação de slides e Gestos Mobile ──────────────────────────────────────
 window.prevSlide = function (section) {
   const s = state[section];
   if (s.currentIndex <= 0) return;
   s.currentIndex--;
-  updateSlider(section);
+  updateSlider(section, -1);
   animateNavBtn(`slider-prev-${section}`, -4);
 };
 
@@ -493,7 +463,7 @@ window.nextSlide = function (section) {
   const s = state[section];
   if (s.currentIndex >= s.filtered.length - 1) return;
   s.currentIndex++;
-  updateSlider(section);
+  updateSlider(section, 1);
   animateNavBtn(`slider-next-${section}`, 4);
 };
 
@@ -511,26 +481,37 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowDown" || e.key === "ArrowRight") window.nextSlide(activeSection);
 });
 
+// Aprimoramento de eventos para Mobile Touch
 document.querySelectorAll(".gallery-layout").forEach(layout => {
   const mainView = layout.querySelector(".gallery-main");
   if (!mainView) return;
 
   const section = mainView.id.replace("gallery-main-", "");
-  let startX = 0, isDragging = false;
+  let startX = 0, startY = 0, isDragging = false;
 
-  layout.addEventListener("mouseenter", () => window.stopAutoplay(section));
-  layout.addEventListener("mouseleave", () => window.startAutoplay(section));
+  mainView.addEventListener("touchstart", e => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
 
-  mainView.addEventListener("pointerdown", e => { isDragging = true; startX = e.clientX; window.stopAutoplay(section); });
-  mainView.addEventListener("pointerup", e => {
+  mainView.addEventListener("touchend", e => {
     if (!isDragging) return;
     isDragging = false;
-    const diff = e.clientX - startX;
-    if (diff > 50)       window.prevSlide(section);
-    else if (diff < -50) window.nextSlide(section);
-    window.startAutoplay(section);
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    
+    const diffX = endX - startX;
+    const diffY = endY - startY;
+
+    // Garante que a ação foi um arraste horizontal predominante
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) window.prevSlide(section);
+      else window.nextSlide(section);
+    }
   });
-  mainView.addEventListener("pointercancel", () => { isDragging = false; });
+  
+  mainView.addEventListener("touchcancel", () => { isDragging = false; });
 });
 
 // ─── Firebase: Escuta em Tempo Real ───────────────────────────────────────────
@@ -798,10 +779,8 @@ document.querySelectorAll(".main-tab").forEach(tab => {
     document.querySelectorAll(".media-section").forEach(s => {
       const id = s.id.replace("section-", "");
       s.classList.remove("active");
-      window.stopAutoplay(id);
     });
 
     document.getElementById(`section-${section}`)?.classList.add("active");
-    window.startAutoplay(section);
   });
 });
