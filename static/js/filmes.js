@@ -274,9 +274,9 @@ window.openEdit = function (section, key) {
   set(`edit-${section}-who`,   m.who);
   set(`edit-${section}-where`, m.where ?? m.platform);
 
-  if (section === "filmes") {
-    set(`edit-filmes-rating-score`, m.ratingScore);
-    set(`edit-filmes-rating-user`, m.ratingUser);
+  if (section === "filmes" || section === "series") {
+    set(`edit-${section}-rating-hesron`, m.ratingHesron);
+    set(`edit-${section}-rating-tiago`, m.ratingTiago);
   }
 
   if (section === "series") {
@@ -292,7 +292,6 @@ window.openEdit = function (section, key) {
   document.getElementById(`edit-dialog-${section}`)?.showModal();
 };
 
-// ─── Renderização principal ───────────────────────────────────────────────────
 function applyFilter(section) {
   const s = state[section];
   s.filtered = s.items.filter(m => {
@@ -362,6 +361,40 @@ function renderItems(section) {
   updateSlider(section);
 }
 
+// ─── Estrelas de Avaliação Premium (Cores Dinâmicas) ──────────────────────────
+function createStars(score, name) {
+  if (!score) return '';
+  const num = parseInt(score);
+  let stars = '';
+  let colorVar = '';
+
+  // Define a cor baseada na nota da avaliação
+  switch(num) {
+    case 1: colorVar = '#ef4444'; break; // 1 - Vermelho
+    case 2: colorVar = '#f59e0b'; break; // 2 - Laranja / Vermelho Esverdeado
+    case 3: colorVar = '#10b981'; break; // 3 - Verde
+    case 4: colorVar = '#06b6d4'; break; // 4 - Ciano / Verde Azulado
+    case 5: colorVar = '#3b82f6'; break; // 5 - Azul
+    default: colorVar = '#f59e0b'; 
+  }
+  
+  for (let i = 1; i <= 5; i++) {
+    const isFilled = i <= num;
+    const fill = isFilled ? colorVar : 'none';
+    const stroke = isFilled ? colorVar : 'rgba(255,255,255,0.25)';
+    const filter = isFilled ? `drop-shadow(0 0 6px ${colorVar})` : 'none';
+    
+    stars += `<svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: ${filter};"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+  }
+  
+  return `
+    <div class="movie-rating-badge">
+      <span class="rating-name">${name}</span>
+      <div class="rating-stars">${stars}</div>
+    </div>
+  `;
+}
+
 function buildMainHTML(section, m) {
   const done     = isDoneItem(section, m);
   const bgImage  = validImage(m.backdrop) ?? validImage(m.poster) ?? fallbackImgs[section];
@@ -370,27 +403,21 @@ function buildMainHTML(section, m) {
   let meta = "";
   let ratingHTML = "";
 
-  if (section === "filmes") {
-    meta = [dateStr, m.where, m.who ? `indicação: ${m.who}` : ""].filter(Boolean).join(" · ");
+  if (section === "filmes" || section === "series") {
+    if (section === "filmes") meta = [dateStr, m.where, m.who ? `indicação: ${m.who}` : ""].filter(Boolean).join(" · ");
+    if (section === "series") meta = [m.status, m.seasons ? `${m.seasons} temp.` : "", m.where].filter(Boolean).join(" · ");
     
-    // Construtor de Estrelas SVG
-    if (m.ratingScore && m.ratingUser) {
-      const score = parseInt(m.ratingScore);
-      let stars = "";
-      for(let i=1; i<=5; i++) {
-        const fill = i <= score ? "var(--amber)" : "none";
-        const stroke = i <= score ? "var(--amber)" : "rgba(255,255,255,0.3)";
-        stars += `<svg width="14" height="14" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: all 0.3s ease;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
-      }
+    if (m.ratingHesron || m.ratingTiago) {
+      const hesronStars = createStars(m.ratingHesron, "Hesron");
+      const tiagoStars  = createStars(m.ratingTiago, "Tiago");
+      
       ratingHTML = `
-        <div class="movie-rating" style="display:flex; align-items:center; gap:0.6rem; margin-bottom: 1.2rem; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 50px; width: fit-content; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.05);">
-          <div style="display:flex; gap:3px;">${stars}</div>
-          <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; padding-top:2px;">por ${m.ratingUser}</span>
+        <div class="movie-ratings-container">
+          ${m.ratingHesron ? hesronStars : ''}
+          ${m.ratingTiago ? tiagoStars : ''}
         </div>
       `;
     }
-  } else if (section === "series") {
-    meta = [m.status, m.seasons ? `${m.seasons} temp.` : "", m.where].filter(Boolean).join(" · ");
   } else {
     meta = [m.status, m.platform, m.where].filter(Boolean).join(" · ");
   }
@@ -476,7 +503,6 @@ function animateNavBtn(id, yFrom) {
   if (btn) gsap.fromTo(btn, { y: yFrom }, { y: 0, duration: 0.35, ease: "back.out(2)" });
 }
 
-// ─── Eventos de Interação (Teclado e Swipe) ───────────────────────────────────
 document.addEventListener("keydown", (e) => {
   if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName)) return;
   const activeSection = ["filmes", "series", "jogos"].find(s => document.getElementById(`section-${s}`)?.classList.contains("active"));
@@ -571,14 +597,15 @@ onValue(dbRefs.musicas, snapshot => {
       who:        get(`edit-${section}-who`),
     };
 
-    if (section === "filmes") {
-      updateData.where = get("edit-filmes-where");
-      updateData.ratingScore = get("edit-filmes-rating-score");
-      updateData.ratingUser = get("edit-filmes-rating-user");
-    } else if (section === "series") {
-      updateData.where   = get("edit-series-where");
-      updateData.seasons = get("edit-series-seasons");
-      updateData.status  = document.getElementById("edit-series-status")?.value ?? "quero ver";
+    if (section === "filmes" || section === "series") {
+      updateData.where = get(`edit-${section}-where`);
+      updateData.ratingHesron = get(`edit-${section}-rating-hesron`);
+      updateData.ratingTiago = get(`edit-${section}-rating-tiago`);
+      
+      if (section === "series") {
+        updateData.seasons = get("edit-series-seasons");
+        updateData.status  = document.getElementById("edit-series-status")?.value ?? "quero ver";
+      }
     } else {
       updateData.where    = get("edit-jogos-where");
       updateData.platform = get("edit-jogos-platform");
@@ -635,8 +662,8 @@ document.getElementById("form-filmes")?.addEventListener("submit", e => {
     extra: get => ({ 
       watched: false, 
       where: get("fWhere").trim(),
-      ratingScore: get("fRatingScore"),
-      ratingUser: get("fRatingUser")
+      ratingHesron: get("fRatingHesron"),
+      ratingTiago: get("fRatingTiago")
     }),
   });
 });
@@ -646,7 +673,13 @@ document.getElementById("form-series")?.addEventListener("submit", e => {
   handleAddSubmit("series", fetchTVData, {
     formId: "form-series", title: "sTitle", year: "sYear", btn: "btn-add-series", targetDate: "sTargetDate", genre: "sGenre", who: "sWho",
     previewImg: "poster-preview-img-series", previewIcon: "poster-placeholder-icon-series",
-    extra: get => ({ status: get("sStatus") || "quero ver", seasons: get("sSeasons"), where: get("sWhere").trim() }),
+    extra: get => ({ 
+      status: get("sStatus") || "quero ver", 
+      seasons: get("sSeasons"), 
+      where: get("sWhere").trim(),
+      ratingHesron: get("sRatingHesron"),
+      ratingTiago: get("sRatingTiago")
+    }),
   });
 });
 
@@ -742,7 +775,6 @@ function renderMusicas() {
   track.appendChild(fragment);
 }
 
-// ─── Abas de Filtro ───────────────────────────────────────────────────────────
 document.querySelectorAll(".ftab").forEach(tab => {
   tab.addEventListener("click", e => {
     const section = e.target.dataset.section;
@@ -755,7 +787,6 @@ document.querySelectorAll(".ftab").forEach(tab => {
   });
 });
 
-// ─── Abas Principais ──────────────────────────────────────────────────────────
 document.querySelectorAll(".main-tab").forEach(tab => {
   tab.addEventListener("click", e => {
     const section = e.currentTarget.dataset.section;

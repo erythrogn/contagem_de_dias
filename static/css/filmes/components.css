@@ -170,3 +170,89 @@ pointer-events: none; opacity: 0.8; mix-blend-mode: screen;
 .musica-title { font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--text-primary); margin: 0; line-height: 1.2; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
 .musica-iframe-wrapper { width: 100%; border-radius: 10px; overflow: hidden; background-color: rgba(0, 0, 0, 0.2); box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5); }
 .musica-iframe-wrapper iframe { width: 100%; border: none; display: block; }
+/* =========================================
+   SISTEMA DE AVALIAÇÕES (ESTRELAS COLORIDAS)
+========================================= */
+.movie-ratings-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation-name: riseUpFilmes;
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-delay: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+.movie-rating-badge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.55); /* Fundo mais escuro para destacar as cores brilhantes */
+  padding-top: 6px;
+  padding-right: 14px;
+  padding-bottom: 6px;
+  padding-left: 14px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-style: solid;
+  border-top-color: rgba(255, 255, 255, 0.08);
+  border-right-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-left-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition-property: transform, border-color, box-shadow, background-color;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-rating-badge:hover {
+  transform: translateY(-2px) scale(1.02);
+  background-color: rgba(0, 0, 0, 0.75);
+  border-top-color: rgba(255, 255, 255, 0.25);
+  border-right-color: rgba(255, 255, 255, 0.25);
+  border-bottom-color: rgba(255, 255, 255, 0.25);
+  border-left-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.rating-name {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding-top: 2px;
+  font-weight: 600;
+}
+
+.rating-stars {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.star-icon {
+  transition-property: transform, filter;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.star-icon:hover {
+  transform: scale(1.25) rotate(15deg);
+}
