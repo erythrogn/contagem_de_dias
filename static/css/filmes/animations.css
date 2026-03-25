@@ -1,0 +1,16 @@
+@keyframes marqueeScroll {
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+}
+@keyframes riseUpFilmes {
+0% { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(12px); }
+100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes sectionEnterFilmes {
+0% { opacity: 0; transform: translateY(20px); }
+100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes gradientShiftFilmes {
+0% { background-position: 0% 50%; }
+100% { background-position: 100% 50%; }
+}
