@@ -2,9 +2,7 @@ body {
   padding: 0;
   margin: 0;
   background-color: #0a0c10;
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(34, 211, 238, 0.08), transparent 30%),
-    radial-gradient(circle at 85% 30%, rgba(240, 180, 41, 0.08), transparent 30%);
+  background-image: radial-gradient(circle at 15% 50%, rgba(34, 211, 238, 0.08), transparent 30%), radial-gradient(circle at 85% 30%, rgba(240, 180, 41, 0.08), transparent 30%);
   background-attachment: fixed;
   color: #e2e8f0;
 }
@@ -17,7 +15,6 @@ body {
   animation: riseUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
   transform-style: preserve-3d;
   perspective: 1000px;
-  will-change: opacity, transform;
 }
 .cal-eyebrow {
   font-family: var(--font-mono);
@@ -30,7 +27,6 @@ body {
   opacity: 0.75;
   text-shadow: 0 0 12px rgba(240, 180, 41, 0.4);
   transform: translateZ(10px);
-  will-change: transform;
 }
 .cal-title {
   font-family: var(--font-display);
@@ -41,7 +37,6 @@ body {
   margin-bottom: 0.5rem;
   line-height: 1.1;
   transform: translateZ(20px);
-  will-change: transform;
 }
 .cal-title span {
   font-family: var(--font-serif);
@@ -62,7 +57,6 @@ body {
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 1.5rem;
   transform: translateZ(5px);
-  will-change: transform;
 }
 .header-rule {
   display: flex;
@@ -72,7 +66,6 @@ body {
   margin-top: 1.25rem;
   opacity: 0;
   animation: expandIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-  will-change: opacity, transform;
 }
 .header-rule::before, .header-rule::after {
   content: '';
@@ -91,7 +84,6 @@ body {
   justify-content: center;
   filter: drop-shadow(0 0 8px rgba(240, 180, 41, 0.6));
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, filter 0.4s;
-  will-change: transform, opacity, filter;
 }
 .header-rule:hover .header-rule-icon {
   transform: rotate(180deg) scale(1.2);
