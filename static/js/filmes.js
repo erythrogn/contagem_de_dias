@@ -274,10 +274,16 @@ window.openEdit = function (section, key) {
   set(`edit-${section}-who`,   m.who);
   set(`edit-${section}-where`, m.where ?? m.platform);
 
+  if (section === "filmes") {
+    set(`edit-filmes-rating-score`, m.ratingScore);
+    set(`edit-filmes-rating-user`, m.ratingUser);
+  }
+
   if (section === "series") {
     set(`edit-series-seasons`, m.seasons);
     set(`edit-series-status`,  m.status ?? "quero ver");
   }
+  
   if (section === "jogos") {
     set(`edit-jogos-platform`, m.platform);
     set(`edit-jogos-status`,   m.status ?? "quero jogar");
@@ -362,9 +368,32 @@ function buildMainHTML(section, m) {
   const dateStr  = m.targetDate ? String(m.targetDate).split("-").reverse().join("/") : "";
 
   let meta = "";
-  if (section === "filmes") meta = [dateStr, m.where, m.who ? `indicação: ${m.who}` : ""].filter(Boolean).join(" · ");
-  else if (section === "series") meta = [m.status, m.seasons ? `${m.seasons} temp.` : "", m.where].filter(Boolean).join(" · ");
-  else meta = [m.status, m.platform, m.where].filter(Boolean).join(" · ");
+  let ratingHTML = "";
+
+  if (section === "filmes") {
+    meta = [dateStr, m.where, m.who ? `indicação: ${m.who}` : ""].filter(Boolean).join(" · ");
+    
+    // Construtor de Estrelas SVG
+    if (m.ratingScore && m.ratingUser) {
+      const score = parseInt(m.ratingScore);
+      let stars = "";
+      for(let i=1; i<=5; i++) {
+        const fill = i <= score ? "var(--amber)" : "none";
+        const stroke = i <= score ? "var(--amber)" : "rgba(255,255,255,0.3)";
+        stars += `<svg width="14" height="14" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: all 0.3s ease;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+      }
+      ratingHTML = `
+        <div class="movie-rating" style="display:flex; align-items:center; gap:0.6rem; margin-bottom: 1.2rem; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 50px; width: fit-content; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.05);">
+          <div style="display:flex; gap:3px;">${stars}</div>
+          <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; padding-top:2px;">por ${m.ratingUser}</span>
+        </div>
+      `;
+    }
+  } else if (section === "series") {
+    meta = [m.status, m.seasons ? `${m.seasons} temp.` : "", m.where].filter(Boolean).join(" · ");
+  } else {
+    meta = [m.status, m.platform, m.where].filter(Boolean).join(" · ");
+  }
 
   const esc = (v) => String(v ?? "").replace(/'/g, "\\'");
 
@@ -373,6 +402,7 @@ function buildMainHTML(section, m) {
     <img src="${bgImage}" class="gallery-main-img" alt="${m.title}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">
     <div class="gallery-main-overlay">
       <h3 class="gallery-main-title">${m.title}</h3>
+      ${ratingHTML}
       <div class="gallery-main-meta">${meta}</div>
       <div class="actions-group">
         <button class="movie-action-btn check ${done ? "checked" : ""}" onclick="event.stopPropagation(); window.toggleItem('${section}','${esc(m.key)}',${done})" aria-label="${actionLabels[section].done}">
@@ -541,8 +571,11 @@ onValue(dbRefs.musicas, snapshot => {
       who:        get(`edit-${section}-who`),
     };
 
-    if (section === "filmes") updateData.where = get("edit-filmes-where");
-    else if (section === "series") {
+    if (section === "filmes") {
+      updateData.where = get("edit-filmes-where");
+      updateData.ratingScore = get("edit-filmes-rating-score");
+      updateData.ratingUser = get("edit-filmes-rating-user");
+    } else if (section === "series") {
       updateData.where   = get("edit-series-where");
       updateData.seasons = get("edit-series-seasons");
       updateData.status  = document.getElementById("edit-series-status")?.value ?? "quero ver";
@@ -599,7 +632,12 @@ document.getElementById("form-filmes")?.addEventListener("submit", e => {
   handleAddSubmit("filmes", fetchMovieData, {
     formId: "form-filmes", title: "fTitle", year: "fYear", btn: "btn-add-filmes", targetDate: "fTargetDate", genre: "fGenre", who: "fWho",
     previewImg: "poster-preview-img-filmes", previewIcon: "poster-placeholder-icon-filmes",
-    extra: get => ({ watched: false, where: get("fWhere").trim() }),
+    extra: get => ({ 
+      watched: false, 
+      where: get("fWhere").trim(),
+      ratingScore: get("fRatingScore"),
+      ratingUser: get("fRatingUser")
+    }),
   });
 });
 

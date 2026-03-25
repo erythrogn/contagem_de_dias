@@ -91,6 +91,25 @@ Adicionar Filme
 <label for="fWhere" class="field-label">Onde assistir?</label>
 <input type="text" id="fWhere" class="field-input" placeholder="ex: Netflix, Prime...">
 </div>
+<div class="field-group">
+  <label for="fRatingScore" class="field-label">Nota (1 a 5)</label>
+  <select id="fRatingScore" class="field-input field-select">
+    <option value="">Sem nota</option>
+    <option value="1">1 Estrela</option>
+    <option value="2">2 Estrelas</option>
+    <option value="3">3 Estrelas</option>
+    <option value="4">4 Estrelas</option>
+    <option value="5">5 Estrelas</option>
+  </select>
+</div>
+<div class="field-group">
+  <label for="fRatingUser" class="field-label">Quem avaliou?</label>
+  <select id="fRatingUser" class="field-input field-select">
+    <option value="">Ninguém</option>
+    <option value="Hesron">Hesron</option>
+    <option value="Tiago">Tiago</option>
+  </select>
+</div>
 <div class="field-group span-full">
 <button class="btn-submit" id="btn-add-filmes" type="submit">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -365,6 +384,23 @@ Adicionar Playlist
 <div class="field-group"><label class="field-label">Ano</label><input type="text" id="edit-filmes-year" class="field-input" maxlength="4"></div>
 <div class="field-group"><label class="field-label">Quem indicou?</label><input type="text" id="edit-filmes-who" class="field-input"></div>
 <div class="field-group span-full"><label class="field-label">Onde assistir?</label><input type="text" id="edit-filmes-where" class="field-input"></div>
+<div class="field-group"><label class="field-label">Nota</label>
+  <select id="edit-filmes-rating-score" class="field-input field-select">
+    <option value="">Sem nota</option>
+    <option value="1">1 Estrela</option>
+    <option value="2">2 Estrelas</option>
+    <option value="3">3 Estrelas</option>
+    <option value="4">4 Estrelas</option>
+    <option value="5">5 Estrelas</option>
+  </select>
+</div>
+<div class="field-group"><label class="field-label">Avaliador</label>
+  <select id="edit-filmes-rating-user" class="field-input field-select">
+    <option value="">Ninguém</option>
+    <option value="Hesron">Hesron</option>
+    <option value="Tiago">Tiago</option>
+  </select>
+</div>
 <div class="field-group span-full">
 <button class="btn-submit" id="btn-edit-filmes-submit" type="submit">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
