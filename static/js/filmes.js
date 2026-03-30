@@ -1,9 +1,27 @@
 import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 import { db } from "/static/js/app.js";
 
-// ─── Configuração ────────────────────────────────────────────────────────────
-const TMDB_API_KEY  = "d39bbf74a96f6cca570dcb69c8f3059f";
-const RAWG_API_KEY  = "4a8f946edbb943dda1ee452b412e8eb0";
+// ─── Sanitização de HTML (Evita XSS e quebra de layout) ───────────────────────
+function escapeHTML(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// ─── Configuração Dinâmica de Chaves ──────────────────────────────────────────
+const metaTmdb = document.querySelector('meta[name="tmdb-api-key"]');
+const metaRawg = document.querySelector('meta[name="rawg-api-key"]');
+
+let rawTmdb = metaTmdb ? metaTmdb.getAttribute("content") : "";
+let rawRawg = metaRawg ? metaRawg.getAttribute("content") : "";
+
+// Ignora o valor do HTML caso o Flask não tenha renderizado a variável ou venha vazio
+const TMDB_API_KEY = (rawTmdb && !rawTmdb.includes("{{")) ? rawTmdb : "d39bbf74a96f6cca570dcb69c8f3059f";
+const RAWG_API_KEY = (rawRawg && !rawRawg.includes("{{")) ? rawRawg : "4a8f946edbb943dda1ee452b412e8eb0";
 const DEBOUNCE_MS   = 700;
 
 // ─── Cache de API ─────────────────────────────────────────────────────────────
@@ -39,6 +57,7 @@ async function fetchMovieData(title, year = "") {
   const key = getCacheKey("filmes", title, year);
   if (apiCache.has(key)) return apiCache.get(key);
 
+  let result = { poster: "", backdrop: "" };
   const yearParam = year ? `&primary_release_year=${year}` : "";
   const base = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}`;
 
@@ -48,21 +67,34 @@ async function fetchMovieData(title, year = "") {
 
     if (data.results?.length) {
       const r = data.results[0];
-      const result = {
-        poster:   r.poster_path   ? `https://image.tmdb.org/t/p/w500${r.poster_path}`   : "",
-        backdrop: r.backdrop_path ? `https://image.tmdb.org/t/p/w1280${r.backdrop_path}` : "",
-      };
+      if (r.poster_path || r.backdrop_path) {
+        result.poster   = r.poster_path   ? `https://image.tmdb.org/t/p/w500${r.poster_path}`   : "";
+        result.backdrop = r.backdrop_path ? `https://image.tmdb.org/t/p/w1280${r.backdrop_path}` : "";
+        apiCache.set(key, result);
+        return result;
+      }
+    }
+  } catch (err) { console.warn("[TMDB Filmes falhou]", err.message); }
+
+  try {
+    const itunesData = await safeFetch(`https://itunes.apple.com/search?term=${encodeURIComponent(title)}&entity=movie&limit=1`);
+    if (itunesData.results?.length && itunesData.results[0].artworkUrl100) {
+      const art = itunesData.results[0].artworkUrl100.replace("100x100bb", "600x600bb");
+      result.poster = art;
+      result.backdrop = art;
       apiCache.set(key, result);
       return result;
     }
-  } catch (err) { console.warn("[fetchMovieData]", err.message); }
-  return { poster: "", backdrop: "" };
+  } catch(err) { console.warn("[iTunes Filmes falhou]", err.message); }
+
+  return result;
 }
 
 async function fetchTVData(title, year = "") {
   const key = getCacheKey("series", title, year);
   if (apiCache.has(key)) return apiCache.get(key);
 
+  let result = { poster: "", backdrop: "" };
   const yearParam = year ? `&first_air_date_year=${year}` : "";
   const base = `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}`;
 
@@ -72,31 +104,81 @@ async function fetchTVData(title, year = "") {
 
     if (data.results?.length) {
       const r = data.results[0];
-      const result = {
-        poster:   r.poster_path   ? `https://image.tmdb.org/t/p/w500${r.poster_path}`   : "",
-        backdrop: r.backdrop_path ? `https://image.tmdb.org/t/p/w1280${r.backdrop_path}` : "",
-      };
+      if (r.poster_path || r.backdrop_path) {
+        result.poster   = r.poster_path   ? `https://image.tmdb.org/t/p/w500${r.poster_path}`   : "";
+        result.backdrop = r.backdrop_path ? `https://image.tmdb.org/t/p/w1280${r.backdrop_path}` : "";
+        apiCache.set(key, result);
+        return result;
+      }
+    }
+  } catch (err) { console.warn("[TMDB Séries falhou]", err.message); }
+
+  try {
+    const tvData = await safeFetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`);
+    if (tvData?.length > 0 && tvData[0].show?.image?.original) {
+      result.poster = tvData[0].show.image.original;
+      result.backdrop = tvData[0].show.image.original;
       apiCache.set(key, result);
       return result;
     }
-  } catch (err) { console.warn("[fetchTVData]", err.message); }
-  return { poster: "", backdrop: "" };
+  } catch (err) { console.warn("[TVMaze falhou]", err.message); }
+
+  return result;
 }
 
 async function fetchGameData(title, year = "") {
   const key = getCacheKey("jogos", title, year);
   if (apiCache.has(key)) return apiCache.get(key);
 
+  let result = { poster: "", backdrop: "" };
+  const cleanTitle = encodeURIComponent(title.trim());
+
+  // 1. STEAM API (Garantido, sem limites de chave, ótima qualidade)
   try {
-    const data = await safeFetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(title)}&page_size=1`);
-    if (data.results?.length) {
-      const img = data.results[0].background_image || "";
-      const result = { poster: img, backdrop: img };
+    const steamUrl = `https://store.steampowered.com/api/storesearch/?term=${cleanTitle}&l=portuguese&cc=BR`;
+    const proxySteam = `https://api.allorigins.win/get?url=${encodeURIComponent(steamUrl)}`;
+    const res = await fetch(proxySteam);
+    if (res.ok) {
+      const proxyData = await res.json();
+      const steamData = JSON.parse(proxyData.contents);
+      if (steamData.items && steamData.items.length > 0) {
+        const appId = steamData.items[0].id;
+        result.poster = `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/library_600x900_2x.jpg`;
+        result.backdrop = `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
+        apiCache.set(key, result);
+        return result;
+      }
+    }
+  } catch (err) { console.warn("[Steam Proxy falhou]", err.message); }
+
+  // 2. RAWG via AllOrigins Proxy (Dribla CORS e bloqueios no navegador)
+  const rawgUrl = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${cleanTitle}&page_size=1`;
+  try {
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(rawgUrl)}`);
+    if (res.ok) {
+      const proxyData = await res.json();
+      const data = JSON.parse(proxyData.contents);
+      if (data.results?.length && data.results[0].background_image) {
+        result.poster = data.results[0].background_image;
+        result.backdrop = data.results[0].background_image;
+        apiCache.set(key, result);
+        return result;
+      }
+    }
+  } catch (err) { console.warn("[RAWG Proxy falhou]", err.message); }
+
+  // 3. Fallback final para CheapShark
+  try {
+    const data = await safeFetch(`https://www.cheapshark.com/api/1.0/games?title=${cleanTitle}&limit=1`);
+    if (data?.length > 0 && data[0].thumb) {
+      result.poster = data[0].thumb;
+      result.backdrop = data[0].thumb;
       apiCache.set(key, result);
       return result;
     }
-  } catch (err) { console.warn("[fetchGameData]", err.message); }
-  return { poster: "", backdrop: "" };
+  } catch (err) { console.warn("[CheapShark falhou]", err.message); }
+
+  return result;
 }
 
 const dataFetcher = { filmes: fetchMovieData, series: fetchTVData, jogos: fetchGameData };
@@ -188,7 +270,7 @@ function renderGenres(section) {
 
   row.innerHTML = [
     `<button class="gtag ${s.genre === "todos" ? "active" : ""}" data-genre="todos">Todos os Gêneros</button>`,
-    ...genres.map(g => `<button class="gtag ${s.genre === g ? "active" : ""}" data-genre="${g}">${g}</button>`),
+    ...genres.map(g => `<button class="gtag ${s.genre === g ? "active" : ""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`),
   ].join("");
 
   row.querySelectorAll(".gtag").forEach(btn => {
@@ -307,7 +389,7 @@ function renderItems(section) {
 
     const card = document.createElement("div");
     card.className = `slider-card${done ? " watched" : ""}`;
-    card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${m.title}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
+    card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
     card.addEventListener("click", () => {
       if (idx !== s.currentIndex) {
         const direction = idx > s.currentIndex ? 1 : -1;
@@ -353,7 +435,7 @@ function createStars(score, name) {
   
   return `
     <div class="movie-rating-badge">
-      <span class="rating-name">${name}</span>
+      <span class="rating-name">${escapeHTML(name)}</span>
       <div class="rating-stars">${stars}</div>
     </div>
   `;
@@ -368,8 +450,8 @@ function buildMainHTML(section, m) {
   let ratingHTML = "";
 
   if (section === "filmes" || section === "series") {
-    if (section === "filmes") meta = [dateStr, m.where, m.who ? `indicação: ${m.who}` : ""].filter(Boolean).join(" · ");
-    if (section === "series") meta = [m.status, m.seasons ? `${m.seasons} temp.` : "", m.where].filter(Boolean).join(" · ");
+    if (section === "filmes") meta = [dateStr, m.where, m.who ? `indicação: ${m.who}` : ""].filter(Boolean).map(escapeHTML).join(" · ");
+    if (section === "series") meta = [m.status, m.seasons ? `${m.seasons} temp.` : "", m.where].filter(Boolean).map(escapeHTML).join(" · ");
     
     if (m.ratingHesron || m.ratingTiago) {
       const hesronStars = createStars(m.ratingHesron, "Hesron");
@@ -383,25 +465,23 @@ function buildMainHTML(section, m) {
       `;
     }
   } else {
-    meta = [m.status, m.platform, m.where].filter(Boolean).join(" · ");
+    meta = [m.status, m.platform, m.where].filter(Boolean).map(escapeHTML).join(" · ");
   }
 
-  const esc = (v) => String(v ?? "").replace(/'/g, "\\'");
-
   return `
-    <img src="${bgImage}" class="gallery-main-img" alt="${m.title}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">
+    <img src="${bgImage}" class="gallery-main-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">
     <div class="gallery-main-overlay">
-      <h3 class="gallery-main-title">${m.title}</h3>
+      <h3 class="gallery-main-title">${escapeHTML(m.title)}</h3>
       ${ratingHTML}
       <div class="gallery-main-meta">${meta}</div>
       <div class="actions-group">
-        <button class="movie-action-btn check ${done ? "checked" : ""}" onclick="event.stopPropagation(); window.toggleItem('${section}','${esc(m.key)}',${done})" aria-label="${actionLabels[section].done}">
+        <button class="movie-action-btn check ${done ? "checked" : ""}" onclick="event.stopPropagation(); window.toggleItem('${section}','${escapeHTML(m.key)}',${done})" aria-label="${actionLabels[section].done}">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </button>
-        <button class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEdit('${section}','${esc(m.key)}')" aria-label="Editar">
+        <button class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEdit('${section}','${escapeHTML(m.key)}')" aria-label="Editar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         </button>
-        <button class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteItem('${section}','${esc(m.key)}')" aria-label="Deletar">
+        <button class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteItem('${section}','${escapeHTML(m.key)}')" aria-label="Deletar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
@@ -556,7 +636,7 @@ onValue(dbRefs.musicas, snapshot => {
     let finalPoster   = original.poster   ?? "";
     let finalBackdrop = original.backdrop ?? "";
 
-    if (newTitle !== original.title || newYear !== original.year) {
+    if (newTitle !== original.title || newYear !== original.year || !finalPoster || finalPoster === "") {
       if (btn) btn.innerHTML = "<span>Atualizando Capa…</span>";
       try {
         const fetched = await dataFetcher[section](newTitle, newYear);
@@ -683,7 +763,7 @@ function extractIframeSrc(input) {
 
   try {
     const u = new URL(url);
-    if (u.hostname.includes("spotify.com")) {
+    if (u.hostname.includes("spotify.com") || u.hostname.includes("open.spotify.com") || u.hostname.includes("googleusercontent.com/spotify.com")) {
       return `https://open.spotify.com/embed${u.pathname}?utm_source=generator`;
     }
     if (u.hostname.includes("music.apple.com")) {
@@ -740,8 +820,8 @@ function renderMusicas() {
     card.className = "musica-card";
     card.innerHTML = `
       <div class="musica-card-header">
-        <h3 class="musica-title">${m.title}</h3>
-        <button class="movie-action-btn delete" onclick="window.deleteItem('musicas','${m.key}')" aria-label="Deletar">
+        <h3 class="musica-title">${escapeHTML(m.title)}</h3>
+        <button class="movie-action-btn delete" onclick="window.deleteItem('musicas','${escapeHTML(m.key)}')" aria-label="Deletar">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>

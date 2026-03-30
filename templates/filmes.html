@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Filmes & Séries & Jogos · tamo junto{% endblock %}
 {% block styles %}
+<meta name="tmdb-api-key" content="{{ tmdb_api_key | default('d39bbf74a96f6cca570dcb69c8f3059f') }}">
+<meta name="rawg-api-key" content="{{ rawg_api_key | default('4a8f946edbb943dda1ee452b412e8eb0') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes/filmes.css') }}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 {% endblock %}
@@ -82,7 +84,7 @@ Adicionar Filme
 </div>
 <div class="field-group">
 <label for="fYear" class="field-label">Ano Lançamento</label>
-<input type="text" id="fYear" class="field-input" placeholder="ex: 2011" maxlength="4">
+<input type="number" id="fYear" class="field-input" placeholder="ex: 2011" min="1900" max="2100">
 </div>
 <div class="field-group">
 <label for="fWho" class="field-label">Quem indicou?</label>
@@ -188,7 +190,7 @@ Adicionar Série
 </div>
 <div class="field-group">
 <label for="sYear" class="field-label">Ano</label>
-<input type="text" id="sYear" class="field-input" placeholder="ex: 2013" maxlength="4">
+<input type="number" id="sYear" class="field-input" placeholder="ex: 2013" min="1900" max="2100">
 </div>
 <div class="field-group">
 <label for="sSeasons" class="field-label">Temporadas</label>
@@ -307,7 +309,7 @@ Adicionar Jogo
 </div>
 <div class="field-group">
 <label for="jYear" class="field-label">Ano</label>
-<input type="text" id="jYear" class="field-input" placeholder="ex: 2016" maxlength="4">
+<input type="number" id="jYear" class="field-input" placeholder="ex: 2016" min="1900" max="2100">
 </div>
 <div class="field-group">
 <label for="jPlatform" class="field-label">Plataforma</label>
@@ -412,7 +414,7 @@ Adicionar Playlist
 <div class="field-group span-full"><label class="field-label">Título</label><input type="text" id="edit-filmes-title" class="field-input" required></div>
 <div class="field-group"><label class="field-label">Data</label><input type="date" id="edit-filmes-date" class="field-input"></div>
 <div class="field-group"><label class="field-label">Gênero</label><input type="text" id="edit-filmes-genre" class="field-input"></div>
-<div class="field-group"><label class="field-label">Ano</label><input type="text" id="edit-filmes-year" class="field-input" maxlength="4"></div>
+<div class="field-group"><label class="field-label">Ano</label><input type="number" id="edit-filmes-year" class="field-input" min="1900" max="2100"></div>
 <div class="field-group"><label class="field-label">Quem indicou?</label><input type="text" id="edit-filmes-who" class="field-input"></div>
 <div class="field-group"><label class="field-label">Onde assistir?</label><input type="text" id="edit-filmes-where" class="field-input"></div>
 <div class="field-group"><label class="field-label">Nota do Hesron</label>
@@ -456,7 +458,7 @@ Adicionar Playlist
 <div class="field-group span-full"><label class="field-label">Título</label><input type="text" id="edit-series-title" class="field-input" required></div>
 <div class="field-group"><label class="field-label">Data</label><input type="date" id="edit-series-date" class="field-input"></div>
 <div class="field-group"><label class="field-label">Gênero</label><input type="text" id="edit-series-genre" class="field-input"></div>
-<div class="field-group"><label class="field-label">Ano</label><input type="text" id="edit-series-year" class="field-input" maxlength="4"></div>
+<div class="field-group"><label class="field-label">Ano</label><input type="number" id="edit-series-year" class="field-input" min="1900" max="2100"></div>
 <div class="field-group"><label class="field-label">Temporadas</label><input type="number" id="edit-series-seasons" class="field-input" min="1"></div>
 <div class="field-group"><label class="field-label">Status</label>
 <select id="edit-series-status" class="field-input field-select">
@@ -508,7 +510,7 @@ Adicionar Playlist
 <div class="field-group span-full"><label class="field-label">Título</label><input type="text" id="edit-jogos-title" class="field-input" required></div>
 <div class="field-group"><label class="field-label">Data</label><input type="date" id="edit-jogos-date" class="field-input"></div>
 <div class="field-group"><label class="field-label">Gênero</label><input type="text" id="edit-jogos-genre" class="field-input"></div>
-<div class="field-group"><label class="field-label">Ano</label><input type="text" id="edit-jogos-year" class="field-input" maxlength="4"></div>
+<div class="field-group"><label class="field-label">Ano</label><input type="number" id="edit-jogos-year" class="field-input" min="1900" max="2100"></div>
 <div class="field-group"><label class="field-label">Plataforma</label><input type="text" id="edit-jogos-platform" class="field-input"></div>
 <div class="field-group"><label class="field-label">Status</label>
 <select id="edit-jogos-status" class="field-input field-select">
