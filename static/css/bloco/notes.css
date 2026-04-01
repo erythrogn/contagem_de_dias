@@ -1,0 +1,349 @@
+/* ============================================================
+   bloco/notes.css — Cards de notas, filtros, Q&A e ações
+   ============================================================ */
+
+/* --- Filter Row --- */
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  animation: riseUpBloco 0.8s var(--spring-soft) 0.3s both;
+  will-change: transform, opacity;
+}
+
+.ftab {
+  padding: 0.4rem 1.1rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s var(--spring-soft);
+  background: transparent;
+}
+
+.ftab:hover {
+  color: var(--text-secondary);
+  background-color: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.ftab.active {
+  color: var(--amber-pale);
+  background-color: rgba(240,180,41,0.1);
+  border-color: rgba(240,180,41,0.22);
+}
+
+/* --- Notes Grid --- */
+.notes-masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.1rem;
+  animation: riseUpBloco 0.9s var(--spring-soft) 0.4s both;
+  will-change: transform, opacity;
+}
+
+/* --- Note Card --- */
+.note-card {
+  background-color: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-lg);
+  padding: 1.5rem;
+  transition: all 0.5s var(--spring-soft);
+  position: relative;
+  overflow: hidden;
+  animation: riseUpBloco 0.7s var(--spring-soft) both;
+  will-change: transform, box-shadow;
+}
+
+.note-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.note-card:hover {
+  border-color: rgba(255,255,255,0.11);
+  transform: translate3d(0, -4px, 0);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+}
+
+/* Type accent borders */
+.note-card.type-texto   { border-left: 2px solid rgba(240,180,41,0.3); }
+.note-card.type-lista   { border-left: 2px solid rgba(34,211,238,0.3); }
+.note-card.type-pergunta { border-left: 2px solid rgba(168,85,247,0.3); }
+
+/* --- Note Badge --- */
+.note-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--text-muted);
+  margin: 0 0.5rem 0.9rem auto;
+  float: right;
+}
+
+.note-card.type-texto .note-badge {
+  color: var(--amber);
+  border-color: rgba(240,180,41,0.2);
+  background-color: rgba(240,180,41,0.07);
+}
+
+.note-card.type-lista .note-badge {
+  color: var(--cyan-bright);
+  border-color: rgba(34,211,238,0.2);
+  background-color: rgba(34,211,238,0.07);
+}
+
+.note-card.type-pergunta .note-badge {
+  color: #c4b5fd;
+  border-color: rgba(168,85,247,0.2);
+  background-color: rgba(168,85,247,0.07);
+}
+
+/* --- Note Content --- */
+.note-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+  clear: both;
+}
+
+.note-author {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.note-body { margin-bottom: 0.75rem; }
+
+.note-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* --- Note List --- */
+.note-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+}
+
+.note-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.note-list li::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(240,180,41,0.4);
+  flex-shrink: 0;
+  margin-top: 0.5em;
+}
+
+/* --- Q&A Block --- */
+.note-qa {
+  background-color: rgba(168,85,247,0.05);
+  border: 1px solid rgba(168,85,247,0.15);
+  border-radius: var(--r-sm);
+  padding: 0.85rem;
+}
+
+.note-qa-pending {
+  background-color: rgba(34,211,238,0.04);
+  border-color: rgba(34,211,238,0.12);
+}
+
+.note-qa-label {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c4b5fd;
+  margin-bottom: 0.5rem;
+}
+
+.note-qa-pending .note-qa-label { color: var(--cyan-bright); }
+
+.note-answer {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* --- Inline Answer Form --- */
+.inline-answer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.inline-answer-input {
+  width: 100%;
+  background-color: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+  padding: 0.6rem 0.75rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  resize: none;
+  outline: none;
+  transition: border-color 0.3s var(--spring-soft);
+}
+
+.inline-answer-input:focus { border-color: rgba(34,211,238,0.3); }
+
+.btn-inline-answer {
+  align-self: flex-end;
+  padding: 0.35rem 1rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background-color: rgba(34,211,238,0.1);
+  border: 1px solid rgba(34,211,238,0.25);
+  color: var(--cyan-pale);
+  cursor: pointer;
+  transition: all 0.3s var(--spring-soft);
+}
+
+.btn-inline-answer:hover {
+  border-color: rgba(34,211,238,0.45);
+  transform: translate3d(0, -1px, 0);
+}
+
+/* --- Note Actions --- */
+.note-actions {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.4s var(--spring-soft);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding-top: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.note-card:hover .note-actions { opacity: 1; }
+
+.btn-action {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s var(--spring-soft);
+}
+
+.btn-action.edit:hover {
+  color: var(--amber);
+  border-color: rgba(240,180,41,0.3);
+  background-color: rgba(240,180,41,0.06);
+  transform: scale(1.1);
+}
+
+.btn-action.del:hover {
+  color: #f87171;
+  border-color: rgba(248,113,113,0.3);
+  background-color: rgba(248,113,113,0.06);
+  transform: scale(1.1);
+}
+
+/* --- Empty State --- */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed rgba(255,255,255,0.06);
+  border-radius: var(--r-lg);
+  color: var(--text-muted);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* --- Submit Buttons --- */
+.mform-btn-submit,
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background-image: linear-gradient(135deg, rgba(240,180,41,0.18) 0%, rgba(240,180,41,0.06) 100%);
+  color: var(--amber-pale);
+  border: 1px solid rgba(240,180,41,0.28);
+  padding: 0.85rem 2rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s var(--spring-soft);
+}
+
+.mform-btn-submit {
+  margin-left: auto;
+  min-width: 160px;
+}
+
+.btn-submit {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.mform-btn-submit:hover,
+.btn-submit:hover {
+  border-color: rgba(240,180,41,0.5);
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 24px rgba(240,180,41,0.12);
+}

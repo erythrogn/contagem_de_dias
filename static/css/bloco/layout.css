@@ -1,0 +1,102 @@
+/* ============================================================
+   bloco/layout.css — Container, header, grids e responsivo
+   ============================================================ */
+
+/* --- Wrapper --- */
+.wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 7.5rem 1.5rem 6rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Page Header --- */
+.page-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--amber);
+  display: block;
+  margin-bottom: 0.75rem;
+  opacity: 0.75;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 200;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.page-title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  background-image: linear-gradient(135deg, var(--cyan-bright) 0%, var(--amber) 50%, var(--amber-bright) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* --- Notes Masonry Grid --- */
+.notes-masonry {
+  columns: 3 280px;
+  column-gap: 1.25rem;
+}
+
+.note-card {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+}
+
+/* --- Form Grid --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group.span2 { grid-column: 1 / -1; }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .wrap { padding: 5.5rem 1rem 5rem; }
+
+  .mform-step { padding: 2rem 1.25rem; }
+
+  .type-cards,
+  .author-cards { grid-template-columns: 1fr 1fr; }
+
+  .notes-masonry { columns: 1; }
+
+  .carousel-list { height: 380px; }
+
+  .carousel-content { padding: 1.75rem 1.5rem; }
+
+  .gate-card { padding: 2.25rem 1.5rem; }
+
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.span2 { grid-column: auto; }
+}

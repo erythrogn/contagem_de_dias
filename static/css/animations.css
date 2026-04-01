@@ -1,0 +1,227 @@
+/* animations.css - Módulo Global de Animações e Transições */
+
+@layer animations {
+  :root {
+    /* Curvas de Aceleração (Easings) Robustas */
+    --spring-soft: cubic-bezier(0.16, 1, 0.3, 1);
+    --spring-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --spring-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-linear: linear;
+
+    /* Durações Padrão */
+    --duration-fast: 0.25s;
+    --duration-base: 0.5s;
+    --duration-slow: 0.8s;
+  }
+
+  /* =========================================
+     1. KEYFRAMES GLOBAIS
+     ========================================= */
+
+  /* Entradas e Saídas (Fades e Slides) */
+  @keyframes riseUp {
+    0% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.98) translateZ(0);
+      filter: blur(12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1) translateZ(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes fallDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-40px) scale(1.02) translateZ(0);
+      filter: blur(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1) translateZ(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes expandIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px) translateZ(0);
+      filter: blur(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0) translateZ(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(30px) translateZ(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) translateZ(0);
+    }
+  }
+
+  @keyframes cardEnter3D {
+    0% {
+      opacity: 0;
+      transform: translateY(50px) scale(0.9) rotateX(5deg) translateZ(0);
+      filter: blur(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotateX(0deg) translateZ(0);
+      filter: blur(0);
+    }
+  }
+
+  /* Movimentos Contínuos (Loops) */
+  @keyframes liquidFloat {
+    0% { transform: translateY(0) rotateX(0deg) rotateY(0deg) translateZ(0); }
+    25% { transform: translateY(-6px) rotateX(1deg) rotateY(1deg) translateZ(0); }
+    50% { transform: translateY(-10px) rotateX(0deg) rotateY(2deg) translateZ(0); }
+    75% { transform: translateY(-4px) rotateX(-1deg) rotateY(1deg) translateZ(0); }
+    100% { transform: translateY(0) rotateX(0deg) rotateY(0deg) translateZ(0); }
+  }
+
+  @keyframes floatSimple {
+    0% { transform: translateY(0) translateZ(0); }
+    50% { transform: translateY(-6px) translateZ(0); }
+    100% { transform: translateY(0) translateZ(0); }
+  }
+
+  @keyframes kenBurns {
+    0% { transform: scale(1.05) translate(0, 0) translateZ(0); }
+    100% { transform: scale(1.18) translate(-2%, -2%) translateZ(0); }
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+
+  @keyframes ambientShift {
+    0% { opacity: 0.4; transform: scale(1) translate(0, 0) translateZ(0); }
+    33% { opacity: 0.7; transform: scale(1.05) translate(2%, -2%) translateZ(0); }
+    66% { opacity: 0.5; transform: scale(0.98) translate(-1%, 2%) translateZ(0); }
+    100% { opacity: 0.8; transform: scale(1.02) translate(1%, 1%) translateZ(0); }
+  }
+
+  @keyframes fireflyPulse {
+    0% { opacity: 0; transform: translate(0, 0) scale(1) translateZ(0); }
+    25% { opacity: 0.9; transform: translate(5px, -9px) scale(1.4) translateZ(0); box-shadow: 0 0 6px currentColor; }
+    50% { opacity: 0.3; transform: translate(-3px, -18px) scale(0.8) translateZ(0); }
+    75% { opacity: 0.8; transform: translate(7px, -26px) scale(1.2) translateZ(0); }
+    100% { opacity: 0; transform: translate(2px, -35px) scale(0.5) translateZ(0); }
+  }
+
+  /* Feedback Visual e Interação */
+  @keyframes shakeError {
+    0% { transform: translateX(0) translateZ(0); }
+    15% { transform: translateX(-8px) translateZ(0); }
+    30% { transform: translateX(8px) translateZ(0); }
+    45% { transform: translateX(-5px) translateZ(0); }
+    60% { transform: translateX(5px) translateZ(0); }
+    75% { transform: translateX(-2px) translateZ(0); }
+    90% { transform: translateX(2px) translateZ(0); }
+    100% { transform: translateX(0) translateZ(0); }
+  }
+
+  @keyframes pulseGlow {
+    0% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.3), 0 0 80px rgba(255, 255, 255, 0.1); }
+    100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+  }
+
+  /* Toasts e Modais (Header/Notificações) */
+  @keyframes toastEnter {
+    0% { opacity: 0; transform: translateX(50px) scale(0.9) translateZ(0); filter: blur(8px); }
+    100% { opacity: 1; transform: translateX(0) scale(1) translateZ(0); filter: blur(0); }
+  }
+
+  @keyframes toastExit {
+    0% { opacity: 1; transform: translateX(0) scale(1) translateZ(0); filter: blur(0); }
+    100% { opacity: 0; transform: translateX(20px) scale(0.95) translateZ(0); filter: blur(4px); }
+  }
+
+  @keyframes navbarSlideDown {
+    0% { transform: translateX(-50%) translateY(-100px) translateZ(0); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0) translateZ(0); opacity: 1; }
+  }
+
+  @keyframes navbarSlideUpMobile {
+    0% { transform: translateX(-50%) translateY(100px) translateZ(0); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0) translateZ(0); opacity: 1; }
+  }
+
+  /* =========================================
+     2. CLASSES UTILITÁRIAS DE ANIMAÇÃO
+     ========================================= */
+
+  /* Aplicação em Elementos de UI Genéricos */
+  .animate-rise-up {
+    animation: riseUp var(--duration-slow) var(--spring-soft) forwards;
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+  }
+
+  .animate-expand-in {
+    animation: expandIn var(--duration-slow) var(--spring-soft) forwards;
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+  }
+
+  .animate-card-3d {
+    animation: cardEnter3D var(--duration-slow) var(--spring-soft) forwards;
+    will-change: transform, opacity, filter;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  .animate-liquid-float {
+    animation: liquidFloat 4s ease-in-out infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .animate-gradient-shift {
+    background-size: 200% auto;
+    animation: gradientShift 6s var(--ease-linear) infinite alternate;
+    will-change: background-position;
+  }
+
+  .animate-shake {
+    animation: shakeError 0.6s ease forwards;
+    will-change: transform;
+  }
+
+  /* Otimização Específica para Backgrounds Pesados (ex: Index.css) */
+  .animate-ken-burns {
+    animation: kenBurns 30s ease-in-out infinite alternate;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0); /* Força rasterização em camada separada na GPU */
+  }
+
+  /* Transições Base para Interatividade (Hover/Focus) */
+  .transition-robust {
+    transition-property: transform, opacity, box-shadow, background-color, border-color, filter;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--spring-soft);
+  }
+
+  .transition-fast {
+    transition-property: all;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-out-expo);
+  }
+}

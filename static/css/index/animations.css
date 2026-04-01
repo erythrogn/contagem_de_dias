@@ -1,0 +1,46 @@
+/* ============================================================
+   index/animations.css — Keyframes + classes utilitárias
+   GPU-first: todo transform usa translate3d/translateZ(0)
+   ============================================================ */
+
+/* --- Keyframes --- */
+
+@keyframes kenBurnsIndex {
+  0%   { transform: scale(1.05) translate3d(0, 0, 0); }
+  100% { transform: scale(1.18) translate3d(-2%, -2%, 0); }
+}
+
+@keyframes floatIndexRune {
+  0%   { transform: translate3d(0, 0, 0); }
+  50%  { transform: translate3d(0, -6px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes liquidFloatIndex {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  33%  { transform: translate3d(0, -8px, 0) rotate(0.5deg); }
+  66%  { transform: translate3d(0, -4px, 0) rotate(-0.5deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+
+/* --- Classes utilitárias de animação (Index) --- */
+
+.bg-img {
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: kenBurnsIndex 30s ease-in-out infinite alternate;
+}
+
+.cell-2 .bg-img { animation-delay: -8s;  animation-duration: 35s; }
+.cell-3 .bg-img { animation-delay: -16s; animation-duration: 28s; }
+.cell-4 .bg-img { animation-delay: -24s; animation-duration: 32s; }
+
+.date-rune {
+  will-change: transform;
+  animation: floatIndexRune 3.5s ease-in-out infinite;
+}
+
+.love-heart {
+  will-change: transform;
+  animation: liquidFloatIndex 4s ease-in-out infinite;
+}

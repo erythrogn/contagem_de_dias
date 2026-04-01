@@ -1,0 +1,642 @@
+/* ============================================================
+   viagens/components.css — Todos os componentes UI (Viagens)
+   ============================================================ */
+
+/* --- Mixin glass-card (padrão recorrente via variáveis) --- */
+
+/* --- Stats Bar --- */
+.stats-bar {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 2.5rem;
+  background-color: var(--glass-bg);
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.005) 100%);
+  backdrop-filter: blur(28px) saturate(2);
+  -webkit-backdrop-filter: blur(28px) saturate(2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--glow-glass-lg);
+  opacity: 0;
+  position: relative;
+  transform: translateZ(0);
+  transition: transform 0.5s var(--spring-soft), box-shadow 0.5s var(--spring-soft), border-color 0.5s var(--spring-soft);
+}
+
+.stats-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  pointer-events: none;
+  opacity: 0.7;
+  mix-blend-mode: screen;
+  transition: opacity 0.5s var(--spring-soft);
+}
+
+.stats-bar:hover {
+  transform: translate3d(0, -4px, 10px) scale(1.005);
+  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.3);
+  border-color: var(--glass-border-hover);
+}
+
+.stats-bar:hover::before { opacity: 1; }
+
+.stat {
+  flex: 1 1 0%;
+  padding: 1.6rem 1.25rem;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  transition: background-color 0.5s var(--spring-soft), transform 0.5s var(--spring-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s var(--spring-soft);
+  pointer-events: none;
+}
+
+.stat:last-child { border-right: none; }
+.stat:hover { background-color: rgba(255,255,255,0.03); transform: translate3d(0, -2px, 0); }
+.stat:hover::after { opacity: 1; }
+
+.stat-num {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transition: color 0.4s var(--spring-soft), text-shadow 0.4s var(--spring-soft), transform 0.4s var(--spring-soft);
+  will-change: transform, color;
+}
+
+.stat:hover .stat-num {
+  color: var(--amber-bright);
+  text-shadow: 0 4px 20px rgba(240,180,41,0.6);
+  transform: scale(1.05);
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.4s var(--spring-soft);
+}
+
+.stat:hover .stat-label { color: var(--text-secondary); }
+
+/* --- Form Section --- */
+.form-section {
+  background-color: var(--glass-bg);
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.005) 100%);
+  backdrop-filter: blur(28px) saturate(2);
+  -webkit-backdrop-filter: blur(28px) saturate(2);
+  border: 1px solid var(--glass-border);
+  padding: 2rem 2.25rem;
+  margin-bottom: 2rem;
+  border-radius: var(--r-xl);
+  box-shadow: var(--glow-glass);
+  opacity: 0;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: transform 0.5s var(--spring-soft), box-shadow 0.5s var(--spring-soft), border-color 0.5s var(--spring-soft);
+}
+
+.form-section:focus-within {
+  transform: translate3d(0, -2px, 5px) scale(1.002);
+  box-shadow: 0 25px 60px -15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.3);
+  border-color: var(--glass-border-hover);
+}
+
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+  pointer-events: none;
+  opacity: 0.7;
+  mix-blend-mode: screen;
+}
+
+.form-heading {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 1.5rem;
+  display: block;
+  opacity: 0.85;
+  text-shadow: 0 0 12px rgba(240,180,41,0.4);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.form-group.span2,
+.span2 { grid-column: 1 / -1; }
+
+/* --- Form Inputs (scoped via viagens) --- */
+label {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s var(--spring-soft), transform 0.3s var(--spring-soft);
+  transform-origin: left bottom;
+}
+
+.form-group:focus-within label {
+  color: var(--amber);
+  transform: translateY(-2px);
+}
+
+input, select, textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0.6rem 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  transition: border-color 0.4s var(--spring-soft), box-shadow 0.4s var(--spring-soft), padding-left 0.4s var(--spring-soft);
+  width: 100%;
+}
+
+select {
+  padding-right: 2rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 14px auto;
+  cursor: pointer;
+}
+
+textarea { resize: vertical; min-height: 56px; }
+
+input:focus, select:focus, textarea:focus {
+  border-bottom-color: var(--amber);
+  box-shadow: 0 1px 0 rgba(240,180,41,0.5);
+  outline: none;
+  padding-left: 0.5rem;
+}
+
+select option { background-color: var(--bg-mid); color: var(--text-primary); padding: 1rem; }
+
+/* --- Submit Button --- */
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background-image: linear-gradient(135deg, rgba(240,180,41,0.18) 0%, rgba(240,180,41,0.06) 100%);
+  color: var(--amber-pale);
+  border: 1px solid rgba(240,180,41,0.28);
+  padding: 0.85rem 2rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s var(--spring-soft), box-shadow 0.5s var(--spring-soft), border-color 0.5s var(--spring-soft), background-image 0.5s, color 0.5s;
+  margin-top: 0.5rem;
+  width: 100%;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transform: translateX(-150%) skewX(-15deg);
+  transition: transform 0.7s var(--spring-soft);
+  pointer-events: none;
+}
+
+.btn-submit:hover {
+  border-color: rgba(240,180,41,0.6);
+  transform: translate3d(0, -3px, 0) scale(1.01);
+  box-shadow: 0 15px 35px -5px rgba(0,0,0,0.5), 0 0 25px rgba(240,180,41,0.2), inset 0 0 10px rgba(240,180,41,0.1);
+  background-image: linear-gradient(135deg, rgba(240,180,41,0.25) 0%, rgba(240,180,41,0.12) 100%);
+  color: #ffffff;
+}
+
+.btn-submit:hover::before { transform: translateX(150%) skewX(-15deg); }
+.btn-submit:active { transform: translate3d(0, 1px, 0) scale(0.98); box-shadow: 0 5px 15px -5px rgba(0,0,0,0.5); }
+
+/* --- Filter Tabs --- */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+}
+
+.ftab {
+  padding: 0.45rem 1.2rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.4s var(--spring-soft);
+  background: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ftab:hover {
+  color: var(--text-primary);
+  background-color: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.12);
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.ftab.active {
+  color: var(--amber-pale);
+  background-color: rgba(240,180,41,0.12);
+  border-color: rgba(240,180,41,0.3);
+  box-shadow: 0 0 20px rgba(240,180,41,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+  transform: translate3d(0, -2px, 0);
+}
+
+/* --- Trip Card --- */
+.trip-card {
+  position: relative;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: transform 0.6s var(--spring-soft), box-shadow 0.6s var(--spring-soft), border-color 0.6s var(--spring-soft), filter 0.6s var(--spring-soft);
+  background-color: var(--bg-mid);
+  transform-style: preserve-3d;
+  opacity: 0;
+}
+
+.trip-card:hover {
+  transform: translate3d(0, -8px, 20px) scale(1.02) rotateX(2deg) rotateY(-1deg);
+  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.8), 0 0 40px -10px var(--trip-glow), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.2);
+  z-index: 10;
+}
+
+.trip-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.5;
+  transition: opacity 0.6s var(--spring-soft);
+  mix-blend-mode: overlay;
+}
+
+.trip-card:hover::before { opacity: 1; }
+
+/* Trip card status colors */
+.trip-card.status-feita   { --trip-glow: rgba(240,180,41,0.4); }
+.trip-card.status-planejada { --trip-glow: rgba(34,211,238,0.4); }
+.trip-card.status-sonho   { --trip-glow: rgba(168,85,247,0.4); }
+
+/* --- Trip Background Image --- */
+.trip-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background-color: #12161f;
+  border-radius: inherit;
+  transform: translateZ(-10px);
+}
+
+.trip-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s var(--spring-soft), transform 15s linear, filter 0.8s var(--spring-soft);
+  filter: brightness(0.5) saturate(0.6);
+  transform: scale(1.02) translateZ(0);
+  will-change: transform, filter, opacity;
+}
+
+.trip-bg img.loaded { opacity: 1; }
+.trip-card:hover .trip-bg img {
+  transform: scale(1.1) translateZ(0);
+  filter: brightness(0.75) saturate(0.9);
+}
+
+/* --- Trip Overlay --- */
+.trip-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom, rgba(10,12,16,0.85) 0%, rgba(10,12,16,0.15) 45%, rgba(10,12,16,0.95) 100%);
+  transition: background-image 0.6s var(--spring-soft);
+  z-index: 2;
+  border-radius: inherit;
+}
+
+.trip-card:hover .trip-overlay {
+  background-image: linear-gradient(to bottom, rgba(10,12,16,0.65) 0%, rgba(10,12,16,0.25) 45%, rgba(10,12,16,0.9) 100%);
+}
+
+/* --- Trip Content --- */
+.trip-content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  transform: translateZ(30px);
+}
+
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: auto;
+}
+
+/* Status Badge */
+.status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--r-pill);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: box-shadow 0.4s var(--spring-soft), transform 0.4s var(--spring-soft);
+}
+
+.trip-card:hover .status-badge {
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.trip-card.status-feita .status-badge {
+  background-color: rgba(240,180,41,0.15);
+  color: var(--amber-bright);
+  border: 1px solid rgba(240,180,41,0.3);
+}
+
+.trip-card.status-planejada .status-badge {
+  background-color: rgba(34,211,238,0.15);
+  color: var(--cyan-bright);
+  border: 1px solid rgba(34,211,238,0.3);
+}
+
+.trip-card.status-sonho .status-badge {
+  background-color: rgba(168,85,247,0.15);
+  color: #d8b4fe;
+  border: 1px solid rgba(168,85,247,0.3);
+}
+
+/* Trip Actions */
+.trip-actions {
+  display: flex;
+  gap: 0.4rem;
+  opacity: 0;
+  transform: translate3d(10px, 0, 0);
+  transition: opacity 0.5s var(--spring-soft), transform 0.5s var(--spring-soft);
+}
+
+.trip-card:hover .trip-actions {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.btn-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(10,12,16,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s var(--spring-soft);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.btn-action.edit:hover {
+  color: #fff;
+  border-color: rgba(240,180,41,0.6);
+  background-color: rgba(240,180,41,0.2);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 4px 12px rgba(240,180,41,0.3);
+}
+
+.btn-action.del:hover {
+  color: #fff;
+  border-color: rgba(248,113,113,0.6);
+  background-color: rgba(248,113,113,0.2);
+  transform: scale(1.15) rotate(-5deg);
+  box-shadow: 0 4px 12px rgba(248,113,113,0.3);
+}
+
+/* Trip Body */
+.trip-body {
+  margin-top: auto;
+  transform: translateZ(15px);
+  transition: transform 0.5s var(--spring-soft);
+  will-change: transform;
+}
+
+.trip-card:hover .trip-body { transform: translateZ(40px); }
+
+.trip-who {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  display: block;
+  margin-bottom: 0.4rem;
+  transition: color 0.4s var(--spring-soft);
+}
+
+.trip-card:hover .trip-who { color: rgba(255,255,255,0.8); }
+
+.trip-dest {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.65rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.1;
+  transition: text-shadow 0.4s var(--spring-soft), color 0.4s var(--spring-soft);
+}
+
+.trip-card:hover .trip-dest {
+  color: #fff;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 0 20px var(--trip-glow);
+}
+
+.trip-date {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--amber);
+  display: block;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  transition: color 0.4s var(--spring-soft), text-shadow 0.4s var(--spring-soft);
+}
+
+.trip-card:hover .trip-date {
+  color: var(--amber-bright);
+  text-shadow: 0 2px 12px rgba(240,180,41,0.4);
+}
+
+.trip-notes-container { margin-top: 0.75rem; }
+
+.trip-notes {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: rgba(240,244,255,0.65);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  transition: color 0.4s var(--spring-soft);
+}
+
+.trip-card:hover .trip-notes { color: rgba(255,255,255,0.9); }
+
+/* --- Dialog --- */
+dialog {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-xl);
+  background-color: rgba(10,12,16,0.96);
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  backdrop-filter: blur(40px) saturate(2.5);
+  -webkit-backdrop-filter: blur(40px) saturate(2.5);
+  color: var(--text-primary);
+  padding: 2.5rem;
+  max-width: 560px;
+  width: 92%;
+  margin: auto;
+  box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.15);
+  opacity: 0;
+  transform: scale(0.95) translateY(20px) translateZ(0);
+  transition: opacity 0.5s var(--spring-soft), transform 0.5s var(--spring-soft), display 0.5s;
+  transition-behavior: allow-discrete;
+}
+
+dialog[open] { opacity: 1; transform: scale(1) translateY(0) translateZ(0); }
+
+@starting-style {
+  dialog[open] { opacity: 0; transform: scale(0.95) translateY(20px) translateZ(0); }
+}
+
+dialog::backdrop {
+  background-color: rgba(0,0,0,0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  opacity: 0;
+  transition: opacity 0.5s var(--spring-soft), display 0.5s;
+  transition-behavior: allow-discrete;
+}
+
+dialog[open]::backdrop { opacity: 1; }
+
+@starting-style {
+  dialog[open]::backdrop { opacity: 0; }
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 1.25rem;
+}
+
+.dialog-header h3 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--amber-pale);
+  text-shadow: 0 2px 12px rgba(240,180,41,0.3);
+}
+
+.btn-close-dialog {
+  background-color: rgba(255,255,255,0.02);
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: color 0.4s var(--spring-soft), transform 0.4s var(--spring-soft), background-color 0.4s var(--spring-soft), border-color 0.4s var(--spring-soft), box-shadow 0.4s var(--spring-soft);
+}
+
+.btn-close-dialog:hover {
+  color: var(--amber-bright);
+  transform: rotate(90deg) scale(1.1);
+  background-color: rgba(240,180,41,0.1);
+  border-color: rgba(240,180,41,0.25);
+  box-shadow: 0 4px 12px rgba(240,180,41,0.2);
+}

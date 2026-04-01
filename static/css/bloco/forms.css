@@ -1,0 +1,407 @@
+/* ============================================================
+   bloco/forms.css — Multi-step form, inputs flutuantes e cards de tipo
+   ============================================================ */
+
+/* --- Multi-step Form Shell --- */
+.mform-shell {
+  background-color: rgba(255,255,255,0.03);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-xl);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.mform-shell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* --- Progress Bar --- */
+.mform-progress {
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 1.75rem 2rem 1.25rem;
+  background-color: rgba(0,0,0,0.1);
+}
+
+.mform-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  background-image: linear-gradient(90deg, var(--cyan) 0%, var(--amber) 50%, var(--cyan-bright) 100%);
+  transition: width 0.7s var(--spring-soft);
+  box-shadow: 0 0 12px var(--amber);
+  will-change: width;
+}
+
+/* --- Step Indicators --- */
+.mform-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mstep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 1;
+}
+
+.mstep-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.4s var(--spring-soft);
+}
+
+.mstep.active .mstep-dot {
+  background-color: rgba(240,180,41,0.12);
+  border-color: rgba(240,180,41,0.3);
+  color: var(--amber);
+  box-shadow: 0 0 20px rgba(240,180,41,0.15);
+  transform: scale(1.1);
+}
+
+.mstep.done .mstep-dot {
+  background-color: rgba(34,211,238,0.1);
+  border-color: rgba(34,211,238,0.25);
+  color: var(--cyan-bright);
+}
+
+.mstep-label {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.4s var(--spring-soft);
+}
+
+.mstep.active .mstep-label { color: var(--amber); }
+.mstep.done  .mstep-label  { color: var(--cyan-bright); }
+
+.mstep-line {
+  flex: 1 1 0%;
+  height: 1px;
+  background-color: rgba(255,255,255,0.05);
+  min-width: 36px;
+  margin: 0 1rem 22px;
+}
+
+/* --- Form Steps --- */
+.mform-step {
+  display: none;
+  padding: 3rem 2.5rem;
+}
+
+.mform-step.active { display: block; }
+
+.mform-step-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.mform-step-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 2.25rem;
+}
+
+/* --- Type & Author Cards --- */
+.type-cards,
+.author-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+
+/* Shared card wrapper */
+.type-card,
+.author-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.type-card input,
+.author-card input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Shared card inner */
+.type-card-inner,
+.author-card-inner {
+  border: 1px solid rgba(255,255,255,0.07);
+  background-color: rgba(255,255,255,0.03);
+  padding: 1.6rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.4s var(--spring-soft);
+  border-radius: var(--r-lg);
+  text-align: center;
+}
+
+.type-card:hover .type-card-inner,
+.author-card:hover .author-card-inner {
+  border-color: rgba(255,255,255,0.12);
+  transform: translate3d(0, -3px, 0);
+  background-color: rgba(255,255,255,0.05);
+}
+
+/* Checked states */
+.type-card input:checked ~ .type-card-inner {
+  border-color: rgba(240,180,41,0.3);
+  background-color: rgba(240,180,41,0.07);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 20px rgba(240,180,41,0.06);
+  transform: translate3d(0, -3px, 0);
+}
+
+.author-card input:checked ~ .author-card-inner {
+  border-color: rgba(34,211,238,0.3);
+  background-color: rgba(34,211,238,0.07);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transform: translate3d(0, -3px, 0);
+}
+
+/* Card icons */
+.type-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.4s var(--spring-soft);
+}
+
+.type-card input:checked ~ .type-card-inner .type-card-icon {
+  border-color: rgba(240,180,41,0.3);
+  color: var(--amber-bright);
+  box-shadow: 0 0 16px rgba(240,180,41,0.2);
+}
+
+.author-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  transition: all 0.4s var(--spring-soft);
+}
+
+.author-card input:checked ~ .author-card-inner .author-avatar {
+  border-color: rgba(34,211,238,0.3);
+  color: var(--cyan-bright);
+  box-shadow: 0 0 16px rgba(34,211,238,0.2);
+}
+
+.type-card-name,
+.author-name {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.type-card input:checked ~ .type-card-inner .type-card-name { color: var(--amber-pale); }
+.author-card input:checked ~ .author-card-inner .author-name { color: var(--cyan-pale); }
+
+.type-card-desc {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* --- Floating Label Inputs --- */
+.floating-group {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.floating-input {
+  width: 100%;
+  background-color: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+  padding: 1.4rem 1rem 0.55rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: border-color 0.4s var(--spring-soft), box-shadow 0.4s var(--spring-soft);
+  outline: none;
+}
+
+.floating-input:focus {
+  border-color: rgba(240,180,41,0.35);
+  box-shadow: 0 0 0 3px rgba(240,180,41,0.07);
+}
+
+.floating-label {
+  position: absolute;
+  top: 0.9rem;
+  left: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.4s var(--spring-soft);
+}
+
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+  top: 0.42rem;
+  font-size: 0.48rem;
+  color: var(--amber);
+}
+
+.floating-input.textarea-expand { min-height: 100px; resize: vertical; }
+.select-label { top: 0.42rem !important; font-size: 0.48rem !important; color: var(--text-muted) !important; }
+
+/* --- Inline mform inputs (underline style) --- */
+.mform-field-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.mform-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 0.9rem 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  transition: all 0.4s var(--spring-soft);
+  outline: none;
+  resize: none;
+}
+
+.mform-input:focus { border-bottom-color: var(--amber); }
+.mform-textarea    { min-height: 90px; }
+
+.mform-label {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.4s var(--spring-soft);
+}
+
+.mform-input:focus ~ .mform-label,
+.mform-input:not(:placeholder-shown) ~ .mform-label {
+  top: -0.4rem;
+  font-size: 0.5rem;
+  color: var(--amber);
+}
+
+/* --- Hint Box --- */
+.mform-hint-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  background-color: rgba(34,211,238,0.05);
+  border-left: 2px solid rgba(34,211,238,0.3);
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 2rem;
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+
+.mform-hint-box p {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* --- Navigation Buttons --- */
+.mform-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.mform-btn-next,
+.mform-btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 0.7rem 1.6rem;
+  transition: all 0.4s var(--spring-soft);
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  background-color: rgba(255,255,255,0.03);
+  cursor: pointer;
+}
+
+.mform-btn-next {
+  background-color: rgba(240,180,41,0.1);
+  border-color: rgba(240,180,41,0.25);
+  color: var(--amber-pale);
+  margin-left: auto;
+}
+
+.mform-btn-next:hover {
+  border-color: rgba(240,180,41,0.45);
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 20px rgba(240,180,41,0.1);
+}
+
+.mform-btn-back:hover {
+  border-color: rgba(255,255,255,0.14);
+  color: var(--text-primary);
+}

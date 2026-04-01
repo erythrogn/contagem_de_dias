@@ -19,7 +19,6 @@ const metaRawg = document.querySelector('meta[name="rawg-api-key"]');
 let rawTmdb = metaTmdb ? metaTmdb.getAttribute("content") : "";
 let rawRawg = metaRawg ? metaRawg.getAttribute("content") : "";
 
-// Ignora o valor do HTML caso o Flask não tenha renderizado a variável ou venha vazio
 const TMDB_API_KEY = (rawTmdb && !rawTmdb.includes("{{")) ? rawTmdb : "d39bbf74a96f6cca570dcb69c8f3059f";
 const RAWG_API_KEY = (rawRawg && !rawRawg.includes("{{")) ? rawRawg : "4a8f946edbb943dda1ee452b412e8eb0";
 const DEBOUNCE_MS   = 700;
@@ -46,11 +45,19 @@ const dbRefs = {
   musicas: ref(db, "musicas"),
 };
 
-// ─── Busca de dados externos ──────────────────────────────────────────────────
-async function safeFetch(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status} — ${url}`);
-  return res.json();
+// ─── Busca de dados externos com Timeout de Proteção (Evita travamentos) ──────
+async function safeFetch(url, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(id);
+    if (!res.ok) throw new Error(`HTTP ${res.status} — ${url}`);
+    return res.json();
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
 }
 
 async function fetchMovieData(title, year = "") {
@@ -133,41 +140,42 @@ async function fetchGameData(title, year = "") {
   let result = { poster: "", backdrop: "" };
   const cleanTitle = encodeURIComponent(title.trim());
 
-  // 1. STEAM API (Garantido, sem limites de chave, ótima qualidade)
   try {
     const steamUrl = `https://store.steampowered.com/api/storesearch/?term=${cleanTitle}&l=portuguese&cc=BR`;
     const proxySteam = `https://api.allorigins.win/get?url=${encodeURIComponent(steamUrl)}`;
-    const res = await fetch(proxySteam);
-    if (res.ok) {
-      const proxyData = await res.json();
-      const steamData = JSON.parse(proxyData.contents);
-      if (steamData.items && steamData.items.length > 0) {
-        const appId = steamData.items[0].id;
-        result.poster = `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/library_600x900_2x.jpg`;
-        result.backdrop = `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
-        apiCache.set(key, result);
-        return result;
-      }
+    const proxyData = await safeFetch(proxySteam);
+    const steamData = JSON.parse(proxyData.contents);
+    if (steamData.items && steamData.items.length > 0) {
+      const appId = steamData.items[0].id;
+      result.poster = `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/library_600x900_2x.jpg`;
+      result.backdrop = `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/page_bg_generated_v6b.jpg`;
+      apiCache.set(key, result);
+      return result;
     }
   } catch (err) { console.warn("[Steam Proxy falhou]", err.message); }
 
-  // 2. RAWG via AllOrigins Proxy (Dribla CORS e bloqueios no navegador)
   const rawgUrl = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${cleanTitle}&page_size=1`;
   try {
-    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(rawgUrl)}`);
-    if (res.ok) {
-      const proxyData = await res.json();
-      const data = JSON.parse(proxyData.contents);
-      if (data.results?.length && data.results[0].background_image) {
-        result.poster = data.results[0].background_image;
-        result.backdrop = data.results[0].background_image;
-        apiCache.set(key, result);
-        return result;
-      }
+    const data = await safeFetch(rawgUrl);
+    if (data.results?.length && data.results[0].background_image) {
+      result.poster = data.results[0].background_image;
+      result.backdrop = data.results[0].background_image_additional || data.results[0].background_image;
+      apiCache.set(key, result);
+      return result;
+    }
+  } catch (err) { console.warn("[RAWG Direto falhou]", err.message); }
+
+  try {
+    const proxyData = await safeFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(rawgUrl)}`);
+    const data = JSON.parse(proxyData.contents);
+    if (data.results?.length && data.results[0].background_image) {
+      result.poster = data.results[0].background_image;
+      result.backdrop = data.results[0].background_image_additional || data.results[0].background_image;
+      apiCache.set(key, result);
+      return result;
     }
   } catch (err) { console.warn("[RAWG Proxy falhou]", err.message); }
 
-  // 3. Fallback final para CheapShark
   try {
     const data = await safeFetch(`https://www.cheapshark.com/api/1.0/games?title=${cleanTitle}&limit=1`);
     if (data?.length > 0 && data[0].thumb) {
@@ -253,7 +261,6 @@ function updateProgress(section) {
   if (fill)  fill.style.width  = `${pct}%`;
 }
 
-// ─── Filtro de gênero ─────────────────────────────────────────────────────────
 function parseGenres(genreStr) {
   if (!genreStr) return [];
   return String(genreStr).split(",").map(g => g.trim().toLowerCase()).filter(Boolean);
@@ -408,7 +415,6 @@ function renderItems(section) {
   updateSlider(section, 0);
 }
 
-// ─── Estrelas de Avaliação Premium (Cores Dinâmicas) ──────────────────────────
 function createStars(score, name) {
   if (!score) return '';
   const num = parseInt(score);
@@ -561,7 +567,6 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowDown" || e.key === "ArrowRight") window.nextSlide(activeSection);
 });
 
-// Aprimoramento de eventos para Mobile Touch
 document.querySelectorAll(".gallery-layout").forEach(layout => {
   const mainView = layout.querySelector(".gallery-main");
   if (!mainView) return;
@@ -584,7 +589,6 @@ document.querySelectorAll(".gallery-layout").forEach(layout => {
     const diffX = endX - startX;
     const diffY = endY - startY;
 
-    // Garante que a ação foi um arraste horizontal predominante
     if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
       if (diffX > 0) window.prevSlide(section);
       else window.nextSlide(section);
@@ -617,7 +621,7 @@ onValue(dbRefs.musicas, snapshot => {
   renderMusicas();
 });
 
-// ─── Formulários de Edição ────────────────────────────────────────────────────
+// ─── Formulários de Edição com Bloqueio de Segurança ──────────────────────────
 ["filmes", "series", "jogos"].forEach(section => {
   const form = document.getElementById(`edit-form-${section}`);
   if (!form) return;
@@ -636,50 +640,62 @@ onValue(dbRefs.musicas, snapshot => {
     let finalPoster   = original.poster   ?? "";
     let finalBackdrop = original.backdrop ?? "";
 
-    if (newTitle !== original.title || newYear !== original.year || !finalPoster || finalPoster === "") {
-      if (btn) btn.innerHTML = "<span>Atualizando Capa…</span>";
-      try {
-        const fetched = await dataFetcher[section](newTitle, newYear);
-        if (fetched.poster || fetched.backdrop) {
-          finalPoster   = fetched.poster   ?? "";
-          finalBackdrop = fetched.backdrop ?? "";
-        }
-      } catch (err) { console.warn("[edit] Falha ao buscar capa:", err.message); }
-    }
-
-    const get = id => document.getElementById(id)?.value.trim() ?? "";
-    const updateData = {
-      title:      newTitle,
-      year:       newYear,
-      poster:     finalPoster,
-      backdrop:   finalBackdrop,
-      targetDate: get(`edit-${section}-date`),
-      genre:      get(`edit-${section}-genre`),
-      who:        get(`edit-${section}-who`),
-    };
-
-    if (section === "filmes" || section === "series") {
-      updateData.where = get(`edit-${section}-where`);
-      updateData.ratingHesron = get(`edit-${section}-rating-hesron`);
-      updateData.ratingTiago = get(`edit-${section}-rating-tiago`);
-      
-      if (section === "series") {
-        updateData.seasons = get("edit-series-seasons");
-        updateData.status  = document.getElementById("edit-series-status")?.value ?? "quero ver";
+    try {
+      if (btn) {
+        btn.innerHTML = "<span>Atualizando…</span>";
+        btn.style.pointerEvents = "none";
       }
-    } else {
-      updateData.where    = get("edit-jogos-where");
-      updateData.platform = get("edit-jogos-platform");
-      updateData.status   = document.getElementById("edit-jogos-status")?.value ?? "quero jogar";
-    }
 
-    await update(ref(db, `${section}/${key}`), updateData);
-    if (btn) btn.innerHTML = origHTML;
-    document.getElementById(`edit-dialog-${section}`)?.close();
+      if (newTitle !== original.title || newYear !== original.year || !finalPoster || finalPoster === "") {
+        try {
+          const fetched = await dataFetcher[section](newTitle, newYear);
+          if (fetched.poster || fetched.backdrop) {
+            finalPoster   = fetched.poster   ?? "";
+            finalBackdrop = fetched.backdrop ?? "";
+          }
+        } catch (err) { console.warn("[edit] Falha ao buscar capa:", err.message); }
+      }
+
+      const get = id => document.getElementById(id)?.value.trim() ?? "";
+      const updateData = {
+        title:      newTitle,
+        year:       newYear,
+        poster:     finalPoster,
+        backdrop:   finalBackdrop,
+        targetDate: get(`edit-${section}-date`),
+        genre:      get(`edit-${section}-genre`),
+        who:        get(`edit-${section}-who`),
+      };
+
+      if (section === "filmes" || section === "series") {
+        updateData.where = get(`edit-${section}-where`);
+        updateData.ratingHesron = get(`edit-${section}-rating-hesron`);
+        updateData.ratingTiago = get(`edit-${section}-rating-tiago`);
+        
+        if (section === "series") {
+          updateData.seasons = get("edit-series-seasons");
+          updateData.status  = document.getElementById("edit-series-status")?.value ?? "quero ver";
+        }
+      } else {
+        updateData.where    = get("edit-jogos-where");
+        updateData.platform = get("edit-jogos-platform");
+        updateData.status   = document.getElementById("edit-jogos-status")?.value ?? "quero jogar";
+      }
+
+      await update(ref(db, `${section}/${key}`), updateData);
+      document.getElementById(`edit-dialog-${section}`)?.close();
+    } catch (error) {
+      console.error("[edit] Erro:", error);
+    } finally {
+      if (btn) {
+        btn.innerHTML = origHTML;
+        btn.style.pointerEvents = "auto";
+      }
+    }
   });
 });
 
-// ─── Formulários de Adição ────────────────────────────────────────────────────
+// ─── Formulários de Adição com Bloqueio de Segurança ──────────────────────────
 async function handleAddSubmit(section, fetchFn, fields) {
   const title = document.getElementById(fields.title)?.value.trim();
   if (!title) return;
@@ -687,32 +703,45 @@ async function handleAddSubmit(section, fetchFn, fields) {
   const year = document.getElementById(fields.year)?.value.trim() ?? "";
   const btn  = document.getElementById(fields.btn);
   const orig = btn?.innerHTML ?? "";
-  if (btn) btn.innerHTML = "<span>Buscando Capa…</span>";
 
-  let mediaData = { poster: "", backdrop: "" };
-  try { mediaData = await fetchFn(title, year); } 
-  catch (err) { console.warn("[add] Falha ao buscar capa:", err.message); }
+  try {
+    if (btn) {
+      btn.innerHTML = "<span>Buscando Capa…</span>";
+      btn.style.pointerEvents = "none";
+    }
 
-  const get = id => document.getElementById(id)?.value ?? "";
-  const payload = {
-    title,
-    year:       year,
-    poster:     mediaData.poster   ?? "",
-    backdrop:   mediaData.backdrop ?? "",
-    targetDate: get(fields.targetDate),
-    genre:      get(fields.genre).trim(),
-    who:        get(fields.who).trim(),
-    ...fields.extra(get),
-  };
+    let mediaData = { poster: "", backdrop: "" };
+    try { mediaData = await fetchFn(title, year); } 
+    catch (err) { console.warn("[add] Falha ao buscar capa:", err.message); }
 
-  await push(dbRefs[section], payload);
+    const get = id => document.getElementById(id)?.value ?? "";
+    const payload = {
+      title,
+      year:       year,
+      poster:     mediaData?.poster   ?? "",
+      backdrop:   mediaData?.backdrop ?? "",
+      targetDate: get(fields.targetDate),
+      genre:      get(fields.genre).trim(),
+      who:        get(fields.who).trim(),
+      ...fields.extra(get),
+    };
 
-  document.getElementById(fields.formId)?.reset();
-  const img  = document.getElementById(fields.previewImg);
-  const icon = document.getElementById(fields.previewIcon);
-  if (img)  img.style.display  = "none";
-  if (icon) icon.style.display = "block";
-  if (btn)  btn.innerHTML = orig;
+    await push(dbRefs[section], payload);
+
+    document.getElementById(fields.formId)?.reset();
+    const img  = document.getElementById(fields.previewImg);
+    const icon = document.getElementById(fields.previewIcon);
+    if (img)  img.style.display  = "none";
+    if (icon) icon.style.display = "block";
+  } catch (error) {
+    console.error("[add] Erro:", error);
+    alert("Ocorreu um erro. Tente novamente.");
+  } finally {
+    if (btn) {
+      btn.innerHTML = orig;
+      btn.style.pointerEvents = "auto";
+    }
+  }
 }
 
 document.getElementById("form-filmes")?.addEventListener("submit", e => {
@@ -790,16 +819,22 @@ document.getElementById("form-musicas")?.addEventListener("submit", async e => {
 
   const btn  = document.getElementById("btn-add-musicas");
   const orig = btn?.innerHTML ?? "";
-  if (btn) btn.innerHTML = "<span>Adicionando…</span>";
 
   try {
+    if (btn) {
+      btn.innerHTML = "<span>Adicionando…</span>";
+      btn.style.pointerEvents = "none";
+    }
     await push(dbRefs.musicas, { title, src, timestamp: Date.now() });
     document.getElementById("form-musicas")?.reset();
   } catch (err) {
     console.error("[musicas] Falha ao salvar:", err.message);
     alert("Erro ao salvar. Tente novamente.");
   } finally {
-    if (btn) btn.innerHTML = orig;
+    if (btn) {
+      btn.innerHTML = orig;
+      btn.style.pointerEvents = "auto";
+    }
   }
 });
 

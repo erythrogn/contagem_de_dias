@@ -1,0 +1,67 @@
+/* ============================================================
+   bloco/animations.css — Keyframes + GPU hints (Bloco)
+   Todos os transforms usam translate3d() / translateZ(0)
+   ============================================================ */
+
+@keyframes riseUpBloco {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0) scale(0.95);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes expandInBloco {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translate3d(0, 20px, 0);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes liquidFloatBloco {
+  0%   { transform: translate3d(0, 0, 0); }
+  50%  { transform: translate3d(0, -6px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slideInBloco {
+  0%   { opacity: 0; transform: translate3d(30px, 0, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes gateShakeBloco {
+  0%   { transform: translate3d(0, 0, 0); }
+  15%  { transform: translate3d(-8px, 0, 0); }
+  30%  { transform: translate3d(8px, 0, 0); }
+  45%  { transform: translate3d(-5px, 0, 0); }
+  60%  { transform: translate3d(5px, 0, 0); }
+  75%  { transform: translate3d(-2px, 0, 0); }
+  90%  { transform: translate3d(2px, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* --- Utilitários de entrada --- */
+
+.page-header     { animation: riseUpBloco 0.9s var(--spring-soft) both; will-change: transform, opacity, filter; }
+.mform-shell     { animation: riseUpBloco 0.9s var(--spring-soft) 0.2s both; will-change: transform, opacity, filter; }
+.empty-state     { animation: riseUpBloco 0.8s var(--spring-soft) 0.3s both; will-change: transform, opacity; }
+.carousel-container { animation: riseUpBloco 0.8s var(--spring-soft) 0.3s both; will-change: transform, opacity; }
+
+.gate-card       { animation: expandInBloco 0.8s var(--spring-soft) both; will-change: transform, opacity, filter; }
+
+.gate-icon       { animation: liquidFloatBloco 4s ease-in-out infinite; will-change: transform; }
+
+.mform-step      { animation: slideInBloco 0.6s var(--spring-soft) forwards; will-change: transform, opacity; }
+
+.gate-field-wrap.shake { animation: gateShakeBloco 0.6s ease forwards; will-change: transform; }
