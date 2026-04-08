@@ -83,7 +83,7 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 5rem 2rem;
-  border: 1px dashed rgba(255,255,255,0.1);
+  border: 1px dashed rgba(124,58,237,0.1);
   border-radius: var(--r-xl);
   color: var(--text-muted);
   font-family: var(--font-serif);
@@ -106,7 +106,7 @@
   }
   .stat {
     border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(124,58,237,0.06);
     padding: 1.25rem 1rem;
   }
   .stat:last-child { border-bottom: none; }

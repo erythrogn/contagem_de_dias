@@ -1,19 +1,17 @@
 /* ============================================================
-   index/animations.css — Keyframes + classes utilitárias
-   GPU-first: todo transform usa translate3d/translateZ(0)
+   index/animations.css — Enchanted Forest Keyframes
    ============================================================ */
-
-/* --- Keyframes --- */
 
 @keyframes kenBurnsIndex {
   0%   { transform: scale(1.05) translate3d(0, 0, 0); }
-  100% { transform: scale(1.18) translate3d(-2%, -2%, 0); }
+  100% { transform: scale(1.2) translate3d(-2%, -3%, 0); }
 }
 
 @keyframes floatIndexRune {
-  0%   { transform: translate3d(0, 0, 0); }
-  50%  { transform: translate3d(0, -6px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  33%  { transform: translate3d(2px, -5px, 0) rotate(3deg); }
+  66%  { transform: translate3d(-2px, -3px, 0) rotate(-2deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 @keyframes liquidFloatIndex {
@@ -23,21 +21,52 @@
   100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
-/* --- Classes utilitárias de animação (Index) --- */
+@keyframes fireflyDrift {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) scale(0); }
+  10%  { opacity: 1; transform: translate3d(5px, -10px, 0) scale(1); }
+  40%  { opacity: 0.8; transform: translate3d(-15px, -30px, 0) scale(0.9); }
+  70%  { opacity: 0.4; transform: translate3d(10px, -55px, 0) scale(0.7); }
+  100% { opacity: 0; transform: translate3d(-5px, -80px, 0) scale(0); }
+}
 
+@keyframes fireflyDrift2 {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) scale(0); }
+  15%  { opacity: 0.9; transform: translate3d(-8px, -15px, 0) scale(1.1); }
+  50%  { opacity: 0.5; transform: translate3d(12px, -40px, 0) scale(0.8); }
+  85%  { opacity: 0.2; transform: translate3d(-3px, -65px, 0) scale(0.5); }
+  100% { opacity: 0; transform: translate3d(6px, -85px, 0) scale(0); }
+}
+
+@keyframes enchantedVignettePulse {
+  0%   { background: radial-gradient(ellipse 75% 75% at 50% 50%, rgba(8,11,20,0.55) 0%, rgba(8,11,20,0.92) 100%); }
+  50%  { background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(8,11,20,0.5) 0%, rgba(8,11,20,0.95) 100%); }
+  100% { background: radial-gradient(ellipse 75% 75% at 50% 50%, rgba(8,11,20,0.55) 0%, rgba(8,11,20,0.92) 100%); }
+}
+
+@keyframes counterGlowLine {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes stampFloat {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%  { transform: translate3d(0, -6px, 0) rotate(0.5deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+
+/* Classes */
 .bg-img {
   will-change: transform;
   backface-visibility: hidden;
-  animation: kenBurnsIndex 30s ease-in-out infinite alternate;
+  animation: kenBurnsIndex 35s ease-in-out infinite alternate;
 }
-
-.cell-2 .bg-img { animation-delay: -8s;  animation-duration: 35s; }
-.cell-3 .bg-img { animation-delay: -16s; animation-duration: 28s; }
-.cell-4 .bg-img { animation-delay: -24s; animation-duration: 32s; }
+.cell-2 .bg-img { animation-delay: -9s; animation-duration: 40s; }
+.cell-3 .bg-img { animation-delay: -18s; animation-duration: 30s; }
+.cell-4 .bg-img { animation-delay: -27s; animation-duration: 36s; }
 
 .date-rune {
   will-change: transform;
-  animation: floatIndexRune 3.5s ease-in-out infinite;
+  animation: floatIndexRune 4s ease-in-out infinite;
 }
 
 .love-heart {

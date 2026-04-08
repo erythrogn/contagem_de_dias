@@ -4,12 +4,12 @@
 
 /* --- Multi-step Form Shell --- */
 .mform-shell {
-  background-color: rgba(255,255,255,0.03);
+  background-color: rgba(124,58,237,0.04);
   backdrop-filter: blur(24px) saturate(1.8);
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(124,58,237,0.08);
   border-radius: var(--r-xl);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(124,58,237,0.08);
   margin-bottom: 2.5rem;
   position: relative;
   overflow: hidden;
@@ -22,14 +22,14 @@
   left: 10%;
   right: 10%;
   height: 1px;
-  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  background-image: linear-gradient(90deg, transparent 0%, rgba(240,180,41,0.15) 50%, transparent 100%);
   pointer-events: none;
 }
 
 /* --- Progress Bar --- */
 .mform-progress {
   position: relative;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(124,58,237,0.06);
   padding: 1.75rem 2rem 1.25rem;
   background-color: rgba(0,0,0,0.1);
 }
@@ -64,8 +64,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background-color: rgba(14,18,37,0.5);
+  border: 1px solid rgba(124,58,237,0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,7 +102,7 @@
 .mstep-line {
   flex: 1 1 0%;
   height: 1px;
-  background-color: rgba(255,255,255,0.05);
+  background-color: rgba(124,58,237,0.06);
   min-width: 36px;
   margin: 0 1rem 22px;
 }
@@ -160,8 +160,8 @@
 /* Shared card inner */
 .type-card-inner,
 .author-card-inner {
-  border: 1px solid rgba(255,255,255,0.07);
-  background-color: rgba(255,255,255,0.03);
+  border: 1px solid rgba(124,58,237,0.07);
+  background-color: rgba(124,58,237,0.04);
   padding: 1.6rem 1.1rem;
   display: flex;
   flex-direction: column;
@@ -174,9 +174,9 @@
 
 .type-card:hover .type-card-inner,
 .author-card:hover .author-card-inner {
-  border-color: rgba(255,255,255,0.12);
+  border-color: rgba(124,58,237,0.12);
   transform: translate3d(0, -3px, 0);
-  background-color: rgba(255,255,255,0.05);
+  background-color: rgba(124,58,237,0.06);
 }
 
 /* Checked states */
@@ -199,8 +199,8 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
+  background-color: rgba(14,18,37,0.5);
+  border: 1px solid rgba(124,58,237,0.07);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,8 +218,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(124,58,237,0.06);
+  border: 1px solid rgba(124,58,237,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -261,8 +261,8 @@
 
 .floating-input {
   width: 100%;
-  background-color: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  background-color: rgba(124,58,237,0.04);
+  border: 1px solid rgba(124,58,237,0.08);
   border-radius: var(--r-sm);
   padding: 1.4rem 1rem 0.55rem;
   font-family: var(--font-display);
@@ -310,7 +310,7 @@
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(124,58,237,0.07);
   padding: 0.9rem 0 0.4rem;
   font-family: var(--font-display);
   font-size: 1.1rem;
@@ -379,12 +379,12 @@
   gap: 0.55rem;
   font-size: 0.78rem;
   letter-spacing: 0.04em;
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(124,58,237,0.07);
   padding: 0.7rem 1.6rem;
   transition: all 0.4s var(--spring-soft);
   border-radius: var(--r-pill);
   color: var(--text-muted);
-  background-color: rgba(255,255,255,0.03);
+  background-color: rgba(124,58,237,0.04);
   cursor: pointer;
 }
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   index/layout.css — Layout, palco e tipografia da Index
+   index/layout.css — Enchanted Forest Stage Layout
    ============================================================ */
 
 .stage {
@@ -10,10 +10,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 5.5rem 1.5rem 4rem;
+  padding: 5rem 1.5rem 4rem;
 }
 
-/* --- Title Stack --- */
+/* === Title Stack === */
 
 .title-stack {
   display: flex;
@@ -26,13 +26,17 @@
   position: relative;
 }
 
+/* Enchanted glow behind title */
 .title-stack::before {
   content: '';
   position: absolute;
-  inset: -40px;
-  background-image: radial-gradient(ellipse 60% 40% at center, rgba(34,211,238,0.05) 0%, transparent 70%);
+  inset: -60px;
+  background:
+    radial-gradient(ellipse 50% 40% at center, rgba(124,58,237,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 60% 50%, rgba(240,180,41,0.04) 0%, transparent 50%);
   pointer-events: none;
-  filter: blur(20px);
+  filter: blur(25px);
+  animation: ambientShift 15s ease-in-out infinite alternate;
 }
 
 .word-tamo {
@@ -42,6 +46,7 @@
   line-height: 0.9;
   letter-spacing: -0.01em;
   color: var(--text-primary);
+  text-shadow: 0 0 80px rgba(124,58,237,0.08);
 }
 
 .word-junto {
@@ -50,15 +55,22 @@
   font-weight: 400;
   font-size: clamp(3rem, 9vw, 8rem);
   line-height: 0.9;
-  background-image: linear-gradient(135deg, var(--cyan-bright) 0%, var(--amber) 55%, var(--amber-bright) 100%);
+  background-image: linear-gradient(135deg,
+    var(--cyan-bright) 0%,
+    var(--amber) 45%,
+    var(--amber-bright) 80%,
+    rgba(124,58,237,0.8) 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 40px rgba(240,180,41,0.2));
+  filter: drop-shadow(0 0 50px rgba(240,180,41,0.2));
   margin-top: -0.15em;
+  background-size: 200% 200%;
+  animation: shimmer 8s ease-in-out infinite;
 }
 
-/* --- Horizontal rule line --- */
+/* === Horizontal Rule Line === */
 
 .ha-line {
   display: flex;
@@ -70,19 +82,29 @@
   width: 100%;
 }
 
-.ha-rule { flex: 1 1 0%; max-width: 60px; height: 1px; }
-.left-rule  { background-image: linear-gradient(90deg,  transparent 0%, rgba(240,180,41,0.3) 100%); }
-.right-rule { background-image: linear-gradient(270deg, transparent 0%, rgba(240,180,41,0.3) 100%); }
+.ha-rule {
+  flex: 1 1 0%;
+  max-width: 70px;
+  height: 1px;
+}
+
+.left-rule {
+  background: linear-gradient(90deg, transparent 0%, rgba(124,58,237,0.2) 50%, rgba(240,180,41,0.3) 100%);
+}
+
+.right-rule {
+  background: linear-gradient(270deg, transparent 0%, rgba(124,58,237,0.2) 50%, rgba(240,180,41,0.3) 100%);
+}
 
 .ha-text {
   font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.38em;
+  font-size: 0.54rem;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-/* --- Responsive --- */
+/* === Responsive === */
 
 @media (max-width: 900px) {
   .counter {
@@ -92,10 +114,10 @@
   }
   .c-unit {
     width: 50%;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(124,58,237,0.06);
   }
   .c-unit:nth-child(2) { border-right: none; }
-  .c-unit:last-child   { border-bottom: none; }
+  .c-unit:last-child { border-bottom: none; }
   .corner-stamp {
     position: static;
     margin-top: 1.5rem;
@@ -104,13 +126,15 @@
 
 @media (max-width: 768px) {
   .stage { padding-bottom: 6rem; }
+  .noti-panel { margin-top: 2.5rem; padding: 1.4rem; }
 }
 
 @media (max-width: 600px) {
   .stage {
-    padding-top: 5rem;
+    padding-top: 4.5rem;
     gap: 0;
   }
-  .c-unit    { padding: 1.25rem 1.75rem; }
+  .c-unit { padding: 1.25rem 1.75rem; }
   .stamp-num { font-size: 2.25rem; }
+  .noti-card { padding: 0.8rem 0.9rem; gap: 0.8rem; }
 }

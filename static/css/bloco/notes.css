@@ -28,8 +28,8 @@
 
 .ftab:hover {
   color: var(--text-secondary);
-  background-color: rgba(255,255,255,0.05);
-  border-color: rgba(255,255,255,0.08);
+  background-color: rgba(124,58,237,0.06);
+  border-color: rgba(124,58,237,0.08);
 }
 
 .ftab.active {
@@ -49,8 +49,8 @@
 
 /* --- Note Card --- */
 .note-card {
-  background-color: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
+  background-color: rgba(124,58,237,0.04);
+  border: 1px solid rgba(124,58,237,0.07);
   border-radius: var(--r-lg);
   padding: 1.5rem;
   transition: all 0.5s var(--spring-soft);
@@ -67,7 +67,7 @@
   left: 10%;
   right: 10%;
   height: 1px;
-  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+  background-image: linear-gradient(90deg, transparent 0%, rgba(124,58,237,0.12) 50%, transparent 100%);
   pointer-events: none;
 }
 
@@ -90,8 +90,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
+  background-color: rgba(14,18,37,0.5);
+  border: 1px solid rgba(124,58,237,0.07);
   color: var(--text-muted);
   margin: 0 0.5rem 0.9rem auto;
   float: right;
@@ -216,8 +216,8 @@
 
 .inline-answer-input {
   width: 100%;
-  background-color: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  background-color: rgba(124,58,237,0.04);
+  border: 1px solid rgba(124,58,237,0.08);
   border-radius: var(--r-sm);
   padding: 0.6rem 0.75rem;
   font-family: var(--font-serif);
@@ -258,7 +258,7 @@
   justify-content: flex-end;
   opacity: 0;
   transition: opacity 0.4s var(--spring-soft);
-  border-top: 1px solid rgba(255,255,255,0.04);
+  border-top: 1px solid rgba(14,18,37,0.5);
   padding-top: 0.65rem;
   margin-top: 0.5rem;
 }
@@ -269,8 +269,8 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background-color: rgba(14,18,37,0.5);
+  border: 1px solid rgba(124,58,237,0.08);
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -298,7 +298,7 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem 2rem;
-  border: 1px dashed rgba(255,255,255,0.06);
+  border: 1px dashed rgba(124,58,237,0.06);
   border-radius: var(--r-lg);
   color: var(--text-muted);
   font-family: var(--font-serif);
