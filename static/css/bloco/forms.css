@@ -1,0 +1,55 @@
+.mform-shell {
+  background: var(--champagne-canvas);
+  border: 1px solid var(--border-gold);
+  padding: 3rem;
+  border-radius: 2px;
+  margin-bottom: 4rem;
+}
+
+.mform-input, .mform-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-gold);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  padding: 0.8rem 0;
+  outline: none;
+  transition: border-color 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.mform-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.mform-input:focus, .mform-textarea:focus {
+  border-bottom-color: var(--gold-soft);
+}
+
+.mform-input::placeholder, .mform-textarea::placeholder {
+  color: var(--text-muted);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* Botões do Form */
+.mform-btn-next, .mform-btn-back, .mform-btn-submit {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--gold-soft);
+  padding: 0.6rem 2rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mform-btn-next:hover, .mform-btn-submit:hover {
+  background: rgba(241, 210, 153, 0.05);
+  border-color: var(--gold-soft);
+}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Bloco de Notas · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bloco/bloco.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="bloco-gate" class="gate-overlay" role="dialog" aria-modal="true">
+  <div class="gate-card">
+    <div class="gate-icon"><svg width="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <h2 class="gate-title">Cofre de Memórias</h2>
+    <p class="gate-sub"><em>Digite a chave para abrir.</em></p>
+    <div class="gate-field-wrap">
+      <input type="password" id="gate-input" class="gate-input" placeholder="••••••••">
+    </div>
+    <div id="gate-error" class="gate-error"></div>
+    <button id="gate-btn" class="gate-btn" disabled>Revelar</button>
+  </div>
+</div>
+
+<div id="bloco-content" class="wrap" style="display: none; opacity: 0;">
+  
+  <header class="page-header">
+    <span class="eyebrow">Registros Privados</span>
+    <h1 class="page-title">Nosso <em>Pequeno Universo</em></h1>
+    <div class="header-decorator"></div>
+  </header>
+
+  <section class="mform-shell">
+    <div class="mform-progress"><div class="mform-progress-fill" id="mformProgress"></div></div>
+    <form id="note-form" novalidate>
+      <div id="steps-container">
+        </div>
+    </form>
+  </section>
+
+  <nav class="filter-row" role="tablist">
+    <button class="ftab active" data-filter="todos">Tudo</button>
+    <button class="ftab" data-filter="texto">Textos</button>
+    <button class="ftab" data-filter="lista">Listas</button>
+    <button class="ftab" data-filter="pergunta">Perguntas</button>
+  </nav>
+
+  <section class="notes-masonry" id="notesList"></section>
+
+  <div class="carousel-container" id="magicSlider" style="display:none;">
+    <ul class="carousel-list" id="carouselList"></ul>
+    <div id="carouselCounter" style="text-align:center; margin-top:20px; color:var(--gold-soft);"></div>
+  </div>
+</div>
+{% endblock %}

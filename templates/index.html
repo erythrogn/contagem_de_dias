@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block title %}Início · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/animations.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/index.css') }}">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="bg-grid" aria-hidden="true">
+  <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto1.jpg') }}" alt="" class="bg-img"></div>
+  <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto3.jpg') }}" alt="" class="bg-img"></div>
+  <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto4.jpg') }}" alt="" class="bg-img"></div>
+  <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto2.jpg') }}" alt="" class="bg-img"></div>
+</div>
+<div class="bg-vignette" aria-hidden="true"></div>
+
+<main class="invitation-container stage">
+    
+    <article class="wedding-card">
+        <div class="card-inner-border">
+            
+            <header class="invitation-header">
+                <div class="fine-line-decorator"></div>
+                <p class="celebration-date">Vinte e Nove de Novembro</p>
+                <div class="fine-line-decorator"></div>
+            </header>
+
+            <h1 class="main-statement">
+                <span class="serif-italic">tamo junto há</span>
+                <strong class="days-highlight" id="stampDays">{{ days_together }} dias</strong>
+            </h1>
+
+            <div class="minimal-divider">✦</div>
+
+            <section class="minimal-counter" role="timer" aria-live="polite">
+                <div class="time-slot c-unit">
+                    <span id="cDays" class="time-digit c-number">00</span>
+                    <span class="time-tag">dias</span>
+                </div>
+                <div class="time-slot c-unit">
+                    <span id="cHours" class="time-digit c-number">00</span>
+                    <span class="time-tag">horas</span>
+                </div>
+                <div class="time-slot c-unit">
+                    <span id="cMinutes" class="time-digit c-number">00</span>
+                    <span class="time-tag">minutos</span>
+                </div>
+                <div class="time-slot c-unit">
+                    <span id="cSeconds" class="time-digit c-number">00</span>
+                    <span class="time-tag">segundos</span>
+                </div>
+            </section>
+
+            <footer class="invitation-footer love-msg">
+                te amo, meu tiago.
+            </footer>
+
+        </div>
+    </article>
+
+    <footer class="minimal-carousel noti-panel">
+        <button class="nav-arrow" id="prev-btn" aria-label="Anterior">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        
+        <div class="carousel-text-area">
+            <span class="carousel-caption">Próximos Capítulos</span>
+            <p id="event-display" class="carousel-message">Buscando registros no grimório...</p>
+        </div>
+
+        <button class="nav-arrow" id="next-btn" aria-label="Próximo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+    </footer>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // 1. Lógica do Relógio Independente
+    const START_DATE = new Date('2025-11-29T00:00:00-03:00');
+
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - START_DATE;
+      if (diff < 0) return; 
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24)+1);
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / 1000 / 60) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+
+      const stamp = document.getElementById('stampDays');
+      if(stamp) stamp.textContent = `${d} dias`;
+      
+      document.getElementById('cDays').textContent = d.toString().padStart(2, '0');
+      document.getElementById('cHours').textContent = h.toString().padStart(2, '0');
+      document.getElementById('cMinutes').textContent = m.toString().padStart(2, '0');
+      document.getElementById('cSeconds').textContent = s.toString().padStart(2, '0');
+
+      if (typeof window._pulseSeconds === 'function') {
+        window._pulseSeconds();
+      }
+    }
+    
+    // Inicia imediatamente e depois repete a cada segundo
+    updateCounter();
+    setInterval(updateCounter, 1000);
+
+    // 2. Lógica das Animações GSAP
+    if (typeof gsap !== 'undefined') {
+      gsap.set([".wedding-card", ".minimal-carousel"], { autoAlpha: 0 });
+      
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      tl.fromTo(".wedding-card", { y: 30, opacity: 0 }, { y: 0, autoAlpha: 1, duration: 1.5 })
+        .fromTo(".minimal-carousel", { y: 20, opacity: 0 }, { y: 0, autoAlpha: 1, duration: 1.2 }, "-=0.8");
+
+      const stage = document.querySelector(".stage");
+      if (stage) {
+        stage.addEventListener("mousemove", (e) => {
+          const dx = (e.clientX - window.innerWidth/2) / window.innerWidth;
+          const dy = (e.clientY - window.innerHeight/2) / window.innerHeight;
+          gsap.to(".wedding-card", { x: dx * -6, y: dy * -4, duration: 2, ease: "power1.out" });
+          gsap.to(".minimal-carousel", { x: dx * 4, y: dy * 4, duration: 2, ease: "power1.out" });
+        });
+      }
+
+      window._pulseSeconds = () => {
+        gsap.fromTo("#cSeconds",
+          { color: "#ffffff", scale: 1.05 },
+          { color: "var(--gold-soft)", scale: 1, duration: 0.5, ease: "power2.out" });
+      };
+    }
+  });
+</script>
+
+<script type="module">
+  import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+  import { db } from "{{ url_for('static', filename='js/app.js') }}";
+
+  const dataStore = { coisinhas: [], viagens: [], filmes: [], series: [], jogos: [] };
+  const paths = Object.keys(dataStore);
+  const ICONS = { 
+    coisinhas: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=\"1.5\" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top: -2px; margin-right: 4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>', 
+    viagens: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=\"1.5\" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>', 
+    filmes: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=\"1.5\" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top: -2px; margin-right: 4px;"><rect x="2" y="2" width="20" height="20" rx="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>', 
+    series: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=\"1.5\" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top: -2px; margin-right: 4px;"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>', 
+    jogos: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=\"1.5\" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-top: -2px; margin-right: 4px;"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4"></path><path d="M8 10v4"></path><circle cx="15" cy="13" r="1" fill="currentColor"></circle><circle cx="18" cy="11" r="1" fill="currentColor"></circle></svg>' 
+  };
+  paths.forEach(path => {
+    onValue(ref(db, path), snapshot => {
+      dataStore[path] = [];
+      snapshot.forEach(child => {
+        const val = child.val();
+        if (val.targetDate) {
+          let isDone = false;
+          if (path === 'coisinhas') isDone = val.done === true;
+          if (path === 'filmes') isDone = (val.watched === true || val.watched === 'true');
+          if (path === 'series') isDone = val.status === 'concluida';
+          if (path === 'jogos') isDone = val.status === 'zerado';
+          if (path === 'viagens') isDone = val.status === 'feita';
+          if (!isDone) dataStore[path].push({ key: child.key, path, ...val });
+        }
+      });
+      buildCarouselEvents();
+    });
+  });
+
+  let eventosCarrossel = ["Unindo nossas memórias..."];
+  let eventoAtual = 0;
+  const display = document.getElementById('event-display');
+
+  function buildCarouselEvents() {
+    let allEvents = [];
+    paths.forEach(path => { allEvents = allEvents.concat(dataStore[path]); });
+    const todayStr = new Date().toISOString().split('T')[0];
+    allEvents = allEvents.filter(ev => ev.targetDate >= todayStr);
+    allEvents.sort((a, b) => a.targetDate.localeCompare(b.targetDate));
+
+    if (allEvents.length === 0) {
+      eventosCarrossel = ["Nenhum plano agendado no horizonte. Vamos criar um?"];
+    } else {
+      eventosCarrossel = allEvents.map(ev => {
+        const dateParts = ev.targetDate.split('-');
+        const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+        const titulo = ev.title || ev.destiny || 'Sem título';
+        return `${ICONS[ev.path]} ${titulo} • ${formattedDate}`;
+      });
+    }
+    renderizarEvento();
+  }
+
+ function renderizarEvento() {
+    if (!display) return;
+    display.style.opacity = 0; 
+    display.style.transform = "translateY(3px)";
+    setTimeout(() => {
+      // ATENÇÃO: Mudou de innerText para innerHTML aqui embaixo!
+      display.innerHTML = eventosCarrossel[eventoAtual] || "Carregando...";
+      display.style.opacity = 1;
+      display.style.transform = "translateY(0)";
+    }, 200);
+  }
+
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    if (eventosCarrossel.length === 0) return;
+    eventoAtual = (eventoAtual - 1 + eventosCarrossel.length) % eventosCarrossel.length;
+    renderizarEvento();
+  });
+  
+  document.getElementById('next-btn').addEventListener('click', () => {
+    if (eventosCarrossel.length === 0) return;
+    eventoAtual = (eventoAtual + 1) % eventosCarrossel.length;
+    renderizarEvento();
+  });
+</script>
+{% endblock %}

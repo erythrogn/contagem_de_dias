@@ -1,0 +1,32 @@
+/* ====================================================
+   ANIMAÇÕES E TRANSIÇÕES (HOVER)
+==================================================== */
+
+/* Efeito ao passar o rato nas setas do carrossel */
+.nav-arrow:hover {
+  border-color: var(--gold-soft);
+  background: rgba(241, 210, 153, 0.05);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(241, 210, 153, 0.1);
+}
+
+.nav-arrow:active {
+  transform: scale(0.95);
+}
+
+/* Hover subtil nos números do contador de tempo */
+.time-slot:hover .time-digit {
+  color: #ffffff;
+  transform: translateY(-3px);
+  text-shadow: 0 5px 15px rgba(241, 210, 153, 0.3);
+}
+
+/* Movimento lento de respiração para as fotos de fundo (Opcional, mas muito elegante) */
+@keyframes subtleZoom {
+  0% { transform: scale(1.06); }
+  100% { transform: scale(1.1); }
+}
+
+.bg-img {
+  animation: subtleZoom 30s alternate infinite ease-in-out;
+}

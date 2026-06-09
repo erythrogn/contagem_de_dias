@@ -1,0 +1,182 @@
+/* ====================================================
+   O CONVITE MINIMALISTA DE CASAMENTO
+==================================================== */
+.wedding-card {
+  background: var(--champagne-canvas);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-gold);
+  border-radius: 4px; /* Bordas retas e limpas */
+  padding: 14px; 
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.card-inner-border {
+  border: 1px solid rgba(241, 210, 153, 0.15);
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.invitation-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.fine-line-decorator {
+  height: 1px;
+  width: 35px;
+  background: rgba(241, 210, 153, 0.3);
+}
+
+.celebration-date {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: var(--gold-soft);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.main-statement {
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.8rem;
+  color: var(--text-muted);
+}
+
+.days-highlight {
+  font-family: var(--font-serif);
+  font-size: 3.8rem;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -1px;
+  margin-top: 0.5rem;
+  text-shadow: 0 0 20px rgba(241, 210, 153, 0.15);
+}
+
+.minimal-divider {
+  font-family: var(--font-serif);
+  color: var(--gold-soft);
+  font-size: 0.8rem;
+  opacity: 0.5;
+  letter-spacing: 6px;
+  margin-bottom: 2.5rem;
+}
+
+.minimal-counter {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.time-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-digit {
+  font-family: var(--font-serif);
+  font-size: 2.6rem;
+  font-weight: 300;
+  color: var(--gold-soft);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.time-tag {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.invitation-footer {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ====================================================
+   CARROSSEL DE EVENTOS TOTALMENTE CLEAN
+==================================================== */
+.minimal-carousel {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.carousel-text-area {
+  flex: 1;
+  text-align: center;
+}
+
+.carousel-caption {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold-dark);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.carousel-message {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin: 0;
+  font-weight: 300;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav-arrow {
+  background: transparent;
+  border: 1px solid rgba(241, 210, 153, 0.15);
+  color: var(--gold-soft);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Responsividade dos Componentes */
+@media (max-width: 768px) {
+  .card-inner-border { padding: 3rem 1.5rem; }
+  .days-highlight { font-size: 2.8rem; }
+  .minimal-counter { gap: 1.2rem; }
+  .time-digit { font-size: 2rem; }
+  .carousel-message { font-size: 1rem; }
+}
