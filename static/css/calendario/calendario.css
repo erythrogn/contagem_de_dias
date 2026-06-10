@@ -1,4 +1,405 @@
-@import url("calendario-animations.css");
-@import url("calendario-layout.css");
-@import url("calendario-components.css");
-@import url("calendario-events.css");
+
+:root {
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  
+  --gold-primary: rgba(212, 175, 55, 0.85);
+  --gold-light: rgba(212, 175, 55, 0.3);
+  --gold-pale: rgba(240, 180, 41, 0.6);
+  --glass-bg: rgba(20, 24, 32, 0.4);
+  --glass-border: rgba(212, 175, 55, 0.15);
+  
+  --text-main: #fcfbf9;
+  --text-muted: #a39f98;
+  
+  --bg-dark: #0a0c10;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.03) 0%, transparent 40%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+}
+
+#calendario-content {
+  padding-left: 80px; /* Compensa menu lateral */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   CABEÇALHO DO CONVITE
+   ========================================================================== */
+.cal-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cal-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+  margin-bottom: 1rem;
+}
+
+.cal-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.1;
+}
+
+.cal-title span {
+  font-style: italic;
+  color: var(--gold-primary);
+}
+
+.cal-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.gold-divider {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--gold-primary), transparent);
+  margin: 2rem auto 0;
+}
+
+/* ==========================================================================
+   LEGENDA MINIMALISTA
+   ========================================================================== */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.legend-dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-today { background-color: var(--gold-primary); box-shadow: 0 0 8px var(--gold-primary); }
+.dot-anniv { background-color: #22d3ee; }
+.dot-viagem { background-color: #a78bfa; }
+.dot-filme { background-color: #f472b6; }
+.dot-coisinha { background-color: #4ade80; }
+
+/* ==========================================================================
+   O VIDRO CENTRAL (CALENDÁRIO)
+   ========================================================================== */
+.calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px; /* Bordas retas, mais luxuoso */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.month-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.month-selector select {
+  background: transparent;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--gold-primary);
+  cursor: pointer;
+  appearance: none;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+.month-selector select:focus { outline: none; }
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  color: var(--gold-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+}
+
+.nav-btn:hover {
+  background: var(--gold-light);
+  transform: scale(1.05);
+}
+
+.today-btn {
+  width: auto;
+  border-radius: 30px;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.5rem;
+  height: auto;
+}
+
+/* Grelha de Dias */
+.days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 1.5rem 2rem 0.5rem;
+}
+
+.dow {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 1rem 2rem 2.5rem;
+}
+
+.day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text-main);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%; /* Mantém o luxo */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.day.empty { opacity: 0; pointer-events: none; }
+.day.past { color: rgba(255,255,255,0.2); }
+
+.day:hover:not(.empty) {
+  border-color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.day.today {
+  border: 1px dashed var(--gold-primary);
+  color: var(--gold-primary);
+  font-style: italic;
+}
+
+.day.anniversary {
+  background: rgba(34, 211, 238, 0.05);
+  border-color: rgba(34, 211, 238, 0.2);
+}
+
+/* Indicadores de Eventos nos Dias */
+.event-dots {
+  display: flex;
+  gap: 3px;
+  position: absolute;
+  bottom: 12%;
+}
+.e-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+}
+
+/* Tooltip do Dia */
+.day[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-dark);
+  border: 1px solid var(--gold-light);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--gold-primary);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+.day[data-tip]:hover::after { opacity: 1; visibility: visible; }
+
+/* ==========================================================================
+   O ROTEIRO (TIMELINE DE EVENTOS)
+   ========================================================================== */
+.timeline-style {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 2rem;
+}
+
+/* A linha dourada vertical conectando os eventos */
+.timeline-style::before {
+  content: '';
+  position: absolute;
+  left: 3.25rem;
+  top: 1rem;
+  bottom: 1rem;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--gold-light), transparent);
+}
+
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding: 2rem 0;
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.02) !important;
+}
+
+.event-row:last-child { border-bottom: none !important; }
+
+/* O Nó da Data */
+.event-date-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--bg-dark) !important;
+  border: 2px double var(--gold-primary) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.event-date-num {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--gold-primary);
+  line-height: 1;
+}
+
+.event-date-dow {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* Detalhes do Evento */
+.event-details {
+  flex: 1;
+}
+
+.event-title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.event-type-badge {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+}
+
+.no-events {
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  padding: 3rem;
+  border: 1px dashed var(--glass-border);
+}
+
+/* ==========================================================================
+   RESPONSIVO
+   ========================================================================== */
+@media (max-width: 768px) {
+  #calendario-content { padding-left: 0; padding-bottom: 100px; }
+  .wrap { padding: 2rem 1rem; }
+  .days-header, .days-grid { padding-left: 0.5rem; padding-right: 0.5rem; }
+  .day { font-size: 1rem; }
+  .timeline-style { padding-left: 0; }
+  .timeline-style::before { left: 1.85rem; }
+  .event-row { gap: 1.5rem; padding: 1.5rem 0; }
+  .event-date-box { width: 50px; height: 50px; border-width: 1px; }
+  .event-title { font-size: 1.4rem; }
+}
+
+/* Keyframes */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
