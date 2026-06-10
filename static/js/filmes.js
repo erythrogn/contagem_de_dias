@@ -5,9 +5,9 @@ import { db } from "/static/js/app.js";
 function escapeHTML(str) {
   if (!str) return "";
   return String(str)
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
@@ -83,17 +83,6 @@ async function fetchMovieData(title, year = "") {
     }
   } catch (err) { console.warn("[TMDB Filmes falhou]", err.message); }
 
-  try {
-    const itunesData = await safeFetch(`https://itunes.apple.com/search?term=${encodeURIComponent(title)}&entity=movie&limit=1`);
-    if (itunesData.results?.length && itunesData.results[0].artworkUrl100) {
-      const art = itunesData.results[0].artworkUrl100.replace("100x100bb", "600x600bb");
-      result.poster = art;
-      result.backdrop = art;
-      apiCache.set(key, result);
-      return result;
-    }
-  } catch(err) { console.warn("[iTunes Filmes falhou]", err.message); }
-
   return result;
 }
 
@@ -120,16 +109,6 @@ async function fetchTVData(title, year = "") {
     }
   } catch (err) { console.warn("[TMDB Séries falhou]", err.message); }
 
-  try {
-    const tvData = await safeFetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`);
-    if (tvData?.length > 0 && tvData[0].show?.image?.original) {
-      result.poster = tvData[0].show.image.original;
-      result.backdrop = tvData[0].show.image.original;
-      apiCache.set(key, result);
-      return result;
-    }
-  } catch (err) { console.warn("[TVMaze falhou]", err.message); }
-
   return result;
 }
 
@@ -153,38 +132,6 @@ async function fetchGameData(title, year = "") {
       return result;
     }
   } catch (err) { console.warn("[Steam Proxy falhou]", err.message); }
-
-  const rawgUrl = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${cleanTitle}&page_size=1`;
-  try {
-    const data = await safeFetch(rawgUrl);
-    if (data.results?.length && data.results[0].background_image) {
-      result.poster = data.results[0].background_image;
-      result.backdrop = data.results[0].background_image_additional || data.results[0].background_image;
-      apiCache.set(key, result);
-      return result;
-    }
-  } catch (err) { console.warn("[RAWG Direto falhou]", err.message); }
-
-  try {
-    const proxyData = await safeFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(rawgUrl)}`);
-    const data = JSON.parse(proxyData.contents);
-    if (data.results?.length && data.results[0].background_image) {
-      result.poster = data.results[0].background_image;
-      result.backdrop = data.results[0].background_image_additional || data.results[0].background_image;
-      apiCache.set(key, result);
-      return result;
-    }
-  } catch (err) { console.warn("[RAWG Proxy falhou]", err.message); }
-
-  try {
-    const data = await safeFetch(`https://www.cheapshark.com/api/1.0/games?title=${cleanTitle}&limit=1`);
-    if (data?.length > 0 && data[0].thumb) {
-      result.poster = data[0].thumb;
-      result.backdrop = data[0].thumb;
-      apiCache.set(key, result);
-      return result;
-    }
-  } catch (err) { console.warn("[CheapShark falhou]", err.message); }
 
   return result;
 }
@@ -240,6 +187,14 @@ function setupPreview(titleId, yearId, boxId, imgId, iconId, section) {
 setupPreview("fTitle", "fYear", "poster-preview-box-filmes", "poster-preview-img-filmes", "poster-placeholder-icon-filmes", "filmes");
 setupPreview("sTitle", "sYear", "poster-preview-box-series", "poster-preview-img-series", "poster-placeholder-icon-series", "series");
 setupPreview("jTitle", "jYear", "poster-preview-box-jogos",  "poster-preview-img-jogos",  "poster-placeholder-icon-jogos",  "jogos");
+
+// ─── Lógica UX Expandir Gavetas de Formulário ────────────────────────────────
+window.toggleFormDrawer = function(id) {
+  const wrapper = document.getElementById(id);
+  if (wrapper) {
+    wrapper.classList.toggle("open");
+  }
+};
 
 // ─── Helpers e Progresso ──────────────────────────────────────────────────────
 function isDoneItem(section, item) {
@@ -333,16 +288,6 @@ window.openEdit = function (section, key) {
     set(`edit-${section}-rating-tiago`, m.ratingTiago);
   }
 
-  if (section === "series") {
-    set(`edit-series-seasons`, m.seasons);
-    set(`edit-series-status`,  m.status ?? "quero ver");
-  }
-  
-  if (section === "jogos") {
-    set(`edit-jogos-platform`, m.platform);
-    set(`edit-jogos-status`,   m.status ?? "quero jogar");
-  }
-
   document.getElementById(`edit-dialog-${section}`)?.showModal();
 };
 
@@ -397,31 +342,6 @@ function renderItems(section) {
     const card = document.createElement("div");
     card.className = `slider-card${done ? " watched" : ""}`;
     card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
-    
-    // Injeta o efeito de inclinação física 3D interativa (Mouse Move)
-    card.addEventListener("mousemove", (e) => {
-      if (!card.classList.contains("active")) return;
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const xc = rect.width / 2;
-      const yc = rect.height / 2;
-      const angleX = (yc - y) / 10; // Inclinação vertical
-      const angleY = (x - xc) / 10; // Inclinação horizontal
-      
-      gsap.to(card, {
-        rotateX: angleX,
-        rotateY: angleY,
-        transformOrigin: "center center",
-        duration: 0.3,
-        ease: "power2.out"
-      });
-    });
-
-    card.addEventListener("mouseleave", () => {
-      gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: "power3.out" });
-    });
-
     card.addEventListener("click", () => {
       if (idx !== s.currentIndex) {
         const direction = idx > s.currentIndex ? 1 : -1;
@@ -440,69 +360,6 @@ function renderItems(section) {
   updateSlider(section, 0);
 }
 
-function updateSlider(section, direction = 0) {
-  const s        = state[section];
-  const mainView = document.getElementById(`gallery-main-${section}`);
-  const cards    = document.querySelectorAll(`#list-${section} .slider-card`);
-  if (!mainView) return;
-
-  // Atualiza classes nativas
-  cards.forEach((card, idx) => {
-    card.classList.toggle("active", idx === s.currentIndex);
-  });
-
-  const m = s.filtered[s.currentIndex];
-  if (!m) return;
-
-  mainView.innerHTML = buildMainHTML(section, m);
-
-  // Controle de opacidade e profundidade esmaecida dos vizinhos via GSAP
-  cards.forEach((card, idx) => {
-    if (idx === s.currentIndex) {
-      gsap.to(card, { opacity: 1, scale: 1.1, z: 20, duration: 0.5, ease: "power3.out" });
-    } else {
-      const distance = Math.abs(idx - s.currentIndex);
-      const targetOpacity = distance === 1 ? 0.45 : 0.25;
-      gsap.to(card, { opacity: targetOpacity, scale: 0.92, z: 0, rotateY: 0, duration: 0.5, ease: "power3.out" });
-    }
-  });
-
-  if (typeof gsap !== "undefined") {
-    const img     = mainView.querySelector(".gallery-main-img");
-    const blurBg  = mainView.querySelector(".gallery-main-blur-bg");
-    const overlay = mainView.querySelector(".gallery-main-overlay");
-    const done    = isDoneItem(section, m);
-    
-    const filter  = done ? "brightness(1) grayscale(100%)" : "brightness(1) grayscale(0%)";
-    const filterStart = done ? "brightness(0.4) grayscale(100%)" : "brightness(0.4) grayscale(0%)";
-    const xOffset = direction !== 0 ? direction * 50 : 0;
-
-    // Efeito Cinema: Imagem entra expandindo ligeiramente no foco
-    if (img) gsap.fromTo(img, 
-      { opacity: 0, x: xOffset, scale: 1.05, filter: filterStart }, 
-      { opacity: 0.85, x: 0, scale: 1, filter, duration: 0.65, ease: "power3.out" }
-    );
-    
-    if (blurBg) gsap.fromTo(blurBg, 
-      { opacity: 0, scale: 1.1 }, 
-      { opacity: 1, scale: 1, duration: 0.9, ease: "power2.out" }
-    );
-    
-    if (overlay) gsap.fromTo(overlay, 
-      { opacity: 0, y: 15 }, 
-      { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", delay: 0.08 }
-    );
-  }
-
-  // Deslocamento magnético suave do scroll interno
-  cards[s.currentIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-
-  const total   = s.filtered.length;
-  const prevBtn = document.getElementById(`slider-prev-${section}`);
-  const nextBtn = document.getElementById(`slider-next-${section}`);
-  if (prevBtn) prevBtn.setAttribute("aria-disabled", String(s.currentIndex === 0));
-  if (nextBtn) nextBtn.setAttribute("aria-disabled", String(s.currentIndex === total - 1));
-}
 function createStars(score, name) {
   if (!score) return '';
   const num = parseInt(score);
@@ -524,7 +381,7 @@ function createStars(score, name) {
     const stroke = isFilled ? colorVar : 'rgba(255,255,255,0.25)';
     const filter = isFilled ? `drop-shadow(0 0 6px ${colorVar})` : 'none';
     
-    stars += `<svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: ${filter};"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+    stars += `<svg class="star-icon" width="14" height="14" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
   }
   
   return `
@@ -622,6 +479,7 @@ function updateSlider(section, direction = 0) {
     );
   }
 
+  // Tratamento nativo magnético ao centralizar o card ativo
   cards[s.currentIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
 
   const total   = s.filtered.length;
@@ -766,11 +624,6 @@ onValue(dbRefs.musicas, snapshot => {
         updateData.where = get(`edit-${section}-where`);
         updateData.ratingHesron = get(`edit-${section}-rating-hesron`);
         updateData.ratingTiago = get(`edit-${section}-rating-tiago`);
-        
-        if (section === "series") {
-          updateData.seasons = get("edit-series-seasons");
-          updateData.status  = document.getElementById("edit-series-status")?.value ?? "quero ver";
-        }
       } else {
         updateData.where    = get("edit-jogos-where");
         updateData.platform = get("edit-jogos-platform");
@@ -887,8 +740,8 @@ function extractIframeSrc(input) {
 
   try {
     const u = new URL(url);
-    if (u.hostname.includes("spotify.com") || u.hostname.includes("open.spotify.com") || u.hostname.includes("googleusercontent.com/spotify.com")) {
-      return `https://open.spotify.com/embed${u.pathname}?utm_source=generator`;
+    if (u.hostname.includes("spotify.com")) {
+      return `https://open.spotify.com/embed${u.pathname}${u.search}`;
     }
     if (u.hostname.includes("music.apple.com")) {
       return `https://embed.music.apple.com${u.pathname}${u.search}`;
@@ -956,7 +809,7 @@ function renderMusicas() {
         </button>
       </div>
       <div class="musica-iframe-wrapper">
-        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="${m.src}" loading="lazy"></iframe>
+        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" style="width:100%;height:100%;overflow:hidden;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="${m.src}" loading="lazy"></iframe>
       </div>`;
     fragment.appendChild(card);
     if (typeof gsap !== "undefined") gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: idx * 0.1 });
@@ -987,7 +840,6 @@ document.querySelectorAll(".main-tab").forEach(tab => {
     e.currentTarget.setAttribute("aria-selected", "true");
 
     document.querySelectorAll(".media-section").forEach(s => {
-      const id = s.id.replace("section-", "");
       s.classList.remove("active");
     });
 
