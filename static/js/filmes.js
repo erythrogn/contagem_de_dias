@@ -397,6 +397,31 @@ function renderItems(section) {
     const card = document.createElement("div");
     card.className = `slider-card${done ? " watched" : ""}`;
     card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
+    
+    // Injeta o efeito de inclinação física 3D interativa (Mouse Move)
+    card.addEventListener("mousemove", (e) => {
+      if (!card.classList.contains("active")) return;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const angleX = (yc - y) / 10; // Inclinação vertical
+      const angleY = (x - xc) / 10; // Inclinação horizontal
+      
+      gsap.to(card, {
+        rotateX: angleX,
+        rotateY: angleY,
+        transformOrigin: "center center",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    });
+
+    card.addEventListener("mouseleave", () => {
+      gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: "power3.out" });
+    });
+
     card.addEventListener("click", () => {
       if (idx !== s.currentIndex) {
         const direction = idx > s.currentIndex ? 1 : -1;
@@ -415,6 +440,69 @@ function renderItems(section) {
   updateSlider(section, 0);
 }
 
+function updateSlider(section, direction = 0) {
+  const s        = state[section];
+  const mainView = document.getElementById(`gallery-main-${section}`);
+  const cards    = document.querySelectorAll(`#list-${section} .slider-card`);
+  if (!mainView) return;
+
+  // Atualiza classes nativas
+  cards.forEach((card, idx) => {
+    card.classList.toggle("active", idx === s.currentIndex);
+  });
+
+  const m = s.filtered[s.currentIndex];
+  if (!m) return;
+
+  mainView.innerHTML = buildMainHTML(section, m);
+
+  // Controle de opacidade e profundidade esmaecida dos vizinhos via GSAP
+  cards.forEach((card, idx) => {
+    if (idx === s.currentIndex) {
+      gsap.to(card, { opacity: 1, scale: 1.1, z: 20, duration: 0.5, ease: "power3.out" });
+    } else {
+      const distance = Math.abs(idx - s.currentIndex);
+      const targetOpacity = distance === 1 ? 0.45 : 0.25;
+      gsap.to(card, { opacity: targetOpacity, scale: 0.92, z: 0, rotateY: 0, duration: 0.5, ease: "power3.out" });
+    }
+  });
+
+  if (typeof gsap !== "undefined") {
+    const img     = mainView.querySelector(".gallery-main-img");
+    const blurBg  = mainView.querySelector(".gallery-main-blur-bg");
+    const overlay = mainView.querySelector(".gallery-main-overlay");
+    const done    = isDoneItem(section, m);
+    
+    const filter  = done ? "brightness(1) grayscale(100%)" : "brightness(1) grayscale(0%)";
+    const filterStart = done ? "brightness(0.4) grayscale(100%)" : "brightness(0.4) grayscale(0%)";
+    const xOffset = direction !== 0 ? direction * 50 : 0;
+
+    // Efeito Cinema: Imagem entra expandindo ligeiramente no foco
+    if (img) gsap.fromTo(img, 
+      { opacity: 0, x: xOffset, scale: 1.05, filter: filterStart }, 
+      { opacity: 0.85, x: 0, scale: 1, filter, duration: 0.65, ease: "power3.out" }
+    );
+    
+    if (blurBg) gsap.fromTo(blurBg, 
+      { opacity: 0, scale: 1.1 }, 
+      { opacity: 1, scale: 1, duration: 0.9, ease: "power2.out" }
+    );
+    
+    if (overlay) gsap.fromTo(overlay, 
+      { opacity: 0, y: 15 }, 
+      { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", delay: 0.08 }
+    );
+  }
+
+  // Deslocamento magnético suave do scroll interno
+  cards[s.currentIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+
+  const total   = s.filtered.length;
+  const prevBtn = document.getElementById(`slider-prev-${section}`);
+  const nextBtn = document.getElementById(`slider-next-${section}`);
+  if (prevBtn) prevBtn.setAttribute("aria-disabled", String(s.currentIndex === 0));
+  if (nextBtn) nextBtn.setAttribute("aria-disabled", String(s.currentIndex === total - 1));
+}
 function createStars(score, name) {
   if (!score) return '';
   const num = parseInt(score);
