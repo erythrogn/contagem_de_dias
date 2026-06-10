@@ -1,4 +1,85 @@
-@import url("animations.css");
-@import url("components.css");
-@import url("forms.css");
-@import url("layout.css");
+:root {
+  --bg-dark: #05070a;
+  --champagne-canvas: rgba(245, 240, 225, 0.04);
+  --gold-soft: #dfce97;
+  --gold-dark: #1e3a8a;
+  --gold-neon: rgba(30, 58, 138, 0.4);
+  --text-light: #fdfbf7;
+  --text-muted: rgba(148, 163, 184, 0.7);
+  --border-gold: rgba(212, 175, 55, 0.25);
+  --glass-bg: rgba(12, 18, 30, 0.7);
+  --glass-border: rgba(212, 175, 55, 0.15);
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --cinematic-glow: 0 0 40px rgba(30, 58, 138, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/*
+ * NOVO: scroll-padding-top compensa o marquee fixo de 40px.
+ * Sem isso, âncoras e foco de teclado ficam escondidos atrás do banner.
+ */
+html {
+  scroll-padding-top: 48px;
+}
+
+::selection {
+  background-color: var(--gold-soft);
+  color: var(--bg-dark);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-gold);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gold-dark);
+}
+
+button {
+  font-family: inherit;
+  background-color: transparent;
+}
+
+input {
+  font-family: inherit;
+}
+
+select {
+  font-family: inherit;
+}
+
+textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

@@ -1,534 +1,418 @@
 {% extends 'base.html' %}
-{% block title %}Filmes & Séries & Jogos · tamo junto{% endblock %}
+{% block title %}Filmes, Séries & Jogos · tamo junto{% endblock %}
+
 {% block styles %}
 <meta name="tmdb-api-key" content="{{ tmdb_api_key | default('d39bbf74a96f6cca570dcb69c8f3059f') }}">
 <meta name="rawg-api-key" content="{{ rawg_api_key | default('4a8f946edbb943dda1ee452b412e8eb0') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes/filmes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filmes/animations.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filmes/components.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filmes/forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filmes/layout.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 {% endblock %}
+
 {% block content %}
+<div class="cinematic-overlay"></div>
+<div class="projector-light"></div>
+
 <div class="marquee-wrapper" aria-hidden="true">
 <div class="marquee-track">
-<span class="marquee-text">Nossa lista de filmes</span>
-<span class="marquee-text">bastante pipoca</span>
-<span class="marquee-text">quero assistir minha vida com voce</span>
-<span class="marquee-text">te amo</span>
-<span class="marquee-text">nossas séries favoritas</span>
-<span class="marquee-text">joguinhos juntos</span>
-<span class="marquee-text">Nossa lista de filmes</span>
-<span class="marquee-text">bastante pipoca</span>
-<span class="marquee-text">quero assistir minha vida com voce</span>
-<span class="marquee-text">te amo</span>
-<span class="marquee-text">nossas séries favoritas</span>
-<span class="marquee-text">joguinhos juntos</span>
+<span class="marquee-text">te amo✦</span>
+<span class="marquee-text">obrigado por tudo✦</span>
+<span class="marquee-text">te amo✦</span>
+  </div>
 </div>
-</div>
+
 <main class="filmes-container">
-<nav class="main-tabs-wrapper" role="tablist" aria-label="Tipo de mídia">
-<button class="main-tab active" data-section="filmes" role="tab" aria-selected="true">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
-Filmes
-</button>
-<button class="main-tab" data-section="series" role="tab" aria-selected="false">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-Séries
-</button>
-<button class="main-tab" data-section="jogos" role="tab" aria-selected="false">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="currentColor"></circle><circle cx="17" cy="11" r="1" fill="currentColor"></circle><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"></path></svg>
-Jogos
-</button>
-<button class="main-tab" data-section="musicas" role="tab" aria-selected="false">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
-Músicas
-</button>
-</nav>
+  <nav class="main-tabs-wrapper" role="tablist" aria-label="Tipo de mídia">
+    <button class="main-tab active" data-section="filmes" role="tab" aria-selected="true">Filmes</button>
+    <button class="main-tab" data-section="series" role="tab" aria-selected="false">Séries</button>
+    <button class="main-tab" data-section="jogos" role="tab" aria-selected="false">Jogos</button>
+    <button class="main-tab" data-section="musicas" role="tab" aria-selected="false">Músicas</button>
+  </nav>
 
-<div id="section-filmes" class="media-section active">
-<header class="filmes-header">
-<span class="filmes-eyebrow">o que vamos assistir juntos</span>
-<h1 class="filmes-title">nossa lista de <span class="filmes-accent">filmes</span></h1>
-<p class="filmes-subtitle">coloca um filme p nos mozi</p>
-</header>
-<section class="progress-wrapper" aria-label="Progresso de filmes assistidos">
-<div class="progress-details">
-<span class="progress-label-text">Assistidos</span>
-<strong class="progress-number" id="progressLabel-filmes">0 / 0</strong>
-</div>
-<div class="progress-track" role="progressbar">
-<div class="progress-fill" id="progressFill-filmes" style="width:0%"></div>
-</div>
-</section>
-<section class="form-wrapper" aria-label="Adicionar filme">
-<h2 class="form-title">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-Adicionar Filme
-</h2>
-<form id="form-filmes" class="form-layout">
-<div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
-<div style="flex:1;">
-<label for="fTitle" class="field-label">Título do Filme</label>
-<input type="text" id="fTitle" class="field-input" placeholder="ex: Interstellar..." autocomplete="off" required>
-</div>
-<div id="poster-preview-box-filmes" class="poster-preview-box">
-<svg id="poster-placeholder-icon-filmes" class="poster-placeholder-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
-<img id="poster-preview-img-filmes" src="" alt="Capa" class="poster-preview-img" style="display:none;">
-</div>
-</div>
-<div class="field-group">
-<label for="fTargetDate" class="field-label">Quando vamos assistir?</label>
-<input type="date" id="fTargetDate" class="field-input">
-</div>
-<div class="field-group">
-<label for="fGenre" class="field-label">Gênero</label>
-<input type="text" id="fGenre" class="field-input" placeholder="ex: terror, animação...">
-</div>
-<div class="field-group">
-<label for="fYear" class="field-label">Ano Lançamento</label>
-<input type="number" id="fYear" class="field-input" placeholder="ex: 2011" min="1900" max="2100">
-</div>
-<div class="field-group">
-<label for="fWho" class="field-label">Quem indicou?</label>
-<input type="text" id="fWho" class="field-input" placeholder="hesron ou mozi">
-</div>
-<div class="field-group">
-<label for="fRatingHesron" class="field-label">Nota do Hesron</label>
-<select id="fRatingHesron" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group">
-<label for="fRatingTiago" class="field-label">Nota do Tiago</label>
-<select id="fRatingTiago" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group span-full">
-<label for="fWhere" class="field-label">Onde assistir?</label>
-<input type="text" id="fWhere" class="field-input" placeholder="ex: Netflix, Prime...">
-</div>
-<div class="field-group span-full">
-<button class="btn-submit" id="btn-add-filmes" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-<span>Adicionar Filme</span>
-</button>
-</div>
-</form>
-</section>
-<nav class="filter-wrapper" id="filter-filmes" role="tablist" aria-label="Filtrar filmes">
-<button class="ftab active" data-filter="todos" data-section="filmes" role="tab">Todos</button>
-<button class="ftab" data-filter="assistir" data-section="filmes" role="tab">Para Assistir</button>
-<button class="ftab" data-filter="assistido" data-section="filmes" role="tab">Assistidos</button>
-</nav>
-<div class="genre-wrapper" id="genreRow-filmes"></div>
-<section class="slider-section">
-<div class="gallery-layout">
-<div class="gallery-main" id="gallery-main-filmes">
-<div class="empty-state"><p class="empty-text">Aguardando filmes...</p></div>
-</div>
-<div class="gallery-side">
-<button id="slider-prev-filmes" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide('filmes')">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
-<div class="slider-track" id="list-filmes" aria-live="polite">
-</div>
-<button id="slider-next-filmes" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide('filmes')">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</button>
-</div>
-</div>
-</section>
-</div>
+  <div id="section-filmes" class="media-section active">
+    <header class="filmes-header">
+      <span class="filmes-eyebrow">o que vamos assistir juntos</span>
+      <h1 class="filmes-title">nossa lista de <span class="filmes-accent">filmes</span></h1>
+      <p class="filmes-subtitle">coloca um filme p nos mozi</p>
+    </header>
 
-<div id="section-series" class="media-section">
-<header class="filmes-header">
-<span class="filmes-eyebrow">episódio após episódio</span>
-<h1 class="filmes-title">nossas <span class="filmes-accent series-accent">séries</span></h1>
-<p class="filmes-subtitle">maratonas com mia vida</p>
-</header>
-<section class="progress-wrapper" aria-label="Progresso de séries">
-<div class="progress-details">
-<span class="progress-label-text">Concluídas</span>
-<strong class="progress-number" id="progressLabel-series">0 / 0</strong>
-</div>
-<div class="progress-track" role="progressbar">
-<div class="progress-fill progress-fill-series" id="progressFill-series" style="width:0%"></div>
-</div>
-</section>
-<section class="form-wrapper" aria-label="Adicionar série">
-<h2 class="form-title">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-Adicionar Série
-</h2>
-<form id="form-series" class="form-layout">
-<div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
-<div style="flex:1;">
-<label for="sTitle" class="field-label">Título da Série</label>
-<input type="text" id="sTitle" class="field-input" placeholder="ex: Breaking Bad..." autocomplete="off" required>
-</div>
-<div id="poster-preview-box-series" class="poster-preview-box">
-<svg id="poster-placeholder-icon-series" class="poster-placeholder-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-<img id="poster-preview-img-series" src="" alt="Capa" class="poster-preview-img" style="display:none;">
-</div>
-</div>
-<div class="field-group">
-<label for="sTargetDate" class="field-label">Quando vamos começar?</label>
-<input type="date" id="sTargetDate" class="field-input">
-</div>
-<div class="field-group">
-<label for="sGenre" class="field-label">Gênero</label>
-<input type="text" id="sGenre" class="field-input" placeholder="ex: drama, sci-fi...">
-</div>
-<div class="field-group">
-<label for="sYear" class="field-label">Ano</label>
-<input type="number" id="sYear" class="field-input" placeholder="ex: 2013" min="1900" max="2100">
-</div>
-<div class="field-group">
-<label for="sSeasons" class="field-label">Temporadas</label>
-<input type="number" id="sSeasons" class="field-input" placeholder="ex: 5" min="1">
-</div>
-<div class="field-group">
-<label for="sStatus" class="field-label">Status</label>
-<select id="sStatus" class="field-input field-select">
-<option value="quero ver">Quero Ver</option>
-<option value="assistindo">Assistindo</option>
-<option value="concluida">Concluída</option>
-</select>
-</div>
-<div class="field-group">
-<label for="sWho" class="field-label">Quem indicou?</label>
-<input type="text" id="sWho" class="field-input" placeholder="hesron ou mozi">
-</div>
-<div class="field-group">
-<label for="sRatingHesron" class="field-label">Nota do Hesron</label>
-<select id="sRatingHesron" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group">
-<label for="sRatingTiago" class="field-label">Nota do Tiago</label>
-<select id="sRatingTiago" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group span-full">
-<label for="sWhere" class="field-label">Onde assistir?</label>
-<input type="text" id="sWhere" class="field-input" placeholder="ex: Netflix, HBO...">
-</div>
-<div class="field-group span-full">
-<button class="btn-submit btn-submit-series" id="btn-add-series" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-<span>Adicionar Série</span>
-</button>
-</div>
-</form>
-</section>
-<nav class="filter-wrapper" id="filter-series" role="tablist">
-<button class="ftab active" data-filter="todos" data-section="series" role="tab">Todas</button>
-<button class="ftab" data-filter="quero ver" data-section="series" role="tab">Quero Ver</button>
-<button class="ftab" data-filter="assistindo" data-section="series" role="tab">Assistindo</button>
-<button class="ftab" data-filter="concluida" data-section="series" role="tab">Concluídas</button>
-</nav>
-<div class="genre-wrapper" id="genreRow-series"></div>
-<section class="slider-section">
-<div class="gallery-layout">
-<div class="gallery-main" id="gallery-main-series">
-<div class="empty-state"><p class="empty-text">Aguardando séries...</p></div>
-</div>
-<div class="gallery-side">
-<button id="slider-prev-series" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide('series')">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
-<div class="slider-track" id="list-series" aria-live="polite">
-</div>
-<button id="slider-next-series" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide('series')">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</button>
-</div>
-</div>
-</section>
-</div>
+    <section class="progress-wrapper" aria-label="Progresso de filmes assistidos">
+      <div class="progress-details">
+        <span class="progress-label-text">Assistidos</span>
+        <strong class="progress-number" id="progressLabel-filmes">0 / 0</strong>
+      </div>
+      <div class="progress-track" role="progressbar">
+        <div class="progress-fill" id="progressFill-filmes"></div>
+      </div>
+    </section>
 
-<div id="section-jogos" class="media-section">
-<header class="filmes-header">
-<span class="filmes-eyebrow">player 1 & player 2</span>
-<h1 class="filmes-title">nossos <span class="filmes-accent jogos-accent">jogos</span></h1>
-<p class="filmes-subtitle">vem p debaixo da coberta jogar cmg</p>
-</header>
-<section class="progress-wrapper" aria-label="Progresso de jogos">
-<div class="progress-details">
-<span class="progress-label-text">Zerados</span>
-<strong class="progress-number" id="progressLabel-jogos">0 / 0</strong>
-</div>
-<div class="progress-track" role="progressbar">
-<div class="progress-fill progress-fill-jogos" id="progressFill-jogos" style="width:0%"></div>
-</div>
-</section>
-<section class="form-wrapper" aria-label="Adicionar jogo">
-<h2 class="form-title">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-Adicionar Jogo
-</h2>
-<form id="form-jogos" class="form-layout">
-<div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
-<div style="flex:1;">
-<label for="jTitle" class="field-label">Título do Jogo</label>
-<input type="text" id="jTitle" class="field-input" placeholder="ex: Stardew Valley..." autocomplete="off" required>
-</div>
-<div id="poster-preview-box-jogos" class="poster-preview-box">
-<svg id="poster-placeholder-icon-jogos" class="poster-placeholder-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1" fill="rgba(255,255,255,0.2)"></circle><circle cx="17" cy="11" r="1" fill="rgba(255,255,255,0.2)"></circle><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"></path></svg>
-<img id="poster-preview-img-jogos" src="" alt="Capa" class="poster-preview-img" style="display:none;">
-</div>
-</div>
-<div class="field-group">
-<label for="jTargetDate" class="field-label">Quando vamos jogar?</label>
-<input type="date" id="jTargetDate" class="field-input">
-</div>
-<div class="field-group">
-<label for="jGenre" class="field-label">Gênero</label>
-<input type="text" id="jGenre" class="field-input" placeholder="ex: RPG, indie...">
-</div>
-<div class="field-group">
-<label for="jYear" class="field-label">Ano</label>
-<input type="number" id="jYear" class="field-input" placeholder="ex: 2016" min="1900" max="2100">
-</div>
-<div class="field-group">
-<label for="jPlatform" class="field-label">Plataforma</label>
-<input type="text" id="jPlatform" class="field-input" placeholder="ex: PC, Switch, PS5...">
-</div>
-<div class="field-group">
-<label for="jStatus" class="field-label">Status</label>
-<select id="jStatus" class="field-input field-select">
-<option value="quero jogar">Quero Jogar</option>
-<option value="jogando">Jogando</option>
-<option value="zerado">Zerado</option>
-</select>
-</div>
-<div class="field-group">
-<label for="jWho" class="field-label">Quem indicou?</label>
-<input type="text" id="jWho" class="field-input" placeholder="hesron ou mozi">
-</div>
-<div class="field-group span-full">
-<label for="jWhere" class="field-label">Onde jogar?</label>
-<input type="text" id="jWhere" class="field-input" placeholder="ex: Steam, itch.io...">
-</div>
-<div class="field-group span-full">
-<button class="btn-submit btn-submit-jogos" id="btn-add-jogos" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-<span>Adicionar Jogo</span>
-</button>
-</div>
-</form>
-</section>
-<nav class="filter-wrapper" id="filter-jogos" role="tablist">
-<button class="ftab active" data-filter="todos" data-section="jogos" role="tab">Todos</button>
-<button class="ftab" data-filter="quero jogar" data-section="jogos" role="tab">Quero Jogar</button>
-<button class="ftab" data-filter="jogando" data-section="jogos" role="tab">Jogando</button>
-<button class="ftab" data-filter="zerado" data-section="jogos" role="tab">Zerados</button>
-</nav>
-<div class="genre-wrapper" id="genreRow-jogos"></div>
-<section class="slider-section">
-<div class="gallery-layout">
-<div class="gallery-main" id="gallery-main-jogos">
-<div class="empty-state"><p class="empty-text">Aguardando jogos...</p></div>
-</div>
-<div class="gallery-side">
-<button id="slider-prev-jogos" class="slider-btn prev" aria-label="Anterior" onclick="window.prevSlide('jogos')">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
-<div class="slider-track" id="list-jogos" aria-live="polite">
-</div>
-<button id="slider-next-jogos" class="slider-btn next" aria-label="Próximo" onclick="window.nextSlide('jogos')">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</button>
-</div>
-</div>
-</section>
-</div>
+    <section class="form-wrapper" aria-label="Adicionar filme">
+      <h2 class="form-title">Adicionar Filme ao Acervo</h2>
+      <form id="form-filmes" class="form-layout">
+        <div class="field-group span-full custom-poster-layout">
+          <div class="input-relative">
+            <input type="text" id="fTitle" class="field-input" placeholder=" " autocomplete="off" required>
+            <label for="fTitle" class="field-label">Título do Filme</label>
+          </div>
+          <div id="poster-preview-box-filmes" class="poster-preview-box">
+            <svg id="poster-placeholder-icon-filmes" class="poster-placeholder-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="2" width="20" height="20" rx="2"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line></svg>
+            <img id="poster-preview-img-filmes" src="" alt="Capa" class="poster-preview-img" style="display:none;">
+          </div>
+        </div>
+        <div class="field-group">
+          <input type="date" id="fTargetDate" class="field-input">
+          <label for="fTargetDate" class="field-label static-label">Quando vamos assistir?</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="fGenre" class="field-input" placeholder=" ">
+          <label for="fGenre" class="field-label">Gênero</label>
+        </div>
+        <div class="field-group">
+          <input type="number" id="fYear" class="field-input" placeholder=" " min="1900" max="2100">
+          <label for="fYear" class="field-label">Ano Lançamento</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="fWho" class="field-input" placeholder=" ">
+          <label for="fWho" class="field-label">Quem indicou?</label>
+        </div>
+        <div class="field-group">
+          <select id="fRatingHesron" class="field-input field-select">
+            <option value="">Ainda não avaliou</option>
+            <option value="1">1 Estrela</option><option value="2">2 Estrelas</option><option value="3">3 Estrelas</option><option value="4">4 Estrelas</option><option value="5">5 Estrelas</option>
+          </select>
+          <label class="field-label static-label">Nota do Hesron</label>
+        </div>
+        <div class="field-group">
+          <select id="fRatingTiago" class="field-input field-select">
+            <option value="">Ainda não avaliou</option>
+            <option value="1">1 Estrela</option><option value="2">2 Estrelas</option><option value="3">3 Estrelas</option><option value="4">4 Estrelas</option><option value="5">5 Estrelas</option>
+          </select>
+          <label class="field-label static-label">Nota do Tiago</label>
+        </div>
+        <div class="field-group span-full">
+          <input type="text" id="fWhere" class="field-input" placeholder=" ">
+          <label for="fWhere" class="field-label">Onde assistir?</label>
+        </div>
+        <div class="field-group span-full">
+          <button class="btn-submit" id="btn-add-filmes" type="submit">Adicionar Filme</button>
+        </div>
+      </form>
+    </section>
 
-<div id="section-musicas" class="media-section">
-<header class="filmes-header">
-<span class="filmes-eyebrow">algumas</span>
-<h1 class="filmes-title"><span class="filmes-accent musica-accent">músicas</span></h1>
-<p class="filmes-subtitle"> que me fazem lembrar de voce</p>
-</header>
-<section class="form-wrapper" aria-label="Adicionar playlist">
-<h2 class="form-title">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-Adicionar Playlist
-</h2>
-<form id="form-musicas" class="form-layout">
-<div class="field-group span-full">
-<label for="mTitle" class="field-label">Título da Playlist</label>
-<input type="text" id="mTitle" class="field-input" placeholder="ex: vibes de domingo..." autocomplete="off" required>
-</div>
-<div class="field-group span-full">
-<label for="mLink" class="field-label">Link do Spotify / Apple Music / YouTube</label>
-<input type="text" id="mLink" class="field-input" placeholder="Cole o link direto da música ou playlist..." required>
-</div>
-<div class="field-group span-full">
-<button class="btn-submit btn-submit-musica" id="btn-add-musicas" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-<span>Adicionar Playlist</span>
-</button>
-</div>
-</form>
-</section>
-<section class="musicas-grid-container">
-<div class="musicas-grid" id="list-musicas" aria-live="polite">
-<div class="empty-state"><p class="empty-text" style="grid-column-start:1;grid-column-end:-1;">Aguardando playlists...</p></div>
-</div>
-</section>
-</div>
+    <nav class="filter-wrapper" id="filter-filmes" role="tablist">
+      <button class="ftab active" data-filter="todos" data-section="filmes" role="tab">Todos</button>
+      <button class="ftab" data-filter="assistir" data-section="filmes" role="tab">Para Assistir</button>
+      <button class="ftab" data-filter="assistido" data-section="filmes" role="tab">Assistidos</button>
+    </nav>
+    <div class="genre-wrapper" id="genreRow-filmes"></div>
 
+    <section class="slider-section">
+      <div class="gallery-layout">
+        <div class="gallery-main cinematic-screen" id="gallery-main-filmes">
+          <div class="empty-state"><p class="empty-text">Aguardando filmes...</p></div>
+        </div>
+        <div class="gallery-side">
+          <button id="slider-prev-filmes" class="slider-btn prev" onclick="window.prevSlide('filmes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <div class="slider-track" id="list-filmes" aria-live="polite"></div>
+          <button id="slider-next-filmes" class="slider-btn next" onclick="window.nextSlide('filmes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="section-series" class="media-section">
+    <header class="filmes-header">
+      <span class="filmes-eyebrow">episódio após episódio</span>
+      <h1 class="filmes-title">nossas <span class="filmes-accent">séries</span></h1>
+      <p class="filmes-subtitle">maratonas com minha vida</p>
+    </header>
+
+    <section class="progress-wrapper">
+      <div class="progress-details">
+        <span class="progress-label-text">Concluídas</span>
+        <strong class="progress-number" id="progressLabel-series">0 / 0</strong>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill-series"></div></div>
+    </section>
+
+    <section class="form-wrapper">
+      <h2 class="form-title">Adicionar Série</h2>
+      <form id="form-series" class="form-layout">
+        <div class="field-group span-full custom-poster-layout">
+          <div class="input-relative">
+            <input type="text" id="sTitle" class="field-input" placeholder=" " required>
+            <label class="field-label">Título da Série</label>
+          </div>
+          <div id="poster-preview-box-series" class="poster-preview-box">
+            <svg id="poster-placeholder-icon-series" class="poster-placeholder-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="7" width="20" height="15" rx="2"></rect></svg>
+            <img id="poster-preview-img-series" src="" alt="Capa" class="poster-preview-img" style="display:none;">
+          </div>
+        </div>
+        <div class="field-group">
+          <input type="date" id="sTargetDate" class="field-input">
+          <label class="field-label static-label">Quando vamos começar?</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="sGenre" class="field-input" placeholder=" ">
+          <label class="field-label">Gênero</label>
+        </div>
+        <div class="field-group">
+          <input type="number" id="sYear" class="field-input" placeholder=" " min="1900" max="2100">
+          <label class="field-label">Ano</label>
+        </div>
+        <div class="field-group">
+          <input type="number" id="sSeasons" class="field-input" placeholder=" " min="1">
+          <label class="field-label">Temporadas</label>
+        </div>
+        <div class="field-group">
+          <select id="sStatus" class="field-input field-select">
+            <option value="quero ver">Quero Ver</option>
+            <option value="assistindo">Assistindo</option>
+            <option value="concluida">Concluída</option>
+          </select>
+          <label class="field-label static-label">Status</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="sWho" class="field-input" placeholder=" ">
+          <label class="field-label">Quem indicou?</label>
+        </div>
+        <div class="field-group span-full">
+          <input type="text" id="sWhere" class="field-input" placeholder=" ">
+          <label class="field-label">Onde assistir?</label>
+        </div>
+        <div class="field-group">
+          <select id="sRatingHesron" class="field-input field-select">
+            <option value="">Ainda não avaliou</option><option value="1">1 Est</option><option value="2">2 Est</option><option value="3">3 Est</option><option value="4">4 Est</option><option value="5">5 Est</option>
+          </select>
+          <label class="field-label static-label">Nota do Hesron</label>
+        </div>
+        <div class="field-group">
+          <select id="sRatingTiago" class="field-input field-select">
+            <option value="">Ainda não avaliou</option><option value="1">1 Est</option><option value="2">2 Est</option><option value="3">3 Est</option><option value="4">4 Est</option><option value="5">5 Est</option>
+          </select>
+          <label class="field-label static-label">Nota do Tiago</label>
+        </div>
+        <div class="field-group span-full">
+          <button class="btn-submit" id="btn-add-series" type="submit">Adicionar Série</button>
+        </div>
+      </form>
+    </section>
+
+    <nav class="filter-wrapper" id="filter-series" role="tablist">
+      <button class="ftab active" data-filter="todos" data-section="series" role="tab">Todas</button>
+      <button class="ftab" data-filter="quero ver" data-section="series" role="tab">Quero Ver</button>
+      <button class="ftab" data-filter="assistindo" data-section="series" role="tab">Assistindo</button>
+      <button class="ftab" data-filter="concluida" data-section="series" role="tab">Concluídas</button>
+    </nav>
+    <div class="genre-wrapper" id="genreRow-series"></div>
+
+    <section class="slider-section">
+      <div class="gallery-layout">
+        <div class="gallery-main cinematic-screen" id="gallery-main-series"><div class="empty-state"><p class="empty-text">Aguardando séries...</p></div></div>
+        <div class="gallery-side">
+          <button id="slider-prev-series" class="slider-btn prev" onclick="window.prevSlide('series')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <div class="slider-track" id="list-series" aria-live="polite"></div>
+          <button id="slider-next-series" class="slider-btn next" onclick="window.nextSlide('series')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="section-jogos" class="media-section">
+    <header class="filmes-header">
+      <span class="filmes-eyebrow">player 1 & player 2</span>
+      <h1 class="filmes-title">nossos <span class="filmes-accent">jogos</span></h1>
+      <p class="filmes-subtitle">vem p debaixo da coberta jogar cmg</p>
+    </header>
+
+    <section class="progress-wrapper">
+      <div class="progress-details">
+        <span class="progress-label-text">Zerados</span>
+        <strong class="progress-number" id="progressLabel-jogos">0 / 0</strong>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill-jogos"></div></div>
+    </section>
+
+    <section class="form-wrapper">
+      <h2 class="form-title">Adicionar Jogo</h2>
+      <form id="form-jogos" class="form-layout">
+        <div class="field-group span-full custom-poster-layout">
+          <div class="input-relative">
+            <input type="text" id="jTitle" class="field-input" placeholder=" " required>
+            <label class="field-label">Título do Jogo</label>
+          </div>
+          <div id="poster-preview-box-jogos" class="poster-preview-box">
+            <svg id="poster-placeholder-icon-jogos" class="poster-placeholder-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="6" width="20" height="12" rx="4"></rect></svg>
+            <img id="poster-preview-img-jogos" src="" alt="Capa" class="poster-preview-img" style="display:none;">
+          </div>
+        </div>
+        <div class="field-group">
+          <input type="date" id="jTargetDate" class="field-input">
+          <label class="field-label static-label">Quando vamos jogar?</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="jGenre" class="field-input" placeholder=" ">
+          <label class="field-label">Gênero</label>
+        </div>
+        <div class="field-group">
+          <input type="number" id="jYear" class="field-input" placeholder=" " min="1900" max="2100">
+          <label class="field-label">Ano</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="jPlatform" class="field-input" placeholder=" ">
+          <label class="field-label">Plataforma</label>
+        </div>
+        <div class="field-group">
+          <select id="jStatus" class="field-input field-select">
+            <option value="quero jogar">Quero Jogar</option>
+            <option value="jogando">Jogando</option>
+            <option value="zerado">Zerado</option>
+          </select>
+          <label class="field-label static-label">Status</label>
+        </div>
+        <div class="field-group">
+          <input type="text" id="jWho" class="field-input" placeholder=" ">
+          <label class="field-label">Quem indicou?</label>
+        </div>
+        <div class="field-group span-full">
+          <input type="text" id="jWhere" class="field-input" placeholder=" ">
+          <label class="field-label">Onde jogar?</label>
+        </div>
+        <div class="field-group span-full">
+          <button class="btn-submit" id="btn-add-jogos" type="submit">Adicionar Jogo</button>
+        </div>
+      </form>
+    </section>
+
+    <nav class="filter-wrapper" id="filter-jogos" role="tablist">
+      <button class="ftab active" data-filter="todos" data-section="jogos" role="tab">Todos</button>
+      <button class="ftab" data-filter="quero jogar" data-section="jogos" role="tab">Quero Jogar</button>
+      <button class="ftab" data-filter="jogando" data-section="jogos" role="tab">Jogando</button>
+      <button class="ftab" data-filter="zerado" data-section="jogos" role="tab">Zerados</button>
+    </nav>
+    <div class="genre-wrapper" id="genreRow-jogos"></div>
+
+    <section class="slider-section">
+      <div class="gallery-layout">
+        <div class="gallery-main cinematic-screen" id="gallery-main-jogos"><div class="empty-state"><p class="empty-text">Aguardando jogos...</p></div></div>
+        <div class="gallery-side">
+          <button id="slider-prev-jogos" class="slider-btn prev" onclick="window.prevSlide('jogos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <div class="slider-track" id="list-jogos" aria-live="polite"></div>
+          <button id="slider-next-jogos" class="slider-btn next" onclick="window.nextSlide('jogos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="section-musicas" class="media-section">
+    <header class="filmes-header">
+      <span class="filmes-eyebrow">algumas</span>
+      <h1 class="filmes-title">nossas <span class="filmes-accent">músicas</span></h1>
+      <p class="filmes-subtitle">que me fazem lembrar de você</p>
+    </header>
+
+    <section class="form-wrapper">
+      <h2 class="form-title">Adicionar Playlist</h2>
+      <form id="form-musicas" class="form-layout">
+        <div class="field-group span-full">
+          <input type="text" id="mTitle" class="field-input" placeholder=" " autocomplete="off" required>
+          <label for="mTitle" class="field-label">Título da Playlist</label>
+        </div>
+        <div class="field-group span-full">
+          <input type="text" id="mLink" class="field-input" placeholder=" " required>
+          <label for="mLink" class="field-label">Link do Spotify / Apple Music</label>
+        </div>
+        <div class="field-group span-full">
+          <button class="btn-submit" id="btn-add-musicas" type="submit">Adicionar Mídia</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="musicas-grid-container">
+      <div class="musicas-grid" id="list-musicas" aria-live="polite">
+        <div class="empty-state" style="grid-column: 1 / -1;"><p class="empty-text">Aguardando playlists...</p></div>
+      </div>
+    </section>
+  </div>
 </main>
 
-<dialog id="edit-dialog-filmes" aria-labelledby="edit-filmes-label">
-<div class="dialog-header">
-<h3 id="edit-filmes-label" style="margin:0;font-family:var(--font-display,sans-serif);">Editar Filme</h3>
-<button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-filmes').close()">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-</button>
-</div>
-<form id="edit-form-filmes" class="form-layout">
-<input type="hidden" id="edit-filmes-key">
-<div class="field-group span-full"><label class="field-label">Título</label><input type="text" id="edit-filmes-title" class="field-input" required></div>
-<div class="field-group"><label class="field-label">Data</label><input type="date" id="edit-filmes-date" class="field-input"></div>
-<div class="field-group"><label class="field-label">Gênero</label><input type="text" id="edit-filmes-genre" class="field-input"></div>
-<div class="field-group"><label class="field-label">Ano</label><input type="number" id="edit-filmes-year" class="field-input" min="1900" max="2100"></div>
-<div class="field-group"><label class="field-label">Quem indicou?</label><input type="text" id="edit-filmes-who" class="field-input"></div>
-<div class="field-group"><label class="field-label">Onde assistir?</label><input type="text" id="edit-filmes-where" class="field-input"></div>
-<div class="field-group"><label class="field-label">Nota do Hesron</label>
-<select id="edit-filmes-rating-hesron" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group"><label class="field-label">Nota do Tiago</label>
-<select id="edit-filmes-rating-tiago" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group span-full">
-<button class="btn-submit" id="btn-edit-filmes-submit" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-<span>Salvar Alterações</span>
-</button>
-</div>
-</form>
+<dialog id="edit-dialog-filmes">
+  <div class="dialog-header">
+    <h3 id="edit-filmes-label">Editar Filme</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-filmes').close()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="edit-form-filmes" class="form-layout">
+    <input type="hidden" id="edit-filmes-key">
+    <div class="field-group span-full"><input type="text" id="edit-filmes-title" class="field-input" required><label class="field-label static-label">Título</label></div>
+    <div class="field-group"><input type="date" id="edit-filmes-date" class="field-input"><label class="field-label static-label">Data</label></div>
+    <div class="field-group"><input type="text" id="edit-filmes-genre" class="field-input"><label class="field-label static-label">Gênero</label></div>
+    <div class="field-group"><input type="number" id="edit-filmes-year" class="field-input" min="1900" max="2100"><label class="field-label static-label">Ano</label></div>
+    <div class="field-group"><input type="text" id="edit-filmes-who" class="field-input"><label class="field-label static-label">Quem indicou?</label></div>
+    <div class="field-group"><input type="text" id="edit-filmes-where" class="field-input"><label class="field-label static-label">Onde assistir?</label></div>
+    <div class="field-group">
+      <select id="edit-filmes-rating-hesron" class="field-input field-select"><option value="">Sem avaliação</option><option value="1">1 Estrela</option><option value="2">2 Estrelas</option><option value="3">3 Estrelas</option><option value="4">4 Estrelas</option><option value="5">5 Estrelas</option></select>
+      <label class="field-label static-label">Nota do Hesron</label>
+    </div>
+    <div class="field-group">
+      <select id="edit-filmes-rating-tiago" class="field-input field-select"><option value="">Sem avaliação</option><option value="1">1 Estrela</option><option value="2">2 Estrelas</option><option value="3">3 Estrelas</option><option value="4">4 Estrelas</option><option value="5">5 Estrelas</option></select>
+      <label class="field-label static-label">Nota do Tiago</label>
+    </div>
+    <div class="field-group span-full"><button class="btn-submit" id="btn-edit-filmes-submit" type="submit">Salvar Alterações</button></div>
+  </form>
 </dialog>
 
-<dialog id="edit-dialog-series" aria-labelledby="edit-series-label">
-<div class="dialog-header">
-<h3 id="edit-series-label" style="margin:0;font-family:var(--font-display,sans-serif);">Editar Série</h3>
-<button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-series').close()">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-</button>
-</div>
-<form id="edit-form-series" class="form-layout">
-<input type="hidden" id="edit-series-key">
-<div class="field-group span-full"><label class="field-label">Título</label><input type="text" id="edit-series-title" class="field-input" required></div>
-<div class="field-group"><label class="field-label">Data</label><input type="date" id="edit-series-date" class="field-input"></div>
-<div class="field-group"><label class="field-label">Gênero</label><input type="text" id="edit-series-genre" class="field-input"></div>
-<div class="field-group"><label class="field-label">Ano</label><input type="number" id="edit-series-year" class="field-input" min="1900" max="2100"></div>
-<div class="field-group"><label class="field-label">Temporadas</label><input type="number" id="edit-series-seasons" class="field-input" min="1"></div>
-<div class="field-group"><label class="field-label">Status</label>
-<select id="edit-series-status" class="field-input field-select">
-<option value="quero ver">Quero Ver</option>
-<option value="assistindo">Assistindo</option>
-<option value="concluida">Concluída</option>
-</select>
-</div>
-<div class="field-group"><label class="field-label">Quem indicou?</label><input type="text" id="edit-series-who" class="field-input"></div>
-<div class="field-group"><label class="field-label">Onde assistir?</label><input type="text" id="edit-series-where" class="field-input"></div>
-<div class="field-group"><label class="field-label">Nota do Hesron</label>
-<select id="edit-series-rating-hesron" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group"><label class="field-label">Nota do Tiago</label>
-<select id="edit-series-rating-tiago" class="field-input field-select">
-<option value="">Ainda não avaliou</option>
-<option value="1">1 Estrela</option>
-<option value="2">2 Estrelas</option>
-<option value="3">3 Estrelas</option>
-<option value="4">4 Estrelas</option>
-<option value="5">5 Estrelas</option>
-</select>
-</div>
-<div class="field-group span-full">
-<button class="btn-submit btn-submit-series" id="btn-edit-series-submit" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-<span>Salvar Alterações</span>
-</button>
-</div>
-</form>
+<dialog id="edit-dialog-series">
+  <div class="dialog-header">
+    <h3 id="edit-series-label">Editar Série</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-series').close()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+  </div>
+  <form id="edit-form-series" class="form-layout">
+    <input type="hidden" id="edit-series-key">
+    <div class="field-group span-full"><input type="text" id="edit-series-title" class="field-input" required><label class="field-label static-label">Título</label></div>
+    <div class="field-group"><input type="date" id="edit-series-date" class="field-input"><label class="field-label static-label">Data</label></div>
+    <div class="field-group"><input type="text" id="edit-series-genre" class="field-input"><label class="field-label static-label">Gênero</label></div>
+    <div class="field-group"><input type="number" id="edit-series-year" class="field-input"><label class="field-label static-label">Ano</label></div>
+    <div class="field-group"><input type="number" id="edit-series-seasons" class="field-input" min="1"><label class="field-label static-label">Temporadas</label></div>
+    <div class="field-group">
+      <select id="edit-series-status" class="field-input field-select"><option value="quero ver">Quero Ver</option><option value="assistindo">Assistindo</option><option value="concluida">Concluída</option></select>
+      <label class="field-label static-label">Status</label>
+    </div>
+    <div class="field-group"><input type="text" id="edit-series-who" class="field-input"><label class="field-label static-label">Quem indicou?</label></div>
+    <div class="field-group"><input type="text" id="edit-series-where" class="field-input"><label class="field-label static-label">Onde assistir?</label></div>
+    <div class="field-group span-full"><button class="btn-submit" type="submit">Salvar Alterações</button></div>
+  </form>
 </dialog>
 
-<dialog id="edit-dialog-jogos" aria-labelledby="edit-jogos-label">
-<div class="dialog-header">
-<h3 id="edit-jogos-label" style="margin:0;font-family:var(--font-display,sans-serif);">Editar Jogo</h3>
-<button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-jogos').close()">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-</button>
-</div>
-<form id="edit-form-jogos" class="form-layout">
-<input type="hidden" id="edit-jogos-key">
-<div class="field-group span-full"><label class="field-label">Título</label><input type="text" id="edit-jogos-title" class="field-input" required></div>
-<div class="field-group"><label class="field-label">Data</label><input type="date" id="edit-jogos-date" class="field-input"></div>
-<div class="field-group"><label class="field-label">Gênero</label><input type="text" id="edit-jogos-genre" class="field-input"></div>
-<div class="field-group"><label class="field-label">Ano</label><input type="number" id="edit-jogos-year" class="field-input" min="1900" max="2100"></div>
-<div class="field-group"><label class="field-label">Plataforma</label><input type="text" id="edit-jogos-platform" class="field-input"></div>
-<div class="field-group"><label class="field-label">Status</label>
-<select id="edit-jogos-status" class="field-input field-select">
-<option value="quero jogar">Quero Jogar</option>
-<option value="jogando">Jogando</option>
-<option value="zerado">Zerado</option>
-</select>
-</div>
-<div class="field-group"><label class="field-label">Quem indicou?</label><input type="text" id="edit-jogos-who" class="field-input"></div>
-<div class="field-group span-full"><label class="field-label">Onde jogar?</label><input type="text" id="edit-jogos-where" class="field-input"></div>
-<div class="field-group span-full">
-<button class="btn-submit btn-submit-jogos" id="btn-edit-jogos-submit" type="submit">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-<span>Salvar Alterações</span>
-</button>
-</div>
-</form>
+<dialog id="edit-dialog-jogos">
+  <div class="dialog-header">
+    <h3 id="edit-jogos-label">Editar Jogo</h3>
+    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-jogos').close()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+  </div>
+  <form id="edit-form-jogos" class="form-layout">
+    <input type="hidden" id="edit-jogos-key">
+    <div class="field-group span-full"><input type="text" id="edit-jogos-title" class="field-input" required><label class="field-label static-label">Título</label></div>
+    <div class="field-group"><input type="date" id="edit-jogos-date" class="field-input"><label class="field-label static-label">Data</label></div>
+    <div class="field-group"><input type="text" id="edit-jogos-genre" class="field-input"><label class="field-label static-label">Gênero</label></div>
+    <div class="field-group"><input type="text" id="edit-jogos-platform" class="field-input"><label class="field-label static-label">Plataforma</label></div>
+    <div class="field-group">
+      <select id="edit-jogos-status" class="field-input field-select"><option value="quero jogar">Quero Jogar</option><option value="jogando">Jogando</option><option value="zerado">Zerado</option></select>
+      <label class="field-label static-label">Status</label>
+    </div>
+    <div class="field-group span-full"><button class="btn-submit" type="submit">Salvar Alterações</button></div>
+  </form>
 </dialog>
+
+<!-- NOVO: toast de feedback — controlado via JS: elemento.textContent = '...'; elemento.className = 'toast toast--success show'; -->
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script type="module" src="{{ url_for('static', filename='js/filmes.js') }}"></script>
 {% endblock %}

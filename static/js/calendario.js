@@ -2,8 +2,8 @@ import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase
 import { db } from "/static/js/app.js";
 
 const START = new Date(2025, 10, 29);
-const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const DOW_FULL = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MONTHS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+const DOW_FULL = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
 const todayLoad = new Date();
 let viewMonth = todayLoad.getMonth();
@@ -49,6 +49,7 @@ window.goToToday = function() {
   renderCalendar(true);
 };
 
+// Escutas Assíncronas do Realtime Database
 onValue(ref(db, 'viagens'), snap => { rawData.viagens = snap.val(); processEvents(); });
 onValue(ref(db, 'filmes'), snap => { rawData.filmes = snap.val(); processEvents(); });
 onValue(ref(db, 'coisinhas'), snap => { rawData.coisinhas = snap.val(); processEvents(); });
@@ -114,12 +115,14 @@ function renderCalendar(animate = true) {
 
     const gridFrag = document.createDocumentFragment();
 
+    // Dias vazios do mês anterior
     for (let i = 0; i < firstDay; i++) {
       const empty = document.createElement('div');
       empty.className = 'day empty';
       gridFrag.appendChild(empty);
     }
 
+    // Construção da grade de dias estilo convite impresso
     for (let d = 1; d <= totalDays; d++) {
       const cell = document.createElement('div');
       const thisDate = new Date(viewYear, viewMonth, d);
@@ -137,15 +140,17 @@ function renderCalendar(animate = true) {
       if (!isPast && !isToday) cls += ' future';
 
       cell.className = cls;
-      cell.style.animationDelay = `${(d * 0.015).toFixed(3)}s`;
+      cell.style.animationDelay = `${(d * 0.012).toFixed(3)}s`;
       
       let innerHTML = `<span class="day-num">${d}</span>`;
 
+      // Tratamento especial para o grande dia 29 (Mesversário)
       if (isAnniv) {
-        const annivTitle = monthCount === 0 ? 'Início do nosso namoro' : `${monthCount} ${monthCount === 1 ? 'mês' : 'meses'} de namoro`;
+        const annivTitle = monthCount === 0 ? 'Início da nossa história' : `${monthCount}º com mia vida`;
         monthEventsRender.push({ date: d, dow: DOW_FULL[thisDate.getDay()], type: 'anniv', label: 'Mesversário', title: annivTitle });
       }
 
+      // Injeção de pontos sutis nos dias com eventos agendados
       if (dayEvents.length > 0) {
         let tooltips = dayEvents.map(e => e.title).join(' • ');
         if (isToday) tooltips = `Hoje | ` + tooltips;
@@ -162,7 +167,7 @@ function renderCalendar(animate = true) {
       } else {
         if (isToday) cell.setAttribute('data-tip', 'Hoje');
         else if (isAnniv) {
-          const tip = monthCount === 0 ? 'Início do nosso namoro' : `${monthCount} meses juntos`;
+          const tip = monthCount === 0 ? 'Início do nosso namoro' : `${monthCount} meses de nós`;
           cell.setAttribute('data-tip', tip);
         }
       }
@@ -174,6 +179,7 @@ function renderCalendar(animate = true) {
     grid.appendChild(gridFrag);
     monthEventsRender.sort((a, b) => a.date - b.date);
 
+    // Geração da Linha do Tempo (Roteiro da Cerimônia)
     const listFrag = document.createDocumentFragment();
     
     if (monthEventsRender.length === 0) {
@@ -185,7 +191,7 @@ function renderCalendar(animate = true) {
       monthEventsRender.forEach((ev, idx) => {
         const row = document.createElement('div');
         row.className = 'event-row';
-        row.style.animationDelay = `${(idx * 0.08).toFixed(2)}s`; 
+        row.style.animationDelay = `${(idx * 0.06).toFixed(2)}s`; 
         row.innerHTML = `
           <div class="event-date-box">
             <span class="event-date-num">${pad(ev.date)}</span>
@@ -193,9 +199,9 @@ function renderCalendar(animate = true) {
           </div>
           <div class="event-details">
             <span class="event-type-badge">
-              <span class="e-dot dot-${ev.type}"></span> ${ev.label}
+              ✦ ${ev.label}
             </span>
-            <span class="event-title">${ev.title}</span>
+            <h2 class="event-title">${ev.title}</h2>
           </div>
         `;
         listFrag.appendChild(row);
@@ -204,12 +210,14 @@ function renderCalendar(animate = true) {
     
     listContainer.appendChild(listFrag);
 
+    // Sincroniza os dropdowns seletores visuais
     const monthSelectEl = document.getElementById('monthSelect');
     const yearSelectEl = document.getElementById('yearSelect');
     if (monthSelectEl) monthSelectEl.value = viewMonth;
     if (yearSelectEl) yearSelectEl.value = viewYear;
   };
 
+  // Orquestração de transições suaves de folheamento
   if (isInitialRender || !animate) {
     buildDOM();
   } else {

@@ -28,8 +28,8 @@
 
     <section class="form-wrapper" aria-label="Adicionar nova coisinha">
       <h2 class="form-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-        Adicionar Item
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        Adicionar ao Menu
       </h2>
       <form id="add-form" class="form-layout" novalidate>
         <div class="field-group span-full" style="display:flex; gap:16px; align-items:flex-start;">
@@ -38,7 +38,7 @@
             <input type="text" id="title" name="title" class="field-input" placeholder="ex: fazer um piquenique no parque..." autocomplete="off" required>
           </div>
           <div id="poster-preview-box" class="poster-preview-box">
-            <svg id="poster-placeholder-icon" class="poster-placeholder-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <svg id="poster-placeholder-icon" class="poster-placeholder-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
             <img id="poster-preview-img" src="" alt="Capa" class="poster-preview-img" style="display:none;">
           </div>
         </div>
@@ -66,8 +66,7 @@
 
         <div class="field-group span-full">
           <button type="submit" class="btn-submit btn-submit-coisinhas" id="btn-add-coisinhas">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>Adicionar Coisinha</span>
+            <span>Adicionar Experiência</span>
           </button>
         </div>
       </form>
@@ -84,7 +83,7 @@
 
     <section class="minimal-slider-section">
       <button id="slider-prev-coisinhas" class="min-nav-btn prev" aria-label="Anterior" onclick="window.prevSlide()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
       </button>
 
       <div class="min-track-container" id="track-container">
@@ -94,7 +93,7 @@
       </div>
 
       <button id="slider-next-coisinhas" class="min-nav-btn next" aria-label="Próximo" onclick="window.nextSlide()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
       </button>
     </section>
 
@@ -102,9 +101,9 @@
 
   <dialog id="edit-dialog" aria-labelledby="edit-dialog-label">
     <div class="dialog-header">
-      <h3 id="edit-dialog-label" style="margin:0;font-family:var(--font-display,sans-serif);">Editar Coisinha</h3>
+      <h3 id="edit-dialog-label">Editar Coisinha</h3>
       <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
     <form id="edit-form" class="form-layout" novalidate>
@@ -134,7 +133,6 @@
       </div>
       <div class="field-group span-full">
         <button class="btn-submit btn-submit-coisinhas" type="submit">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
           <span>Salvar Alterações</span>
         </button>
       </div>

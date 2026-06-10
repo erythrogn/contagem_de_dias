@@ -1,122 +1,125 @@
+.cinematic-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 50% 0%, rgba(241, 210, 153, 0.05) 0%, transparent 60%);
+  z-index: 0;
+}
+
+.projector-light {
+  position: fixed;
+  top: -20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150vw;
+  height: 40vh;
+  background-image: radial-gradient(ellipse at center, rgba(241, 210, 153, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation-name: projectorFlicker;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* ─── CONTAINER PRINCIPAL ─────────────────────────────────── */
+
 .filmes-container {
-max-width: 1280px; margin: 0 auto; padding: 6.5rem 1.5rem 6rem 1.5rem; position: relative; z-index: 1;
+  max-width: 1440px;
+  margin-top: 0;
+  margin-right: auto;
+  margin-bottom: 0;
+  margin-left: auto;
+  padding-top: 6rem;
+  padding-right: 3rem;
+  padding-bottom: 8rem;
+  padding-left: 3rem;
+  position: relative;
+  z-index: 10;
+  /* NOTA: margin-left: 80px compensa a sidebar fixa do layout base */
+  margin-left: 80px;
+  display: flex;
+  flex-direction: column;
 }
+
+/* ─── HEADER DA SEÇÃO ─────────────────────────────────────── */
+
 .filmes-header {
-text-align: center; margin-bottom: 2.5rem; opacity: 0;
-animation: riseUpFilmes 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; transform-style: preserve-3d;
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
 }
+
 .filmes-eyebrow {
-font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.38em; text-transform: uppercase;
-color: var(--amber); display: block; margin-bottom: 0.75rem; opacity: 0.8; text-shadow: 0 0 12px rgba(240, 180, 41, 0.4); transform: translateZ(10px);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  display: block;
+  margin-bottom: 1.2rem;
+  opacity: 0.8;
 }
+
 .filmes-title {
-font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 200; color: var(--text-primary);
-letter-spacing: -0.01em; margin-bottom: 0.5rem; line-height: 1.1; transform: translateZ(20px);
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 300;
+  color: var(--text-light);
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+  margin-left: 0;
+  line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
+
 .filmes-accent {
-font-family: var(--font-serif); font-style: italic; font-weight: 400;
-background-image: linear-gradient(135deg, var(--cyan-bright) 0%, var(--amber) 50%, var(--amber-bright) 100%);
-background-size: 200% auto; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-filter: drop-shadow(0 4px 16px rgba(240, 180, 41, 0.3));
-animation: gradientShiftFilmes 6s linear infinite alternate;
+  font-style: italic;
+  color: var(--gold-soft);
+  text-shadow: var(--cinematic-glow);
 }
-.series-accent {
-background-image: linear-gradient(135deg, #a78bfa 0%, var(--cyan-bright) 100%);
-filter: drop-shadow(0 4px 16px rgba(167, 139, 250, 0.3));
-}
-.jogos-accent {
-background-image: linear-gradient(135deg, #f472b6 0%, var(--amber) 100%);
-filter: drop-shadow(0 4px 16px rgba(244, 114, 182, 0.3));
-}
-.musica-accent {
-background-image: linear-gradient(135deg, #10b981 0%, var(--cyan-bright) 100%);
-filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.3));
-}
+
 .filmes-subtitle {
-font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--text-secondary); transform: translateZ(5px);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* ─── NOVO: SLIDER SECTION ────────────────────────────────── */
+/*
+ * CORRIGIDO: .slider-section era usado no HTML mas não tinha definição no CSS.
+ * Adicionado para garantir espaçamento e z-index correto.
+ */
+
+.slider-section {
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+/* ─── RESPONSIVO ──────────────────────────────────────────── */
+
+@media (max-width: 1200px) {
+  .filmes-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
-  /* Layout e Tipografia Global */
-  .filmes-container { padding: 5rem 1rem 5rem 1rem; }
-  .filmes-title { font-size: 2.4rem; margin-bottom: 0.25rem; }
-  .filmes-subtitle { font-size: 0.95rem; }
-
-  /* Navegação em Abas (Scroll Horizontal Suave) */
-  .main-tabs-wrapper { 
-    width: 100%; 
-    border-radius: var(--r-lg); 
-    overflow-x: auto; 
-    justify-content: flex-start; 
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; 
-  }
-  .main-tabs-wrapper::-webkit-scrollbar { display: none; }
-  .main-tab { 
-    flex: 1 0 auto; 
-    justify-content: center; 
-    padding: 0.85rem 1.25rem; 
-    font-size: 0.75rem; 
-    white-space: nowrap; 
+  .filmes-container {
+    margin-left: 0;
+    padding-top: 5rem;
+    padding-bottom: 120px;
   }
 
-  /* Galeria Principal */
-  .gallery-layout { flex-direction: column; height: auto; gap: 1rem; }
-  .gallery-main { 
-    height: 55vh; 
-    min-height: 400px; 
-    max-height: 500px;
-    width: 100%; 
-    border-radius: 20px;
+  .filmes-title {
+    font-size: 2.5rem;
   }
-  .gallery-main-overlay { 
-    padding: 1.5rem; 
-    background-image: linear-gradient(to top, rgba(10, 12, 16, 0.98) 0%, rgba(10, 12, 16, 0.6) 45%, transparent 100%); 
-  }
-  .gallery-main-title { font-size: 2rem; margin-bottom: 0.25rem; }
-  .gallery-main-meta { font-size: 0.65rem; margin-bottom: 1.25rem; }
-
-  /* Ajuste de Botões de Ação para Mobile (Touch Target Maior) */
-  .movie-action-btn { width: 44px; height: 44px; }
-  .movie-action-btn svg { width: 20px; height: 20px; }
-
-  /* Slider (Transformado para Horizontal) */
-  .gallery-side { width: 100%; flex-direction: row; height: auto; align-items: center; gap: 0.5rem; }
-  .slider-track { 
-    flex-direction: row; 
-    overflow-x: auto; 
-    overflow-y: hidden; 
-    scroll-snap-type: x mandatory; 
-    padding: 0.5rem; 
-    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%); 
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%); 
-  }
-  .slider-card { width: 85px; height: auto; aspect-ratio: 2/3; }
-  
-  /* Animação do card ativo no Mobile (Indicador sobe em vez de ir para o lado) */
-  .slider-card.active { 
-    border-left-width: 0px; 
-    border-bottom: 3px solid var(--amber); 
-    transform: scale(1.05) translateY(-4px); 
-    box-shadow: 0 10px 24px -5px rgba(0, 0, 0, 0.8), 0 0 16px 0 rgba(240, 180, 41, 0.2); 
-  }
-  .slider-card.watched.active { border-bottom-color: var(--text-muted); }
-  
-  .slider-btn { width: 40px; height: 65px; }
-  .slider-btn.prev svg { transform: rotate(-90deg); }
-  .slider-btn.next svg { transform: rotate(-90deg); }
-
-  /* Formulários e Diálogos */
-  .form-wrapper { padding: 1.5rem; border-radius: var(--r-lg); margin-bottom: 1.5rem; }
-  .form-layout { grid-template-columns: 1fr; gap: 1.25rem; }
-  .field-group.span-full { grid-column: 1 / -1; }
-  
-  dialog { width: 95%; padding: 1.5rem; border-radius: var(--r-lg); }
-  .dialog-header { flex-direction: column; align-items: flex-start; gap: 1rem; position: relative; }
-  .btn-close-dialog { position: absolute; right: 0; top: 0; }
-
-  /* Músicas Grid */
-  .musicas-grid { grid-template-columns: 1fr; gap: 1rem; }
-  .musica-card { padding: 1.25rem; }
-  .musica-iframe-wrapper iframe { height: 250px; }
 }
