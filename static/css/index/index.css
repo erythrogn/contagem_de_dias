@@ -1,15 +1,20 @@
 :root {
-  /* Paleta Champagne & Ouro Nobre */
-  --champagne-canvas: rgba(253, 250, 240, 0.08);
---gold-soft: #e8c878;
---gold-dark: #6f84d8;
---text-light: #607bf3;
---text-muted: rgba(180, 194, 255, 0.65);
---border-gold: rgba(232, 200, 120, 0.25);
-  /* Fontes de Alta Costura */
+
+  --bg-dark: #040508;
+  --champagne-canvas: rgba(245, 240, 220, 0.04);
+  --gold-soft: #d4af37;
+  --gold-dark: #1e3a8a;
+  --gold-neon: rgba(212, 175, 55, 0.3);
+  --text-light: #fdfbf7;
+  --text-muted: rgba(148, 163, 184, 0.7);
+  --border-gold: rgba(212, 175, 55, 0.25);
+  --glass-bg: rgba(10, 15, 30, 0.7);
+  --glass-border: rgba(212, 175, 55, 0.15);
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
+  --cinematic-glow: 0 0 30px rgba(212, 175, 55, 0.15);
 }
+
 
 body {
   background-color: #06080d;
