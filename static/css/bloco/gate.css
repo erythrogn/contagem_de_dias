@@ -114,3 +114,15 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* Efeito elegante da linha da senha */
+.gate-input-line {
+  height: 1px;
+  width: 0;
+  background: var(--gold-soft);
+  margin: 0 auto;
+  transition: width 0.4s ease;
+}
+.gate-input:focus + .gate-input-line {
+  width: 100%;
+}

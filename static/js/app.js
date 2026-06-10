@@ -44,6 +44,9 @@ function toggleMenu() {
   const menu     = document.getElementById('navMenu');
   const overlay  = document.getElementById('overlay');
   
+  // Segurança: Se algum destes não existir na tela atual, cancela a função pacificamente
+  if (!toggle || !menu || !overlay) return;
+  
   const willBeOpen = !menu.classList.contains('active');
   
   menu.classList.toggle('active', willBeOpen);
@@ -56,24 +59,45 @@ function toggleMenu() {
   document.body.style.overflow = willBeOpen ? 'hidden' : '';
   
   if (willBeOpen) {
-    menu.querySelector('a').focus(); // foco no primeiro link
+    const firstLink = menu.querySelector('a');
+    if (firstLink) firstLink.focus();
   }
 }
 
-document.getElementById('menuToggle').addEventListener('click', toggleMenu);
-document.getElementById('overlay').addEventListener('click', toggleMenu);
+// =================================================================
+// CORREÇÃO APLICADA AQUI: 
+// O código só adiciona o clique se o botão existir no HTML
+// =================================================================
+const btnToggle = document.getElementById('menuToggle');
+const overlayEl = document.getElementById('overlay');
+
+if (btnToggle) {
+  btnToggle.addEventListener('click', toggleMenu);
+}
+
+if (overlayEl) {
+  overlayEl.addEventListener('click', toggleMenu);
+}
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.getElementById('navMenu').classList.contains('active')) {
+  const menu = document.getElementById('navMenu');
+  // Segurança: verifica se o menu existe antes de checar as suas classes
+  if (e.key === 'Escape' && menu && menu.classList.contains('active')) {
     toggleMenu();
   }
 });
 
 window.addEventListener('resize', () => {
   if (window.innerWidth > 820) {
-    document.getElementById('menuToggle').classList.remove('open');
-    document.getElementById('navMenu').classList.remove('active');
-    document.getElementById('overlay').classList.remove('active');
+    const toggle = document.getElementById('menuToggle');
+    const menu = document.getElementById('navMenu');
+    const overlay = document.getElementById('overlay');
+
+    // Segurança: remove as classes apenas se eles existirem
+    if (toggle) toggle.classList.remove('open');
+    if (menu) menu.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    
     document.body.style.overflow = '';
   }
 });

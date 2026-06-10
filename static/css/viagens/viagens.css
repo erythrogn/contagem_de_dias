@@ -1,3 +1,177 @@
-@import url("animations.css");
-@import url("components.css");
-@import url("layout.css");
+/* Importa a base estética de Ouro Fosco e Minimalismo */
+@import url("../bloco/animations.css");
+@import url("../bloco/forms.css");
+@import url("../bloco/layout.css");
+
+:root {
+  --bg-dark: #06080d;
+  --champagne-canvas: rgba(253, 250, 240, 0.04);
+  --gold-soft: #f1d299;
+  --gold-dark: #dca852;
+  --text-light: #fefefe;
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --border-gold: rgba(241, 210, 153, 0.15);
+  
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   VIAGENS GRID & CARDS
+   ============================================================ */
+
+.viagens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  margin-bottom: 4rem;
+}
+
+.viagem-card {
+  background: var(--champagne-canvas);
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  animation: riseUpMinimal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.viagem-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(241, 210, 153, 0.35);
+}
+
+.viagem-img-box {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.viagem-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s ease;
+  /* Efeito de revelação de filme clássico */
+  filter: grayscale(0.2) sepia(0.2) brightness(0.85);
+}
+
+.viagem-card:hover .viagem-img {
+  transform: scale(1.08);
+}
+
+.viagem-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--bg-dark) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.viagem-status {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(6, 8, 13, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid transparent;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  z-index: 2;
+}
+
+.viagem-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.viagem-destiny {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--text-light);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.viagem-date {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.viagem-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(241, 210, 153, 0.1);
+}
+
+/* Modificadores do Select (Para não ficarem pretos no Chrome) */
+.select-field {
+  appearance: none;
+  background-color: transparent;
+  color: var(--text-light);
+}
+
+.select-field option {
+  background-color: var(--bg-dark);
+  color: var(--gold-soft);
+  padding: 10px;
+}
+
+/* Modal de Edição (Ajustes caso o CSS base não tenha pegado) */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-gold);
+  padding-bottom: 1rem;
+}
+
+.dialog-header h3 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.8rem;
+  color: var(--gold-soft);
+  margin: 0;
+}
+
+.btn-close-dialog {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.btn-close-dialog:hover {
+  transform: rotate(90deg);
+  color: var(--text-light);
+}

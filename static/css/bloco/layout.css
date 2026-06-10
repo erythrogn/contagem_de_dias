@@ -1,12 +1,22 @@
+#bloco-content {
+  padding-left: 80px; /* Espaço exato do menu lateral */
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center; /* Centraliza a div .wrap horizontalmente */
+}
+
+/* --- O Filho (Sempre no centro absoluto do espaço restante) --- */
 .wrap {
   max-width: 900px;
+  width: 100%;
   margin: 0 auto;
   padding: 6rem 2rem;
-  margin-left: 80px; /* Compensar o header fixo */
   position: relative;
   z-index: 1;
 }
 
+/* --- Cabeçalhos da Página --- */
 .page-header {
   text-align: center;
   margin-bottom: 4rem;
@@ -51,7 +61,38 @@
   background: var(--border-gold);
 }
 
+/* --- Responsividade para Celulares --- */
 @media (max-width: 768px) {
-  .wrap { margin-left: 0; padding: 4rem 1.5rem 100px; }
-  .page-title { font-size: 2.2rem; }
+  #bloco-content {
+    padding-left: 0; /* No celular o menu fica embaixo, então zera a esquerda */
+    padding-bottom: 80px; /* Adiciona espaço para não sobrepor o menu no fundo */
+  }
+  
+  .wrap { 
+    padding: 4rem 1.5rem; 
+  }
+  
+  .page-title { 
+    font-size: 2.2rem; 
+  }
+}
+/* --- Form Grid (Usado no Modal de Edição) --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 1.5rem;
+}
+.form-grid .span2 { grid-column: 1 / -1; }
+
+.floating-group { position: relative; }
+.floating-input {
+  width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-gold);
+  color: var(--text-light); font-family: var(--font-sans); padding: 0.5rem 0; outline: none; transition: 0.3s;
+}
+.floating-label {
+  position: absolute; left: 0; top: 8px; color: var(--text-muted); font-family: var(--font-serif);
+  font-style: italic; pointer-events: none; transition: 0.3s;
+}
+.floating-input:focus ~ .floating-label, .floating-input:not(:placeholder-shown) ~ .floating-label {
+  top: -18px; font-size: 0.65rem; color: var(--gold-soft); font-family: var(--font-sans); text-transform: uppercase; font-style: normal; letter-spacing: 2px;
 }

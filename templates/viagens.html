@@ -1,292 +1,266 @@
 {% extends 'base.html' %}
 
-{% block title %}Viagens · tamo junto{% endblock %}
+{% block title %}Nossas Viagens · tamo junto{% endblock %}
 
 {% block styles %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="{{ url_for('static', filename='css/viagens/viagens.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 {% endblock %}
 
 {% block content %}
-<div class="wrap">
-
+<div id="viagens-content" class="wrap" style="opacity: 0; transform: translateY(20px);">
+  
   <header class="page-header">
-    <span class="eyebrow">lugares para explorar juntos</span>
-    <h1 class="page-title">Nossa lista de<br><em>Viagens</em></h1>
-    <p class="page-sub">cada destino só vai valer a pena pq é com voce</p>
+    <span class="eyebrow">Pelo Mundo</span>
+    <h1 class="page-title">Nossas <em>Aventuras</em></h1>
+    <p class="page-sub">Lugares que conhecemos e destinos que sonhamos.</p>
+    <div class="header-decorator"></div>
   </header>
 
-  <div class="stats-bar" aria-label="Estatísticas de viagens">
-    <div class="stat">
-      <div class="stat-num" id="s-total">0</div>
-      <div class="stat-label">Destinos</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" id="s-sonhos" style="color: var(--gold-pale);">0</div>
-      <div class="stat-label">Sonhos</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" id="s-feitas" style="color: #4da6ff;">0</div>
-      <div class="stat-label">Realizadas</div>
-    </div>
-  </div>
-
-  <section class="form-section" aria-label="Adicionar viagem">
-    <p class="form-heading">✦ Adicionar Destino</p>
-
-    <form id="standalone-trip-form" class="form-grid">
-      <div class="form-group">
-        <label for="fDest">Destino</label>
-        <input type="text" id="fDest" name="fDest" placeholder="ex: Gramado, Paris..." autocomplete="off" required>
+  <section class="form-wrapper" aria-label="Nova viagem">
+    <form id="viagem-form" class="form-grid" novalidate>
+      <div class="form-group span2 floating-group">
+        <input type="text" id="vDestiny" class="floating-input" placeholder=" " required>
+        <label class="floating-label">Destino (Cidade, País, Praia...)</label>
       </div>
-      <div class="form-group">
-        <label for="targetDate">Quando (Data Oficial)?</label>
-        <input type="date" id="targetDate" name="targetDate" required>
+      
+      <div class="form-group floating-group">
+        <input type="date" id="vDate" class="floating-input" required style="color: var(--text-muted); cursor: text;">
+        <label class="floating-label" style="top: -18px; font-size: 0.65rem; color: var(--gold-soft); font-family: var(--font-sans); text-transform: uppercase; font-style: normal; letter-spacing: 2px;">Data da Viagem</label>
       </div>
-      <div class="form-group">
-        <label for="fStatus">Status</label>
-        <select id="fStatus" name="fStatus" required>
-          <option value="sonho">Sonho</option>
-          <option value="planejada">Planejada</option>
-          <option value="feita">Feita</option>
+
+      <div class="form-group floating-group">
+        <select id="vStatus" class="floating-input select-field" required>
+          <option value="planejada">Planejada (Sonho)</option>
+          <option value="feita">Realizada (Memória)</option>
         </select>
+        <label class="floating-label select-label">Status</label>
       </div>
-      <div class="form-group">
-        <label for="fQuem">De quem foi a ideia?</label>
-        <input type="text" id="fQuem" name="fQuem" placeholder="Hesron ou Tiago">
-      </div>
+
       <div class="form-group span2">
-        <label for="fNotes">Anotações e Roteiro</label>
-        <textarea id="fNotes" name="fNotes" rows="2" placeholder="Lugares para visitar lá, custos, ideias..."></textarea>
-      </div>
-      <div class="form-group span2">
-        <button type="submit" class="btn-submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-          <span>Adicionar Viagem</span>
+        <button type="submit" class="btn-submit" id="btn-viagem-submit" style="margin-top: 1rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13"></path><path d="M22 2L15 22L11 13L2 9L22 2z"></path></svg>
+          <span>Salvar Rota</span>
         </button>
       </div>
     </form>
   </section>
 
-  <div class="filter-container" role="tablist">
-    <button class="ftab active" data-filter="all" role="tab">Todas</button>
-    <button class="ftab" data-filter="sonho" role="tab">Sonhos</button>
-    <button class="ftab" data-filter="planejada" role="tab">Planejadas</button>
-    <button class="ftab" data-filter="feita" role="tab">Feitas</button>
-  </div>
+  <nav class="filter-row" role="tablist">
+    <button class="ftab active" data-filter="todos">Todos os Destinos</button>
+    <button class="ftab" data-filter="planejada">Próximos Sonhos</button>
+    <button class="ftab" data-filter="feita">Já Visitados</button>
+  </nav>
 
-  <div class="trip-list" id="tripList" aria-live="polite">
-    <div class="empty-state">
-      <p>Aguardando novos destinos...</p>
+  <section class="viagens-grid" id="viagensList" aria-live="polite">
+    <div class="empty-state" style="grid-column: 1 / -1;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      <p>O mapa está em branco. Qual será o nosso próximo destino?</p>
     </div>
-  </div>
+  </section>
 
-</div>
-
-<dialog id="edit-dialog" aria-labelledby="edit-dialog-title">
-  <div class="dialog-header">
-    <h3 id="edit-dialog-title" style="margin: 0; font-family: var(--font-title); color: var(--gold-pale); font-weight: 400;">Editar Viagem</h3>
-    <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog').close()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
-  </div>
-  <form id="edit-trip-form" class="form-grid" novalidate>
-    <input type="hidden" id="edit-tKey">
-    <div class="form-group span2">
-      <label for="edit-tDest">Destino</label>
-      <input type="text" id="edit-tDest" required>
-    </div>
-    <div class="form-group">
-      <label for="edit-tTargetDate">Data</label>
-      <input type="date" id="edit-tTargetDate" required>
-    </div>
-    <div class="form-group">
-      <label for="edit-tStatus">Status</label>
-      <select id="edit-tStatus" required>
-        <option value="sonho">Sonho</option>
-        <option value="planejada">Planejada</option>
-        <option value="feita">Feita</option>
-      </select>
-    </div>
-    <div class="form-group span2">
-      <label for="edit-tQuem">De quem foi a ideia?</label>
-      <input type="text" id="edit-tQuem">
-    </div>
-    <div class="form-group span2">
-      <label for="edit-tNotes">Anotações e Roteiro</label>
-      <textarea id="edit-tNotes" rows="2"></textarea>
-    </div>
-    <div class="form-group span2">
-      <button type="submit" class="btn-submit">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        <span>Salvar Alterações</span>
+  <dialog id="edit-dialog-viagem" aria-labelledby="edit-viagem-title">
+    <div class="dialog-header">
+      <h3 id="edit-viagem-title">Ajustar Rota</h3>
+      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-viagem').close()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
-  </form>
-</dialog>
+    <form id="edit-viagem-form" class="form-grid" novalidate style="margin-top:1.5rem;">
+      <input type="hidden" id="edit-vKey">
+      <div class="form-group span2 floating-group">
+        <input type="text" id="edit-vDestiny" class="floating-input" placeholder=" " required>
+        <label class="floating-label">Destino</label>
+      </div>
+      <div class="form-group floating-group">
+        <input type="date" id="edit-vDate" class="floating-input" required>
+        <label class="floating-label" style="top: -18px; font-size: 0.65rem; color: var(--gold-soft); font-family: var(--font-sans); text-transform: uppercase; font-style: normal; letter-spacing: 2px;">Data</label>
+      </div>
+      <div class="form-group floating-group">
+        <select id="edit-vStatus" class="floating-input select-field" required>
+          <option value="planejada">Planejada</option>
+          <option value="feita">Realizada</option>
+        </select>
+        <label class="floating-label select-label">Status</label>
+      </div>
+      <div class="form-group span2">
+        <button type="submit" class="btn-submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Atualizar Mapa</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
 
+</div>
+{% endblock %}
+
+{% block scripts %}
 <script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
 
-  const tripsRef = ref(db, 'viagens');
-  let trips = [];
-  let currentFilter = 'all';
-  const editDialog = document.getElementById('edit-dialog');
+  const viagensRef = ref(db, 'viagens');
+  let viagens = [];
+  let currentFilter = 'todos';
+  const editDialog = document.getElementById('edit-dialog-viagem');
 
-  function updateStats() {
-    document.getElementById('s-total').textContent = trips.length;
-    document.getElementById('s-sonhos').textContent = trips.filter(t => t.status === 'sonho').length;
-    document.getElementById('s-feitas').textContent = trips.filter(t => t.status === 'feita').length;
+  // Helper para formatar a data (AAAA-MM-DD para DD/MM/AAAA)
+  function formatDateBr(dateString) {
+    if (!dateString) return '';
+    const parts = dateString.split('-');
+    if(parts.length !== 3) return dateString;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
   }
 
-  // Função para gerar um hash numérico único a partir de uma string (nome do destino)
-  function hashCode(str) {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) {
-      h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+  // Gera uma imagem com inteligência artificial para representar o destino!
+  function getDestinyImage(destiny) {
+    const safeDestiny = (destiny || '').trim();
+    let seed = 0;
+    for (let i = 0; i < safeDestiny.length; i++) {
+        seed = (Math.imul(31, seed) + safeDestiny.charCodeAt(i)) | 0;
     }
-    return h;
+    const prompt = `Minimalist luxury travel photography of ${safeDestiny}, landscape, highly detailed, moody cinematic lighting, 8k resolution`;
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=600&seed=${Math.abs(seed)}`;
   }
 
-  // Gera uma imagem ÚNICA baseada no nome do destino usando uma seed
-  function getDestImage(destName) {
-    const safeName = (destName || 'travel').trim();
-    // Prompt mais rico para garantir qualidade estilo "Pinterest"
-    const prompt = `cinematic travel photography of ${safeName}, famous landmark, dreamy atmosphere, golden hour light, highly detailed, 8k resolution, majestic landscape`;
-    // A seed garante que o mesmo nome gere sempre a mesma imagem, e nomes diferentes gerem imagens diferentes.
-    const seed = Math.abs(hashCode(safeName));
+  function renderInterface() {
+    const list = document.getElementById('viagensList');
+    if (!list) return;
 
-    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=1200&seed=${seed}`;
-  }
-
-function renderTrips() {
-    const list = document.getElementById('tripList');
     list.innerHTML = '';
+    const filtered = viagens.filter(v => currentFilter === 'todos' || v.status === currentFilter);
 
-    const filtered = trips.filter(t => currentFilter === 'all' || t.status === currentFilter);
-
-    if (filtered.length === 0) {
-      list.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><p>Nenhuma viagem encontrada.</p></div>`;
+    if (!filtered.length) {
+      list.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><p style="font-family:var(--font-serif); font-style:italic;">Nenhum destino encontrado. Vamos planear algo?</p></div>`;
       return;
     }
 
-    filtered.forEach((trip, index) => {
+    filtered.forEach((v, i) => {
       const card = document.createElement('article');
-      card.className = `trip-card status-${trip.status}`;
-      
-      // A LINHA ABAIXO FOI REMOVIDA PARA O GSAP AGIR:
-      // card.style.animationDelay = `${index * 0.12}s`;
+      card.className = 'viagem-card';
+      card.style.animationDelay = `${(i * 0.08).toFixed(2)}s`;
 
-      const dateStr = trip.targetDate ? trip.targetDate.split('-').reverse().join('/') : '';
-      const bgImage = getDestImage(trip.dest);
-      
-      const pinIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
-      
+      const isDone = v.status === 'feita';
+      const statusLabel = isDone ? 'Realizada' : 'Planejada';
+      const statusColor = isDone ? 'var(--gold-soft)' : 'var(--text-muted)';
+      const bgImage = getDestinyImage(v.destiny);
+
       card.innerHTML = `
-        <div class="trip-bg">
-          <img src="${bgImage}" alt="${trip.dest}" onload="this.classList.add('loaded')">
-          <div class="trip-overlay"></div>
+        <div class="viagem-img-box">
+          <img src="${bgImage}" alt="${v.destiny}" class="viagem-img" loading="lazy">
+          <div class="viagem-overlay"></div>
+          <span class="viagem-status" style="color: ${statusColor}; border-color: ${statusColor};">${statusLabel}</span>
         </div>
-        
-        <div class="trip-content">
-          <header class="trip-header">
-            <span class="status-badge">${trip.status}</span>
-            <div class="trip-actions">
-              <button class="btn-action edit" onclick="window.openEditTrip('${trip.key}')" title="Editar">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-              </button>
-              <button class="btn-action del" onclick="window.deleteTrip('${trip.key}')" title="Excluir">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </button>
-            </div>
-          </header>
-
-          <div class="trip-body">
-            ${trip.quem ? `<span class="trip-who">Ideia de: ${trip.quem}</span>` : ''}
-            <h3 class="trip-dest">${pinIcon} ${trip.dest}</h3>
-            ${dateStr ? `<time class="trip-date">${dateStr}</time>` : '<span class="trip-date">Data indefinida</span>'}
-            
-            <div class="trip-notes-container">
-              ${trip.notes ? `<p class="trip-notes">${trip.notes}</p>` : '<p class="trip-notes">Sem anotações.</p>'}
-            </div>
+        <div class="viagem-content">
+          <h3 class="viagem-destiny">${v.destiny}</h3>
+          <p class="viagem-date">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-right: 4px; vertical-align: middle; margin-top: -2px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            ${formatDateBr(v.targetDate || v.date)}
+          </p>
+          <div class="viagem-actions">
+            <button class="btn-action edit" onclick="window.openEditViagem('${v.key}')" title="Editar">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="btn-action del" onclick="window.deleteViagem('${v.key}')" title="Deletar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
           </div>
         </div>
       `;
       list.appendChild(card);
     });
-
-    // A MÁGICA DO GSAP ENTRA AQUI, APÓS O LAÇO FOREACH
-    gsap.fromTo(".trip-card", 
-      { 
-        y: 40,         // Começa 40px para baixo
-        opacity: 0     // Começa invisível
-      }, 
-      { 
-        y: 0,          // Volta para a posição original
-        opacity: 1,    // Fica 100% visível
-        duration: 0.6, // Duração de 0.6 segundos por cartão
-        stagger: 0.1,  // Intervalo de 0.1s entre a entrada de cada cartão
-        ease: "power3.out", // Curva de aceleração suave
-        clearProps: "all" // Muito importante: limpa as tags style do HTML ao finalizar para não bugar o CSS de hover depois
-      }
-    );
   }
-  onValue(tripsRef, (snapshot) => {
-    trips = [];
-    snapshot.forEach(child => {
-      trips.push({ key: child.key, ...child.val() });
-    });
-    trips.reverse();
-    updateStats();
-    renderTrips();
+
+  // Sincronização em tempo real com o Firebase
+  onValue(viagensRef, (snapshot) => {
+    viagens = [];
+    snapshot.forEach(child => { viagens.push({ key: child.key, ...child.val() }); });
+    // Ordena pela data mais próxima primeiro
+    viagens.sort((a, b) => new Date(a.targetDate || a.date) - new Date(b.targetDate || b.date));
+    renderInterface();
   });
 
-  document.getElementById('standalone-trip-form').addEventListener('submit', async (e) => {
+  // Salvar Nova Viagem
+  document.getElementById('viagem-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    await push(tripsRef, {
-      dest: document.getElementById('fDest').value.trim(),
-      targetDate: document.getElementById('targetDate').value,
-      status: document.getElementById('fStatus').value,
-      quem: document.getElementById('fQuem').value.trim(),
-      notes: document.getElementById('fNotes').value.trim()
-    });
-    document.getElementById('standalone-trip-form').reset();
+    const destiny = document.getElementById('vDestiny').value.trim();
+    const date = document.getElementById('vDate').value;
+    const status = document.getElementById('vStatus').value;
+    
+    if (!destiny || !date) return;
+
+    const btn = document.getElementById('btn-viagem-submit');
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '<span>Salvando...</span>';
+    btn.disabled = true;
+
+    // Use targetDate para manter compatibilidade com o index/carrossel
+    await push(viagensRef, { destiny, targetDate: date, date: date, status, timestamp: Date.now() });
+
+    document.getElementById('viagem-form').reset();
+    btn.innerHTML = origHTML;
+    btn.disabled = false;
   });
 
-  window.deleteTrip = function(key) { remove(ref(db, 'viagens/' + key)); };
-
-  window.openEditTrip = function(key) {
-    const t = trips.find(trip => trip.key === key);
-    if (!t) return;
-    document.getElementById('edit-tKey').value = t.key;
-    document.getElementById('edit-tDest').value = t.dest || '';
-    document.getElementById('edit-tTargetDate').value = t.targetDate || '';
-    document.getElementById('edit-tStatus').value = t.status || 'sonho';
-    document.getElementById('edit-tQuem').value = t.quem || '';
-    document.getElementById('edit-tNotes').value = t.notes || '';
-    editDialog.showModal();
+  // Excluir Viagem
+  window.deleteViagem = function(key) {
+    if(confirm("Tem certeza que deseja apagar este destino?")) {
+      remove(ref(db, 'viagens/' + key));
+    }
   };
 
-  document.getElementById('edit-trip-form').addEventListener('submit', async (e) => {
+  // Abrir Modal de Edição
+  window.openEditViagem = function(key) {
+    const v = viagens.find(x => x.key === key);
+    if (!v) return;
+    document.getElementById('edit-vKey').value = v.key;
+    document.getElementById('edit-vDestiny').value = v.destiny || '';
+    document.getElementById('edit-vDate').value = v.targetDate || v.date || '';
+    document.getElementById('edit-vStatus').value = v.status || 'planejada';
+    
+    if(editDialog) editDialog.showModal();
+  };
+
+  // Salvar Edição
+  document.getElementById('edit-viagem-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const key = document.getElementById('edit-tKey').value;
+    const key = document.getElementById('edit-vKey').value;
+    const destiny = document.getElementById('edit-vDestiny').value.trim();
+    const date = document.getElementById('edit-vDate').value;
+    
     await update(ref(db, 'viagens/' + key), {
-      dest: document.getElementById('edit-tDest').value.trim(),
-      targetDate: document.getElementById('edit-tTargetDate').value,
-      status: document.getElementById('edit-tStatus').value,
-      quem: document.getElementById('edit-tQuem').value.trim(),
-      notes: document.getElementById('edit-tNotes').value.trim()
+      destiny,
+      targetDate: date,
+      date: date,
+      status: document.getElementById('edit-vStatus').value
     });
-    editDialog.close();
+    if(editDialog) editDialog.close();
   });
 
+  // Sistema de Abas (Filtros)
   document.querySelectorAll('.ftab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
       e.target.classList.add('active');
       currentFilter = e.target.dataset.filter;
-      renderTrips();
+      renderInterface();
     });
+  });
+
+  // Animação de Entrada
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof gsap !== 'undefined') {
+      const content = document.getElementById('viagens-content');
+      gsap.to(content, { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" });
+      gsap.fromTo(".page-header", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.1, ease: "power3.out" });
+      gsap.fromTo(".form-wrapper", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.3, ease: "power3.out" });
+      gsap.fromTo(".filter-row", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: "power3.out" });
+    }
   });
 </script>
 {% endblock %}

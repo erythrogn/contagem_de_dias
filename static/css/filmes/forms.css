@@ -1,156 +1,349 @@
 .form-wrapper {
-background-color: rgba(255, 255, 255, 0.02);
-background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.005) 100%);
-backdrop-filter: blur(28px) saturate(2);
--webkit-backdrop-filter: blur(28px) saturate(2);
-border: 1px solid rgba(255, 255, 255, 0.08);
-border-radius: var(--r-xl);
-padding: 2.25rem 2.5rem;
-margin-bottom: 2.5rem;
-box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 0 rgba(0, 0, 0, 0.2);
-opacity: 0;
-animation: riseUpFilmes 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
-position: relative;
-overflow: hidden;
-transform: translateZ(0);
-transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-gold);
+  border-radius: 8px;
+  padding-top: 4rem;
+  padding-right: 3rem;
+  padding-bottom: 4rem;
+  padding-left: 3rem;
+  margin-bottom: 5rem;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
 }
-.form-wrapper:focus-within {
-transform: translateY(-2px) scale(1.002) translateZ(5px);
-box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 0 rgba(0, 0, 0, 0.3);
-border-color: rgba(255, 255, 255, 0.12);
+
+.form-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-image: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+  opacity: 0.3;
 }
-.form-wrapper::before {
-content: '';
-position: absolute;
-top: 0; left: 10%; right: 10%;
-height: 1px;
-background-image: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
-pointer-events: none;
-opacity: 0.7;
-mix-blend-mode: screen;
-}
+
 .form-title {
-display: flex; align-items: center; gap: 0.75rem;
-font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
-color: var(--amber); margin-bottom: 2rem; opacity: 0.9; font-weight: 500; text-shadow: 0 0 12px rgba(240, 180, 41, 0.4);
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--gold-soft);
+  margin-top: 0;
+  margin-bottom: 3rem;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
 }
-.form-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.75rem; }
-.field-group { display: flex; flex-direction: column; gap: 0.5rem; position: relative; }
-.field-group.span-full { grid-column: 1 / -1; }
-.field-label {
-font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
-color: var(--text-muted); transition: color 0.3s, transform 0.3s; transform-origin: left bottom;
+
+.form-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem 2.5rem;
 }
-.field-group:focus-within .field-label { color: var(--amber); transform: translateY(-2px); }
+
+.span-full {
+  grid-column: 1 / -1;
+}
+
+.field-group {
+  position: relative;
+}
+
+.custom-poster-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-end;
+}
+
+.input-relative {
+  flex: 1;
+  position: relative;
+}
+
 .field-input {
-background-color: transparent;
-border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-padding: 0.75rem 0; color: var(--text-primary); font-family: var(--font-display); font-size: 1.05rem;
-transition: border-color 0.4s, box-shadow 0.4s, padding-left 0.4s; width: 100%;
+  width: 100%;
+  background-color: transparent !important;
+  border-top-style: none;
+  border-right-style: none;
+  border-left-style: none;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(241, 210, 153, 0.3);
+  /* CORRIGIDO: cor explícita para todos os tipos de input,
+     não apenas select — evitava cor errada em date/number */
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  padding-top: 0.8rem;
+  padding-right: 0;
+  padding-bottom: 0.8rem;
+  padding-left: 0;
+  outline: none;
+  transition-property: border-color, box-shadow;
+  transition-duration: 0.4s;
+  transition-timing-function: ease;
+  font-size: 1.1rem;
 }
+
 .field-input:focus {
-border-bottom-color: var(--amber); box-shadow: 0 1px 0 0 rgba(240, 180, 41, 0.5);
-outline: none; padding-left: 0.5rem;
+  border-bottom-color: var(--gold-soft);
+  box-shadow: 0 1px 0 var(--gold-soft);
 }
+
+/* CORRIGIDO: inputs de data e número precisam de cor explícita;
+   antes herdavam da regra .field-select que definia text-muted */
+input[type="date"].field-input,
+input[type="number"].field-input {
+  color: var(--text-light);
+  /* Normaliza o ícone do calendar picker nos browsers webkit */
+  color-scheme: dark;
+}
+
+.field-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  position: absolute;
+  top: 15px;
+  pointer-events: none;
+  transition-property: all;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.field-input:focus ~ .field-label,
+.field-input:not(:placeholder-shown) ~ .field-label,
+.static-label {
+  top: -18px;
+  font-size: 0.6rem;
+  color: var(--gold-soft);
+  letter-spacing: 4px;
+}
+
 .field-select {
-cursor: pointer; appearance: none; -webkit-appearance: none;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(240,180,41,0.25)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 14px auto; padding-right: 2rem;
+  appearance: none;
+  /* CORRIGIDO: select começa com text-muted mas value preenchido fica light */
+  color: var(--text-muted);
+  cursor: pointer;
 }
-.field-select option { background-color: var(--bg-mid); color: var(--text-primary); padding: 1rem; }
+
+/* NOVO: quando o select tem valor selecionado (não vazio), usa cor legível */
+.field-select:not([value=""]):valid {
+  color: var(--text-light);
+}
+
+.field-select option {
+  background-color: var(--bg-dark);
+  color: var(--gold-soft);
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  font-family: var(--font-sans);
+}
+
+/* ─── POSTER PREVIEW ──────────────────────────────────────── */
+
 .poster-preview-box {
-width: 90px; height: 125px; flex-shrink: 0; border-radius: var(--r-md);
-border: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.03);
-display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;
-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+  width: 90px;
+  height: 135px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-gold);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: rgba(6, 8, 13, 0.8);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  /* NOVO: transição suave ao receber imagem via JS */
+  transition-property: border-color, box-shadow;
+  transition-duration: 0.4s;
+  transition-timing-function: ease;
 }
-.poster-placeholder-icon { opacity: 0.4; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)); }
+
+/* NOVO: destaca o preview quando tem imagem carregada */
+.poster-preview-box:has(.poster-preview-img:not([style*="display:none"])) {
+  border-color: rgba(241, 210, 153, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), var(--cinematic-glow);
+}
+
 .poster-preview-img {
-width: 100%; height: 100%; object-fit: cover;
-animation: riseUpFilmes 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.poster-placeholder-icon {
+  color: rgba(241, 210, 153, 0.2);
+}
+
+/* ─── BOTÃO SUBMIT ────────────────────────────────────────── */
+
 .btn-submit {
-display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem;
-background-image: linear-gradient(135deg, rgba(240, 180, 41, 0.25) 0%, rgba(240, 180, 41, 0.05) 100%);
-color: var(--amber-pale); border: 1px solid rgba(240, 180, 41, 0.35); padding: 1rem 2.5rem;
-border-radius: var(--r-pill); font-family: var(--font-display); font-size: 0.9rem; font-weight: 500;
-cursor: pointer; position: relative; overflow: hidden;
-transition: transform 0.5s, box-shadow 0.5s, border-color 0.5s, background-image 0.5s, color 0.5s;
-margin-top: 1rem; width: 100%; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  background-color: transparent !important;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-gold);
+  color: var(--gold-soft);
+  padding-top: 1.2rem;
+  padding-right: 2.5rem;
+  padding-bottom: 1.2rem;
+  padding-left: 2.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition-property: all;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 4px;
+  outline: none;
+  margin-top: 1rem;
 }
-.btn-submit::before {
-content: ''; position: absolute; inset: 0;
-background-image: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
-transform: translateX(-150%) skewX(-15deg); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
-}
+
 .btn-submit:hover {
-border-color: rgba(240, 180, 41, 0.7); transform: translateY(-3px) scale(1.02);
-box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 30px 0 rgba(240, 180, 41, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-color: #ffffff; background-image: linear-gradient(135deg, rgba(240, 180, 41, 0.35) 0%, rgba(240, 180, 41, 0.15) 100%);
+  background-color: rgba(241, 210, 153, 0.05) !important;
+  transform: translateY(-4px);
+  border-color: var(--gold-soft);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), var(--cinematic-glow);
+  color: var(--text-light);
 }
-.btn-submit:hover::before { transform: translateX(150%) skewX(-15deg); }
-.btn-submit:active { transform: translateY(1px) scale(0.98); box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5); }
-.btn-submit-series {
-background-image: linear-gradient(135deg, rgba(167, 139, 250, 0.25) 0%, rgba(34, 211, 238, 0.05) 100%);
-border-color: rgba(167, 139, 250, 0.35); color: #e9d5ff;
+
+.btn-submit:focus-visible {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--gold-soft);
+  outline-offset: 4px;
 }
-.btn-submit-series:hover {
-border-color: rgba(167, 139, 250, 0.7);
-box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 30px 0 rgba(167, 139, 250, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-background-image: linear-gradient(135deg, rgba(167, 139, 250, 0.35) 0%, rgba(34, 211, 238, 0.15) 100%);
+
+/* NOVO: estado de loading do botão submit */
+.btn-submit[aria-busy="true"] {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
 }
-.btn-submit-jogos {
-background-image: linear-gradient(135deg, rgba(244, 114, 182, 0.25) 0%, rgba(240, 180, 41, 0.05) 100%);
-border-color: rgba(244, 114, 182, 0.35); color: #fbcfe8;
-}
-.btn-submit-jogos:hover {
-border-color: rgba(244, 114, 182, 0.7);
-box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 30px 0 rgba(244, 114, 182, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-background-image: linear-gradient(135deg, rgba(244, 114, 182, 0.35) 0%, rgba(240, 180, 41, 0.15) 100%);
-}
-.btn-submit-musica {
-background-image: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(34, 211, 238, 0.05) 100%);
-border-color: rgba(16, 185, 129, 0.35); color: #a7f3d0;
-}
-.btn-submit-musica:hover {
-border-color: rgba(16, 185, 129, 0.7);
-box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 30px 0 rgba(16, 185, 129, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-background-image: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(34, 211, 238, 0.15) 100%);
-}
+
+/* ─── DIALOG ──────────────────────────────────────────────── */
+
 dialog {
-border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--r-xl);
-background-color: rgba(10, 12, 16, 0.96); background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-backdrop-filter: blur(40px) saturate(2.5); -webkit-backdrop-filter: blur(40px) saturate(2.5);
-color: var(--text-primary); padding: 2.5rem; max-width: 600px; width: 92%; margin: auto;
-box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-opacity: 0; transform: scale(0.95) translateY(20px);
-transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), display 0.5s cubic-bezier(0.16, 1, 0.3, 1) allow-discrete;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-gold);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding-top: 4rem;
+  padding-right: 4rem;
+  padding-bottom: 4rem;
+  padding-left: 4rem;
+  border-radius: 8px;
+  max-width: 800px;
+  width: 90%;
+  /* CORRIGIDO: position:fixed garante centralização consistente entre browsers */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9);
 }
-dialog[open] { opacity: 1; transform: scale(1) translateY(0); }
-@starting-style { dialog[open] { opacity: 0; transform: scale(0.95) translateY(20px); } }
+
+/* NOVO: entrada suave do dialog */
+dialog[open] {
+  animation-name: sectionEnterCinematic;
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: both;
+}
+
 dialog::backdrop {
-background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-opacity: 0; transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), display 0.5s allow-discrete;
+  background-color: rgba(4, 5, 8, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
-dialog[open]::backdrop { opacity: 1; }
-@starting-style { dialog[open]::backdrop { opacity: 0; } }
+
 .dialog-header {
-display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
-border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3.5rem;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(241, 210, 153, 0.2);
+  padding-bottom: 1.5rem;
 }
+
 .dialog-header h3 {
-font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.4rem;
-color: var(--amber-pale); margin: 0; text-shadow: 0 2px 12px rgba(240, 180, 41, 0.3);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 2.8rem;
+  color: var(--gold-soft);
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
 }
+
 .btn-close-dialog {
-background-color: rgba(255, 255, 255, 0.02); border: 1px solid transparent; color: var(--text-muted); cursor: pointer;
-display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%;
-transition: color 0.4s, transform 0.4s, background-color 0.4s, border-color 0.4s, box-shadow 0.4s;
+  background-color: transparent !important;
+  border-top-style: none;
+  border-right-style: none;
+  border-bottom-style: none;
+  border-left-style: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition-property: all;
+  transition-duration: 0.4s;
+  transition-timing-function: ease;
+  outline: none;
 }
+
 .btn-close-dialog:hover {
-color: var(--amber-bright); transform: rotate(90deg) scale(1.1);
-background-color: rgba(240, 180, 41, 0.1); border-color: rgba(240, 180, 41, 0.25);
-box-shadow: 0 4px 12px rgba(240, 180, 41, 0.2);
+  color: var(--gold-soft);
+  transform: rotate(90deg) scale(1.2);
+  filter: drop-shadow(0 0 8px var(--gold-neon));
+}
+
+/* ─── RESPONSIVO ──────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .form-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .form-wrapper {
+    padding-top: 2.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 2.5rem;
+    padding-left: 1.5rem;
+  }
+
+  dialog {
+    padding-top: 2.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 2.5rem;
+    padding-left: 1.5rem;
+    /* Em mobile, ocupa mais da tela */
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .dialog-header h3 {
+    font-size: 2rem;
+  }
 }

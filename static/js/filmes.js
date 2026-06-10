@@ -5,9 +5,9 @@ import { db } from "/static/js/app.js";
 function escapeHTML(str) {
   if (!str) return "";
   return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
@@ -475,6 +475,7 @@ function buildMainHTML(section, m) {
   }
 
   return `
+    <div class="gallery-main-blur-bg" style="background-image: url('${bgImage}')"></div>
     <img src="${bgImage}" class="gallery-main-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">
     <div class="gallery-main-overlay">
       <h3 class="gallery-main-title">${escapeHTML(m.title)}</h3>
@@ -509,6 +510,7 @@ function updateSlider(section, direction = 0) {
 
   if (typeof gsap !== "undefined") {
     const img     = mainView.querySelector(".gallery-main-img");
+    const blurBg  = mainView.querySelector(".gallery-main-blur-bg");
     const overlay = mainView.querySelector(".gallery-main-overlay");
     const done    = isDoneItem(section, m);
     
@@ -519,6 +521,11 @@ function updateSlider(section, direction = 0) {
     if (img) gsap.fromTo(img, 
       { opacity: 0, x: xOffset, filter: filterStart }, 
       { opacity: 1, x: 0, filter, duration: 0.5, ease: "power2.out" }
+    );
+    
+    if (blurBg) gsap.fromTo(blurBg, 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 0.8, ease: "power2.out" }
     );
     
     if (overlay) gsap.fromTo(overlay, 

@@ -1,55 +1,105 @@
+/* ============================================================
+   bloco/forms.css — Multi-step form, inputs e cards de seleção
+   ============================================================ */
 .mform-shell {
   background: var(--champagne-canvas);
   border: 1px solid var(--border-gold);
   padding: 3rem;
-  border-radius: 2px;
+  border-radius: 4px;
   margin-bottom: 4rem;
 }
 
-.mform-input, .mform-textarea {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border-gold);
-  color: var(--text-light);
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  padding: 0.8rem 0;
-  outline: none;
-  transition: border-color 0.3s ease;
-  margin-bottom: 2rem;
-}
+/* --- Barra de Progresso --- */
+.mform-progress { position: relative; margin-bottom: 2rem; }
+.mform-progress-fill { height: 1px; background: var(--gold-soft); transition: width 0.4s ease; width: 0%; }
+.mform-steps { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+.mstep { display: flex; flex-direction: column; align-items: center; opacity: 0.3; transition: all 0.4s ease; gap: 8px; color: var(--text-muted); }
+.mstep.active, .mstep.done { opacity: 1; color: var(--gold-soft); }
+.mstep-line { flex-grow: 1; height: 1px; background: var(--border-gold); margin: 12px 15px 0; }
+.mstep-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; font-family: var(--font-sans); }
 
-.mform-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
+/* --- Títulos e Navegação --- */
+.mform-step-eyebrow { font-family: var(--font-sans); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: var(--gold-dark); margin-bottom: 0.5rem; }
+.mform-step-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 300; margin-top: 0; margin-bottom: 2rem; color: var(--text-light); }
+.mform-nav { display: flex; justify-content: space-between; margin-top: 2rem; border-top: 1px solid var(--border-gold); padding-top: 1.5rem; }
 
-.mform-input:focus, .mform-textarea:focus {
-  border-bottom-color: var(--gold-soft);
-}
-
-.mform-input::placeholder, .mform-textarea::placeholder {
-  color: var(--text-muted);
-  font-family: var(--font-serif);
-  font-style: italic;
-}
-
-/* Botões do Form */
-.mform-btn-next, .mform-btn-back, .mform-btn-submit {
-  background: transparent;
+/* --- Cartões de Seleção (Tipo e Autor) --- */
+.type-cards, .author-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 1rem; }
+.type-card input, .author-card input { display: none; /* Esconde a bolinha feia do input */ }
+.type-card-inner, .author-card-inner {
   border: 1px solid var(--border-gold);
-  color: var(--gold-soft);
-  padding: 0.6rem 2rem;
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  padding: 1.5rem;
+  border-radius: 4px;
+  text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  background: transparent;
+  color: var(--text-muted);
+}
+.type-card input:checked + .type-card-inner, 
+.author-card input:checked + .author-card-inner {
+  background: rgba(241, 210, 153, 0.08);
+  border-color: var(--gold-soft);
+  color: var(--gold-soft);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.type-card-icon { margin-bottom: 1rem; }
+.type-card-name { font-family: var(--font-serif); font-size: 1.4rem; display: block; margin-bottom: 0.3rem; color: var(--text-light); }
+.type-card-desc { font-size: 0.75rem; font-style: italic; opacity: 0.7; }
+.author-avatar { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 0.5rem; }
+.author-name { font-family: var(--font-sans); letter-spacing: 2px; text-transform: uppercase; font-size: 0.75rem; }
+
+/* --- Inputs e Floating Labels --- */
+.mform-field-group { position: relative; margin-bottom: 2.5rem; }
+.mform-input, .mform-textarea {
+  width: 100%; background: transparent; border: none;
+  border-bottom: 1px solid var(--border-gold);
+  color: var(--text-light); font-family: var(--font-sans); font-size: 1rem;
+  padding: 0.8rem 0; outline: none; transition: border-color 0.3s ease;
+}
+.mform-textarea { min-height: 80px; resize: vertical; margin-bottom: 0; }
+.mform-input:focus, .mform-textarea:focus { border-bottom-color: var(--gold-soft); }
+.mform-label {
+  position: absolute; left: 0; top: 12px; color: var(--text-muted); pointer-events: none; transition: all 0.3s ease;
+  font-family: var(--font-serif); font-style: italic; font-size: 1.1rem;
+}
+.mform-input:focus ~ .mform-label, .mform-input:not(:placeholder-shown) ~ .mform-label,
+.mform-textarea:focus ~ .mform-label, .mform-textarea:not(:placeholder-shown) ~ .mform-label {
+  top: -18px; font-size: 0.75rem; color: var(--gold-soft); font-family: var(--font-sans); font-style: normal; text-transform: uppercase; letter-spacing: 2px;
+}
+.mform-underline { position: absolute; bottom: 0; left: 0; height: 1px; width: 0; background: var(--gold-soft); transition: width 0.4s ease; }
+.mform-input:focus ~ .mform-underline, .mform-textarea:focus ~ .mform-underline { width: 100%; }
+
+/* --- Botões --- */
+.mform-btn-next, .mform-btn-back, .mform-btn-submit {
+  background: transparent; border: 1px solid var(--border-gold); color: var(--gold-soft);
+  padding: 0.6rem 2rem; font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
+  display: flex; align-items: center; gap: 8px; border-radius: 2px;
+}
+.mform-btn-next:hover, .mform-btn-submit:hover { background: rgba(241, 210, 153, 0.1); transform: scale(1.05); }
+.mform-btn-back { border: none; opacity: 0.6; }
+.mform-btn-back:hover { opacity: 1; transform: translateX(-4px); }
+.mform-hint-box { display: flex; align-items: center; gap: 10px; color: var(--gold-dark); font-style: italic; font-family: var(--font-serif); margin-bottom: 2rem; }
+/* --- Lógica de Ocultar/Mostrar os Passos do Formulário --- */
+.mform-step {
+  display: none;
+  opacity: 0;
 }
 
-.mform-btn-next:hover, .mform-btn-submit:hover {
-  background: rgba(241, 210, 153, 0.05);
-  border-color: var(--gold-soft);
+.mform-step.active {
+  display: block;
+  animation: slideStepIn 0.5s cubic-bezier(0.25, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideStepIn {
+  0% { 
+    opacity: 0; 
+    transform: translateX(30px); /* Começa um pouco para a direita */
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateX(0); /* Desliza para o centro */
+  }
 }

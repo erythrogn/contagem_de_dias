@@ -1,56 +1,135 @@
-
 @keyframes marqueeScroll {
   0% {
     transform: translate3d(0, 0, 0);
   }
   100% {
-
     transform: translate3d(-50%, 0, 0);
   }
 }
 
-@keyframes riseUpFilmes {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 60px, 0) scale(0.92);
-    filter: blur(15px);
-  }
- 
-  60% {
-    opacity: 1;
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes sectionEnterFilmes {
+@keyframes sectionEnterCinematic {
   0% {
     opacity: 0;
     transform: translate3d(0, 30px, 0);
+    filter: blur(8px);
   }
   100% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0px);
   }
 }
 
-@keyframes gradientShiftFilmes {
+@keyframes projectorFlicker {
   0% {
-    background-position: 0% 50%;
+    opacity: 0.8;
+    transform: translateX(-50%) scaleY(1);
+  }
+  5% {
+    opacity: 0.9;
+  }
+  10% {
+    opacity: 0.7;
+    transform: translateX(-50%) scaleY(1.02);
+  }
+  15% {
+    opacity: 1;
   }
   50% {
-    background-position: 100% 50%;
+    opacity: 0.8;
+  }
+  55% {
+    opacity: 0.6;
+    transform: translateX(-50%) scaleY(0.98);
+  }
+  60% {
+    opacity: 0.9;
   }
   100% {
-    background-position: 0% 50%;
+    opacity: 0.85;
+    transform: translateX(-50%) scaleY(1);
   }
 }
 
-.elemento-animado {
-  animation: riseUpFilmes 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  will-change: transform, opacity, filter;
+@keyframes glassGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(241, 210, 153, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(241, 210, 153, 0.15);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(241, 210, 153, 0.05);
+  }
+}
+
+/* NOVO: entrada staggered para slider-cards */
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 0.4;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* NOVO: toast de feedback */
+@keyframes toastSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) translateX(-50%);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) translateX(-50%);
+  }
+}
+
+/* NOVO: shimmer para skeleton loading */
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* NOVO: pulso sutil para badge "assistindo" / "jogando" */
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(241, 210, 153, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(241, 210, 153, 0);
+  }
+}
+
+/* Respeita preferência do sistema por redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes marqueeScroll {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+  }
+  @keyframes sectionEnterCinematic {
+    0%, 100% { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes projectorFlicker {
+    0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleY(1); }
+  }
+  @keyframes skeletonShimmer {
+    0%, 100% { background-position: 0 center; }
+  }
+  @keyframes statusPulse {
+    0%, 100% { box-shadow: none; }
+  }
 }
