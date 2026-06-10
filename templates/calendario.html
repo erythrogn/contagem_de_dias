@@ -9,26 +9,45 @@
 {% block content %}
 <div id="calendario-content">
   <div class="wrap">
+
     <header class="cal-header">
-      <p class="cal-eyebrow">quero viver todos os dias com voce</p>
+      <span class="cal-eyebrow">nosso roteiro de memórias</span>
       <h1 class="cal-title">Nossa <span>Programação</span></h1>
-      <p class="cal-subtitle">todo dia 29 é unico</p>
+      <p class="cal-subtitle">cada dia 29 é um capítulo da nossa história</p>
       <div class="gold-divider"></div>
     </header>
 
     <div class="legend" aria-label="Legenda da programação">
-      <div class="legend-item"><div class="legend-dot dot-today"></div><span>Hoje</span></div>
-      <div class="legend-item"><div class="legend-dot dot-anniv"></div><span>Mesversário</span></div>
-      <div class="legend-item"><div class="legend-dot dot-viagem"></div><span>Viagem</span></div>
-      <div class="legend-item"><div class="legend-dot dot-filme"></div><span>Filme</span></div>
-      <div class="legend-item"><div class="legend-dot dot-coisinha"></div><span>Coisinha</span></div>
+      <div class="legend-item">
+        <div class="legend-dot dot-today"></div>
+        <span>Hoje</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-anniv"></div>
+        <span>Mesversário</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-viagem"></div>
+        <span>Viagem</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-filme"></div>
+        <span>Filme</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-coisinha"></div>
+        <span>Coisinha</span>
+      </div>
     </div>
 
     <div class="calendar-wrapper">
       <article class="month-card glass-panel" id="calendarCard">
+        
         <div class="month-nav">
           <button class="nav-btn" onclick="window.prevMonth()" aria-label="Mês Anterior">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
           </button>
           
           <div class="month-center">
@@ -40,19 +59,29 @@
           </div>
           
           <button class="nav-btn" onclick="window.nextMonth()" aria-label="Próximo Mês">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
         </div>
 
         <div class="days-header" aria-hidden="true">
-          <span class="dow">Dom</span><span class="dow">Seg</span><span class="dow">Ter</span><span class="dow">Qua</span><span class="dow">Qui</span><span class="dow">Sex</span><span class="dow">Sáb</span>
+          <span class="dow">Dom</span>
+          <span class="dow">Seg</span>
+          <span class="dow">Ter</span>
+          <span class="dow">Qua</span>
+          <span class="dow">Qui</span>
+          <span class="dow">Sex</span>
+          <span class="dow">Sáb</span>
         </div>
         
         <div class="days-grid" id="daysGrid" role="grid"></div>
+        
       </article>
 
       <div class="events-list-container timeline-style" id="eventsListContainer"></div>
     </div>
+
   </div>
 </div>
 {% endblock %}
