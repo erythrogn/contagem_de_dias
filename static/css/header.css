@@ -1,11 +1,11 @@
 :root {
   --header-bg-base: rgba(6, 7, 10, 0.65);
   --header-bg-hover: rgba(6, 7, 10, 0.95);
-  --header-border-color: rgba(219, 198, 129, 0.18);
-  --header-gold-primary: #d6c793;
-  --header-gold-glow: rgba(160, 139, 72, 0.4);
+  --header-border-color: rgba(232, 200, 120, 0.18);
+  --header-gold-primary: #e8c878;
+  --header-gold-glow: rgba(111, 132, 216, 0.35);
   --header-text-main: #fdfbf7;
-  --header-text-muted: #9e9a91;
+  --header-text-muted: #6f84e4;
   --header-font-sans: 'Montserrat', 'Inter', sans-serif;
   --header-width-collapsed: 80px;
   --header-width-expanded: 260px;
