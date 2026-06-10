@@ -4,9 +4,9 @@
   --font-sans: 'Montserrat', sans-serif;
   --font-mono: 'Space Mono', monospace;
   
-  --gold-primary: rgba(212, 175, 55, 0.85);
+  --gold-primary: #f1d299;
   --gold-light: rgba(212, 175, 55, 0.3);
-  --gold-pale: rgba(240, 180, 41, 0.6);
+  --gold-pale: rgba(255, 199, 70, 0.6);
   --glass-bg: rgba(20, 24, 32, 0.4);
   --glass-border: rgba(212, 175, 55, 0.15);
   
