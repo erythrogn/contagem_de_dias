@@ -3,11 +3,7 @@
 {% block title %}Nossas Viagens · tamo junto{% endblock %}
 
 {% block styles %}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
-  
- <link rel="stylesheet" href="{{ url_for('static', filename='css/viagens/viagens.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/viagens/viagens.css') }}">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 {% endblock %}
 
@@ -21,228 +17,217 @@
     <div class="header-decorator"></div>
   </header>
 
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-label">Concluídas</span>
+      <span class="stat-value" id="stats-done">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Total</span>
+      <span class="stat-value" id="stats-total">0</span>
+    </div>
+  </div>
+
   <section class="form-wrapper" aria-label="Nova viagem">
     <form id="viagem-form" class="form-grid" novalidate>
-      <div class="form-group span2 floating-group">
-        <input type="text" id="vDestiny" class="floating-input" placeholder=" " required>
-        <label class="floating-label">Destino (Cidade, País, Praia...)</label>
+      <div class="field-group full-width">
+        <label for="vDestiny" class="field-label">Destino</label>
+        <input type="text" id="vDestiny" class="field-input" placeholder="proximo destino" required autocomplete="off">
       </div>
-      
-      <div class="form-group floating-group">
-        <input type="date" id="vDate" class="floating-input" required style="color: var(--text-muted); cursor: text;">
-        <label class="floating-label" style="top: -18px; font-size: 0.65rem; color: var(--gold-soft); font-family: var(--font-sans); text-transform: uppercase; font-style: normal; letter-spacing: 2px;">Data da Viagem</label>
+      <div class="field-group">
+        <label for="vDate" class="field-label">Quando?</label>
+        <input type="date" id="vDate" class="field-input" required>
       </div>
-
-      <div class="form-group floating-group">
-        <select id="vStatus" class="floating-input select-field" required>
-          <option value="planejada">Planejada (Sonho)</option>
-          <option value="feita">Realizada (Memória)</option>
-        </select>
-        <label class="floating-label select-label">Status</label>
-      </div>
-
-      <div class="form-group span2">
-        <button type="submit" class="btn-submit" id="btn-viagem-submit" style="margin-top: 1rem;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13"></path><path d="M22 2L15 22L11 13L2 9L22 2z"></path></svg>
-          <span>Salvar Rota</span>
-        </button>
-      </div>
-    </form>
-  </section>
-
-  <nav class="filter-row" role="tablist">
-    <button class="ftab active" data-filter="todos">Todos os Destinos</button>
-    <button class="ftab" data-filter="planejada">Próximos Sonhos</button>
-    <button class="ftab" data-filter="feita">Já Visitados</button>
-  </nav>
-
-  <section class="viagens-grid" id="viagensList" aria-live="polite">
-    <div class="empty-state" style="grid-column: 1 / -1;">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-      <p>O mapa está em branco. Qual será o nosso próximo destino?</p>
-    </div>
-  </section>
-
-  <dialog id="edit-dialog-viagem" aria-labelledby="edit-viagem-title">
-    <div class="dialog-header">
-      <h3 id="edit-viagem-title">Ajustar Rota</h3>
-      <button type="button" class="btn-close-dialog" onclick="document.getElementById('edit-dialog-viagem').close()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
-    <form id="edit-viagem-form" class="form-grid" novalidate style="margin-top:1.5rem;">
-      <input type="hidden" id="edit-vKey">
-      <div class="form-group span2 floating-group">
-        <input type="text" id="edit-vDestiny" class="floating-input" placeholder=" " required>
-        <label class="floating-label">Destino</label>
-      </div>
-      <div class="form-group floating-group">
-        <input type="date" id="edit-vDate" class="floating-input" required>
-        <label class="floating-label" style="top: -18px; font-size: 0.65rem; color: var(--gold-soft); font-family: var(--font-sans); text-transform: uppercase; font-style: normal; letter-spacing: 2px;">Data</label>
-      </div>
-      <div class="form-group floating-group">
-        <select id="edit-vStatus" class="floating-input select-field" required>
-          <option value="planejada">Planejada</option>
+      <div class="field-group">
+        <label for="vStatus" class="field-label">Status</label>
+        <select id="vStatus" class="select-field">
+          <option value="pendente">Pendente</option>
           <option value="feita">Realizada</option>
         </select>
-        <label class="floating-label select-label">Status</label>
       </div>
-      <div class="form-group span2">
+      <div class="field-group full-width">
+        <label for="vImage" class="field-label">Link da Imagem (a ia é p gerar uma near)</label>
+        <input type="url" id="vImage" class="field-input" placeholder="https://..." autocomplete="off">
+      </div>
+      <div class="field-group full-width">
         <button type="submit" class="btn-submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-          <span>Atualizar Mapa</span>
+          <span>Adicionar Destino</span>
         </button>
       </div>
     </form>
-  </dialog>
+  </section>
+
+  <nav class="filter-wrapper">
+    <button class="ftab active" data-filter="all">Todos os Destinos</button>
+    <button class="ftab" data-filter="feita">Realizados</button>
+    <button class="ftab" data-filter="pendente">Sonhos Pendentes</button>
+  </nav>
+
+  <div class="viagens-grid" id="viagens-list">
+    </div>
 
 </div>
-{% endblock %}
 
-{% block scripts %}
+<dialog id="edit-dialog" aria-labelledby="edit-dialog-label">
+  <div class="dialog-header">
+    <h3 id="edit-dialog-label">Editar Viagem</h3>
+    <button type="button" class="btn-close-dialog" id="close-edit-dialog" aria-label="Fechar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <form id="edit-viagem-form" class="form-grid" novalidate>
+    <input type="hidden" id="edit-vKey">
+    <div class="field-group full-width">
+      <label for="edit-vDestiny" class="field-label">Destino</label>
+      <input type="text" id="edit-vDestiny" class="field-input" required>
+    </div>
+    <div class="field-group">
+      <label for="edit-vDate" class="field-label">Data</label>
+      <input type="date" id="edit-vDate" class="field-input" required>
+    </div>
+    <div class="field-group">
+      <label for="edit-vStatus" class="field-label">Status</label>
+      <select id="edit-vStatus" class="select-field">
+        <option value="pendente">Pendente</option>
+        <option value="feita">Realizada</option>
+      </select>
+    </div>
+    <div class="field-group full-width">
+      <label for="edit-vImage" class="field-label">Link da Imagem</label>
+      <input type="url" id="edit-vImage" class="field-input">
+    </div>
+    <div class="field-group full-width">
+      <button type="submit" class="btn-submit">
+        <span>Salvar Alterações</span>
+      </button>
+    </div>
+  </form>
+</dialog>
+
 <script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
 
   const viagensRef = ref(db, 'viagens');
-  let viagens = [];
-  let currentFilter = 'todos';
-  const editDialog = document.getElementById('edit-dialog-viagem');
+  let currentFilter = 'all';
+  let viagensData = [];
 
-  // Helper para formatar a data (AAAA-MM-DD para DD/MM/AAAA)
-  function formatDateBr(dateString) {
-    if (!dateString) return '';
-    const parts = dateString.split('-');
-    if(parts.length !== 3) return dateString;
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  // A Mágica: IA gera a foto baseada no nome do destino
+  function getThemeImage(destiny) {
+    const safeDestiny = (destiny || 'beautiful travel').trim();
+    const aiPrompt = `${safeDestiny} city landscape, travel photography, cinematic lighting, highly detailed, 4k`;
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(aiPrompt)}?width=600&height=400&nologo=true`;
   }
 
-  // Gera uma imagem com inteligência artificial para representar o destino!
-  function getDestinyImage(destiny) {
-    const safeDestiny = (destiny || '').trim();
-    let seed = 0;
-    for (let i = 0; i < safeDestiny.length; i++) {
-        seed = (Math.imul(31, seed) + safeDestiny.charCodeAt(i)) | 0;
-    }
-    const prompt = `Minimalist luxury travel photography of ${safeDestiny}, landscape, highly detailed, moody cinematic lighting, 8k resolution`;
-    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=600&seed=${Math.abs(seed)}`;
-  }
+  const listContainer = document.getElementById('viagens-list');
+  const editDialog = document.getElementById('edit-dialog');
+
+  onValue(viagensRef, (snapshot) => {
+    viagensData = [];
+    snapshot.forEach(child => {
+      viagensData.push({ key: child.key, ...child.val() });
+    });
+    viagensData.reverse();
+    renderInterface();
+  });
 
   function renderInterface() {
-    const list = document.getElementById('viagensList');
-    if (!list) return;
-
-    list.innerHTML = '';
-    const filtered = viagens.filter(v => currentFilter === 'todos' || v.status === currentFilter);
+    let filtered = viagensData.filter(v => currentFilter === 'all' || v.status === currentFilter);
+    document.getElementById('stats-total').innerText = viagensData.length;
+    document.getElementById('stats-done').innerText = viagensData.filter(v => v.status === 'feita').length;
 
     if (!filtered.length) {
-      list.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><p style="font-family:var(--font-serif); font-style:italic;">Nenhum destino encontrado. Vamos planear algo?</p></div>`;
+      listContainer.innerHTML = `<div class="empty-state"><p class="empty-text">Ainda não há destinos aqui.</p></div>`;
       return;
     }
 
-    filtered.forEach((v, i) => {
-      const card = document.createElement('article');
-      card.className = 'viagem-card';
-      card.style.animationDelay = `${(i * 0.08).toFixed(2)}s`;
+    listContainer.innerHTML = '';
+    const frag = document.createDocumentFragment();
 
-      const isDone = v.status === 'feita';
-      const statusLabel = isDone ? 'Realizada' : 'Planejada';
-      const statusColor = isDone ? 'var(--gold-soft)' : 'var(--text-muted)';
-      const bgImage = getDestinyImage(v.destiny);
+    filtered.forEach(v => {
+      const card = document.createElement('article');
+      card.className = `viagem-card ${v.status === 'feita' ? 'concluida' : ''}`;
+      
+      const dateStr = v.date ? v.date.split('-').reverse().join('/') : 'Sem data';
+      // Se a imagem no banco estiver vazia, gera a imagem por IA
+      const imageUrl = v.image && v.image.trim() !== '' ? v.image : getThemeImage(v.destiny);
 
       card.innerHTML = `
-        <div class="viagem-img-box">
-          <img src="${bgImage}" alt="${v.destiny}" class="viagem-img" loading="lazy">
-          <div class="viagem-overlay"></div>
-          <span class="viagem-status" style="color: ${statusColor}; border-color: ${statusColor};">${statusLabel}</span>
+        <div class="viagem-image">
+          <img src="${imageUrl}" loading="lazy" alt="${v.destiny}">
         </div>
-        <div class="viagem-content">
-          <h3 class="viagem-destiny">${v.destiny}</h3>
+        <div class="viagem-info">
+          <h2 class="viagem-destiny">${v.destiny}</h2>
           <p class="viagem-date">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-right: 4px; vertical-align: middle; margin-top: -2px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            ${formatDateBr(v.targetDate || v.date)}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            ${dateStr}
           </p>
           <div class="viagem-actions">
-            <button class="btn-action edit" onclick="window.openEditViagem('${v.key}')" title="Editar">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            <button class="btn-icon check ${v.status === 'feita' ? 'checked' : ''}" onclick="window.toggleViagem('${v.key}', '${v.status}')" aria-label="Concluir">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
-            <button class="btn-action del" onclick="window.deleteViagem('${v.key}')" title="Deletar">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button class="btn-icon edit" onclick="window.openEditViagem('${v.key}')" aria-label="Editar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="btn-icon delete" onclick="window.deleteViagem('${v.key}')" aria-label="Eliminar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
           </div>
         </div>
       `;
-      list.appendChild(card);
+      frag.appendChild(card);
     });
+    listContainer.appendChild(frag);
   }
 
-  // Sincronização em tempo real com o Firebase
-  onValue(viagensRef, (snapshot) => {
-    viagens = [];
-    snapshot.forEach(child => { viagens.push({ key: child.key, ...child.val() }); });
-    // Ordena pela data mais próxima primeiro
-    viagens.sort((a, b) => new Date(a.targetDate || a.date) - new Date(b.targetDate || b.date));
-    renderInterface();
-  });
-
-  // Salvar Nova Viagem
   document.getElementById('viagem-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const destiny = document.getElementById('vDestiny').value.trim();
     const date = document.getElementById('vDate').value;
     const status = document.getElementById('vStatus').value;
+    const image = document.getElementById('vImage').value.trim();
     
-    if (!destiny || !date) return;
+    if (!destiny) return;
 
-    const btn = document.getElementById('btn-viagem-submit');
-    const origHTML = btn.innerHTML;
-    btn.innerHTML = '<span>Salvando...</span>';
-    btn.disabled = true;
-
-    // Use targetDate para manter compatibilidade com o index/carrossel
-    await push(viagensRef, { destiny, targetDate: date, date: date, status, timestamp: Date.now() });
-
+    await push(viagensRef, { destiny, targetDate: date, date, status, image });
     document.getElementById('viagem-form').reset();
-    btn.innerHTML = origHTML;
-    btn.disabled = false;
   });
 
-  // Excluir Viagem
-  window.deleteViagem = function(key) {
-    if(confirm("Tem certeza que deseja apagar este destino?")) {
-      remove(ref(db, 'viagens/' + key));
-    }
+  window.toggleViagem = async function(key, currentStatus) {
+    const newStatus = currentStatus === 'feita' ? 'pendente' : 'feita';
+    await update(ref(db, 'viagens/' + key), { status: newStatus });
   };
 
-  // Abrir Modal de Edição
+  window.deleteViagem = async function(key) {
+    await remove(ref(db, 'viagens/' + key));
+  };
+
   window.openEditViagem = function(key) {
-    const v = viagens.find(x => x.key === key);
+    const v = viagensData.find(x => x.key === key);
     if (!v) return;
     document.getElementById('edit-vKey').value = v.key;
     document.getElementById('edit-vDestiny').value = v.destiny || '';
-    document.getElementById('edit-vDate').value = v.targetDate || v.date || '';
-    document.getElementById('edit-vStatus').value = v.status || 'planejada';
-    
-    if(editDialog) editDialog.showModal();
+    document.getElementById('edit-vDate').value = v.date || '';
+    document.getElementById('edit-vStatus').value = v.status || 'pendente';
+    document.getElementById('edit-vImage').value = v.image || '';
+    editDialog.showModal();
   };
 
-  // Salvar Edição
+  document.getElementById('close-edit-dialog').addEventListener('click', () => editDialog.close());
+
   document.getElementById('edit-viagem-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const key = document.getElementById('edit-vKey').value;
-    const destiny = document.getElementById('edit-vDestiny').value.trim();
-    const date = document.getElementById('edit-vDate').value;
-    
     await update(ref(db, 'viagens/' + key), {
-      destiny,
-      targetDate: date,
-      date: date,
-      status: document.getElementById('edit-vStatus').value
+      destiny: document.getElementById('edit-vDestiny').value.trim(),
+      targetDate: document.getElementById('edit-vDate').value,
+      date: document.getElementById('edit-vDate').value,
+      status: document.getElementById('edit-vStatus').value,
+      image: document.getElementById('edit-vImage').value.trim()
     });
-    if(editDialog) editDialog.close();
+    editDialog.close();
   });
 
-  // Sistema de Abas (Filtros)
   document.querySelectorAll('.ftab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
@@ -252,14 +237,13 @@
     });
   });
 
-  // Animação de Entrada
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof gsap !== 'undefined') {
       const content = document.getElementById('viagens-content');
       gsap.to(content, { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" });
-      gsap.fromTo(".page-header", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.1, ease: "power3.out" });
-      gsap.fromTo(".form-wrapper", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.3, ease: "power3.out" });
-      gsap.fromTo(".filter-row", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: "power3.out" });
+    } else {
+      document.getElementById('viagens-content').style.opacity = 1;
+      document.getElementById('viagens-content').style.transform = "none";
     }
   });
 </script>
