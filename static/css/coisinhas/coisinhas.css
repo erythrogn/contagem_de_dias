@@ -1,8 +1,8 @@
 :root {
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
-  --gold-primary: rgba(212, 175, 55, 0.85);
-  --gold-light: rgba(212, 175, 55, 0.3);
+  --gold-primary: rgba(243, 219, 141, 0.85);
+  --gold-light: rgba(255, 212, 71, 0.3);
   --glass-bg: rgba(20, 24, 32, 0.4);
   --glass-border: rgba(212, 175, 55, 0.15);
   --text-main: #fcfbf9;
@@ -88,12 +88,59 @@ body {
 }
 .experience-card:hover { transform: translateY(-5px); border-color: var(--gold-light); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
 
+/* Container da Imagem com Animação de Carregamento */
 .card-image {
-  width: 100%; height: 180px; position: relative; overflow: hidden;
+  width: 100%; 
+  height: 180px; 
+  position: relative; 
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.5);
 }
+
+/* O texto que aparece enquanto a IA pensa */
+.card-image::before {
+  content: 'Pintando arte...';
+  position: absolute; 
+  inset: 0;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-family: var(--font-sans); 
+  font-size: 0.65rem; 
+  letter-spacing: 3px;
+  color: var(--gold-primary); 
+  text-transform: uppercase;
+  animation: pulseArt 1.5s infinite; 
+  z-index: 0;
+}
+
+@keyframes pulseArt {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
 .card-image img {
-  width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease;
-  filter: brightness(0.8) sepia(0.2); /* Mantém a paleta de cores unida */
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  position: relative; 
+  z-index: 1; /* Cobre o texto de carregamento quando a imagem chega */
+  transition: transform 0.8s ease;
+  filter: brightness(0.8) sepia(0.2);
+}
+
+.experience-card:hover .card-image img { 
+  transform: scale(1.05); 
+  filter: brightness(1) sepia(0); 
+}
+
+.card-image::after {
+  content: ''; 
+  position: absolute; 
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,12,16,0.9), transparent);
+  z-index: 2;
+  pointer-events: none;
 }
 .experience-card:hover .card-image img { transform: scale(1.05); filter: brightness(1) sepia(0); }
 
@@ -123,19 +170,80 @@ body {
 .experience-card.done .item-name { color: var(--text-muted); text-decoration: line-through; text-decoration-color: var(--gold-light); }
 .experience-card.done .card-image img { filter: grayscale(0.8) brightness(0.5); }
 
-/* Botão Deletar */
-.btn-delete {
-  position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); border: 1px solid var(--glass-border);
-  color: #fff; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;
-  opacity: 0; transform: scale(0.8); transition: all 0.3s ease; z-index: 10;
+/* ==========================================================================
+   AÇÕES DO CARTÃO (EDITAR E DELETAR) E MODO DE EDIÇÃO
+   ========================================================================== */
+.card-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
 }
-.experience-card:hover .btn-delete { opacity: 1; transform: scale(1); }
-.btn-delete:hover { background: #ef4444; border-color: #ef4444; }
 
-.empty-menu { grid-column: 1 / -1; text-align: center; font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-size: 1.2rem; padding: 4rem 0; }
+.action-btn {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+.experience-card:hover .action-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.action-btn:hover {
+  background: var(--glass-bg);
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+.btn-delete:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* O Input quando você clica em "Editar" */
+.edit-input {
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-bottom: 1px solid var(--gold-primary);
+  color: var(--gold-primary);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-style: italic;
+  width: 100%;
+  padding: 4px 8px;
+  outline: none;
+  border-radius: 4px 4px 0 0;
+  box-shadow: inset 0 -10px 10px -10px rgba(212, 175, 55, 0.2);
+}
+
+.empty-menu {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  padding: 4rem 0;
+}
 
 @media (max-width: 768px) {
   #coisinhas-content { padding-left: 0; }
   .coisinhas-grid { grid-template-columns: 1fr; }
-  .btn-delete { opacity: 1; transform: scale(1); }
+  .action-btn { opacity: 1; transform: translateY(0); } /* Sempre visível no mobile */
 }

@@ -7,9 +7,9 @@ const listContainer = document.getElementById('coisinhasList');
 const filterBtns = document.querySelectorAll('.filter-btn');
 
 let allCoisinhas = [];
-let currentFilter = 'all'; // Pode ser 'all', 'pending', 'done'
+let currentFilter = 'all';
 
-// 1. O SERVIÇO: Adicionar um novo item
+// 1. ADICIONAR NOVA EXPERIÊNCIA
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const title = input.value.trim();
@@ -20,7 +20,6 @@ form.addEventListener('submit', async (e) => {
       title: title,
       done: false,
       createdAt: Date.now()
-      // Se você tinha imagens salvas no banco antes, pode adicionar o campo imageUrl aqui.
     });
     input.value = '';
     input.focus();
@@ -29,7 +28,7 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// 2. ESCUTAR DADOS DO FIREBASE
+// 2. ESCUTAR DADOS EM TEMPO REAL
 onValue(ref(db, 'coisinhas'), (snapshot) => {
   const data = snapshot.val();
   if (!data) {
@@ -40,31 +39,27 @@ onValue(ref(db, 'coisinhas'), (snapshot) => {
   renderCards();
 });
 
-// 3. LÓGICA DE FILTROS
+// 3. FILTROS
 filterBtns.forEach(btn => {
   btn.addEventListener('click', (e) => {
-    // Muda a classe ativa visualmente
     filterBtns.forEach(b => b.classList.remove('active'));
     e.target.classList.add('active');
-    
-    // Atualiza o estado do filtro e re-renderiza
     currentFilter = e.target.getAttribute('data-filter');
     renderCards();
   });
 });
 
-// 4. RENDERIZAR A GRADE DE CARTÕES
+// 4. RENDERIZAR CARTÕES COM IMAGEM GERADA POR IA
+// 4. RENDERIZAR CARTÕES COM SISTEMA ANTI-FALHA DE IMAGEM
 function renderCards() {
   listContainer.innerHTML = '';
 
-  // Aplica o filtro atual
   let itemsToRender = allCoisinhas.filter(item => {
     if (currentFilter === 'pending') return !item.done;
     if (currentFilter === 'done') return item.done;
-    return true; // 'all'
+    return true;
   });
 
-  // Ordena: Não concluídos primeiro, depois os concluídos
   itemsToRender.sort((a, b) => {
     if (a.done === b.done) return (b.createdAt || 0) - (a.createdAt || 0);
     return a.done ? 1 : -1;
@@ -82,13 +77,33 @@ function renderCards() {
     card.className = `experience-card ${item.done ? 'done' : ''}`;
     card.setAttribute('data-id', item.id);
 
-    // Geração Dinâmica da Imagem baseada no Título (mantém a mágica do app antigo)
-    // Se não houver imageUrl no banco, ele gera uma foto temática (romantic aesthetic) na hora.
-    const imgSrc = item.imageUrl ? item.imageUrl : `https://image.pollinations.ai/prompt/${encodeURIComponent(item.title + " romantic cinematic")}?width=400&height=300&nologo=true`;
+    // 1. Resgate de Imagens Antigas (Cobre todas as possibilidades do Firebase)
+    let oldImage = item.imageUrl || item.image || item.img || item.foto || "";
+    
+    // Se a imagem antiga for do serviço Unsplash que foi desativado, ignoramos ela.
+    if (oldImage.includes("source.unsplash.com")) {
+        oldImage = ""; 
+    }
 
+    // 2. O Motor de Inteligência Artificial para gerar as novas
+    // Usamos um 'seed' fixo (baseado no ID ou tempo) para que a IA não fique gerando uma imagem diferente cada vez que você abre a página.
+    const seed = item.createdAt ? item.createdAt.toString().slice(-4) : '1234';
+    const aiPrompt = encodeURIComponent(item.title + ", romantic couples aesthetic photography, cinematic, 4k");
+    const imgSrc = oldImage ? oldImage : `https://image.pollinations.ai/prompt/${aiPrompt}?width=600&height=400&seed=${seed}&nologo=true`;
+
+    // 3. Fallback de Segurança Absoluta: Se a IA travar ou a internet falhar, esta foto linda entra no lugar.
+    const fallbackImg = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80";
+
+    // Adicionamos o atributo 'onerror' direto na tag img para trocar a fonte se houver quebra.
     card.innerHTML = `
+      <div class="card-actions">
+        <button class="action-btn btn-edit" aria-label="Editar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+        <button class="action-btn btn-delete" aria-label="Remover">✕</button>
+      </div>
       <div class="card-image">
-        <img src="${imgSrc}" alt="${item.title}" loading="lazy">
+        <img src="${imgSrc}" alt="${item.title}" loading="lazy" onerror="this.onerror=null; this.src='${fallbackImg}';">
       </div>
       <div class="card-content">
         <span class="item-name">${item.title}</span>
@@ -97,7 +112,6 @@ function renderCards() {
           <span class="checkmark"></span>
         </label>
       </div>
-      <button class="btn-delete" aria-label="Remover">✕</button>
     `;
     
     fragment.appendChild(card);
@@ -105,25 +119,57 @@ function renderCards() {
 
   listContainer.appendChild(fragment);
 }
-
-// 5. INTERAÇÃO: Checkbox e Deleção
+// 5. INTERAÇÕES: Checkbox, Deletar e Editar
 listContainer.addEventListener('change', (e) => {
   if (e.target.classList.contains('elegant-checkbox')) {
     const card = e.target.closest('.experience-card');
     const id = card.getAttribute('data-id');
-    const isChecked = e.target.checked;
-    update(ref(db, `coisinhas/${id}`), { done: isChecked });
+    update(ref(db, `coisinhas/${id}`), { done: e.target.checked });
   }
 });
 
 listContainer.addEventListener('click', (e) => {
-  if (e.target.classList.contains('btn-delete')) {
+  // Ação de Deletar
+  if (e.target.closest('.btn-delete')) {
     const card = e.target.closest('.experience-card');
     const id = card.getAttribute('data-id');
-    
     card.style.opacity = '0';
     card.style.transform = 'scale(0.9)';
-    
     setTimeout(() => remove(ref(db, `coisinhas/${id}`)), 300);
+  }
+
+  // Ação de Editar
+  if (e.target.closest('.btn-edit')) {
+    const card = e.target.closest('.experience-card');
+    const id = card.getAttribute('data-id');
+    const titleContainer = card.querySelector('.item-name');
+    const currentTitle = titleContainer.textContent;
+
+    // Transforma o texto num input de edição elegante
+    titleContainer.innerHTML = `<input type="text" class="edit-input" value="${currentTitle}">`;
+    const inputField = titleContainer.querySelector('.edit-input');
+    
+    // Foca no input e joga o cursor para o final do texto
+    inputField.focus();
+    inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
+
+    // Salva ao clicar fora (blur) ou apertar Enter
+    const saveEdit = () => {
+      const newTitle = inputField.value.trim();
+      if (newTitle && newTitle !== currentTitle) {
+        update(ref(db, `coisinhas/${id}`), { title: newTitle });
+        // O Firebase vai atualizar o dado, o evento onValue vai disparar, e a IA vai gerar uma nova foto!
+      } else {
+        renderCards(); // Se não mudou nada, apenas refaz o layout original
+      }
+    };
+
+    inputField.addEventListener('blur', saveEdit);
+    inputField.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        inputField.removeEventListener('blur', saveEdit); // Previne salvar duas vezes
+        saveEdit();
+      }
+    });
   }
 });
