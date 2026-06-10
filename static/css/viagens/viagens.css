@@ -1,16 +1,15 @@
-/* Importa a base estética de Ouro Fosco e Minimalismo */
-@import url("../bloco/animations.css");
-@import url("../bloco/forms.css");
-@import url("../bloco/layout.css");
+@import url("animations.css");
+@import url("layout.css");
+@import url("components.css");
 
 :root {
   --bg-dark: #06080d;
   --champagne-canvas: rgba(253, 250, 240, 0.04);
   --gold-soft: #f1d299;
-  --gold-dark: #dca852;
+  --gold-dark: #1a34ac;
   --text-light: #fefefe;
   --text-muted: rgba(255, 255, 255, 0.45);
-  --border-gold: rgba(241, 210, 153, 0.15);
+  --border-gold: rgba(47, 59, 116, 0.15);
   
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
