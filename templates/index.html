@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/animations.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/animations.css') }}?v=4">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index/components.css') }}?v=4">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index/layout.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index/index.css') }}">
   
@@ -22,13 +22,12 @@
   <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto4.jpg') }}" alt="" class="bg-img"></div>
   <div class="bg-cell"><img src="{{ url_for('static', filename='img/foto2.jpg') }}" alt="" class="bg-img"></div>
 </div>
-<div class="bg-vignette" aria-hidden="true"></div>
+<div class="bg-vignette" id="vignette-layer" aria-hidden="true"></div>
 
-<main class="invitation-container stage">
+<main class="invitation-container stage" id="main-stage">
     
-    <article class="wedding-card">
+    <article class="wedding-card" id="normal-card">
         <div class="card-inner-border">
-            
             <header class="invitation-header">
                 <div class="fine-line-decorator"></div>
                 <p class="celebration-date">Vinte e Nove de Novembro</p>
@@ -64,7 +63,29 @@
             <footer class="invitation-footer love-msg">
                 te amo, meu tiago.
             </footer>
+        </div>
+    </article>
 
+    <article class="wedding-card centenary-card" id="centenary-card" style="display: none;">
+        <div class="card-inner-border golden-aura">
+            <header class="invitation-header">
+                <div class="fine-line-decorator"></div>
+                <p class="celebration-date" style="color: var(--gold-soft);">Um Marco na Nossa História</p>
+                <div class="fine-line-decorator"></div>
+            </header>
+
+            <div class="centenary-body">
+                <span class="centenary-number" id="centenaryDays">000</span>
+                <span class="serif-italic" style="font-size: 1.5rem; display: block; margin-top: -10px;">Dias Incríveis</span>
+            </div>
+
+            <div class="minimal-divider" style="color: var(--gold-soft); text-shadow: 0 0 10px var(--gold-neon);">✦</div>
+
+            <p class="centenary-message" id="magicMsg"></p>
+
+            <footer class="invitation-footer love-msg" style="margin-top: 30px;">
+                feliz dia, meu tiago.
+            </footer>
         </div>
     </article>
 
@@ -89,37 +110,118 @@
 {% block scripts %}
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // 1. Lógica do Relógio Independente
     const START_DATE = new Date('2025-11-29T00:00:00-03:00');
+    let hasAnimatedCentenary = false;
 
     function updateCounter() {
       const now = new Date();
       const diff = now - START_DATE;
       if (diff < 0) return; 
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24)+1);
+      // ✦ MODO DE TESTE (Descomente o 200 para testar)
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24) + 1);
+       //const d = 200; 
+
       const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const m = Math.floor((diff / 1000 / 60) % 60);
       const s = Math.floor((diff / 1000) % 60);
 
-      const stamp = document.getElementById('stampDays');
-      if(stamp) stamp.textContent = `${d} dias`;
-      
-      document.getElementById('cDays').textContent = d.toString().padStart(2, '0');
-      document.getElementById('cHours').textContent = h.toString().padStart(2, '0');
-      document.getElementById('cMinutes').textContent = m.toString().padStart(2, '0');
-      document.getElementById('cSeconds').textContent = s.toString().padStart(2, '0');
+      const stage = document.getElementById('main-stage');
+      const normalCard = document.getElementById('normal-card');
+      const centenaryCard = document.getElementById('centenary-card');
+      const vignette = document.getElementById('vignette-layer');
+
+      if (d > 0 && d % 100 === 0) {
+          if (!hasAnimatedCentenary) {
+              normalCard.style.display = 'none';
+              centenaryCard.style.display = 'flex';
+              stage.classList.add('is-centenary');
+              vignette.classList.add('is-centenary-bg');
+              
+              document.getElementById('centenaryDays').textContent = d;
+              
+              if (typeof gsap !== 'undefined') {
+                  gsap.fromTo("#centenary-card", { scale: 0.9, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 2, ease: "power3.out" });
+              }
+
+              const elMsg = document.getElementById('magicMsg');
+              if (elMsg) {
+                  elMsg.innerHTML = '';
+                  // Utilizamos crases (`) para permitir múltiplas linhas e aspas internas sem quebrar o código
+                  const textToAnimate = `Obrigado pelos 200 dias ao seu lado e por me mostrar que amo a forma como você toca o meu rosto. Não sou o mesmo da noite em que assistimos "Robô Selvagem" juntos,
+Agradeço e sempre serei grato a você.
+Obrigado pelos melhores 200 dias da minha vida e por me mostrar que viver é incrível, mas que só é incrível porque vivi os últimos dias com você.
+Me tornei mais sensível e imaturo, mas só porque é com você.
+É você quem eu quero beijar ao acordar, logo depois de experimentar uma comida nova em um restaurante ruim, ao tomar uma bebida num lugar qualquer ou no nosso bar favorito.
+E eu sei que algumas coisas, inseguras coisas, minhas coisas inseguras irão nos atrapalhar, mas estou cuidando para que isso melhore.
+Mas a sua maturidade me faz perceber que posso ser melhor a cada dia, e a sua certeza sobre mim me faz ter certeza de que consigo ser melhor a cada dia.
+Já não me lembro com tanta clareza do nosso início, principalmente das coisas ruins que comentamos recentemente. Mas, de alguma forma, eu sempre soube que tudo valeria a pena, que tentar, sem medo, manter alguém e fazer com que esse alguém queira ficar, seria incrível.
+Espero que você saiba que nunca será "ninguém", porque você é o tudo de alguém. Porque você é tudo para mim.
+E aquilo que dizem ser um erro é, na verdade, a nossa forma mais bonita de amar. Obrigado por me fazer sentir tão seguro, a ponto de poder demonstrar tudo isso sem o menor medo.
+E não vou mentir: a forma como foi fácil te amar me assusta. Nunca amei ninguém como amo você, simplesmente porque nunca amei amar alguém como eu amo amar você. Eu amo deitar com você, amo acordar com você, amo comer, assistir, jogar, sorrir e chorar. Amo sentir o vento e a água do chuveiro caindo com você, eu amo tudo o que é com você.
+Ainda não me acostumei e acredito que nunca vou me acostumar a te ver vindo em minha direção no final do dia. Me faça acreditar nas suas piores e melhores verdades e torná-las minhas, mas seja paciente com a minha reação.
+Ainda estou tentando ser melhor para alguém, ainda estou tentando ser melhor para você, e me perdoe se falho às vezes, quando sou imaturo e sem noção.
+Eu queria ser tudo aquilo que você precisa e almeja.
+Mas seja meu por mais um dia, todos os dias, que farei seus contos de fadas se tornarem realidade. Sempre que o sino mais antigo da cidade tocar à meia-noite em algum lugar, e você pensar em fazer um novo pedido para aquela estrela já morta, lembre-se de que, desde 29 de novembro, ficou a promessa de que você não precisaria mais dela para tornar os seus sonhos possíveis, pois eles se transformarão em memórias. Boas memórias.
+Eu te amo.`;
+                  
+                  let delay = 0;
+                  
+                 for (let i = 0; i < textToAnimate.length; i++) {
+                      const char = textToAnimate[i];
+                      // Verifica barras verticais e quebras de linha reais (Enter)
+                      if (char === '|' || char === '\n') {
+                          elMsg.innerHTML += '<br>';
+                      } else if (char === '\r') {
+                          // Ignora o caractere de retorno oculto do Windows
+                          continue;
+                      } else {
+                          const span = document.createElement('span');
+                          span.className = 'magic-letter';
+                          
+                          // ✨ O SEGREDO: Criar uma variável CSS dinâmica para sincronizar a fada e a letra
+                          span.style.setProperty('--magic-delay', delay + 's');
+                          
+                          if (char === ' ') {
+                              span.innerHTML = '&nbsp;';
+                          } else {
+                              span.textContent = char;
+                          }
+                          
+                          elMsg.appendChild(span);
+                          delay += 0.06; // Aumentei um pouquinho (0.06s) para o rastro da fada ficar mais visível e dramático
+                      }
+                  }
+              }
+
+              hasAnimatedCentenary = true;
+          }
+      } else {
+          if (hasAnimatedCentenary) {
+              stage.classList.remove('is-centenary');
+              vignette.classList.remove('is-centenary-bg');
+              centenaryCard.style.display = 'none';
+              normalCard.style.display = 'flex';
+              hasAnimatedCentenary = false;
+          }
+          
+          const stamp = document.getElementById('stampDays');
+          if(stamp) stamp.textContent = `${d} dias`;
+          
+          document.getElementById('cDays').textContent = d.toString().padStart(2, '0');
+          document.getElementById('cHours').textContent = h.toString().padStart(2, '0');
+          document.getElementById('cMinutes').textContent = m.toString().padStart(2, '0');
+          document.getElementById('cSeconds').textContent = s.toString().padStart(2, '0');
+      }
 
       if (typeof window._pulseSeconds === 'function') {
         window._pulseSeconds();
       }
     }
     
-    // Inicia imediatamente e depois repete a cada segundo
     updateCounter();
     setInterval(updateCounter, 1000);
 
-    // 2. Lógica das Animações GSAP
     if (typeof gsap !== 'undefined') {
       gsap.set([".wedding-card", ".minimal-carousel"], { autoAlpha: 0 });
       
@@ -207,7 +309,6 @@
     display.style.opacity = 0; 
     display.style.transform = "translateY(3px)";
     setTimeout(() => {
-      // ATENÇÃO: Mudou de innerText para innerHTML aqui embaixo!
       display.innerHTML = eventosCarrossel[eventoAtual] || "Carregando...";
       display.style.opacity = 1;
       display.style.transform = "translateY(0)";
