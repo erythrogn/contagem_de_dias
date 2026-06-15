@@ -70,3 +70,25 @@
   animation: riseUpViagens 0.8s var(--spring-soft) 0.4s forwards;
   will-change: transform, opacity;
 }
+/* ====================================================
+   ✨ ANIMAÇÃO MÁGICA DE TEXTO (LETRA A LETRA)
+==================================================== */
+.magic-letter {
+    opacity: 0;
+    display: inline-block;
+    -webkit-animation: revealMagic 0.8s forwards;
+    animation: revealMagic 0.8s forwards;
+    white-space: pre; 
+}
+
+@-webkit-keyframes revealMagic {
+    0% { opacity: 0; transform: translateX(-15px) scale(0.8); color: #6f84d8; text-shadow: 0 0 20px #6f84d8, 0 0 40px #6f84d8; }
+    50% { opacity: 1; transform: translateX(0) scale(1.1); color: #fdfbf7; text-shadow: 0 0 15px rgba(111, 132, 216, 0.8); }
+    100% { opacity: 1; transform: translateX(0) scale(1); color: var(--text-light); text-shadow: 0 0 5px rgba(111, 132, 216, 0.2); }
+}
+
+@keyframes revealMagic {
+    0% { opacity: 0; transform: translateX(-15px) scale(0.8); color: #6f84d8; text-shadow: 0 0 20px #6f84d8, 0 0 40px #6f84d8; }
+    50% { opacity: 1; transform: translateX(0) scale(1.1); color: #fdfbf7; text-shadow: 0 0 15px rgba(111, 132, 216, 0.8); }
+    100% { opacity: 1; transform: translateX(0) scale(1); color: var(--text-light); text-shadow: 0 0 5px rgba(111, 132, 216, 0.2); }
+}

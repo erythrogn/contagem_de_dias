@@ -180,3 +180,68 @@
   .time-digit { font-size: 2rem; }
   .carousel-message { font-size: 1rem; }
 }
+/* ====================================================
+   ✨ MODO CELEBRAÇÃO (CENTENAS DE DIAS)
+==================================================== */
+.centenary-card {
+    min-height: 520px;
+    box-shadow: 0 0 60px rgba(232, 200, 120, 0.15), inset 0 0 40px rgba(10, 15, 30, 0.8);
+    border-color: var(--gold-soft);
+    animation: pulseGold 4s infinite alternate ease-in-out;
+}
+
+.golden-aura {
+    background: radial-gradient(circle at center, rgba(232, 200, 120, 0.08) 0%, transparent 70%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+}
+
+.centenary-body {
+    margin: 35px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+}
+
+.centenary-number {
+    font-family: var(--font-serif);
+    font-size: 8.5rem;
+    font-weight: 300;
+    line-height: 0.8;
+    color: var(--gold-soft);
+    text-shadow: 0 0 30px var(--gold-neon), 0 0 60px rgba(232, 200, 120, 0.3);
+    letter-spacing: -4px;
+    margin-bottom: 5px;
+}
+
+.centenary-message {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    text-align: center;
+    padding: 0 30px;
+    opacity: 0.95;
+}
+
+.bg-vignette {
+    transition: background 2s ease;
+}
+
+.bg-vignette.is-centenary-bg {
+    background: radial-gradient(circle at center, rgba(111, 132, 216, 0.15) 0%, var(--bg-dark) 90%);
+}
+
+.stage.is-centenary .minimal-carousel {
+    border-color: var(--border-gold);
+    box-shadow: 0 0 25px var(--cinematic-glow);
+}
+
+@keyframes pulseGold {
+    0% { box-shadow: 0 0 40px rgba(232, 200, 120, 0.1), inset 0 0 40px rgba(10, 15, 30, 0.8); }
+    100% { box-shadow: 0 0 80px rgba(232, 200, 120, 0.25), inset 0 0 40px rgba(10, 15, 30, 0.8); }
+}
