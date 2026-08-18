@@ -1,4 +1,3 @@
-
 (function () {
   if (typeof gsap === 'undefined') return;
 
@@ -10,10 +9,10 @@
     const tl = gsap.timeline({ defaults: { duration: 0.7 } });
 
     tl
-      /* Cabeçalho */
+      /* Cabeçalho - clearProps remove o blur da memória após animar */
       .fromTo('.filmes-header',
         { opacity: 0, y: 40, filter: 'blur(6px)' },
-        { opacity: 1, y: 0,  filter: 'blur(0px)' }
+        { opacity: 1, y: 0,  filter: 'blur(0px)', clearProps: 'filter' }
       )
       /* Barra de progresso */
       .fromTo('.progress-wrapper',
@@ -27,7 +26,7 @@
         { opacity: 1, y: 0 },
         '-=0.3'
       )
-      /* Filtros e tags de gênero em stagger */
+      /* Filtros e tags de gênero em stagger (muito mais leve) */
       .fromTo('.filter-wrapper, .genre-wrapper',
         { opacity: 0, y: 12 },
         { opacity: 1, y: 0, stagger: 0.12 },
@@ -41,7 +40,7 @@
       );
   }
 
-  /* ── Re-anima ao trocar de aba (filmes / séries / jogos) ─ */
+  /* ── Re-anima ao trocar de aba ────────────────────────── */
   document.querySelectorAll('.main-tab').forEach(function (btn) {
     btn.addEventListener('click', function () {
       const section = document.getElementById('section-' + btn.dataset.section);
@@ -52,13 +51,12 @@
           '.filmes-header, .progress-wrapper, .form-wrapper, .filter-wrapper, .genre-wrapper, .slider-section'
         ),
         { opacity: 0, y: 24, filter: 'blur(4px)' },
-        { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.55, stagger: 0.08 }
+        { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.55, stagger: 0.08, clearProps: 'filter' }
       );
     });
   });
 
   /* ── Animação dos cards do slider ao navegar ─────────── */
-  /* Exposta globalmente para ser chamada após updateSlider() */
   window.gsapSliderChange = function (activeCard, prevCards, nextCards) {
     if (activeCard) {
       gsap.fromTo(activeCard,
@@ -75,13 +73,15 @@
   };
 
   /* ── Micro-interação: hover no card ativo ────────────── */
+  /* overwrite: 'auto' previne travamentos caso o usuário passe o mouse rapidamente várias vezes */
   document.addEventListener('mouseover', function (e) {
     const card = e.target.closest('.slider-card.active');
-    if (card) gsap.to(card, { y: -4, duration: 0.3, ease: 'power2.out' });
+    if (card) gsap.to(card, { y: -4, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
   });
+  
   document.addEventListener('mouseout', function (e) {
     const card = e.target.closest('.slider-card.active');
-    if (card) gsap.to(card, { y: 0, duration: 0.4, ease: 'power2.inOut' });
+    if (card) gsap.to(card, { y: 0, duration: 0.4, ease: 'power2.inOut', overwrite: 'auto' });
   });
 
   /* ── Inicia ───────────────────────────────────────────── */

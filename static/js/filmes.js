@@ -45,7 +45,7 @@ const dbRefs = {
   musicas: ref(db, "musicas"),
 };
 
-// ─── Busca de dados externos com Timeout de Proteção (Evita travamentos) ──────
+// ─── Busca de dados externos com Timeout de Proteção ──────────────────────────
 async function safeFetch(url, timeoutMs = 8000) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -191,9 +191,7 @@ setupPreview("jTitle", "jYear", "poster-preview-box-jogos",  "poster-preview-img
 // ─── Lógica UX Expandir Gavetas de Formulário ────────────────────────────────
 window.toggleFormDrawer = function(id) {
   const wrapper = document.getElementById(id);
-  if (wrapper) {
-    wrapper.classList.toggle("open");
-  }
+  if (wrapper) wrapper.classList.toggle("open");
 };
 
 // ─── Helpers e Progresso ──────────────────────────────────────────────────────
@@ -230,20 +228,11 @@ function renderGenres(section) {
   s.items.forEach(m => parseGenres(m.genre).forEach(g => genreSet.add(g)));
   const genres = Array.from(genreSet).sort();
 
-  // CORREÇÃO: As classes 'gtag' foram alteradas para 'gtab' para parear com o CSS
+  // Apenas renderiza, sem recriar Event Listeners (memória otimizada via delegação)
   row.innerHTML = [
     `<button class="gtab ${s.genre === "todos" ? "active" : ""}" data-genre="todos">Todos os Gêneros</button>`,
     ...genres.map(g => `<button class="gtab ${s.genre === g ? "active" : ""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`),
   ].join("");
-
-  // CORREÇÃO: O seletor abaixo também passa a buscar por '.gtab'
-  row.querySelectorAll(".gtab").forEach(btn => {
-    btn.addEventListener("click", () => {
-      s.genre = btn.dataset.genre;
-      renderGenres(section);
-      renderItems(section);
-    });
-  });
 }
 
 // ─── Imagens de fallback e Ações ──────────────────────────────────────────────
@@ -343,14 +332,8 @@ function renderItems(section) {
 
     const card = document.createElement("div");
     card.className = `slider-card${done ? " watched" : ""}`;
+    card.dataset.idx = idx; // Delegação de evento
     card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
-    card.addEventListener("click", () => {
-      if (idx !== s.currentIndex) {
-        const direction = idx > s.currentIndex ? 1 : -1;
-        s.currentIndex = idx;
-        updateSlider(section, direction);
-      }
-    });
     fragment.appendChild(card);
   });
 
@@ -381,7 +364,6 @@ function createStars(score, name) {
     const isFilled = i <= num;
     const fill = isFilled ? colorVar : 'none';
     const stroke = isFilled ? colorVar : 'rgba(255,255,255,0.25)';
-    const filter = isFilled ? `drop-shadow(0 0 6px ${colorVar})` : 'none';
     
     stars += `<svg class="star-icon" width="14" height="14" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
   }
@@ -409,13 +391,7 @@ function buildMainHTML(section, m) {
     if (m.ratingHesron || m.ratingTiago) {
       const hesronStars = createStars(m.ratingHesron, "Hesron");
       const tiagoStars  = createStars(m.ratingTiago, "Tiago");
-      
-      ratingHTML = `
-        <div class="movie-ratings-container">
-          ${m.ratingHesron ? hesronStars : ''}
-          ${m.ratingTiago ? tiagoStars : ''}
-        </div>
-      `;
+      ratingHTML = `<div class="movie-ratings-container">${m.ratingHesron ? hesronStars : ''}${m.ratingTiago ? tiagoStars : ''}</div>`;
     }
   } else {
     meta = [m.status, m.platform, m.where].filter(Boolean).map(escapeHTML).join(" · ");
@@ -490,6 +466,38 @@ function updateSlider(section, direction = 0) {
   if (prevBtn) prevBtn.setAttribute("aria-disabled", String(s.currentIndex === 0));
   if (nextBtn) nextBtn.setAttribute("aria-disabled", String(s.currentIndex === total - 1));
 }
+
+// ─── Event Delegation (Economiza memória substituindo ouvintes individuais) ───
+document.addEventListener("click", e => {
+  // Clique nos cards de Slider
+  const card = e.target.closest(".slider-card");
+  if (card) {
+    const track = card.closest(".slider-track");
+    if (!track) return;
+    const section = track.id.replace("list-", "");
+    const idx = parseInt(card.dataset.idx, 10);
+    const s = state[section];
+
+    if (!isNaN(idx) && idx !== s.currentIndex) {
+      const direction = idx > s.currentIndex ? 1 : -1;
+      s.currentIndex = idx;
+      updateSlider(section, direction);
+    }
+    return;
+  }
+
+  // Clique nas abas de Gênero
+  const gtab = e.target.closest(".gtab");
+  if (gtab) {
+    const wrapper = gtab.closest(".genre-wrapper");
+    if (!wrapper) return;
+    const section = wrapper.id.replace("genreRow-", "");
+    state[section].genre = gtab.dataset.genre;
+    renderGenres(section);
+    renderItems(section);
+    return;
+  }
+});
 
 // ─── Navegação de slides e Gestos Mobile ──────────────────────────────────────
 window.prevSlide = function (section) {
@@ -576,7 +584,7 @@ onValue(dbRefs.musicas, snapshot => {
   renderMusicas();
 });
 
-// ─── Formulários de Edição com Bloqueio de Segurança ──────────────────────────
+// ─── Formulários de Edição ────────────────────────────────────────────────────
 ["filmes", "series", "jogos"].forEach(section => {
   const form = document.getElementById(`edit-form-${section}`);
   if (!form) return;
@@ -645,7 +653,7 @@ onValue(dbRefs.musicas, snapshot => {
   });
 });
 
-// ─── Formulários de Adição com Bloqueio de Segurança ──────────────────────────
+// ─── Formulários de Adição ────────────────────────────────────────────────────
 async function handleAddSubmit(section, fetchFn, fields) {
   const title = document.getElementById(fields.title)?.value.trim();
   if (!title) return;
@@ -814,11 +822,18 @@ function renderMusicas() {
         <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" style="width:100%;height:100%;overflow:hidden;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="${m.src}" loading="lazy"></iframe>
       </div>`;
     fragment.appendChild(card);
-    if (typeof gsap !== "undefined") gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: idx * 0.1 });
   });
 
   track.innerHTML = "";
   track.appendChild(fragment);
+
+  // Otimização: Anima todos os elementos da lista em lote (stagger) após estarem no DOM
+  if (typeof gsap !== "undefined") {
+    gsap.fromTo(track.querySelectorAll('.musica-card'), 
+      { opacity: 0, y: 20 }, 
+      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.1 }
+    );
+  }
 }
 
 document.querySelectorAll(".ftab").forEach(tab => {
