@@ -25,27 +25,19 @@
   animation-direction: alternate;
 }
 
-/* ─── CONTAINER PRINCIPAL ─────────────────────────────────── */
-
 .filmes-container {
   max-width: 1440px;
-  margin-top: 0;
-  margin-right: auto;
-  margin-bottom: 0;
-  margin-left: auto;
+  margin: 0 auto;
   padding-top: 6rem;
   padding-right: 3rem;
   padding-bottom: 8rem;
-  padding-left: 3rem;
+  /* Compensa a sidebar via padding para manter o margin: auto centralizando a caixa */
+  padding-left: calc(80px + 3rem);
   position: relative;
   z-index: 10;
-  /* NOTA: margin-left: 80px compensa a sidebar fixa do layout base */
-  margin-left: 80px;
   display: flex;
   flex-direction: column;
 }
-
-/* ─── HEADER DA SEÇÃO ─────────────────────────────────────── */
 
 .filmes-header {
   text-align: center;
@@ -69,10 +61,7 @@
   font-size: clamp(3rem, 6vw, 4.5rem);
   font-weight: 300;
   color: var(--text-light);
-  margin-top: 0;
-  margin-right: 0;
-  margin-bottom: 0.5rem;
-  margin-left: 0;
+  margin: 0 0 0.5rem 0;
   line-height: 1.1;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
@@ -91,30 +80,23 @@
   letter-spacing: 1px;
 }
 
-/* ─── NOVO: SLIDER SECTION ────────────────────────────────── */
-/*
- * CORRIGIDO: .slider-section era usado no HTML mas não tinha definição no CSS.
- * Adicionado para garantir espaçamento e z-index correto.
- */
-
 .slider-section {
   width: 100%;
   position: relative;
   z-index: 5;
 }
 
-/* ─── RESPONSIVO ──────────────────────────────────────────── */
-
 @media (max-width: 1200px) {
   .filmes-container {
-    padding-left: 2rem;
+    padding-left: calc(80px + 2rem);
     padding-right: 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .filmes-container {
-    margin-left: 0;
+    padding-left: 2rem;
+    padding-right: 2rem;
     padding-top: 5rem;
     padding-bottom: 120px;
   }

@@ -2,18 +2,15 @@
   background-color: var(--glass-bg);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--border-gold);
+  border: 1px solid var(--border-gold);
   border-radius: 8px;
-  padding-top: 4rem;
-  padding-right: 3rem;
-  padding-bottom: 4rem;
-  padding-left: 3rem;
+  padding: 4rem 3rem;
   margin-bottom: 5rem;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .form-wrapper::after {
@@ -25,22 +22,24 @@
   height: 1px;
   background-image: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
   opacity: 0.3;
+  pointer-events: none;
 }
 
 .form-title {
   font-family: var(--font-serif);
   font-size: 2.2rem;
   font-weight: 300;
+  line-height: 1.2;
   color: var(--gold-soft);
-  margin-top: 0;
-  margin-bottom: 3rem;
+  margin: 0 0 3rem;
   text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
 }
 
 .form-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 3rem 2.5rem;
+  width: 100%;
 }
 
 .span-full {
@@ -49,41 +48,42 @@
 
 .field-group {
   position: relative;
+  min-width: 0;
 }
 
 .custom-poster-layout {
   display: flex;
   gap: 2rem;
   align-items: flex-end;
+  width: 100%;
 }
 
 .input-relative {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   position: relative;
 }
 
 .field-input {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background-color: transparent !important;
-  border-top-style: none;
-  border-right-style: none;
-  border-left-style: none;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: rgba(241, 210, 153, 0.3);
-  /* CORRIGIDO: cor explícita para todos os tipos de input,
-     não apenas select — evitava cor errada em date/number */
+  border: 0;
+  border-bottom: 1px solid rgba(241, 210, 153, 0.3);
   color: var(--text-light);
+  caret-color: var(--gold-soft);
   font-family: var(--font-sans);
-  padding-top: 0.8rem;
-  padding-right: 0;
-  padding-bottom: 0.8rem;
-  padding-left: 0;
-  outline: none;
-  transition-property: border-color, box-shadow;
-  transition-duration: 0.4s;
-  transition-timing-function: ease;
   font-size: 1.1rem;
+  line-height: 1.5;
+  padding: 0.8rem 0;
+  outline: none;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease;
+}
+
+.field-input::placeholder {
+  color: transparent;
+  opacity: 0;
 }
 
 .field-input:focus {
@@ -91,28 +91,45 @@
   box-shadow: 0 1px 0 var(--gold-soft);
 }
 
-/* CORRIGIDO: inputs de data e número precisam de cor explícita;
-   antes herdavam da regra .field-select que definia text-muted */
+.field-input:hover:not(:focus) {
+  border-bottom-color: rgba(241, 210, 153, 0.5);
+}
+
 input[type="date"].field-input,
 input[type="number"].field-input {
   color: var(--text-light);
-  /* Normaliza o ícone do calendar picker nos browsers webkit */
   color-scheme: dark;
+}
+
+input[type="date"].field-input::-webkit-calendar-picker-indicator {
+  opacity: 0.7;
+  cursor: pointer;
+  filter: invert(1) brightness(0.8);
+  transition: opacity 0.3s ease;
+}
+
+input[type="date"].field-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+input[type="number"].field-input::-webkit-inner-spin-button,
+input[type="number"].field-input::-webkit-outer-spin-button {
+  opacity: 0.6;
 }
 
 .field-label {
   display: block;
   font-family: var(--font-sans);
   font-size: 0.7rem;
+  line-height: 1;
   text-transform: uppercase;
   letter-spacing: 3px;
   color: var(--text-muted);
   position: absolute;
   top: 15px;
+  left: 0;
   pointer-events: none;
-  transition-property: all;
-  transition-duration: 0.4s;
-  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), font-size 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.4s ease, letter-spacing 0.4s ease;
 }
 
 .field-input:focus ~ .field-label,
@@ -126,55 +143,58 @@ input[type="number"].field-input {
 
 .field-select {
   appearance: none;
-  /* CORRIGIDO: select começa com text-muted mas value preenchido fica light */
+  -webkit-appearance: none;
   color: var(--text-muted);
   cursor: pointer;
+  padding-right: 2rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--gold-soft) 50%), linear-gradient(135deg, var(--gold-soft) 50%, transparent 50%);
+  background-position: calc(100% - 10px) 50%, calc(100% - 5px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
 }
 
-/* NOVO: quando o select tem valor selecionado (não vazio), usa cor legível */
-.field-select:not([value=""]):valid {
+.field-select:valid {
   color: var(--text-light);
+}
+
+.field-select:invalid {
+  color: var(--text-muted);
 }
 
 .field-select option {
   background-color: var(--bg-dark);
   color: var(--gold-soft);
-  padding-top: 15px;
-  padding-right: 15px;
-  padding-bottom: 15px;
-  padding-left: 15px;
+  padding: 15px;
   font-family: var(--font-sans);
 }
 
-/* ─── POSTER PREVIEW ──────────────────────────────────────── */
+.field-select:focus {
+  color: var(--text-light);
+}
 
 .poster-preview-box {
   width: 90px;
   height: 135px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--border-gold);
+  border: 1px solid var(--border-gold);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  flex-shrink: 0;
+  flex: 0 0 90px;
   background-color: rgba(6, 8, 13, 0.8);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  /* NOVO: transição suave ao receber imagem via JS */
-  transition-property: border-color, box-shadow;
-  transition-duration: 0.4s;
-  transition-timing-function: ease;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
 
-/* NOVO: destaca o preview quando tem imagem carregada */
-.poster-preview-box:has(.poster-preview-img:not([style*="display:none"])) {
-  border-color: rgba(241, 210, 153, 0.35);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), var(--cinematic-glow);
+.poster-preview-box:hover {
+  border-color: rgba(241, 210, 153, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), var(--cinematic-glow);
 }
 
 .poster-preview-img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -182,35 +202,35 @@ input[type="number"].field-input {
 
 .poster-placeholder-icon {
   color: rgba(241, 210, 153, 0.2);
+  transition: color 0.4s ease, transform 0.4s ease;
 }
 
-/* ─── BOTÃO SUBMIT ────────────────────────────────────────── */
+.poster-preview-box:hover .poster-placeholder-icon {
+  color: rgba(241, 210, 153, 0.35);
+  transform: scale(1.08);
+}
 
 .btn-submit {
-  background-color: transparent !important;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--border-gold);
-  color: var(--gold-soft);
-  padding-top: 1.2rem;
-  padding-right: 2.5rem;
-  padding-bottom: 1.2rem;
-  padding-left: 2.5rem;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  cursor: pointer;
-  transition-property: all;
-  transition-duration: 0.4s;
-  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  width: 100%;
+  min-height: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent !important;
+  border: 1px solid var(--border-gold);
   border-radius: 4px;
+  color: var(--gold-soft);
+  padding: 1.2rem 2.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  cursor: pointer;
   outline: none;
   margin-top: 1rem;
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .btn-submit:hover {
@@ -221,50 +241,40 @@ input[type="number"].field-input {
   color: var(--text-light);
 }
 
+.btn-submit:active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), var(--cinematic-glow);
+}
+
 .btn-submit:focus-visible {
-  outline-width: 2px;
-  outline-style: solid;
-  outline-color: var(--gold-soft);
+  outline: 2px solid var(--gold-soft);
   outline-offset: 4px;
 }
 
-/* NOVO: estado de loading do botão submit */
+.btn-submit:disabled,
 .btn-submit[aria-busy="true"] {
   opacity: 0.6;
   pointer-events: none;
   cursor: not-allowed;
+  transform: none;
 }
-
-/* ─── DIALOG ──────────────────────────────────────────────── */
 
 dialog {
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--border-gold);
+  box-sizing: border-box;
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
   background-color: var(--bg-dark);
   color: var(--text-light);
-  padding-top: 4rem;
-  padding-right: 4rem;
-  padding-bottom: 4rem;
-  padding-left: 4rem;
-  border-radius: 8px;
+  padding: 4rem;
   max-width: 800px;
   width: 90%;
-  /* CORRIGIDO: position:fixed garante centralização consistente entre browsers */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
+  max-height: 90vh;
+  /* Posicionamento automático garantido pela API showModal */
+  margin: auto;
+  overflow-y: auto;
   box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9);
-}
-
-/* NOVO: entrada suave do dialog */
-dialog[open] {
-  animation-name: sectionEnterCinematic;
-  animation-duration: 0.4s;
-  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-  animation-fill-mode: both;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-gold) transparent;
 }
 
 dialog::backdrop {
@@ -273,14 +283,17 @@ dialog::backdrop {
   -webkit-backdrop-filter: blur(15px);
 }
 
+dialog[open] {
+  animation: sectionEnterCinematic 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
 .dialog-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
   margin-bottom: 3.5rem;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: rgba(241, 210, 153, 0.2);
+  border-bottom: 1px solid rgba(241, 210, 153, 0.2);
   padding-bottom: 1.5rem;
 }
 
@@ -289,26 +302,24 @@ dialog::backdrop {
   font-style: italic;
   font-weight: 300;
   font-size: 2.8rem;
+  line-height: 1.2;
   color: var(--gold-soft);
-  margin-top: 0;
-  margin-right: 0;
-  margin-bottom: 0;
-  margin-left: 0;
+  margin: 0;
   text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
 }
 
 .btn-close-dialog {
+  flex: 0 0 auto;
   background-color: transparent !important;
-  border-top-style: none;
-  border-right-style: none;
-  border-bottom-style: none;
-  border-left-style: none;
+  border: 0;
   color: var(--text-muted);
   cursor: pointer;
-  transition-property: all;
-  transition-duration: 0.4s;
-  transition-timing-function: ease;
   outline: none;
+  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.4s ease, transform 0.4s ease, filter 0.4s ease;
 }
 
 .btn-close-dialog:hover {
@@ -317,33 +328,97 @@ dialog::backdrop {
   filter: drop-shadow(0 0 8px var(--gold-neon));
 }
 
-/* ─── RESPONSIVO ──────────────────────────────────────────── */
+.btn-close-dialog:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 4px;
+}
 
 @media (max-width: 768px) {
+  .form-wrapper {
+    padding: 2.5rem 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .form-title {
+    font-size: 1.9rem;
+    margin-bottom: 2.5rem;
+  }
   .form-layout {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-
-  .form-wrapper {
-    padding-top: 2.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: 2.5rem;
-    padding-left: 1.5rem;
+  .span-full {
+    grid-column: auto;
   }
-
+  .custom-poster-layout {
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+  .poster-preview-box {
+    width: 80px;
+    height: 120px;
+    flex-basis: 80px;
+  }
   dialog {
-    padding-top: 2.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: 2.5rem;
-    padding-left: 1.5rem;
-    /* Em mobile, ocupa mais da tela */
     width: 95%;
+    max-width: none;
     max-height: 90vh;
-    overflow-y: auto;
+    padding: 2.5rem 1.5rem;
+    border-radius: 8px;
   }
-
+  .dialog-header {
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
   .dialog-header h3 {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-wrapper {
+    padding: 2rem 1rem;
+  }
+  .form-title {
+    font-size: 1.6rem;
+  }
+  .custom-poster-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .poster-preview-box {
+    width: 90px;
+    height: 135px;
+    flex-basis: 135px;
+    align-self: center;
+  }
+  .field-input {
+    font-size: 1rem;
+  }
+  .field-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+  }
+  .field-input:focus ~ .field-label,
+  .field-input:not(:placeholder-shown) ~ .field-label,
+  .static-label {
+    letter-spacing: 3px;
+  }
+  .btn-submit {
+    padding: 1rem 1.5rem;
+    letter-spacing: 3px;
+  }
+  dialog {
+    width: calc(100% - 1.5rem);
+    padding: 2rem 1rem;
+  }
+  .dialog-header h3 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-wrapper, .field-input, .field-label, .poster-preview-box, .poster-placeholder-icon, .btn-submit, .btn-close-dialog, dialog {
+    transition: none !important;
+    animation: none !important;
   }
 }

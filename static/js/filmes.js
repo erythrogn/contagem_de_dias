@@ -230,12 +230,14 @@ function renderGenres(section) {
   s.items.forEach(m => parseGenres(m.genre).forEach(g => genreSet.add(g)));
   const genres = Array.from(genreSet).sort();
 
+  // CORREÇÃO: As classes 'gtag' foram alteradas para 'gtab' para parear com o CSS
   row.innerHTML = [
-    `<button class="gtag ${s.genre === "todos" ? "active" : ""}" data-genre="todos">Todos os Gêneros</button>`,
-    ...genres.map(g => `<button class="gtag ${s.genre === g ? "active" : ""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`),
+    `<button class="gtab ${s.genre === "todos" ? "active" : ""}" data-genre="todos">Todos os Gêneros</button>`,
+    ...genres.map(g => `<button class="gtab ${s.genre === g ? "active" : ""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`),
   ].join("");
 
-  row.querySelectorAll(".gtag").forEach(btn => {
+  // CORREÇÃO: O seletor abaixo também passa a buscar por '.gtab'
+  row.querySelectorAll(".gtab").forEach(btn => {
     btn.addEventListener("click", () => {
       s.genre = btn.dataset.genre;
       renderGenres(section);

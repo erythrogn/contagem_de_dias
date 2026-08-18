@@ -36,8 +36,6 @@
   text-shadow: 0 0 8px var(--gold-neon);
 }
 
-/* ─── TABS PRINCIPAIS ─────────────────────────────────────── */
-
 .main-tabs-wrapper {
   display: flex;
   justify-content: center;
@@ -69,20 +67,21 @@
   text-shadow: 0 0 15px var(--gold-neon);
 }
 
-/* ─── SEÇÕES E SELETORES DE FLUXO ────────────────────────── */
-
+/* Ocultação segura para os cálculos dinâmicos funcionarem */
 .media-section {
-  display: none;
+  visibility: hidden;
+  position: absolute;
   opacity: 0;
   width: 100%;
+  pointer-events: none;
 }
 
 .media-section.active {
-  display: block;
+  visibility: visible;
+  position: relative;
+  pointer-events: auto;
   animation: sectionEnterCinematic 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
-
-/* ─── BOTÃO TOGGLE FORMULÁRIO (UX ENHANCEMENT) ────────────── */
 
 .form-toggle-container {
   display: flex;
@@ -122,10 +121,8 @@
 }
 
 .form-collapsible-wrapper.open {
-  max-height: 1000px; /* Permite abertura fluida em forma de gaveta */
+  max-height: 1000px;
 }
-
-/* ─── PROGRESSO E FILTROS ─────────────────────────────────── */
 
 .progress-wrapper {
   max-width: 600px;
@@ -223,8 +220,6 @@
   border-bottom-color: var(--gold-soft);
 }
 
-/* ─── BANNER PRINCIPAL (TEATRO DE EXIBIÇÃO) ───────────────── */
-
 .gallery-layout {
   display: flex;
   flex-direction: column;
@@ -234,7 +229,7 @@
 
 .gallery-main {
   width: 100%;
-  aspect-ratio: 21 / 9; /* Proporção UltraWide reduz altura vertical desnecessária */
+  aspect-ratio: 21 / 9;
   min-height: 300px;
   position: relative;
   border-radius: 16px;
@@ -276,9 +271,7 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  background-image:
-    linear-gradient(to top, rgba(4, 5, 8, 1) 0%, rgba(4, 5, 8, 0.4) 60%, transparent 100%),
-    linear-gradient(to right, rgba(4, 5, 8, 1) 0%, rgba(4, 5, 8, 0.2) 70%, transparent 100%);
+  background-image: linear-gradient(to top, rgba(4, 5, 8, 1) 0%, rgba(4, 5, 8, 0.4) 60%, transparent 100%), linear-gradient(to right, rgba(4, 5, 8, 1) 0%, rgba(4, 5, 8, 0.2) 70%, transparent 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -353,8 +346,6 @@
   transform: scale(1.1);
 }
 
-/* ─── PRATELEIRA DE PRODUTOS PREMIUM (NATIVE FEEL) ───────── */
-
 .gallery-side {
   display: flex;
   align-items: center;
@@ -380,7 +371,7 @@
 }
 
 .slider-card {
-  flex: 0 0 130px; /* Tamanho unificado e escalável */
+  flex: 0 0 130px;
   aspect-ratio: 2 / 3;
   border-radius: 10px;
   border: 1px solid rgba(241, 210, 153, 0.15);
@@ -451,8 +442,6 @@
   transform: scale(1.08);
 }
 
-/* ─── HUB DE MÚSICAS COMPACTO E ELEGANTE ──────────────────── */
-
 .musicas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -498,15 +487,13 @@
 .musica-iframe-wrapper {
   border-radius: 8px;
   overflow: hidden;
-  height: 80px; /* Compactação extrema para players de áudio horizontais limpos */
+  height: 80px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .musica-iframe-wrapper iframe {
   height: 100% !important;
 }
-
-/* ─── COMPONENTES GENÉRICOS ──────────────────────────────── */
 
 .empty-state {
   text-align: center;
