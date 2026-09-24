@@ -113,15 +113,15 @@
     const START_DATE = new Date('2025-11-29T00:00:00-03:00');
     let hasAnimatedCentenary = false;
 
+    // ✦ MODO DE TESTE: coloque um número (ex.: 200) para simular; null = usa a data real
+    const TEST_DAYS = null;
+
     function updateCounter() {
       const now = new Date();
       const diff = now - START_DATE;
-      if (diff < 0) return; 
+      if (diff < 0) return;
 
-      // ✦ MODO DE TESTE (Descomente o 200 para testar)
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24) + 1);
-       //const d = 200; 
-
+      const d = TEST_DAYS ?? (Math.floor(diff / 86400000) + 1);
       const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const m = Math.floor((diff / 1000 / 60) % 60);
       const s = Math.floor((diff / 1000) % 60);
@@ -132,87 +132,91 @@
       const vignette = document.getElementById('vignette-layer');
 
       if (d > 0 && d % 100 === 0) {
-          if (!hasAnimatedCentenary) {
-              normalCard.style.display = 'none';
-              centenaryCard.style.display = 'flex';
-              stage.classList.add('is-centenary');
-              vignette.classList.add('is-centenary-bg');
-              
-              document.getElementById('centenaryDays').textContent = d;
-              
-              if (typeof gsap !== 'undefined') {
-                  gsap.fromTo("#centenary-card", { scale: 0.9, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 2, ease: "power3.out" });
-              }
+        if (!hasAnimatedCentenary) {
+          normalCard.style.display = 'none';
+          centenaryCard.style.display = 'flex';
+          stage.classList.add('is-centenary');
+          vignette.classList.add('is-centenary-bg');
 
-              const elMsg = document.getElementById('magicMsg');
-              if (elMsg) {
-                  elMsg.innerHTML = '';
-                  // Utilizamos crases (`) para permitir múltiplas linhas e aspas internas sem quebrar o código
-                  const textToAnimate = `Obrigado pelos 300 dias. Pode ter certeza de que sou o homem mais feliz do mundo ao seu lado. Obrigado por fazer com que eu me perca todos os dias sempre que olha pra mim. 
+          document.getElementById('centenaryDays').textContent = d;
+
+          if (typeof gsap !== 'undefined') {
+            gsap.fromTo("#centenary-card",
+              { scale: 0.9, opacity: 0, y: 40 },
+              { scale: 1, opacity: 1, y: 0, duration: 2, ease: "power3.out", overwrite: "auto" });
+          }
+
+          const elMsg = document.getElementById('magicMsg');
+          if (elMsg) {
+            elMsg.innerHTML = '';
+
+            // Remove a indentação do código para não virar &nbsp; no início das linhas
+            const textToAnimate = `Obrigado pelos 300 dias. Pode ter certeza de que sou o homem mais feliz do mundo ao seu lado. Obrigado por fazer com que eu me perca todos os dias sempre que olha pra mim.
                   Meus pensamentos pertencem a ti, os melhores e os maliciosos, e tudo em mim é teu. Sempre que olhar para o sol e achar que ele está bonito, saiba que é assim que ficam os meus pensamentos quando penso em você.
-                  E, sempre que a lua brilhar, saiba que é desse jeito que os meus olhos ficam quando vejo você chegando. 
-                  Espero que fique ao meu lado por mais 300 dias. Eu te amo, meu idem*`;
-                  
-                  let delay = 0;
-                  
-                 for (let i = 0; i < textToAnimate.length; i++) {
-                      const char = textToAnimate[i];
-                      // Verifica barras verticais e quebras de linha reais (Enter)
-                      if (char === '|' || char === '\n') {
-                          elMsg.innerHTML += '<br>';
-                      } else if (char === '\r') {
-                          // Ignora o caractere de retorno oculto do Windows
-                          continue;
-                      } else {
-                          const span = document.createElement('span');
-                          span.className = 'magic-letter';
-                          
-                          // ✨ O SEGREDO: Criar uma variável CSS dinâmica para sincronizar a fada e a letra
-                          span.style.setProperty('--magic-delay', delay + 's');
-                          
-                          if (char === ' ') {
-                              span.innerHTML = '&nbsp;';
-                          } else {
-                              span.textContent = char;
-                          }
-                          
-                          elMsg.appendChild(span);
-                          delay += 0.06; // Aumentei um pouquinho (0.06s) para o rastro da fada ficar mais visível e dramático
-                      }
-                  }
-              }
+                  E, sempre que a lua brilhar, saiba que é desse jeito que os meus olhos ficam quando vejo você chegando.
+                  Espero que fique ao meu lado por mais 300 dias. Eu te amo, meu idem*`
+              .split('\n')
+              .map(line => line.trim())
+              .join('\n');
 
-              hasAnimatedCentenary = true;
+            let delay = 0;
+
+            for (let i = 0; i < textToAnimate.length; i++) {
+              const char = textToAnimate[i];
+
+              if (char === '|' || char === '\n') {
+                elMsg.appendChild(document.createElement('br'));
+              } else if (char === '\r') {
+                continue;
+              } else {
+                const span = document.createElement('span');
+                span.className = 'magic-letter';
+                span.style.setProperty('--magic-delay', delay + 's');
+
+                if (char === ' ') {
+                  span.innerHTML = '&nbsp;';
+                } else {
+                  span.textContent = char;
+                }
+
+                elMsg.appendChild(span);
+                delay += 0.06;
+              }
+            }
           }
-      } else {
-          if (hasAnimatedCentenary) {
-              stage.classList.remove('is-centenary');
-              vignette.classList.remove('is-centenary-bg');
-              centenaryCard.style.display = 'none';
-              normalCard.style.display = 'flex';
-              hasAnimatedCentenary = false;
-          }
-          
-          const stamp = document.getElementById('stampDays');
-          if(stamp) stamp.textContent = `${d} dias`;
-          
-          document.getElementById('cDays').textContent = d.toString().padStart(2, '0');
-          document.getElementById('cHours').textContent = h.toString().padStart(2, '0');
-          document.getElementById('cMinutes').textContent = m.toString().padStart(2, '0');
-          document.getElementById('cSeconds').textContent = s.toString().padStart(2, '0');
+
+          hasAnimatedCentenary = true;
+        }
+
+        // Durante o centenário não precisa pulsar os segundos (card normal está oculto)
+        return;
       }
+
+      if (hasAnimatedCentenary) {
+        stage.classList.remove('is-centenary');
+        vignette.classList.remove('is-centenary-bg');
+        centenaryCard.style.display = 'none';
+        normalCard.style.display = 'flex';
+        hasAnimatedCentenary = false;
+      }
+
+      const stamp = document.getElementById('stampDays');
+      if (stamp) stamp.textContent = `${d} dias`;
+
+      document.getElementById('cDays').textContent = d.toString().padStart(2, '0');
+      document.getElementById('cHours').textContent = h.toString().padStart(2, '0');
+      document.getElementById('cMinutes').textContent = m.toString().padStart(2, '0');
+      document.getElementById('cSeconds').textContent = s.toString().padStart(2, '0');
 
       if (typeof window._pulseSeconds === 'function') {
         window._pulseSeconds();
       }
     }
-    
-    updateCounter();
-    setInterval(updateCounter, 1000);
 
+    // ── GSAP primeiro, para não esconder o card do centenário depois ──
     if (typeof gsap !== 'undefined') {
       gsap.set([".wedding-card", ".minimal-carousel"], { autoAlpha: 0 });
-      
+
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.fromTo(".wedding-card", { y: 30, opacity: 0 }, { y: 0, autoAlpha: 1, duration: 1.5 })
         .fromTo(".minimal-carousel", { y: 20, opacity: 0 }, { y: 0, autoAlpha: 1, duration: 1.2 }, "-=0.8");
@@ -220,10 +224,10 @@
       const stage = document.querySelector(".stage");
       if (stage) {
         stage.addEventListener("mousemove", (e) => {
-          const dx = (e.clientX - window.innerWidth/2) / window.innerWidth;
-          const dy = (e.clientY - window.innerHeight/2) / window.innerHeight;
-          gsap.to(".wedding-card", { x: dx * -6, y: dy * -4, duration: 2, ease: "power1.out" });
-          gsap.to(".minimal-carousel", { x: dx * 4, y: dy * 4, duration: 2, ease: "power1.out" });
+          const dx = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+          const dy = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+          gsap.to(".wedding-card", { x: dx * -6, y: dy * -4, duration: 2, ease: "power1.out", overwrite: "auto" });
+          gsap.to(".minimal-carousel", { x: dx * 4, y: dy * 4, duration: 2, ease: "power1.out", overwrite: "auto" });
         });
       }
 
@@ -233,6 +237,10 @@
           { color: "var(--gold-soft)", scale: 1, duration: 0.5, ease: "power2.out" });
       };
     }
+
+    // ── Contador só inicia depois do GSAP estar configurado ──
+    updateCounter();
+    setInterval(updateCounter, 1000);
   });
 </script>
 
