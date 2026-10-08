@@ -21,7 +21,6 @@
 
 <div class="marquee-wrapper" aria-hidden="true">
   <div class="marquee-track">
-    <!-- Primeira Metade do Loop -->
     <span class="marquee-text">te amo✦</span>
     <span class="marquee-text">obrigado por tudo✦</span>
     <span class="marquee-text">te amo✦</span>
@@ -31,7 +30,6 @@
     <span class="marquee-text">te amo✦</span>
     <span class="marquee-text">obrigado por tudo✦</span>
     
-    <!-- Segunda Metade do Loop (Cópia Exata para transição imperceptível em -50%) -->
     <span class="marquee-text">te amo✦</span>
     <span class="marquee-text">obrigado por tudo✦</span>
     <span class="marquee-text">te amo✦</span>
@@ -45,10 +43,10 @@
 
 <main class="filmes-container">
   <nav class="main-tabs-wrapper" role="tablist" aria-label="Tipo de mídia">
-    <button class="main-tab active" data-section="filmes" role="tab" aria-selected="true">Filmes</button>
-    <button class="main-tab" data-section="series" role="tab" aria-selected="false">Séries</button>
-    <button class="main-tab" data-section="jogos" role="tab" aria-selected="false">Jogos</button>
-    <button class="main-tab" data-section="musicas" role="tab" aria-selected="false">Músicas</button>
+    <button type="button" class="main-tab active" data-section="filmes" role="tab" aria-selected="true">Filmes</button>
+    <button type="button" class="main-tab" data-section="series" role="tab" aria-selected="false">Séries</button>
+    <button type="button" class="main-tab" data-section="jogos" role="tab" aria-selected="false">Jogos</button>
+    <button type="button" class="main-tab" data-section="musicas" role="tab" aria-selected="false">Músicas</button>
   </nav>
 
   <div id="section-filmes" class="media-section active">
@@ -122,9 +120,9 @@
     </section>
 
     <nav class="filter-wrapper" id="filter-filmes" role="tablist">
-      <button class="ftab active" data-filter="todos" data-section="filmes" role="tab">Todos</button>
-      <button class="ftab" data-filter="assistir" data-section="filmes" role="tab">Para Assistir</button>
-      <button class="ftab" data-filter="assistido" data-section="filmes" role="tab">Assistidos</button>
+      <button type="button" class="ftab active" data-filter="todos" data-section="filmes" role="tab">Todos</button>
+      <button type="button" class="ftab" data-filter="assistir" data-section="filmes" role="tab">Para Assistir</button>
+      <button type="button" class="ftab" data-filter="assistido" data-section="filmes" role="tab">Assistidos</button>
     </nav>
     <div class="genre-wrapper" id="genreRow-filmes"></div>
 
@@ -134,9 +132,9 @@
           <div class="empty-state"><p class="empty-text">Aguardando filmes...</p></div>
         </div>
         <div class="gallery-side">
-          <button id="slider-prev-filmes" class="slider-btn prev" onclick="window.prevSlide('filmes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <button type="button" id="slider-prev-filmes" class="slider-btn prev" onclick="window.prevSlide('filmes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
           <div class="slider-track" id="list-filmes" aria-live="polite"></div>
-          <button id="slider-next-filmes" class="slider-btn next" onclick="window.nextSlide('filmes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+          <button type="button" id="slider-next-filmes" class="slider-btn next" onclick="window.nextSlide('filmes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
         </div>
       </div>
     </section>
@@ -221,10 +219,10 @@
     </section>
 
     <nav class="filter-wrapper" id="filter-series" role="tablist">
-      <button class="ftab active" data-filter="todos" data-section="series" role="tab">Todas</button>
-      <button class="ftab" data-filter="quero ver" data-section="series" role="tab">Quero Ver</button>
-      <button class="ftab" data-filter="assistindo" data-section="series" role="tab">Assistindo</button>
-      <button class="ftab" data-filter="concluida" data-section="series" role="tab">Concluídas</button>
+      <button type="button" class="ftab active" data-filter="todos" data-section="series" role="tab">Todas</button>
+      <button type="button" class="ftab" data-filter="quero ver" data-section="series" role="tab">Quero Ver</button>
+      <button type="button" class="ftab" data-filter="assistindo" data-section="series" role="tab">Assistindo</button>
+      <button type="button" class="ftab" data-filter="concluida" data-section="series" role="tab">Concluídas</button>
     </nav>
     <div class="genre-wrapper" id="genreRow-series"></div>
 
@@ -232,9 +230,9 @@
       <div class="gallery-layout">
         <div class="gallery-main cinematic-screen" id="gallery-main-series"><div class="empty-state"><p class="empty-text">Aguardando séries...</p></div></div>
         <div class="gallery-side">
-          <button id="slider-prev-series" class="slider-btn prev" onclick="window.prevSlide('series')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <button type="button" id="slider-prev-series" class="slider-btn prev" onclick="window.prevSlide('series')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
           <div class="slider-track" id="list-series" aria-live="polite"></div>
-          <button id="slider-next-series" class="slider-btn next" onclick="window.nextSlide('series')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+          <button type="button" id="slider-next-series" class="slider-btn next" onclick="window.nextSlide('series')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
         </div>
       </div>
     </section>
@@ -307,10 +305,10 @@
     </section>
 
     <nav class="filter-wrapper" id="filter-jogos" role="tablist">
-      <button class="ftab active" data-filter="todos" data-section="jogos" role="tab">Todos</button>
-      <button class="ftab" data-filter="quero jogar" data-section="jogos" role="tab">Quero Jogar</button>
-      <button class="ftab" data-filter="jogando" data-section="jogos" role="tab">Jogando</button>
-      <button class="ftab" data-filter="zerado" data-section="jogos" role="tab">Zerados</button>
+      <button type="button" class="ftab active" data-filter="todos" data-section="jogos" role="tab">Todos</button>
+      <button type="button" class="ftab" data-filter="quero jogar" data-section="jogos" role="tab">Quero Jogar</button>
+      <button type="button" class="ftab" data-filter="jogando" data-section="jogos" role="tab">Jogando</button>
+      <button type="button" class="ftab" data-filter="zerado" data-section="jogos" role="tab">Zerados</button>
     </nav>
     <div class="genre-wrapper" id="genreRow-jogos"></div>
 
@@ -318,9 +316,9 @@
       <div class="gallery-layout">
         <div class="gallery-main cinematic-screen" id="gallery-main-jogos"><div class="empty-state"><p class="empty-text">Aguardando jogos...</p></div></div>
         <div class="gallery-side">
-          <button id="slider-prev-jogos" class="slider-btn prev" onclick="window.prevSlide('jogos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <button type="button" id="slider-prev-jogos" class="slider-btn prev" onclick="window.prevSlide('jogos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
           <div class="slider-track" id="list-jogos" aria-live="polite"></div>
-          <button id="slider-next-jogos" class="slider-btn next" onclick="window.nextSlide('jogos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+          <button type="button" id="slider-next-jogos" class="slider-btn next" onclick="window.nextSlide('jogos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
         </div>
       </div>
     </section>
@@ -337,12 +335,12 @@
       <h2 class="form-title">Adicionar Playlist ou Mídia</h2>
       <form id="form-musicas" class="form-layout">
         <div class="field-group span-full">
-          <input type="text" id="mTitle" class="field-input" placeholder=" " autocomplete="off">
-          <label for="mTitle" class="field-label">Título da Mídia (Opcional - auto preenchido)</label>
+          <input type="text" id="mTitle" class="field-input" placeholder=" " autocomplete="off" required>
+          <label for="mTitle" class="field-label">Título da Playlist ou Música</label>
         </div>
         <div class="field-group span-full">
-          <input type="url" id="mLink" class="field-input" placeholder=" " inputmode="url" autocomplete="off" required>
-          <label for="mLink" class="field-label">Cole o link de qualquer plataforma de música ou vídeo</label>
+          <input type="text" id="mLink" class="field-input" placeholder=" " autocomplete="off" required>
+          <label for="mLink" class="field-label">Link do Spotify / Apple Music / YouTube</label>
         </div>
         <div class="field-group span-full">
           <button class="btn-submit" id="btn-add-musicas" type="submit">Adicionar Mídia</button>
@@ -403,7 +401,15 @@
     </div>
     <div class="field-group"><input type="text" id="edit-series-who" class="field-input"><label class="field-label static-label">Quem indicou?</label></div>
     <div class="field-group"><input type="text" id="edit-series-where" class="field-input"><label class="field-label static-label">Onde assistir?</label></div>
-    <div class="field-group span-full"><button class="btn-submit" type="submit">Salvar Alterações</button></div>
+    <div class="field-group">
+      <select id="edit-series-rating-hesron" class="field-input field-select"><option value="">Sem avaliação</option><option value="1">1 Est</option><option value="2">2 Est</option><option value="3">3 Est</option><option value="4">4 Est</option><option value="5">5 Est</option></select>
+      <label class="field-label static-label">Nota do Hesron</label>
+    </div>
+    <div class="field-group">
+      <select id="edit-series-rating-tiago" class="field-input field-select"><option value="">Sem avaliação</option><option value="1">1 Est</option><option value="2">2 Est</option><option value="3">3 Est</option><option value="4">4 Est</option><option value="5">5 Est</option></select>
+      <label class="field-label static-label">Nota do Tiago</label>
+    </div>
+    <div class="field-group span-full"><button class="btn-submit" id="btn-edit-series-submit" type="submit">Salvar Alterações</button></div>
   </form>
 </dialog>
 
@@ -417,16 +423,20 @@
     <div class="field-group span-full"><input type="text" id="edit-jogos-title" class="field-input" required><label class="field-label static-label">Título</label></div>
     <div class="field-group"><input type="date" id="edit-jogos-date" class="field-input"><label class="field-label static-label">Data</label></div>
     <div class="field-group"><input type="text" id="edit-jogos-genre" class="field-input"><label class="field-label static-label">Gênero</label></div>
+    <div class="field-group"><input type="number" id="edit-jogos-year" class="field-input" min="1900" max="2100"><label class="field-label static-label">Ano</label></div>
     <div class="field-group"><input type="text" id="edit-jogos-platform" class="field-input"><label class="field-label static-label">Plataforma</label></div>
     <div class="field-group">
       <select id="edit-jogos-status" class="field-input field-select"><option value="quero jogar">Quero Jogar</option><option value="jogando">Jogando</option><option value="zerado">Zerado</option></select>
       <label class="field-label static-label">Status</label>
     </div>
-    <div class="field-group span-full"><button class="btn-submit" type="submit">Salvar Alterações</button></div>
+    <div class="field-group"><input type="text" id="edit-jogos-who" class="field-input"><label class="field-label static-label">Quem indicou?</label></div>
+    <div class="field-group"><input type="text" id="edit-jogos-where" class="field-input"><label class="field-label static-label">Onde jogar?</label></div>
+    <div class="field-group span-full"><button class="btn-submit" id="btn-edit-jogos-submit" type="submit">Salvar Alterações</button></div>
   </form>
 </dialog>
 
 <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script type="module" src="{{ url_for('static', filename='js/filmes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filmes.gsap.js') }}"></script>
 {% endblock %}

@@ -21,7 +21,7 @@ let rawRawg = metaRawg ? metaRawg.getAttribute("content") : "";
 
 const TMDB_API_KEY = (rawTmdb && !rawTmdb.includes("{{")) ? rawTmdb : "d39bbf74a96f6cca570dcb69c8f3059f";
 const RAWG_API_KEY = (rawRawg && !rawRawg.includes("{{")) ? rawRawg : "4a8f946edbb943dda1ee452b412e8eb0";
-const DEBOUNCE_MS   = 700;
+const DEBOUNCE_MS  = 700;
 
 // ─── Cache de API ─────────────────────────────────────────────────────────────
 const apiCache = new Map();
@@ -228,10 +228,9 @@ function renderGenres(section) {
   s.items.forEach(m => parseGenres(m.genre).forEach(g => genreSet.add(g)));
   const genres = Array.from(genreSet).sort();
 
-  // Apenas renderiza, sem recriar Event Listeners (memória otimizada via delegação)
   row.innerHTML = [
-    `<button class="gtab ${s.genre === "todos" ? "active" : ""}" data-genre="todos">Todos os Gêneros</button>`,
-    ...genres.map(g => `<button class="gtab ${s.genre === g ? "active" : ""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`),
+    `<button type="button" class="gtab ${s.genre === "todos" ? "active" : ""}" data-genre="todos">Todos os Gêneros</button>`,
+    ...genres.map(g => `<button type="button" class="gtab ${s.genre === g ? "active" : ""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`),
   ].join("");
 }
 
@@ -258,13 +257,19 @@ window.toggleItem = function (section, key, currentlyDone) {
   else update(ref(db, `jogos/${key}`), { status: currentlyDone ? "quero jogar" : "zerado" });
 };
 
-window.deleteItem = function (section, key) { remove(ref(db, `${section}/${key}`)); };
+window.deleteItem = function (section, key) {
+  if (!section || !key) return;
+  remove(ref(db, `${section}/${key}`));
+};
 
 window.openEdit = function (section, key) {
-  const m = state[section].items.find(x => x.key === key);
+  const m = state[section]?.items.find(x => x.key === key);
   if (!m) return;
 
-  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ""; };
+  const set = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val ?? "";
+  };
 
   set(`edit-${section}-key`,   m.key);
   set(`edit-${section}-title`, m.title);
@@ -272,11 +277,21 @@ window.openEdit = function (section, key) {
   set(`edit-${section}-genre`, m.genre);
   set(`edit-${section}-year`,  m.year);
   set(`edit-${section}-who`,   m.who);
-  set(`edit-${section}-where`, m.where ?? m.platform);
+  set(`edit-${section}-where`, m.where ?? "");
 
   if (section === "filmes" || section === "series") {
     set(`edit-${section}-rating-hesron`, m.ratingHesron);
-    set(`edit-${section}-rating-tiago`, m.ratingTiago);
+    set(`edit-${section}-rating-tiago`,  m.ratingTiago);
+  }
+
+  if (section === "series") {
+    set("edit-series-seasons", m.seasons);
+    set("edit-series-status",  m.status || "quero ver");
+  }
+
+  if (section === "jogos") {
+    set("edit-jogos-platform", m.platform);
+    set("edit-jogos-status",   m.status || "quero jogar");
   }
 
   document.getElementById(`edit-dialog-${section}`)?.showModal();
@@ -332,7 +347,7 @@ function renderItems(section) {
 
     const card = document.createElement("div");
     card.className = `slider-card${done ? " watched" : ""}`;
-    card.dataset.idx = idx; // Delegação de evento
+    card.dataset.idx = idx;
     card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
     fragment.appendChild(card);
   });
@@ -347,7 +362,8 @@ function renderItems(section) {
 
 function createStars(score, name) {
   if (!score) return '';
-  const num = parseInt(score);
+  const num = parseInt(score, 10);
+  if (isNaN(num)) return '';
   let stars = '';
   let colorVar = '';
 
@@ -405,13 +421,13 @@ function buildMainHTML(section, m) {
       ${ratingHTML}
       <div class="gallery-main-meta">${meta}</div>
       <div class="actions-group">
-        <button class="movie-action-btn check ${done ? "checked" : ""}" onclick="event.stopPropagation(); window.toggleItem('${section}','${escapeHTML(m.key)}',${done})" aria-label="${actionLabels[section].done}">
+        <button type="button" class="movie-action-btn check ${done ? "checked" : ""}" onclick="event.stopPropagation(); window.toggleItem('${section}','${escapeHTML(m.key)}',${done})" aria-label="${actionLabels[section].done}">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </button>
-        <button class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEdit('${section}','${escapeHTML(m.key)}')" aria-label="Editar">
+        <button type="button" class="movie-action-btn edit" onclick="event.stopPropagation(); window.openEdit('${section}','${escapeHTML(m.key)}')" aria-label="Editar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         </button>
-        <button class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteItem('${section}','${escapeHTML(m.key)}')" aria-label="Deletar">
+        <button type="button" class="movie-action-btn delete" onclick="event.stopPropagation(); window.deleteItem('${section}','${escapeHTML(m.key)}')" aria-label="Deletar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
@@ -437,27 +453,26 @@ function updateSlider(section, direction = 0) {
     const overlay = mainView.querySelector(".gallery-main-overlay");
     const done    = isDoneItem(section, m);
     
-    const filter  = done ? "brightness(1) grayscale(100%)" : "brightness(1) grayscale(0%)";
+    const filter      = done ? "brightness(1) grayscale(100%)" : "brightness(1) grayscale(0%)";
     const filterStart = done ? "brightness(0.5) grayscale(100%)" : "brightness(0.5) grayscale(0%)";
-    const xOffset = direction !== 0 ? direction * 40 : 0;
+    const xOffset     = direction !== 0 ? direction * 40 : 0;
 
     if (img) gsap.fromTo(img, 
       { opacity: 0, x: xOffset, filter: filterStart }, 
-      { opacity: 1, x: 0, filter, duration: 0.5, ease: "power2.out" }
+      { opacity: 1, x: 0, filter, duration: 0.5, ease: "power2.out", overwrite: "auto" }
     );
     
     if (blurBg) gsap.fromTo(blurBg, 
       { opacity: 0 }, 
-      { opacity: 1, duration: 0.8, ease: "power2.out" }
+      { opacity: 1, duration: 0.8, ease: "power2.out", overwrite: "auto" }
     );
     
     if (overlay) gsap.fromTo(overlay, 
       { opacity: 0, y: 15, x: xOffset * 0.5 }, 
-      { opacity: 1, y: 0, x: 0, duration: 0.5, ease: "power2.out", delay: 0.05 }
+      { opacity: 1, y: 0, x: 0, duration: 0.5, ease: "power2.out", delay: 0.05, overwrite: "auto" }
     );
   }
 
-  // Tratamento nativo magnético ao centralizar o card ativo
   cards[s.currentIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
 
   const total   = s.filtered.length;
@@ -467,9 +482,8 @@ function updateSlider(section, direction = 0) {
   if (nextBtn) nextBtn.setAttribute("aria-disabled", String(s.currentIndex === total - 1));
 }
 
-// ─── Event Delegation (Economiza memória substituindo ouvintes individuais) ───
+// ─── Event Delegation ─────────────────────────────────────────────────────────
 document.addEventListener("click", e => {
-  // Clique nos cards de Slider
   const card = e.target.closest(".slider-card");
   if (card) {
     const track = card.closest(".slider-track");
@@ -486,7 +500,6 @@ document.addEventListener("click", e => {
     return;
   }
 
-  // Clique nas abas de Gênero
   const gtab = e.target.closest(".gtab");
   if (gtab) {
     const wrapper = gtab.closest(".genre-wrapper");
@@ -502,7 +515,7 @@ document.addEventListener("click", e => {
 // ─── Navegação de slides e Gestos Mobile ──────────────────────────────────────
 window.prevSlide = function (section) {
   const s = state[section];
-  if (s.currentIndex <= 0) return;
+  if (!s || s.currentIndex <= 0) return;
   s.currentIndex--;
   updateSlider(section, -1);
   animateNavBtn(`slider-prev-${section}`, -4);
@@ -510,7 +523,7 @@ window.prevSlide = function (section) {
 
 window.nextSlide = function (section) {
   const s = state[section];
-  if (s.currentIndex >= s.filtered.length - 1) return;
+  if (!s || s.currentIndex >= s.filtered.length - 1) return;
   s.currentIndex++;
   updateSlider(section, 1);
   animateNavBtn(`slider-next-${section}`, 4);
@@ -519,7 +532,7 @@ window.nextSlide = function (section) {
 function animateNavBtn(id, yFrom) {
   if (typeof gsap === "undefined") return;
   const btn = document.getElementById(id);
-  if (btn) gsap.fromTo(btn, { y: yFrom }, { y: 0, duration: 0.35, ease: "back.out(2)" });
+  if (btn) gsap.fromTo(btn, { y: yFrom }, { y: 0, duration: 0.35, ease: "back.out(2)", overwrite: "auto" });
 }
 
 document.addEventListener("keydown", (e) => {
@@ -561,6 +574,41 @@ document.querySelectorAll(".gallery-layout").forEach(layout => {
   mainView.addEventListener("touchcancel", () => { isDragging = false; });
 });
 
+// ─── Abas Principais e Filtros (Registados antes do Firebase) ─────────────────
+document.querySelectorAll(".ftab").forEach(tab => {
+  tab.addEventListener("click", e => {
+    const btn = e.currentTarget;
+    const section = btn.dataset.section;
+    if (!section || section === "musicas") return;
+
+    document.querySelectorAll(`.ftab[data-section="${section}"]`).forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    state[section].filter = btn.dataset.filter;
+    renderItems(section);
+  });
+});
+
+document.querySelectorAll(".main-tab").forEach(tab => {
+  tab.addEventListener("click", e => {
+    const btn = e.currentTarget;
+    const section = btn.dataset.section;
+    if (!section) return;
+
+    document.querySelectorAll(".main-tab").forEach(t => {
+      t.classList.remove("active");
+      t.setAttribute("aria-selected", "false");
+    });
+    btn.classList.add("active");
+    btn.setAttribute("aria-selected", "true");
+
+    document.querySelectorAll(".media-section").forEach(s => {
+      s.classList.remove("active");
+    });
+
+    document.getElementById(`section-${section}`)?.classList.add("active");
+  });
+});
+
 // ─── Firebase: Escuta em Tempo Real ───────────────────────────────────────────
 ["filmes", "series", "jogos"].forEach(section => {
   onValue(dbRefs[section], snapshot => {
@@ -591,13 +639,15 @@ onValue(dbRefs.musicas, snapshot => {
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
-    const key      = document.getElementById(`edit-${section}-key`).value;
+    const key      = document.getElementById(`edit-${section}-key`)?.value ?? "";
     const original = state[section].items.find(x => x.key === key);
     if (!original) return;
 
-    const newTitle = document.getElementById(`edit-${section}-title`).value.trim();
-    const newYear  = document.getElementById(`edit-${section}-year`).value.trim();
-    const btn      = document.getElementById(`btn-edit-${section}-submit`);
+    const get = id => document.getElementById(id)?.value?.trim() ?? "";
+
+    const newTitle = get(`edit-${section}-title`);
+    const newYear  = get(`edit-${section}-year`) || (original.year ?? "");
+    const btn      = document.getElementById(`btn-edit-${section}-submit`) || form.querySelector('button[type="submit"]');
     const origHTML = btn?.innerHTML ?? "";
 
     let finalPoster   = original.poster   ?? "";
@@ -609,7 +659,7 @@ onValue(dbRefs.musicas, snapshot => {
         btn.style.pointerEvents = "none";
       }
 
-      if (newTitle !== original.title || newYear !== original.year || !finalPoster || finalPoster === "") {
+      if (newTitle !== original.title || newYear !== (original.year ?? "") || !finalPoster) {
         try {
           const fetched = await dataFetcher[section](newTitle, newYear);
           if (fetched.poster || fetched.backdrop) {
@@ -619,7 +669,6 @@ onValue(dbRefs.musicas, snapshot => {
         } catch (err) { console.warn("[edit] Falha ao buscar capa:", err.message); }
       }
 
-      const get = id => document.getElementById(id)?.value.trim() ?? "";
       const updateData = {
         title:      newTitle,
         year:       newYear,
@@ -627,17 +676,23 @@ onValue(dbRefs.musicas, snapshot => {
         backdrop:   finalBackdrop,
         targetDate: get(`edit-${section}-date`),
         genre:      get(`edit-${section}-genre`),
-        who:        get(`edit-${section}-who`),
+        who:        get(`edit-${section}-who`) || (original.who ?? ""),
       };
 
-      if (section === "filmes" || section === "series") {
-        updateData.where = get(`edit-${section}-where`);
-        updateData.ratingHesron = get(`edit-${section}-rating-hesron`);
-        updateData.ratingTiago = get(`edit-${section}-rating-tiago`);
-      } else {
-        updateData.where    = get("edit-jogos-where");
+      if (section === "filmes") {
+        updateData.where        = get("edit-filmes-where");
+        updateData.ratingHesron = get("edit-filmes-rating-hesron");
+        updateData.ratingTiago  = get("edit-filmes-rating-tiago");
+      } else if (section === "series") {
+        updateData.where        = get("edit-series-where");
+        updateData.seasons      = get("edit-series-seasons");
+        updateData.status       = document.getElementById("edit-series-status")?.value ?? original.status ?? "quero ver";
+        updateData.ratingHesron = get("edit-series-rating-hesron") || (original.ratingHesron ?? "");
+        updateData.ratingTiago  = get("edit-series-rating-tiago")  || (original.ratingTiago ?? "");
+      } else if (section === "jogos") {
+        updateData.where    = get("edit-jogos-where") || (original.where ?? "");
         updateData.platform = get("edit-jogos-platform");
-        updateData.status   = document.getElementById("edit-jogos-status")?.value ?? "quero jogar";
+        updateData.status   = document.getElementById("edit-jogos-status")?.value ?? original.status ?? "quero jogar";
       }
 
       await update(ref(db, `${section}/${key}`), updateData);
@@ -740,40 +795,58 @@ document.getElementById("form-jogos")?.addEventListener("submit", e => {
   });
 });
 
-// ─── Músicas (Spotify/YouTube/Apple Music) ────────────────────────────────────
+// ─── Músicas (Spotify / YouTube / Apple Music) ────────────────────────────────
 function extractIframeSrc(input) {
+  if (!input) return "";
   const match = input.match(/src=["'](.*?)["']/);
-  if (match) return match[1];
+  const rawUrl = match ? match[1] : input.trim();
 
-  const url = input.trim();
-  if (!url.startsWith("http")) return "";
+  if (!rawUrl.startsWith("http")) return "";
 
   try {
-    const u = new URL(url);
+    const u = new URL(rawUrl);
     if (u.hostname.includes("spotify.com")) {
-      return `https://open.spotify.com/embed${u.pathname}${u.search}`;
+      const cleanPath = u.pathname.replace(/^\/intl-[a-z]{2}\//i, "/");
+      if (cleanPath.startsWith("/embed/")) {
+        return `https://open.spotify.com${cleanPath}${u.search}`;
+      }
+      return `https://open.spotify.com/embed${cleanPath}${u.search}`;
     }
     if (u.hostname.includes("music.apple.com")) {
       return `https://embed.music.apple.com${u.pathname}${u.search}`;
     }
     if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) {
-      const videoId = u.hostname.includes("youtu.be") ? u.pathname.slice(1) : u.searchParams.get("v");
-      const listId  = u.searchParams.get("list");
+      if (u.pathname.startsWith("/embed/")) return rawUrl;
+      let videoId = "";
+      if (u.hostname.includes("youtu.be")) {
+        videoId = u.pathname.slice(1);
+      } else if (u.pathname.startsWith("/shorts/")) {
+        videoId = u.pathname.split("/")[2];
+      } else {
+        videoId = u.searchParams.get("v");
+      }
+      const listId = u.searchParams.get("list");
       if (videoId) return `https://www.youtube.com/embed/${videoId}${listId ? `?list=${listId}` : ""}`;
       if (listId)  return `https://www.youtube.com/embed/videoseries?list=${listId}`;
     }
-    return url;
-  } catch { return ""; }
+    return rawUrl;
+  } catch {
+    return "";
+  }
 }
 
 document.getElementById("form-musicas")?.addEventListener("submit", async e => {
   e.preventDefault();
-  const title     = document.getElementById("mTitle")?.value.trim();
-  const linkInput = document.getElementById("mLink")?.value.trim();
-  if (!title || !linkInput) return;
+  const titleInput = document.getElementById("mTitle")?.value.trim();
+  const linkInput  = document.getElementById("mLink")?.value.trim();
+  if (!linkInput) return;
 
-  const src = extractIframeSrc(linkInput);
-  if (!src) { alert("URL ou código iframe inválido."); return; }
+  const title = titleInput || "Nossa Música";
+  const src   = extractIframeSrc(linkInput);
+  if (!src) {
+    alert("URL ou código iframe inválido.");
+    return;
+  }
 
   const btn  = document.getElementById("btn-add-musicas");
   const orig = btn?.innerHTML ?? "";
@@ -808,18 +881,21 @@ function renderMusicas() {
 
   const fragment = document.createDocumentFragment();
 
-  items.forEach((m, idx) => {
+  items.forEach((m) => {
+    const rawSrc = m.src || m.embedUrl || m.url || "";
+    const safeSrc = extractIframeSrc(rawSrc) || rawSrc;
+
     const card = document.createElement("div");
     card.className = "musica-card";
     card.innerHTML = `
       <div class="musica-card-header">
-        <h3 class="musica-title">${escapeHTML(m.title)}</h3>
-        <button class="movie-action-btn delete" onclick="window.deleteItem('musicas','${escapeHTML(m.key)}')" aria-label="Deletar">
+        <h3 class="musica-title" title="${escapeHTML(m.title)}">${escapeHTML(m.title || "Nossa Música")}</h3>
+        <button type="button" class="movie-action-btn delete" onclick="window.deleteItem('musicas','${escapeHTML(m.key)}')" aria-label="Deletar">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
       <div class="musica-iframe-wrapper">
-        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" style="width:100%;height:100%;overflow:hidden;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="${m.src}" loading="lazy"></iframe>
+        <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" frameborder="0" src="${escapeHTML(safeSrc)}" loading="lazy"></iframe>
       </div>`;
     fragment.appendChild(card);
   });
@@ -827,39 +903,10 @@ function renderMusicas() {
   track.innerHTML = "";
   track.appendChild(fragment);
 
-  // Otimização: Anima todos os elementos da lista em lote (stagger) após estarem no DOM
   if (typeof gsap !== "undefined") {
     gsap.fromTo(track.querySelectorAll('.musica-card'), 
       { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.1 }
+      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08, overwrite: "auto" }
     );
   }
 }
-
-document.querySelectorAll(".ftab").forEach(tab => {
-  tab.addEventListener("click", e => {
-    const section = e.target.dataset.section;
-    if (!section || section === "musicas") return;
-
-    document.querySelectorAll(`.ftab[data-section="${section}"]`).forEach(t => t.classList.remove("active"));
-    e.target.classList.add("active");
-    state[section].filter = e.target.dataset.filter;
-    renderItems(section);
-  });
-});
-
-document.querySelectorAll(".main-tab").forEach(tab => {
-  tab.addEventListener("click", e => {
-    const section = e.currentTarget.dataset.section;
-
-    document.querySelectorAll(".main-tab").forEach(t => { t.classList.remove("active"); t.setAttribute("aria-selected", "false"); });
-    e.currentTarget.classList.add("active");
-    e.currentTarget.setAttribute("aria-selected", "true");
-
-    document.querySelectorAll(".media-section").forEach(s => {
-      s.classList.remove("active");
-    });
-
-    document.getElementById(`section-${section}`)?.classList.add("active");
-  });
-});
