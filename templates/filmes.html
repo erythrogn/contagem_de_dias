@@ -333,13 +333,6 @@
       <p class="filmes-subtitle">que me fazem lembrar de você</p>
     </header>
 
-   <div id="section-musicas" class="media-section">
-    <header class="filmes-header">
-      <span class="filmes-eyebrow">algumas</span>
-      <h1 class="filmes-title">nossas <span class="filmes-accent">músicas</span></h1>
-      <p class="filmes-subtitle">que me fazem lembrar de você</p>
-    </header>
-
     <section class="form-wrapper">
       <h2 class="form-title">Adicionar Playlist ou Mídia</h2>
       <form id="form-musicas" class="form-layout">
@@ -363,6 +356,7 @@
       </div>
     </section>
   </div>
+</main>
 
 <dialog id="edit-dialog-filmes">
   <div class="dialog-header">
@@ -432,7 +426,6 @@
   </form>
 </dialog>
 
-<!-- NOVO: toast de feedback — controlado via JS: elemento.textContent = '...'; elemento.className = 'toast toast--success show'; -->
 <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script type="module" src="{{ url_for('static', filename='js/filmes.js') }}"></script>
