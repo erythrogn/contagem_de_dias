@@ -1,0 +1,27 @@
+
+@import url("animations.css");
+@import url("gate.css");
+@import url("forms.css");
+@import url("notes.css");
+@import url("carousel.css");
+@import url("layout.css");
+:root {
+  --bg-dark: #06080d;
+  --champagne-canvas: rgba(253, 250, 240, 0.04);
+  --gold-soft: #f1d299;
+  --gold-dark: #dca852;
+  --text-light: #fefefe;
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --border-gold: rgba(241, 210, 153, 0.15);
+  
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+  margin: 0;
+  min-height: 100vh;
+}

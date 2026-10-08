@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Nossa Programação · tamo junto{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendario/calendario.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="calendario-content">
+  <div class="wrap">
+
+    <header class="cal-header">
+      <span class="cal-eyebrow">nosso roteiro de memórias</span>
+      <h1 class="cal-title">Nossa <span>Programação</span></h1>
+      <p class="cal-subtitle">voce muda todos os dias da minha vida</p>
+      <div class="gold-divider"></div>
+    </header>
+
+    <div class="legend" aria-label="Legenda da programação">
+      <div class="legend-item">
+        <div class="legend-dot dot-today"></div>
+        <span>Hoje</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-anniv"></div>
+        <span>Mesversário</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-viagem"></div>
+        <span>Viagem</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-filme"></div>
+        <span>Filme</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-coisinha"></div>
+        <span>Coisinha</span>
+      </div>
+    </div>
+
+    <div class="calendar-wrapper">
+      <article class="month-card glass-panel" id="calendarCard">
+        
+        <div class="month-nav">
+          <button class="nav-btn" onclick="window.prevMonth()" aria-label="Mês Anterior">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          
+          <div class="month-center">
+            <div class="month-selector">
+              <select id="monthSelect" onchange="window.changeMonth(this.value)"></select>
+              <select id="yearSelect" onchange="window.changeYear(this.value)"></select>
+            </div>
+            <button class="nav-btn today-btn" onclick="window.goToToday()" aria-label="Ir para hoje">Ir para Hoje</button>
+          </div>
+          
+          <button class="nav-btn" onclick="window.nextMonth()" aria-label="Próximo Mês">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="days-header" aria-hidden="true">
+          <span class="dow">Dom</span>
+          <span class="dow">Seg</span>
+          <span class="dow">Ter</span>
+          <span class="dow">Qua</span>
+          <span class="dow">Qui</span>
+          <span class="dow">Sex</span>
+          <span class="dow">Sáb</span>
+        </div>
+        
+        <div class="days-grid" id="daysGrid" role="grid"></div>
+        
+      </article>
+
+      <div class="events-list-container timeline-style" id="eventsListContainer"></div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='js/calendario.js') }}"></script>
+{% endblock %}

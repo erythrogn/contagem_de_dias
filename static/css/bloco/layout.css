@@ -1,0 +1,98 @@
+#bloco-content {
+  padding-left: 80px; /* Espaço exato do menu lateral */
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center; /* Centraliza a div .wrap horizontalmente */
+}
+
+/* --- O Filho (Sempre no centro absoluto do espaço restante) --- */
+.wrap {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Cabeçalhos da Página --- */
+.page-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--text-light);
+  margin: 0 0 0.5rem 0;
+}
+
+.page-title em {
+  font-style: italic;
+  color: var(--gold-soft);
+}
+
+.page-sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.header-decorator {
+  width: 40px;
+  height: 1px;
+  background: var(--border-gold);
+}
+
+/* --- Responsividade para Celulares --- */
+@media (max-width: 768px) {
+  #bloco-content {
+    padding-left: 0; /* No celular o menu fica embaixo, então zera a esquerda */
+    padding-bottom: 80px; /* Adiciona espaço para não sobrepor o menu no fundo */
+  }
+  
+  .wrap { 
+    padding: 4rem 1.5rem; 
+  }
+  
+  .page-title { 
+    font-size: 2.2rem; 
+  }
+}
+/* --- Form Grid (Usado no Modal de Edição) --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 1.5rem;
+}
+.form-grid .span2 { grid-column: 1 / -1; }
+
+.floating-group { position: relative; }
+.floating-input {
+  width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-gold);
+  color: var(--text-light); font-family: var(--font-sans); padding: 0.5rem 0; outline: none; transition: 0.3s;
+}
+.floating-label {
+  position: absolute; left: 0; top: 8px; color: var(--text-muted); font-family: var(--font-serif);
+  font-style: italic; pointer-events: none; transition: 0.3s;
+}
+.floating-input:focus ~ .floating-label, .floating-input:not(:placeholder-shown) ~ .floating-label {
+  top: -18px; font-size: 0.65rem; color: var(--gold-soft); font-family: var(--font-sans); text-transform: uppercase; font-style: normal; letter-spacing: 2px;
+}

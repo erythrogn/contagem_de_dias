@@ -1,0 +1,107 @@
+.cinematic-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 50% 0%, rgba(241, 210, 153, 0.05) 0%, transparent 60%);
+  z-index: 0;
+}
+
+.projector-light {
+  position: fixed;
+  top: -20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150vw;
+  height: 40vh;
+  background-image: radial-gradient(ellipse at center, rgba(241, 210, 153, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation-name: projectorFlicker;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.filmes-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-top: 6rem;
+  padding-right: 3rem;
+  padding-bottom: 8rem;
+  /* Compensa a sidebar via padding para manter o margin: auto centralizando a caixa */
+  padding-left: calc(80px + 3rem);
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.filmes-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.filmes-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  display: block;
+  margin-bottom: 1.2rem;
+  opacity: 0.8;
+}
+
+.filmes-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 300;
+  color: var(--text-light);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.filmes-accent {
+  font-style: italic;
+  color: var(--gold-soft);
+  text-shadow: var(--cinematic-glow);
+}
+
+.filmes-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.slider-section {
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+@media (max-width: 1200px) {
+  .filmes-container {
+    padding-left: calc(80px + 2rem);
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filmes-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 5rem;
+    padding-bottom: 120px;
+  }
+
+  .filmes-title {
+    font-size: 2.5rem;
+  }
+}

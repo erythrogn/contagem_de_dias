@@ -1,0 +1,166 @@
+/* ====================================================
+   ANIMAÇÕES E TRANSIÇÕES (HOVER)
+==================================================== */
+
+/* Efeito ao passar o rato nas setas do carrossel */
+.nav-arrow:hover {
+  border-color: var(--gold-soft);
+  background: rgba(241, 210, 153, 0.05);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(241, 210, 153, 0.1);
+}
+
+.nav-arrow:active {
+  transform: scale(0.95);
+}
+
+/* Hover subtil nos números do contador de tempo */
+.time-slot:hover .time-digit {
+  color: #ffffff;
+  transform: translateY(-3px);
+  text-shadow: 0 5px 15px rgba(241, 210, 153, 0.3);
+}
+
+/* Movimento lento de respiração para as fotos de fundo (Opcional, mas muito elegante) */
+@keyframes subtleZoom {
+  0% { transform: scale(1.06); }
+  100% { transform: scale(1.1); }
+}
+
+.bg-img {
+  animation: subtleZoom 30s alternate infinite ease-in-out;
+}.magic-letter {
+    opacity: 0;
+    display: inline-block;
+    position: relative;
+    white-space: pre;
+    will-change: transform, opacity, filter, color;
+    animation: complexLetterReveal 2.2s forwards var(--magic-delay);
+}
+
+.magic-letter::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 11;
+    will-change: box-shadow;
+    animation: fairyDustExplosion 2.2s forwards var(--magic-delay);
+}
+
+.magic-letter::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 12;
+    will-change: transform, box-shadow;
+    animation: fairyCoreSpark 2.2s forwards var(--magic-delay);
+}
+
+@keyframes complexLetterReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.3) rotateX(90deg) rotateY(45deg);
+        color: transparent;
+        text-shadow: none;
+        filter: blur(15px);
+    }
+    30% {
+        opacity: 0.3;
+        transform: translateY(10px) scale(0.9) rotateX(30deg) rotateY(0deg);
+        color: #8c9eea;
+        text-shadow: 0 0 20px #8c9eea;
+        filter: blur(6px);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(0px) scale(1.3) rotateX(10deg) rotateY(0deg);
+        color: #ffffff;
+        text-shadow: 0 0 40px #ffffff, 0 0 70px #d4af37, 0 0 100px #6f84d8;
+        filter: blur(2px);
+    }
+    60% {
+        transform: translateY(0px) scale(1.02) rotateX(0deg) rotateY(0deg);
+        color: #faf5eb;
+        text-shadow: 0 0 15px #faf5eb, 0 0 25px #d4af37;
+        filter: blur(0px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1) rotateX(0deg) rotateY(0deg);
+        color: var(--text-light);
+        text-shadow: none;
+        filter: blur(0px);
+    }
+}
+
+@keyframes fairyCoreSpark {
+    0%, 20% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        box-shadow: none;
+    }
+    40% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(3.5) rotate(225deg);
+        box-shadow: 0 0 80px #ffffff, 0 0 120px #6f84d8, inset 0 0 20px #ffffff;
+    }
+    70% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(495deg);
+        box-shadow: none;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(495deg);
+        box-shadow: none;
+    }
+}
+
+@keyframes fairyDustExplosion {
+    0%, 25% {
+        opacity: 0;
+        box-shadow: none;
+    }
+    40% {
+        opacity: 1;
+        box-shadow: 
+            15px -15px 3px #d4af37, 
+            -15px 15px 3px #6f84d8, 
+            22px 6px 3px #ffffff, 
+            -22px -6px 3px #d4af37;
+    }
+    55% {
+        opacity: 0.8;
+        box-shadow: 
+            32px -20px 3px #d4af37, 
+            -25px 32px 3px #6f84d8, 
+            45px 22px 3px #ffffff, 
+            -42px -5px 3px #d4af37;
+    }
+    75% {
+        opacity: 0.1;
+        box-shadow: 
+            65px 60px 1px rgba(255, 255, 255, 0.2), 
+            -65px 42px 1px rgba(212, 175, 55, 0.2), 
+            32px -65px 1px rgba(111, 132, 216, 0.2), 
+            -30px 80px 1px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        opacity: 0;
+        box-shadow: none;
+    }
+}

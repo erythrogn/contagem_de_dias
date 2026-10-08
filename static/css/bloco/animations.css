@@ -1,0 +1,21 @@
+@keyframes riseUpMinimal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.note-card {
+  animation: riseUpMinimal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Aplicando stagger visual nos cards do Masonry */
+.note-card:nth-child(1) { animation-delay: 0.1s; }
+.note-card:nth-child(2) { animation-delay: 0.2s; }
+.note-card:nth-child(3) { animation-delay: 0.3s; }
+.note-card:nth-child(4) { animation-delay: 0.4s; }
+.note-card:nth-child(5) { animation-delay: 0.5s; }

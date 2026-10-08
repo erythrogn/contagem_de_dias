@@ -1,0 +1,13 @@
+:root {
+  --bg-dark: #0a0c10; /* O teu fundo azul-profundo/noturno */
+  --text-main: #fcfbf9;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark); /* Força o fundo escuro */
+  color: var(--text-main);
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+}

@@ -1,0 +1,79 @@
+.filter-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.ftab {
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.ftab:hover, .ftab.active {
+  color: var(--gold-soft);
+  border-bottom-color: var(--gold-soft);
+}
+
+.notes-masonry {
+  columns: 1;
+  column-gap: 1.5rem;
+}
+
+@media (min-width: 600px) { .notes-masonry { columns: 2; } }
+@media (min-width: 900px) { .notes-masonry { columns: 3; } }
+
+.note-card {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  background: var(--champagne-canvas);
+  border: 1px solid var(--border-gold);
+  padding: 2rem;
+  border-radius: 2px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(241, 210, 153, 0.4);
+}
+
+.note-date {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--gold-dark);
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.note-content {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+/* Botões de deletar/editar da nota */
+.btn-action {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.btn-action:hover {
+  color: var(--gold-soft);
+}
