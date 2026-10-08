@@ -2,29 +2,28 @@ from datetime import datetime, timedelta
 import hashlib
 import hmac
 import ipaddress
+import json
 import os
 import secrets
 import socket
+import time
 from urllib.parse import urlparse
-
-from cachetools import TTLCache
+import urllib.request
 from flask import Flask, jsonify, render_template, request, session
-import requests
 
 app = Flask(__name__)
 
-# Secret key for session encryption — in production set via env var
+# Chave secreta da sessao
 app.secret_key = os.environ.get("SECRET_KEY", secrets.token_hex(32))
 
-# ── Data inicial do relacionamento ──────────────────────────────────────────
+# Data inicial do relacionamento
 DATA_INICIO = datetime(2025, 11, 29, 0, 1, 0)
 
-# ── Bloco password (SHA-256 hash) ───────────────────────────────────────────
-# Hash of the password. Default password: "floresta"
+# Senha do bloco (SHA-256 hash) - padrao: "floresta"
 _DEFAULT_HASH = hashlib.sha256("floresta".encode()).hexdigest()
 BLOCO_PASSWORD_HASH = os.environ.get("BLOCO_PASSWORD_HASH", _DEFAULT_HASH)
 
-# ── Allowlist e Cache para resolucao de midia ───────────────────────────────
+# Allowlist e Cache nativo em memoria (TTL 24h) para resolucao de midia
 ALLOWED_HOSTS = [
     "spotify.com",
     "youtube.com",
@@ -45,7 +44,8 @@ ALLOWED_HOSTS = [
     "tiktok.com",
 ]
 
-resolver_cache = TTLCache(maxsize=500, ttl=86400)
+CACHE_TTL_SECONDS = 86400
+resolver_cache = {}
 
 
 def is_safe_url(url):
@@ -63,7 +63,6 @@ def is_safe_url(url):
     if not allowed:
       return False
 
-    # Protecao SSRF: checar IPs privados, loopback ou link-local
     ip_str = socket.gethostbyname(hostname)
     ip_obj = ipaddress.ip_address(ip_str)
     if (
@@ -92,7 +91,6 @@ def tempo_juntos():
   }
 
 
-# ── Security Headers ─────────────────────────────────────────────────────────
 @app.after_request
 def add_security_headers(response):
   response.headers["X-Content-Type-Options"] = "nosniff"
@@ -108,17 +106,13 @@ def add_security_headers(response):
       " https://w.soundcloud.com https://player.vimeo.com; "
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
       "font-src 'self' https://fonts.gstatic.com; "
-      "img-src 'self' data: https: https://image.tmdb.org"
-      " https://cdn.cloudflare.steamstatic.com;"
-      " connect-src 'self' https://*.firebaseio.com"
-      " wss://*.firebaseio.com https://*.googleapis.com"
-      " https://www.gstatic.com https://api.themoviedb.org"
-      " https://store.steampowered.com https://api.allorigins.win; "
+      "img-src 'self' data: https: http:; "
+      "connect-src 'self' https: wss:; "
       "frame-src 'self' https://open.spotify.com https://embed.music.apple.com"
       " https://www.youtube.com https://w.soundcloud.com"
       " https://widget.deezer.com https://player.vimeo.com"
-      " https://www.dailymotion.com https://player.twitch.tv;"
-      " object-src 'none'; "
+      " https://www.dailymotion.com https://player.twitch.tv; "
+      "object-src 'none'; "
       "base-uri 'self'; "
       "frame-ancestors 'self'"
   )
@@ -126,7 +120,6 @@ def add_security_headers(response):
   return response
 
 
-# ── Public routes ────────────────────────────────────────────────────────────
 @app.route("/")
 def index():
   ctx = tempo_juntos()
@@ -158,7 +151,6 @@ def coisinhas():
   return render_template("coisinhas.html", **tempo_juntos())
 
 
-# ── API: Resolver Midia (oEmbed) ─────────────────────────────────────────────
 @app.route("/api/midia/resolver", methods=["POST"])
 def resolver_midia():
   data = request.get_json(silent=True) or {}
@@ -167,8 +159,10 @@ def resolver_midia():
   if not url or not is_safe_url(url):
     return jsonify({"error": "URL invalida ou nao permitida"}), 400
 
-  if url in resolver_cache:
-    return jsonify(resolver_cache[url])
+  now = time.time()
+  cached = resolver_cache.get(url)
+  if cached and (now - cached["ts"] < CACHE_TTL_SECONDS):
+    return jsonify(cached["data"])
 
   parsed = urlparse(url)
   host = parsed.hostname or ""
@@ -196,37 +190,35 @@ def resolver_midia():
       "embedUrl": url,
   }
 
-  if oembed_url:
+  if oembed_url and is_safe_url(oembed_url):
     try:
-      session_req = requests.Session()
-      session_req.max_redirects = 3
-      resp = session_req.get(oembed_url, timeout=5, allow_redirects=True)
-      if resp.status_code == 200 and len(resp.content) < 1024 * 1024:
-        j = resp.json()
-        result["title"] = j.get("title", "")
-        result["author"] = j.get("author_name", "")
-        result["thumbnail"] = j.get("thumbnail_url", "")
+      req = urllib.request.Request(
+          oembed_url,
+          headers={"User-Agent": "Mozilla/5.0 (compatible; TamoJunto/1.0)"},
+      )
+      with urllib.request.urlopen(req, timeout=5) as resp:
+        if resp.status == 200:
+          raw_bytes = resp.read(1024 * 1024)
+          j = json.loads(raw_bytes.decode("utf-8", errors="replace"))
+          result["title"] = j.get("title", "")
+          result["author"] = j.get("author_name", "")
+          result["thumbnail"] = j.get("thumbnail_url", "")
     except Exception:
       pass
 
-  resolver_cache[url] = result
+  if len(resolver_cache) >= 500:
+    resolver_cache.clear()
+  resolver_cache[url] = {"ts": now, "data": result}
   return jsonify(result)
 
 
-# ── Bloco — password-protected ───────────────────────────────────────────────
 @app.route("/bloco")
 def bloco():
-  """Serve the bloco page. The client-side JS handles auth via session."""
   return render_template("bloco.html", **tempo_juntos())
 
 
 @app.route("/api/bloco/auth", methods=["POST"])
 def bloco_auth():
-  """
-    Verify password sent as SHA-256 hash.
-    The client sends: { "hash": "<sha256 of entered password>" }
-    We compare using hmac.compare_digest to prevent timing attacks.
-    """
   data = request.get_json(silent=True)
   if not data or "hash" not in data:
     return jsonify({"ok": False, "msg": "Dados inválidos"}), 400
@@ -244,7 +236,6 @@ def bloco_auth():
 
 @app.route("/api/bloco/check")
 def bloco_check():
-  """Quick check whether the current session is authenticated."""
   return jsonify({"authenticated": bool(session.get("bloco_auth"))})
 
 
