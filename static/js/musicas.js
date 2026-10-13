@@ -168,7 +168,10 @@ export function renderMusicasList(items, container, escapeHTML) {
         <h3 class="musica-title" title="${escapeHTML(m.title)}">${escapeHTML(m.title || FALLBACK_TITLE)}</h3>
         <button type="button" class="movie-action-btn delete" onclick="window.deleteItem('musicas','${escapeHTML(m.key)}')" aria-label="Deletar">${DELETE_ICON}</button>
       </div>
-      ${m.thumbnail ? `<img class="musica-thumb" src="${escapeHTML(m.thumbnail)}" alt="" loading="lazy">` : ""}
+      <div class="musica-media ${/spotify|apple/i.test(`${m.provider || ""} ${m.url || ""}`) ? "is-square" : ""} ${m.thumbnail ? "" : "is-empty"}">
+        ${m.thumbnail ? `<img class="musica-thumb" src="${escapeHTML(m.thumbnail)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('is-empty');this.remove();">` : ""}
+        <span class="musica-placeholder">${escapeHTML(m.provider || "link")}</span>
+      </div>
       <div class="musica-btn-group">
         <button type="button" class="movie-action-btn play" data-embed="${escapeHTML(embed)}" data-provider="${escapeHTML(m.provider || "")}" data-kind="${escapeHTML(m.kind || "")}" aria-label="Tocar" ${embed ? "" : "disabled"}>${PLAY_ICON}</button>
         <span class="musica-meta-info">${escapeHTML(m.provider || "link")}</span>

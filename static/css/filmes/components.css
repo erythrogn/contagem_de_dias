@@ -548,6 +548,54 @@
   border: 1px solid rgba(226, 212, 163, 0.1);
 }
 
+.musica-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #040508;
+  border: 1px solid rgba(226, 212, 163, 0.1);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.musica-media.is-square {
+  aspect-ratio: 1 / 1;
+  max-height: 260px;
+  width: auto;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.musica-media .musica-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  object-fit: cover;
+}
+
+.musica-media.is-square .musica-thumb {
+  object-fit: contain;
+}
+
+.musica-placeholder {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+.musica-media:not(.is-empty) .musica-placeholder {
+  display: none;
+}
+
 .musica-meta-info {
   font-family: var(--font-sans);
   font-size: 0.65rem;
