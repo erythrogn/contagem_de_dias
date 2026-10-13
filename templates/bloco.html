@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+{% if not authed %}
 <div id="bloco-gate" class="gate-overlay" role="dialog" aria-modal="true" aria-label="Acesso protegido">
   <div class="gate-card">
     <div class="gate-icon" aria-hidden="true">
@@ -42,7 +43,9 @@
   </div>
 </div>
 
-<div id="bloco-content" class="bloco-hidden" style="opacity: 0; transform: translateY(20px);">
+{% endif %}
+{% if authed %}
+<div id="bloco-content">
   <div class="wrap">
 
     <header class="page-header">
@@ -678,96 +681,66 @@ function updateMFormUI() {
     if (e.key === 'ArrowLeft')  window.moveSlider('prev');
   });
 </script>
-
+<script>
+  if (typeof gsap !== 'undefined') gsap.fromTo('#bloco-content', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' });
+</script>
+{% endif %}
+{% if not authed %}
 <script>
 (function initGate() {
-  const gate    = document.getElementById('bloco-gate');
-  const content = document.getElementById('bloco-content');
-  const input   = document.getElementById('gate-input');
-  const btn     = document.getElementById('gate-btn');
-  const errEl   = document.getElementById('gate-error');
-
-  const EXPECTED_HASH = "b2dhaXR1ZW0="; // Chave reversa em Base64 para: "meutiago"
-
-  if (sessionStorage.getItem('bloco_auth') === 'true') { 
-    unlock(false); 
-    return; 
-  }
+  const input = document.getElementById('gate-input');
+  const btn   = document.getElementById('gate-btn');
+  const errEl = document.getElementById('gate-error');
+  if (!input || !btn) return;
 
   input.addEventListener('input', () => {
     btn.disabled = input.value.trim().length === 0;
   });
 
-  function encodePwd(str) {
-    return btoa(str.split('').reverse().join(''));
-  }
-
-  function tryAuth() {
-    const pwd = input.value.trim();
-    if (!pwd) { showError('Digite a senha da floresta.'); return; }
-
-    btn.disabled = true;
-    if (errEl) errEl.textContent = '';
-
-    try {
-      const hash = encodePwd(pwd);
-      
-      if (hash === EXPECTED_HASH) {
-        sessionStorage.setItem('bloco_auth', 'true');
-        unlock(true);
-      } else {
-        showError('Senha incorreta. Tente novamente.');
-        input.value = '';
-        input.focus();
-      }
-    } catch(e) {
-      showError('Erro na verificação. Tente novamente.');
-    } finally {
-      if(input.value.trim().length > 0) btn.disabled = false;
-    }
-  }
-
   function showError(msg) {
-    if(errEl) {
+    if (errEl) {
       errEl.textContent = msg;
       errEl.classList.add('visible');
     }
   }
 
-  function unlock(animate) {
-    if (animate) {
-      gate.style.transition = "all 1s cubic-bezier(0.25, 1, 0.3, 1)";
-      gate.style.opacity = "0";
-      gate.style.filter = "blur(10px)";
-      
-      setTimeout(() => {
-        gate.style.display = 'none';
-        showContent();
-      }, 1000);
-    } else {
-      gate.style.display = 'none';
-      showContent();
-    }
+  async function sha256Hex(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  function showContent() {
-    content.classList.remove('bloco-hidden');
-    content.style.display = 'block';
-    
-    if (typeof gsap !== 'undefined') {
-      gsap.to(content, { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" });
-      gsap.fromTo(".page-header", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.2, ease: "power3.out" });
-      gsap.fromTo(".mform-shell", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.4, ease: "power3.out" });
-    } else {
-      content.style.opacity = '1';
-      content.style.transform = 'translateY(0)';
+  async function tryAuth() {
+    const pwd = input.value.trim();
+    if (!pwd) { showError('Digite a senha da floresta.'); return; }
+
+    btn.disabled = true;
+    if (errEl) { errEl.textContent = ''; errEl.classList.remove('visible'); }
+
+    try {
+      const hash = await sha256Hex(pwd);
+      const res = await fetch('/api/bloco/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hash })
+      });
+      if (res.ok) {
+        location.reload(); // o servidor agora renderiza o conteúdo para a sessão autenticada
+        return;
+      }
+      showError('Senha incorreta. Tente novamente.');
+      input.value = '';
+      input.focus();
+    } catch (e) {
+      showError('Erro na verificação. Tente novamente.');
+    } finally {
+      btn.disabled = input.value.trim().length === 0;
     }
   }
 
   btn.addEventListener('click', tryAuth);
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryAuth(); });
-  
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); });
   setTimeout(() => input.focus(), 100);
 })();
 </script>
+{% endif %}
 {% endblock %}

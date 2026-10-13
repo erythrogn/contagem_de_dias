@@ -19,8 +19,9 @@ app.secret_key = os.environ.get("SECRET_KEY", secrets.token_hex(32))
 # Data inicial do relacionamento
 DATA_INICIO = datetime(2025, 11, 29, 0, 1, 0)
 
-# Senha do bloco (SHA-256 hash) - padrao: "floresta"
-_DEFAULT_HASH = hashlib.sha256("floresta".encode()).hexdigest()
+# Senha do bloco (SHA-256 hash). Padrão: "meutiago", a senha que o site já aceitava.
+# Em produção, defina BLOCO_PASSWORD_HASH no ambiente.
+_DEFAULT_HASH = hashlib.sha256("meutiago".encode()).hexdigest()
 BLOCO_PASSWORD_HASH = os.environ.get("BLOCO_PASSWORD_HASH", _DEFAULT_HASH)
 
 # Allowlist e Cache nativo em memoria (TTL 24h) para resolucao de midia
@@ -214,7 +215,8 @@ def resolver_midia():
 
 @app.route("/bloco")
 def bloco():
-  return render_template("bloco.html", **tempo_juntos())
+  # O conteúdo só é renderizado para sessões autenticadas no servidor.
+  return render_template("bloco.html", authed=bool(session.get("bloco_auth")), **tempo_juntos())
 
 
 @app.route("/api/bloco/auth", methods=["POST"])
@@ -246,4 +248,4 @@ def bloco_logout():
 
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  app.run(debug=os.environ.get("FLASK_DEBUG") == "1")
