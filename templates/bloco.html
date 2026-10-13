@@ -488,6 +488,8 @@ function updateMFormUI() {
               <div class="note-qa" style="border-top:1px solid rgba(226, 212, 163,0.12); margin-top:15px; padding-top:15px;">
                 <div class="note-qa-label" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark); margin-bottom:6px;">✦ resposta de ${escapeHTML(n.answeredBy)}</div>
                 <div class="note-answer" style="font-family:var(--font-serif); font-style:italic; font-size:1.05rem; line-height:1.5; color:rgba(255,255,255,0.95);">"${escapeHTML(n.answer).replace(/\n/g,'<br>')}"</div>
+                <div class="note-qa-label" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark); margin-bottom:6px;">✦ resposta de ${n.answeredBy}</div>
+                <div class="note-answer" style="font-family:var(--font-serif); font-style:italic; font-size:1.05rem; line-height:1.5; color:rgba(255,255,255,0.95);">"${n.answer.replace(/\n/g,'<br>')}"</div>
               </div>`;
           } else {
             contentHtml = `

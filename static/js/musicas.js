@@ -276,6 +276,7 @@ export function initMusicasModule({ dbRefs, push, escapeHTML, showToast }) {
         if (json.thumbnail) resolved.thumbnail = json.thumbnail;
         if (json.author) resolved.author = json.author;
         // json.embedUrl do servidor é o link original (não embutível): mantemos o embed calculado acima.
+        if (json.embedUrl) resolved.embedUrl = json.embedUrl;
       }
     } catch (err) {
       console.warn("Falha ao resolver oEmbed:", err);
