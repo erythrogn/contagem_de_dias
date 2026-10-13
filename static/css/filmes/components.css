@@ -83,36 +83,6 @@
   animation: sectionEnterCinematic 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-.form-toggle-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
-  width: 100%;
-}
-
-.btn-toggle-form {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background-color: rgba(241, 210, 153, 0.05) !important;
-  border: 1px solid var(--border-gold);
-  color: var(--gold-soft);
-  padding: 0.6rem 1.5rem;
-  border-radius: 30px;
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-toggle-form:hover {
-  background-color: rgba(241, 210, 153, 0.15) !important;
-  border-color: var(--gold-soft);
-  box-shadow: var(--cinematic-glow);
-}
-
 .form-collapsible-wrapper {
   max-height: 0;
   overflow: hidden;
