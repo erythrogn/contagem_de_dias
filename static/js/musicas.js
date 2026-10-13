@@ -148,6 +148,9 @@ export function resolveEmbed(item) {
   }
   if (item.embedUrl && item.embedUrl !== item.url) return item.embedUrl;
   if (item.src) return item.src;
+  if (item.embedUrl) return item.embedUrl;
+  if (item.src) return item.src;
+  if (item.url) return parseMediaLink(item.url)?.embedUrl || null;
   return null;
 }
 

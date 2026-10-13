@@ -430,6 +430,8 @@ function updateMFormUI() {
             <div class="c-answer-box" style="border-top:1px solid rgba(226, 212, 163,0.15); margin-top:20px; padding-top:15px;">
               <span class="c-answer-author" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark);">✦ Resposta de ${escapeHTML(n.answeredBy || expected)}</span>
               <p class="c-answer-text" style="font-family:var(--font-serif); font-style:italic; font-size:1.15rem; margin-top:8px; line-height:1.6; color:#ffffff;">"${escapeHTML(n.answer).replace(/\n/g,'<br>')}"</p>
+              <span class="c-answer-author" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark);">✦ Resposta de ${n.answeredBy || expected}</span>
+              <p class="c-answer-text" style="font-family:var(--font-serif); font-style:italic; font-size:1.15rem; margin-top:8px; line-height:1.6; color:#ffffff;">"${n.answer.replace(/\n/g,'<br>')}"</p>
             </div>`;
         } else {
           answerUI = `
