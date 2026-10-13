@@ -1,0 +1,12 @@
+/* ============================================================
+   tokens.css — Fonte única de cores de destaque (dourado)
+   Carregado primeiro em base.html. Páginas podem sobrescrever
+   apenas tokens próprios; o dourado principal é este.
+   ============================================================ */
+:root {
+  --gold: #e2d4a3;
+  --gold-rgb: 226, 212, 163;
+  --gold-soft: var(--gold);
+  --color-gold-primary: var(--gold);
+  --header-gold-primary: var(--gold);
+}

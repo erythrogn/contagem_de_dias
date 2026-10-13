@@ -2,17 +2,17 @@
 
   --bg-dark: #040508;
   --champagne-canvas: rgba(245, 240, 220, 0.04);
-  --gold-soft: #d4af37;
+  --gold-soft: #e2d4a3;
   --gold-dark: #1e3a8a;
-  --gold-neon: rgba(212, 175, 55, 0.3);
+  --gold-neon: rgba(226, 212, 163, 0.3);
   --text-light: #fdfbf7;
   --text-muted: rgba(148, 163, 184, 0.7);
-  --border-gold: rgba(212, 175, 55, 0.25);
+  --border-gold: rgba(226, 212, 163, 0.25);
   --glass-bg: rgba(10, 15, 30, 0.7);
-  --glass-border: rgba(212, 175, 55, 0.15);
+  --glass-border: rgba(226, 212, 163, 0.15);
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
-  --cinematic-glow: 0 0 30px rgba(212, 175, 55, 0.15);
+  --cinematic-glow: 0 0 30px rgba(226, 212, 163, 0.15);
 }
 
 

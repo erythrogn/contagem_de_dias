@@ -1,15 +1,15 @@
 :root {
   --bg-dark: #05070a;
   --champagne-canvas: rgba(245, 240, 225, 0.04);
-  --gold-soft: #dfce97;
+  --gold-soft: #e2d4a3;
   --gold-dark: #1e3a8a;
   --gold-neon: rgba(30, 58, 138, 0.4);
   --text-light: #fdfbf7;
   --text-main: #fcfbf9;
   --text-muted: rgba(148, 163, 184, 0.7);
-  --border-gold: rgba(212, 175, 55, 0.25);
+  --border-gold: rgba(226, 212, 163, 0.25);
   --glass-bg: rgba(12, 18, 30, 0.7);
-  --glass-border: rgba(212, 175, 55, 0.15);
+  --glass-border: rgba(226, 212, 163, 0.15);
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
   --cinematic-glow: 0 0 40px rgba(30, 58, 138, 0.3);

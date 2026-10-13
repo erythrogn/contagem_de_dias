@@ -15,7 +15,7 @@
 }
 
 .card-inner-border {
-  border: 1px solid rgba(241, 210, 153, 0.15);
+  border: 1px solid rgba(226, 212, 163, 0.15);
   padding: 4rem 3rem;
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@
 .fine-line-decorator {
   height: 1px;
   width: 35px;
-  background: rgba(241, 210, 153, 0.3);
+  background: rgba(226, 212, 163, 0.3);
 }
 
 .celebration-date {
@@ -69,7 +69,7 @@
   color: #ffffff;
   letter-spacing: -1px;
   margin-top: 0.5rem;
-  text-shadow: 0 0 20px rgba(241, 210, 153, 0.15);
+  text-shadow: 0 0 20px rgba(226, 212, 163, 0.15);
 }
 
 .minimal-divider {
@@ -160,7 +160,7 @@
 
 .nav-arrow {
   background: transparent;
-  border: 1px solid rgba(241, 210, 153, 0.15);
+  border: 1px solid rgba(226, 212, 163, 0.15);
   color: var(--gold-soft);
   border-radius: 50%;
   width: 38px;
@@ -185,13 +185,13 @@
 ==================================================== */
 .centenary-card {
     min-height: 520px;
-    box-shadow: 0 0 60px rgba(232, 200, 120, 0.15), inset 0 0 40px rgba(10, 15, 30, 0.8);
+    box-shadow: 0 0 60px rgba(226, 212, 163, 0.15), inset 0 0 40px rgba(10, 15, 30, 0.8);
     border-color: var(--gold-soft);
     animation: pulseGold 4s infinite alternate ease-in-out;
 }
 
 .golden-aura {
-    background: radial-gradient(circle at center, rgba(232, 200, 120, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(226, 212, 163, 0.08) 0%, transparent 70%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -213,7 +213,7 @@
     font-weight: 300;
     line-height: 0.8;
     color: var(--gold-soft);
-    text-shadow: 0 0 30px var(--gold-neon), 0 0 60px rgba(232, 200, 120, 0.3);
+    text-shadow: 0 0 30px var(--gold-neon), 0 0 60px rgba(226, 212, 163, 0.3);
     letter-spacing: -4px;
     margin-bottom: 5px;
 }
@@ -242,6 +242,6 @@
 }
 
 @keyframes pulseGold {
-    0% { box-shadow: 0 0 40px rgba(232, 200, 120, 0.1), inset 0 0 40px rgba(10, 15, 30, 0.8); }
-    100% { box-shadow: 0 0 80px rgba(232, 200, 120, 0.25), inset 0 0 40px rgba(10, 15, 30, 0.8); }
+    0% { box-shadow: 0 0 40px rgba(226, 212, 163, 0.1), inset 0 0 40px rgba(10, 15, 30, 0.8); }
+    100% { box-shadow: 0 0 80px rgba(226, 212, 163, 0.25), inset 0 0 40px rgba(10, 15, 30, 0.8); }
 }

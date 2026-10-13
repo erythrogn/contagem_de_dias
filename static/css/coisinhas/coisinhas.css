@@ -1,12 +1,12 @@
 :root {
   --color-bg-base: #06070a;
-  --color-gold-primary: #e8c878;
+  --color-gold-primary: #e2d4a3;
   --color-gold-light: rgba(111, 132, 216, 0.25);
   --color-gold-hover: #89a0ff;
   --color-text-main: #fdfbf7;
   --color-text-muted: #b4c2ff;
   --color-glass-panel: rgba(10, 12, 18, 0.55);
-  --color-glass-border: rgba(232, 200, 120, 0.18);
+  --color-glass-border: rgba(226, 212, 163, 0.18);
   --color-glass-shadow: rgba(0, 0, 0, 0.6);
   --color-danger: #e63946;
   --color-success: #2a9d8f;
@@ -34,7 +34,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(212, 175, 55, 0.05) 0%, transparent 45%);
+  background-image: radial-gradient(circle at 15% 15%, rgba(226, 212, 163, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(226, 212, 163, 0.05) 0%, transparent 45%);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -255,7 +255,7 @@ body {
   right: 10px;
   bottom: 10px;
   left: 10px;
-  border: 1px solid rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(226, 212, 163, 0.08);
   pointer-events: none;
   z-index: 0;
 }
@@ -350,7 +350,7 @@ body {
 
 .field-input:focus {
   border-bottom-color: var(--color-gold-primary);
-  box-shadow: 0 10px 10px -10px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 10px 10px -10px rgba(226, 212, 163, 0.25);
 }
 
 .field-input:focus-visible {
@@ -477,7 +477,7 @@ textarea.field-input {
 
 .btn-submit:hover {
   background-color: var(--color-gold-primary);
-  box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(226, 212, 163, 0.4);
   transform: translateY(-2px);
 }
 
@@ -604,12 +604,12 @@ textarea.field-input {
 
 .experience-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(232, 200, 120, 0.45);
-  box-shadow: 0 28px 55px -12px var(--color-glass-shadow), 0 0 20px rgba(232, 200, 120, 0.08);
+  border-color: rgba(226, 212, 163, 0.45);
+  box-shadow: 0 28px 55px -12px var(--color-glass-shadow), 0 0 20px rgba(226, 212, 163, 0.08);
 }
 
 .experience-card.done {
-  border-color: rgba(232, 200, 120, 0.1);
+  border-color: rgba(226, 212, 163, 0.1);
   background-color: rgba(10, 12, 18, 0.38);
 }
 
@@ -656,7 +656,7 @@ textarea.field-input {
   background-image: linear-gradient(
     100deg,
     rgba(255, 255, 255, 0) 20%,
-    rgba(232, 200, 120, 0.09) 50%,
+    rgba(226, 212, 163, 0.09) 50%,
     rgba(255, 255, 255, 0) 80%
   );
   background-size: 200% 100%;
@@ -786,7 +786,7 @@ textarea.field-input {
   font-size: 1.25rem;
   color: var(--color-text-main);
   outline: none;
-  box-shadow: 0 0 12px rgba(232, 200, 120, 0.2);
+  box-shadow: 0 0 12px rgba(226, 212, 163, 0.2);
 }
 
 .item-checkbox-container {
@@ -853,7 +853,7 @@ textarea.field-input {
 .elegant-checkbox:checked + .checkmark {
   background-color: var(--color-gold-primary);
   border-color: var(--color-gold-primary);
-  box-shadow: 0 0 12px rgba(232, 200, 120, 0.35);
+  box-shadow: 0 0 12px rgba(226, 212, 163, 0.35);
 }
 
 .elegant-checkbox:checked + .checkmark::after {
@@ -1195,7 +1195,7 @@ dialog {
   width: 100%;
   max-width: 600px;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent 60%);
+  background-image: radial-gradient(circle at top right, rgba(226, 212, 163, 0.05), transparent 60%);
   border: 1px solid var(--color-gold-light);
   border-radius: 4px;
   padding: 3rem;
@@ -1330,11 +1330,11 @@ dialog::backdrop {
 
 @keyframes cardSavedPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(232, 200, 120, 0.55);
+    box-shadow: 0 0 0 0 rgba(226, 212, 163, 0.55);
     border-color: var(--color-gold-primary);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(232, 200, 120, 0);
+    box-shadow: 0 0 0 12px rgba(226, 212, 163, 0);
     border-color: var(--color-gold-primary);
   }
   100% {

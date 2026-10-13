@@ -70,7 +70,7 @@
   box-sizing: border-box;
   background-color: transparent !important;
   border: 0;
-  border-bottom: 1px solid rgba(241, 210, 153, 0.3);
+  border-bottom: 1px solid rgba(226, 212, 163, 0.3);
   color: var(--text-light);
   caret-color: var(--gold-soft);
   font-family: var(--font-sans);
@@ -92,7 +92,7 @@
 }
 
 .field-input:hover:not(:focus) {
-  border-bottom-color: rgba(241, 210, 153, 0.5);
+  border-bottom-color: rgba(226, 212, 163, 0.5);
 }
 
 input[type="date"].field-input,
@@ -188,7 +188,7 @@ input[type="number"].field-input::-webkit-outer-spin-button {
 }
 
 .poster-preview-box:hover {
-  border-color: rgba(241, 210, 153, 0.45);
+  border-color: rgba(226, 212, 163, 0.45);
   transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), var(--cinematic-glow);
 }
@@ -201,12 +201,12 @@ input[type="number"].field-input::-webkit-outer-spin-button {
 }
 
 .poster-placeholder-icon {
-  color: rgba(241, 210, 153, 0.2);
+  color: rgba(226, 212, 163, 0.2);
   transition: color 0.4s ease, transform 0.4s ease;
 }
 
 .poster-preview-box:hover .poster-placeholder-icon {
-  color: rgba(241, 210, 153, 0.35);
+  color: rgba(226, 212, 163, 0.35);
   transform: scale(1.08);
 }
 
@@ -234,7 +234,7 @@ input[type="number"].field-input::-webkit-outer-spin-button {
 }
 
 .btn-submit:hover {
-  background-color: rgba(241, 210, 153, 0.05) !important;
+  background-color: rgba(226, 212, 163, 0.05) !important;
   transform: translateY(-4px);
   border-color: var(--gold-soft);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), var(--cinematic-glow);
@@ -293,7 +293,7 @@ dialog[open] {
   align-items: center;
   gap: 2rem;
   margin-bottom: 3.5rem;
-  border-bottom: 1px solid rgba(241, 210, 153, 0.2);
+  border-bottom: 1px solid rgba(226, 212, 163, 0.2);
   padding-bottom: 1.5rem;
 }
 

@@ -45,7 +45,7 @@
 .note-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border-color: rgba(241, 210, 153, 0.4);
+  border-color: rgba(226, 212, 163, 0.4);
 }
 
 .note-date {
