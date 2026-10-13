@@ -1,5 +1,6 @@
 import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 import { db } from "/static/js/app.js";
+import { initMusicasModule, renderMusicasList } from "/static/js/musicas.js";
 
 // ─── Sanitização de HTML (Evita XSS e quebra de layout) ───────────────────────
 function escapeHTML(str) {
@@ -795,118 +796,19 @@ document.getElementById("form-jogos")?.addEventListener("submit", e => {
   });
 });
 
-// ─── Músicas (Spotify / YouTube / Apple Music) ────────────────────────────────
-function extractIframeSrc(input) {
-  if (!input) return "";
-  const match = input.match(/src=["'](.*?)["']/);
-  const rawUrl = match ? match[1] : input.trim();
-
-  if (!rawUrl.startsWith("http")) return "";
-
-  try {
-    const u = new URL(rawUrl);
-    if (u.hostname.includes("spotify.com")) {
-      const cleanPath = u.pathname.replace(/^\/intl-[a-z]{2}\//i, "/");
-      if (cleanPath.startsWith("/embed/")) {
-        return `https://open.spotify.com${cleanPath}${u.search}`;
-      }
-      return `https://open.spotify.com/embed${cleanPath}${u.search}`;
-    }
-    if (u.hostname.includes("music.apple.com")) {
-      return `https://embed.music.apple.com${u.pathname}${u.search}`;
-    }
-    if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) {
-      if (u.pathname.startsWith("/embed/")) return rawUrl;
-      let videoId = "";
-      if (u.hostname.includes("youtu.be")) {
-        videoId = u.pathname.slice(1);
-      } else if (u.pathname.startsWith("/shorts/")) {
-        videoId = u.pathname.split("/")[2];
-      } else {
-        videoId = u.searchParams.get("v");
-      }
-      const listId = u.searchParams.get("list");
-      if (videoId) return `https://www.youtube.com/embed/${videoId}${listId ? `?list=${listId}` : ""}`;
-      if (listId)  return `https://www.youtube.com/embed/videoseries?list=${listId}`;
-    }
-    return rawUrl;
-  } catch {
-    return "";
-  }
-}
-
-document.getElementById("form-musicas")?.addEventListener("submit", async e => {
-  e.preventDefault();
-  const titleInput = document.getElementById("mTitle")?.value.trim();
-  const linkInput  = document.getElementById("mLink")?.value.trim();
-  if (!linkInput) return;
-
-  const title = titleInput || "Nossa Música";
-  const src   = extractIframeSrc(linkInput);
-  if (!src) {
-    alert("URL ou código iframe inválido.");
-    return;
-  }
-
-  const btn  = document.getElementById("btn-add-musicas");
-  const orig = btn?.innerHTML ?? "";
-
-  try {
-    if (btn) {
-      btn.innerHTML = "<span>Adicionando…</span>";
-      btn.style.pointerEvents = "none";
-    }
-    await push(dbRefs.musicas, { title, src, timestamp: Date.now() });
-    document.getElementById("form-musicas")?.reset();
-  } catch (err) {
-    console.error("[musicas] Falha ao salvar:", err.message);
-    alert("Erro ao salvar. Tente novamente.");
-  } finally {
-    if (btn) {
-      btn.innerHTML = orig;
-      btn.style.pointerEvents = "auto";
-    }
-  }
-});
-
+// ─── Músicas: lógica no módulo musicas.js (player único + lista) ─────────────
 function renderMusicas() {
   const track = document.getElementById("list-musicas");
-  const items = state.musicas.items;
   if (!track) return;
 
-  if (!items.length) {
-    track.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p class="empty-text">Aguardando playlists…</p></div>`;
-    return;
-  }
-
-  const fragment = document.createDocumentFragment();
-
-  items.forEach((m) => {
-    const rawSrc = m.src || m.embedUrl || m.url || "";
-    const safeSrc = extractIframeSrc(rawSrc) || rawSrc;
-
-    const card = document.createElement("div");
-    card.className = "musica-card";
-    card.innerHTML = `
-      <div class="musica-card-header">
-        <h3 class="musica-title" title="${escapeHTML(m.title)}">${escapeHTML(m.title || "Nossa Música")}</h3>
-        <button type="button" class="movie-action-btn delete" onclick="window.deleteItem('musicas','${escapeHTML(m.key)}')" aria-label="Deletar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-      <div class="musica-iframe-wrapper">
-        <iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" frameborder="0" src="${escapeHTML(safeSrc)}" loading="lazy"></iframe>
-      </div>`;
-    fragment.appendChild(card);
-  });
-
-  track.innerHTML = "";
-  track.appendChild(fragment);
+  renderMusicasList(state.musicas.items, track, escapeHTML);
 
   if (typeof gsap !== "undefined") {
-    gsap.fromTo(track.querySelectorAll('.musica-card'), 
-      { opacity: 0, y: 20 }, 
+    gsap.fromTo(track.querySelectorAll(".musica-card"),
+      { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08, overwrite: "auto" }
     );
   }
 }
+
+initMusicasModule({ dbRefs, push, escapeHTML });

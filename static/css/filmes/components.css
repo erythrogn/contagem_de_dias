@@ -472,46 +472,6 @@
   flex: 0 0 34px;
 }
 
-.musica-iframe-wrapper {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: rgba(4, 5, 8, 0.6);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.musica-iframe-wrapper iframe {
-  display: block;
-  width: 100% !important;
-  height: 175px !important;
-  border: 0;
-  border-radius: 12px;
-}
-
-/* Ajuste específico por plataforma para evitar cortes ou barras desnecessárias */
-.musica-iframe-wrapper iframe[src*="spotify.com"] {
-  height: 152px !important;
-}
-
-.musica-iframe-wrapper iframe[src*="apple.com"] {
-  height: 175px !important;
-  background-color: transparent;
-}
-
-.musica-iframe-wrapper iframe[src*="youtube.com"],
-.musica-iframe-wrapper iframe[src*="youtu.be"],
-.musica-iframe-wrapper iframe[src*="vimeo.com"],
-.musica-iframe-wrapper iframe[src*="dailymotion.com"] {
-  height: auto !important;
-  aspect-ratio: 16 / 9;
-  min-height: 195px;
-}
-
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
