@@ -1,5 +1,4 @@
-import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-import { db } from "/static/js/app.js";
+import { db, ref, push, onValue, remove, update } from "/static/js/app.js";
 import { initMusicasModule, renderMusicasList } from "/static/js/musicas.js";
 import { escapeHTML } from "/static/js/utils.js";
 
