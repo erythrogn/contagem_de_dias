@@ -141,9 +141,13 @@ const DELETE_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
 
 // Itens antigos guardam `src` (já em formato embed); novos guardam `embedUrl`.
 export function resolveEmbed(item) {
-  if (item.embedUrl) return item.embedUrl;
+  // Itens salvos com link original são recalculados; itens antigos usam o embed salvo.
+  if (item.url) {
+    const parsed = parseMediaLink(item.url);
+    if (parsed?.embedUrl) return parsed.embedUrl;
+  }
+  if (item.embedUrl && item.embedUrl !== item.url) return item.embedUrl;
   if (item.src) return item.src;
-  if (item.url) return parseMediaLink(item.url)?.embedUrl || null;
   return null;
 }
 
@@ -271,7 +275,7 @@ export function initMusicasModule({ dbRefs, push, escapeHTML, showToast }) {
         if (json.title && !titleInput?.value) resolved.title = json.title;
         if (json.thumbnail) resolved.thumbnail = json.thumbnail;
         if (json.author) resolved.author = json.author;
-        if (json.embedUrl) resolved.embedUrl = json.embedUrl;
+        // json.embedUrl do servidor é o link original (não embutível): mantemos o embed calculado acima.
       }
     } catch (err) {
       console.warn("Falha ao resolver oEmbed:", err);
