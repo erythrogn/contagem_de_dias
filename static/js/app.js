@@ -1,5 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+// Helpers do banco reexportados: as páginas importam daqui, sem repetir a URL do CDN.
+export { ref, push, onValue, remove, update };
 
 const firebaseConfig = {
   apiKey: "AIzaSyAkmYoQKSUD1brrYL47RBZB9nHy5WaaSiw",

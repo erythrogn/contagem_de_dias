@@ -245,8 +245,7 @@
 </script>
 
 <script type="module">
-  import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-  import { db } from "{{ url_for('static', filename='js/app.js') }}";
+  import { db, ref, onValue } from "{{ url_for('static', filename='js/app.js') }}";
 
   const dataStore = { coisinhas: [], viagens: [], filmes: [], series: [], jogos: [] };
   const paths = Object.keys(dataStore);

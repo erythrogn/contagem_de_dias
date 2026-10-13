@@ -1,5 +1,4 @@
-import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-import { db } from "/static/js/app.js";
+import { db, ref, onValue } from "/static/js/app.js";
 import { escapeHTML } from "/static/js/utils.js";
 
 const START = new Date(2025, 10, 29);
