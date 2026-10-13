@@ -1,5 +1,6 @@
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 import { db } from "/static/js/app.js";
+import { escapeHTML } from "/static/js/utils.js";
 
 const START = new Date(2025, 10, 29);
 const MONTHS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -195,13 +196,13 @@ function renderCalendar(animate = true) {
         row.innerHTML = `
           <div class="event-date-box">
             <span class="event-date-num">${pad(ev.date)}</span>
-            <span class="event-date-dow">${ev.dow}</span>
+            <span class="event-date-dow">${escapeHTML(ev.dow)}</span>
           </div>
           <div class="event-details">
             <span class="event-type-badge">
-              ✦ ${ev.label}
+              ✦ ${escapeHTML(ev.label)}
             </span>
-            <h2 class="event-title">${ev.title}</h2>
+            <h2 class="event-title">${escapeHTML(ev.title)}</h2>
           </div>
         `;
         listFrag.appendChild(row);

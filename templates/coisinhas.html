@@ -142,6 +142,7 @@
 <script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
+import { escapeHTML } from "/static/js/utils.js";
 
   const state = {
     items: [],
@@ -268,15 +269,15 @@
       const finalPoster = m.poster || getThemeImage(m.title, m.category);
       
       card.innerHTML = `
-        <img src="${finalPoster}" class="min-card-bg" onerror="this.onerror=null;this.src='${fallbackImg}';">
+        <img src="${escapeHTML(finalPoster)}" class="min-card-bg" onerror="this.onerror=null;this.src='${fallbackImg}';">
         <div class="min-card-overlay">
           <div class="min-card-header">
-            <div class="min-card-meta">${iconSvg} <span>${m.category}</span></div>
+            <div class="min-card-meta">${iconSvg} <span>${escapeHTML(m.category)}</span></div>
           </div>
           <div class="min-card-body">
-            <h3 class="min-card-title ${m.done ? 'strikethrough' : ''}">${m.title}</h3>
-            ${dateStr ? `<p class="min-card-date">${dateStr}</p>` : ''}
-            ${m.notes ? `<p class="min-card-notes">${m.notes}</p>` : ''}
+            <h3 class="min-card-title ${m.done ? 'strikethrough' : ''}">${escapeHTML(m.title)}</h3>
+            ${dateStr ? `<p class="min-card-date">${escapeHTML(dateStr)}</p>` : ''}
+            ${m.notes ? `<p class="min-card-notes">${escapeHTML(m.notes)}</p>` : ''}
           </div>
           <div class="min-card-footer">
             <div class="actions-group">

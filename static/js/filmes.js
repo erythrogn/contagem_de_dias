@@ -1,17 +1,7 @@
 import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 import { db } from "/static/js/app.js";
 import { initMusicasModule, renderMusicasList } from "/static/js/musicas.js";
-
-// ─── Sanitização de HTML (Evita XSS e quebra de layout) ───────────────────────
-function escapeHTML(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+import { escapeHTML } from "/static/js/utils.js";
 
 // ─── Configuração Dinâmica de Chaves ──────────────────────────────────────────
 const metaTmdb = document.querySelector('meta[name="tmdb-api-key"]');
@@ -349,7 +339,7 @@ function renderItems(section) {
     const card = document.createElement("div");
     card.className = `slider-card${done ? " watched" : ""}`;
     card.dataset.idx = idx;
-    card.innerHTML = `<img src="${poster}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
+    card.innerHTML = `<img src="${escapeHTML(poster)}" loading="lazy" class="slider-card-img" alt="${escapeHTML(m.title)}" onerror="this.onerror=null;this.src='${fallbackImgs[section]}';">`;
     fragment.appendChild(card);
   });
 

@@ -28,7 +28,9 @@ export class UIController {
     showToast(message, type = 'default') {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        toast.innerHTML = `<span>${message}</span>`;
+        const text = document.createElement('span');
+        text.textContent = message;
+        toast.appendChild(text);
         this.toastContainer.appendChild(toast);
         setTimeout(() => {
             toast.classList.add('fade-out');

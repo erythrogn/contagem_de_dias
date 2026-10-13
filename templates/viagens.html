@@ -107,6 +107,7 @@
 <script type="module">
   import { ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
   import { db } from "/static/js/app.js";
+import { escapeHTML } from "/static/js/utils.js";
 
   const viagensRef = ref(db, 'viagens');
   let currentFilter = 'all';
@@ -154,13 +155,13 @@
 
       card.innerHTML = `
         <div class="viagem-image">
-          <img src="${imageUrl}" loading="lazy" alt="${v.destiny}">
+          <img src="${escapeHTML(imageUrl)}" loading="lazy" alt="${escapeHTML(v.destiny)}">
         </div>
         <div class="viagem-info">
-          <h2 class="viagem-destiny">${v.destiny}</h2>
+          <h2 class="viagem-destiny">${escapeHTML(v.destiny)}</h2>
           <p class="viagem-date">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            ${dateStr}
+            ${escapeHTML(dateStr)}
           </p>
           <div class="viagem-actions">
             <button class="btn-icon check ${v.status === 'feita' ? 'checked' : ''}" onclick="window.toggleViagem('${v.key}', '${v.status}')" aria-label="Concluir">
