@@ -10,7 +10,7 @@
 }
 
 .note-card {
-  animation: riseUpMinimal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: riseUpMinimal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
 }
 
 /* Aplicando stagger visual nos cards do Masonry */
