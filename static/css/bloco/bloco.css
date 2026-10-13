@@ -8,11 +8,11 @@
 :root {
   --bg-dark: #06080d;
   --champagne-canvas: rgba(253, 250, 240, 0.04);
-  --gold-soft: #f1d299;
+  --gold-soft: #e2d4a3;
   --gold-dark: #dca852;
   --text-light: #fefefe;
   --text-muted: rgba(255, 255, 255, 0.45);
-  --border-gold: rgba(241, 210, 153, 0.15);
+  --border-gold: rgba(226, 212, 163, 0.15);
   
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;

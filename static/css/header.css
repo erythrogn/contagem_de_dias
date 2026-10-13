@@ -4,10 +4,10 @@
   --header-bg-hover: rgba(15, 22, 40, 0.95);
   
   /* Borda dourada sutil */
-  --header-border-color: rgba(212, 175, 55, 0.2);
+  --header-border-color: rgba(226, 212, 163, 0.2);
   
   /* Ouro Nobre */
-  --header-gold-primary: #e8c878;
+  --header-gold-primary: #e2d4a3;
   
   /* Brilho em tom Indigo vibrante */
   --header-gold-glow: rgba(60, 80, 200, 0.4);
@@ -124,7 +124,7 @@
   transform: scaleY(1);
 }
 .tree-branch:hover {
-  background-color: rgba(212, 175, 55, 0.05);
+  background-color: rgba(226, 212, 163, 0.05);
 }
 .branch-icon {
   display: flex;

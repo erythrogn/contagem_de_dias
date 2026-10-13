@@ -1,12 +1,12 @@
 :root {
   --color-bg-base: #06070a;
   --color-gold-primary: #e2d4a3;
-  --color-gold-light: rgba(212, 175, 55, 0.25);
+  --color-gold-light: rgba(226, 212, 163, 0.25);
   --color-gold-hover: #bdb59b;
   --color-text-main: #fdfbf7;
   --color-text-muted: #3f4963;
   --color-glass-panel: rgba(10, 12, 18, 0.55);
-  --color-glass-border: rgba(212, 175, 55, 0.18);
+  --color-glass-border: rgba(226, 212, 163, 0.18);
   --color-glass-shadow: rgba(5, 4, 65, 0.6);
   --color-dot-anniv: #4e4e4d;
   --color-dot-viagem: #0099ff;
@@ -455,7 +455,7 @@
   border-right-color: var(--color-gold-light);
   border-bottom-color: var(--color-gold-light);
   border-left-color: var(--color-gold-light);
-  background-color: rgba(212, 175, 55, 0.05);
+  background-color: rgba(226, 212, 163, 0.05);
   transform: scale(1.05);
 }
 .day.today {
