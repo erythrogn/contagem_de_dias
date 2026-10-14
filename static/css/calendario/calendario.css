@@ -12,6 +12,7 @@
   --color-dot-viagem: #0099ff;
   --color-dot-filme: #7472f4;
   --color-dot-coisinha: #02085a;
+  --color-dot-treino: #3fae6a;
   --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
   --font-sans: 'Montserrat', 'Inter', sans-serif;
   --transition-slow: 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -187,6 +188,9 @@
 }
 .dot-coisinha {
   background-color: var(--color-dot-coisinha);
+}
+.dot-treino {
+  background-color: var(--color-dot-treino);
 }
 .calendar-wrapper {
   display: flex;
@@ -509,6 +513,7 @@
 .dot-viagem { background-color: var(--color-dot-viagem); }
 .dot-filme { background-color: var(--color-dot-filme); }
 .dot-coisinha { background-color: var(--color-dot-coisinha); }
+.dot-treino { background-color: var(--color-dot-treino); }
 .day[data-tip] {
   position: relative;
 }

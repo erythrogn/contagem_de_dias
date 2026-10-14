@@ -9,7 +9,7 @@ const todayLoad = new Date();
 let viewMonth = todayLoad.getMonth();
 let viewYear = todayLoad.getFullYear();
 
-let rawData = { viagens: null, filmes: null, coisinhas: null };
+let rawData = { viagens: null, filmes: null, coisinhas: null, treinos: null };
 let allEvents = {};
 let isAnimating = false;
 let renderTimeout;
@@ -53,6 +53,7 @@ window.goToToday = function() {
 onValue(ref(db, 'viagens'), snap => { rawData.viagens = snap.val(); processEvents(); });
 onValue(ref(db, 'filmes'), snap => { rawData.filmes = snap.val(); processEvents(); });
 onValue(ref(db, 'coisinhas'), snap => { rawData.coisinhas = snap.val(); processEvents(); });
+onValue(ref(db, 'treinos'), snap => { rawData.treinos = snap.val(); processEvents(); });
 
 function processEvents() {
   clearTimeout(renderTimeout);
@@ -70,6 +71,7 @@ function processEvents() {
     add(rawData.viagens, 'viagem', 'dest', i => i.status === 'feita');
     add(rawData.filmes, 'filme', 'title', i => i.watched === true || i.watched === 'true');
     add(rawData.coisinhas, 'coisinha', 'title', i => i.done === true);
+    add(rawData.treinos, 'treino', 'title', () => false);
     
     renderCalendar(false);
   }, 50);
@@ -159,7 +161,7 @@ function renderCalendar(animate = true) {
         let dotsHtml = `<div class="event-dots">`;
         dayEvents.forEach(e => {
           dotsHtml += `<div class="e-dot dot-${e.type}"></div>`;
-          const evLabel = e.type === 'viagem' ? 'Viagem' : e.type === 'filme' ? 'Filme' : 'Coisinha';
+          const evLabel = e.type === 'viagem' ? 'Viagem' : e.type === 'filme' ? 'Filme' : e.type === 'treino' ? 'Treino' : 'Coisinha';
           monthEventsRender.push({ date: d, dow: DOW_FULL[thisDate.getDay()], type: e.type, label: evLabel, title: e.title });
         });
         dotsHtml += `</div>`;
