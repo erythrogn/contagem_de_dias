@@ -53,7 +53,7 @@ window.goToToday = function() {
 onValue(ref(db, 'viagens'), snap => { rawData.viagens = snap.val(); processEvents(); });
 onValue(ref(db, 'filmes'), snap => { rawData.filmes = snap.val(); processEvents(); });
 onValue(ref(db, 'coisinhas'), snap => { rawData.coisinhas = snap.val(); processEvents(); });
-onValue(ref(db, 'treinos'), snap => { rawData.treinos = snap.val(); processEvents(); });
+onValue(ref(db, 'treinoRegistros'), snap => { rawData.treinos = snap.val(); processEvents(); });
 
 function processEvents() {
   clearTimeout(renderTimeout);

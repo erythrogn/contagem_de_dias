@@ -105,40 +105,63 @@
     </div>
 
     <section id="section-treino" hidden aria-label="Treinos">
-      <section class="form-wrapper" aria-label="Registrar treino">
-        <h2 class="form-title">Registrar <span class="page-accent coisinhas-accent">treino</span></h2>
-        <form id="treino-form" class="form-layout" novalidate>
+
+      <section class="form-wrapper" aria-label="Montar treino">
+        <h2 class="form-title">Montar <span class="page-accent coisinhas-accent">treino</span></h2>
+        <form id="plano-form" class="form-layout" novalidate>
+          <div class="field-group span-full">
+            <label class="field-label" for="plano-name">Nome do treino</label>
+            <input type="text" id="plano-name" class="field-input" placeholder="ex: Treino A · Peito e tríceps">
+          </div>
+          <div class="field-group span-full">
+            <label class="field-label" for="plano-ex-input">Exercícios</label>
+            <div class="treino-add-row">
+              <input type="text" id="plano-ex-input" class="field-input" placeholder="ex: Supino reto 4x10">
+              <button type="button" class="btn-submit btn-submit-coisinhas" id="plano-ex-add"><span>Adicionar</span></button>
+            </div>
+            <ul class="treino-draft" id="plano-draft"></ul>
+          </div>
+          <div class="field-group span-full">
+            <button class="btn-submit btn-submit-coisinhas" type="submit" id="plano-save"><span>Salvar treino</span></button>
+          </div>
+        </form>
+      </section>
+
+      <div class="treino-list" id="plano-list" aria-live="polite"></div>
+
+      <section class="form-wrapper" aria-label="Marcar o dia">
+        <h2 class="form-title">Marcar o <span class="page-accent coisinhas-accent">dia</span></h2>
+        <form id="reg-form" class="form-layout" novalidate>
           <div class="field-group">
-            <label class="field-label" for="treino-date">Data</label>
-            <input type="date" id="treino-date" class="field-input" required>
+            <label class="field-label" for="reg-date">Data</label>
+            <input type="date" id="reg-date" class="field-input" required>
           </div>
           <div class="field-group">
-            <label class="field-label" for="treino-who">Quem treinou</label>
-            <select id="treino-who" class="field-input field-select" required>
+            <label class="field-label" for="reg-who">Quem treinou</label>
+            <select id="reg-who" class="field-input field-select">
               <option value="Hesron">Hesron</option>
               <option value="Tiago">Tiago</option>
             </select>
           </div>
           <div class="field-group span-full">
-            <label class="field-label" for="treino-group">Foco do treino (opcional)</label>
-            <input type="text" id="treino-group" class="field-input" placeholder="ex: Peito e tríceps">
+            <label class="field-label" for="reg-plan">Treino</label>
+            <select id="reg-plan" class="field-input field-select"></select>
           </div>
           <div class="field-group span-full">
-            <label class="field-label" for="treino-ex-input">Exercícios</label>
-            <div class="treino-add-row">
-              <input type="text" id="treino-ex-input" class="field-input" placeholder="ex: Supino reto 4x10">
-              <button type="button" class="btn-submit btn-submit-coisinhas" id="treino-ex-add"><span>Adicionar</span></button>
-            </div>
-            <ul class="treino-draft" id="treino-draft"></ul>
+            <label class="field-label">Exercícios feitos</label>
+            <ul class="treino-exercises" id="reg-checklist"></ul>
+            <p class="treino-progress" id="reg-progress"></p>
           </div>
-          <div class="field-group span-full">
-            <button class="btn-submit btn-submit-coisinhas" type="submit" id="treino-save"><span>Salvar treino</span></button>
+          <div class="field-group span-full treino-form-actions">
+            <button class="btn-submit btn-submit-coisinhas" type="submit" id="reg-save"><span>Salvar dia</span></button>
+            <button type="button" class="treino-btn-del" id="reg-clear" hidden>Limpar registro</button>
           </div>
         </form>
       </section>
-      <div class="treino-list" id="treino-list" aria-live="polite"></div>
-    </section>
 
+      <h3 class="treino-subtitle">Dias registrados</h3>
+      <div class="treino-list" id="reg-list" aria-live="polite"></div>
+    </section>
   </main>
 
   <dialog id="edit-dialog" aria-labelledby="edit-dialog-label">

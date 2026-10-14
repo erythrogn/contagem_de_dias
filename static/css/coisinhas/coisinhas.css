@@ -1265,3 +1265,41 @@ dialog::backdrop {
     flex-direction: column;
   }
 }
+
+.treino-plan-name {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.treino-ex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.treino-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--gold-soft);
+  margin: 3rem 0 0;
+  text-align: center;
+}
+
+.treino-form-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#reg-list .treino-card {
+  gap: 0.6rem;
+}
