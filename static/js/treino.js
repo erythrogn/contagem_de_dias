@@ -1,12 +1,10 @@
-// Aba de treino (Coisinhas):
-// - treinoPlanos/: treinos montados (nome + lista de exercícios)
-// - treinoRegistros/{data}_{quem}: o que foi feito em cada dia, com base em um plano
-// Os registros alimentam o calendário.
-import { db, ref, push, onValue, update, remove } from "/static/js/app.js";
+// Aba de treino (Coisinhas): só a interface. O acesso ao banco fica em treino-storage.js.
 import { escapeHTML } from "/static/js/utils.js";
-
-const PLANOS = "treinoPlanos";
-const REGISTROS = "treinoRegistros";
+import {
+  criarPlano, adicionarExercicio, removerExercicio, excluirPlano,
+  salvarRegistro, excluirRegistro, recordKey,
+  assinarPlanos, assinarRegistros
+} from "/static/js/treino-storage.js";
 
 let planos = [];          // { key, name, exercises: [string] }
 let registros = {};       // key -> registro
@@ -25,13 +23,6 @@ function formatDate(iso) {
   return y && m && d ? `${d}/${m}/${y}` : "Sem data";
 }
 
-const recordKey = (date, who) => `${date}_${who}`;
-
-// Título usado pelo calendário: "Tiago · Treino A (2/5): Supino, Remada"
-export function buildRecordTitle(who, planName, done, total) {
-  const doneTxt = done.length ? done.join(", ") : "nada marcado";
-  return `${who} · ${planName} (${done.length}/${total}): ${doneTxt}`;
-}
 
 // ─── Planos (treinos montados) ────────────────────────────────────────────────
 
@@ -100,7 +91,7 @@ function bindPlanos() {
     const btn = $("plano-save");
     btn.disabled = true;
     try {
-      await push(ref(db, PLANOS), { name, exercises: planDraft, createdAt: Date.now() });
+      await criarPlano({ name, exercises: planDraft });
       planDraft = [];
       $("plano-form").reset();
       renderDraft();
@@ -124,17 +115,15 @@ function bindPlanos() {
     try {
       if (action === "del-plan") {
         if (!confirm(`Excluir o treino "${plan.name}"? Os dias já registrados continuam.`)) return;
-        await remove(ref(db, `${PLANOS}/${plan.key}`));
+        await excluirPlano(plan);
       } else if (action === "add-ex") {
         const input = card.querySelector('[data-role="new-ex"]');
         const name = input.value.trim();
         if (!name) return;
-        await update(ref(db, `${PLANOS}/${plan.key}`), { exercises: [...plan.exercises, name] });
+        await adicionarExercicio(plan, name);
       } else if (action === "rm-ex") {
         const idx = Number(actionEl.dataset.idx);
-        await update(ref(db, `${PLANOS}/${plan.key}`), {
-          exercises: plan.exercises.filter((_, i) => i !== idx)
-        });
+        await removerExercicio(plan, idx);
       }
     } catch (err) {
       console.error("Erro ao atualizar treino:", err);
@@ -237,20 +226,10 @@ function bindRegistro() {
     if (!plan) { alert("Escolha um treino."); return; }
 
     const done = [...$("reg-checklist").querySelectorAll(".treino-ex.is-done")].map(li => li.dataset.name);
-    const total = plan.exercises.length;
     const btn = $("reg-save");
     btn.disabled = true;
     try {
-      await update(ref(db, `${REGISTROS}/${recordKey(date, who)}`), {
-        date,
-        who,
-        planId: plan.key,
-        planName: plan.name,
-        done,
-        total,
-        title: buildRecordTitle(who, plan.name, done, total),
-        updatedAt: Date.now()
-      });
+      await salvarRegistro({ date, who, plan, done });
       btn.querySelector("span").textContent = "Salvo ✓";
       setTimeout(() => { btn.querySelector("span").textContent = "Salvar dia"; }, 1200);
     } catch (err) {
@@ -264,7 +243,7 @@ function bindRegistro() {
   $("reg-clear").addEventListener("click", async () => {
     const { date, who } = currentSelection();
     if (!confirm("Apagar o registro deste dia?")) return;
-    await remove(ref(db, `${REGISTROS}/${recordKey(date, who)}`));
+    await excluirRegistro(date, who);
   });
 
   $("reg-list").addEventListener("click", async e => {
@@ -280,7 +259,7 @@ function bindRegistro() {
       $("reg-form").scrollIntoView({ behavior: "smooth", block: "start" });
     } else if (actionEl.dataset.action === "del-reg") {
       if (!confirm("Apagar este registro?")) return;
-      await remove(ref(db, `${REGISTROS}/${recordKey(rec.date, rec.who)}`));
+      await excluirRegistro(rec.date, rec.who);
     }
   });
 }
@@ -293,16 +272,13 @@ export function initTreinoModule() {
   bindPlanos();
   bindRegistro();
 
-  onValue(ref(db, PLANOS), snap => {
-    const val = snap.val() || {};
-    planos = Object.entries(val)
-      .map(([key, v]) => ({ key, name: v.name || "Sem nome", exercises: Object.values(v.exercises || {}) }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+  assinarPlanos(lista => {
+    planos = lista;
     renderPlanos();
   });
 
-  onValue(ref(db, REGISTROS), snap => {
-    registros = snap.val() || {};
+  assinarRegistros(val => {
+    registros = val;
     renderRegistros();
     renderChecklist();
   });
