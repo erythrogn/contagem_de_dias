@@ -151,6 +151,82 @@ export function resolveEmbed(item) {
   return null;
 }
 
+// Itens antigos guardam só `src` (URL de embed). Daqui recuperamos o link original,
+// o provedor e, quando possível, a capa, sem precisar regravar o item no banco.
+function embedToOriginal(src) {
+  let u;
+  try { u = new URL(src); } catch { return null; }
+  const host = u.hostname.toLowerCase();
+  if (host === "open.spotify.com" && u.pathname.startsWith("/embed/")) {
+    return `https://open.spotify.com${u.pathname.replace(/^\/embed/, "")}`;
+  }
+  if ((host === "www.youtube.com" || host === "youtube.com" || host === "www.youtube-nocookie.com") && u.pathname.startsWith("/embed/")) {
+    const id = u.pathname.split("/")[2];
+    return id ? `https://www.youtube.com/watch?v=${id}` : null;
+  }
+  if (host === "embed.music.apple.com") {
+    return `https://music.apple.com${u.pathname}`;
+  }
+  if (host === "w.soundcloud.com") {
+    return u.searchParams.get("url");
+  }
+  if (host === "player.vimeo.com" && u.pathname.startsWith("/video/")) {
+    return `https://vimeo.com/${u.pathname.split("/")[2]}`;
+  }
+  return null;
+}
+
+function youtubeThumb(url) {
+  if (!url) return "";
+  let id = "";
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) id = u.pathname.slice(1);
+    else if (u.hostname.includes("youtube")) id = u.searchParams.get("v") || "";
+  } catch { return ""; }
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : "";
+}
+
+// Dados de exibição do card: usa o que foi salvo e completa o que falta.
+export function describeMedia(item) {
+  let url = item.url || "";
+  if (!url && item.src) url = embedToOriginal(item.src) || "";
+  const provider = item.provider || (url ? parseMediaLink(url)?.provider || "" : "");
+  const thumbnail = item.thumbnail || youtubeThumb(url);
+  return { url, provider, thumbnail };
+}
+
+// Busca a capa de itens sem imagem pelo resolvedor do servidor (cache por link).
+const thumbCache = new Map();
+async function fetchThumb(url) {
+  if (thumbCache.has(url)) return thumbCache.get(url);
+  const pending = fetch("/api/midia/resolver", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url })
+  })
+    .then(r => (r.ok ? r.json() : null))
+    .then(j => (j && j.thumbnail) || "")
+    .catch(() => "");
+  thumbCache.set(url, pending);
+  return pending;
+}
+
+function hydrateThumbs(container) {
+  container.querySelectorAll(".musica-media.is-empty[data-url]").forEach(async box => {
+    const thumb = await fetchThumb(box.dataset.url);
+    if (!thumb || !box.isConnected) return;
+    const img = document.createElement("img");
+    img.className = "musica-thumb";
+    img.alt = "";
+    img.loading = "lazy";
+    img.src = thumb;
+    img.onerror = () => { img.remove(); box.classList.add("is-empty"); };
+    box.classList.remove("is-empty");
+    box.prepend(img);
+  });
+}
+
 export function renderMusicasList(items, container, escapeHTML) {
   if (!container) return;
   if (!items.length) {
@@ -161,6 +237,7 @@ export function renderMusicasList(items, container, escapeHTML) {
   const fragment = document.createDocumentFragment();
   items.forEach(m => {
     const embed = resolveEmbed(m) || "";
+    const media = describeMedia(m);
     const card = document.createElement("div");
     card.className = "musica-card";
     card.innerHTML = `
@@ -168,19 +245,20 @@ export function renderMusicasList(items, container, escapeHTML) {
         <h3 class="musica-title" title="${escapeHTML(m.title)}">${escapeHTML(m.title || FALLBACK_TITLE)}</h3>
         <button type="button" class="movie-action-btn delete" onclick="window.deleteItem('musicas','${escapeHTML(m.key)}')" aria-label="Deletar">${DELETE_ICON}</button>
       </div>
-      <div class="musica-media ${/spotify|apple/i.test(`${m.provider || ""} ${m.url || ""}`) ? "is-square" : ""} ${m.thumbnail ? "" : "is-empty"}">
-        ${m.thumbnail ? `<img class="musica-thumb" src="${escapeHTML(m.thumbnail)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('is-empty');this.remove();">` : ""}
-        <span class="musica-placeholder">${escapeHTML(m.provider || "link")}</span>
+      <div class="musica-media ${/spotify|apple/i.test(`${media.provider} ${media.url}`) ? "is-square" : ""} ${media.thumbnail ? "" : "is-empty"}" data-url="${escapeHTML(media.url)}">
+        ${media.thumbnail ? `<img class="musica-thumb" src="${escapeHTML(media.thumbnail)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('is-empty');this.remove();">` : ""}
+        <span class="musica-placeholder">${escapeHTML(media.provider || "link")}</span>
       </div>
       <div class="musica-btn-group">
-        <button type="button" class="movie-action-btn play" data-embed="${escapeHTML(embed)}" data-provider="${escapeHTML(m.provider || "")}" data-kind="${escapeHTML(m.kind || "")}" aria-label="Tocar" ${embed ? "" : "disabled"}>${PLAY_ICON}</button>
-        <span class="musica-meta-info">${escapeHTML(m.provider || "link")}</span>
+        <button type="button" class="movie-action-btn play" data-embed="${escapeHTML(embed)}" data-provider="${escapeHTML(media.provider)}" data-kind="${escapeHTML(m.kind || "")}" aria-label="Tocar" ${embed ? "" : "disabled"}>${PLAY_ICON}</button>
+        <span class="musica-meta-info">${escapeHTML(media.provider || "link")}</span>
       </div>`;
     fragment.appendChild(card);
   });
 
   container.innerHTML = "";
   container.appendChild(fragment);
+  hydrateThumbs(container);
 }
 
 export function playMediaItem(embedUrl, provider, kind) {
