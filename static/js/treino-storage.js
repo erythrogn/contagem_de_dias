@@ -4,7 +4,7 @@
 // Estrutura no banco:
 //   treinoPlanos/{key}           -> { name, exercises: [string], createdAt }
 //   treinoRegistros/{data}_{quem} -> { date, who, planId, planName, done: [string], total, title, updatedAt }
-import { db, ref, push, onValue, update, remove } from "/static/js/app.js";
+import { db, ref, push, onValue, update, remove, runTransaction } from "/static/js/app.js";
 
 export const PLANOS = "treinoPlanos";
 export const REGISTROS = "treinoRegistros";
@@ -44,14 +44,21 @@ export function criarPlano({ name, exercises }) {
   return push(ref(db, PLANOS), { name, exercises, createdAt: Date.now() });
 }
 
+// Usa transação: lê a lista atual do banco antes de gravar, então duas adições
+// seguidas não se sobrescrevem.
+function editarExercicios(planKey, transform) {
+  return runTransaction(ref(db, `${PLANOS}/${planKey}/exercises`), current => {
+    const atual = Array.isArray(current) ? current : Object.values(current || {});
+    return transform(atual);
+  });
+}
+
 export function adicionarExercicio(plan, nome) {
-  return update(ref(db, `${PLANOS}/${plan.key}`), { exercises: [...plan.exercises, nome] });
+  return editarExercicios(plan.key, lista => [...lista, nome]);
 }
 
 export function removerExercicio(plan, idx) {
-  return update(ref(db, `${PLANOS}/${plan.key}`), {
-    exercises: plan.exercises.filter((_, i) => i !== idx)
-  });
+  return editarExercicios(plan.key, lista => lista.filter((_, i) => i !== idx));
 }
 
 export function excluirPlano(plan) {

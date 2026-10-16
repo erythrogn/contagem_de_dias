@@ -104,6 +104,13 @@ function bindPlanos() {
   });
 
   // Edições dentro do cartão salvam direto no banco.
+  // Enter no campo de exercício de um cartão também adiciona.
+  $("plano-list").addEventListener("keydown", e => {
+    if (e.key !== "Enter" || !e.target.matches('[data-role="new-ex"]')) return;
+    e.preventDefault();
+    e.target.closest(".treino-card").querySelector('[data-action="add-ex"]').click();
+  });
+
   $("plano-list").addEventListener("click", async e => {
     const actionEl = e.target.closest("[data-action]");
     if (!actionEl) return;
@@ -119,8 +126,15 @@ function bindPlanos() {
       } else if (action === "add-ex") {
         const input = card.querySelector('[data-role="new-ex"]');
         const name = input.value.trim();
-        if (!name) return;
-        await adicionarExercicio(plan, name);
+        if (!name) { input.focus(); return; }
+        input.value = "";
+        try {
+          await adicionarExercicio(plan, name);
+        } catch (err) {
+          input.value = name;
+          throw err;
+        }
+        input.focus();
       } else if (action === "rm-ex") {
         const idx = Number(actionEl.dataset.idx);
         await removerExercicio(plan, idx);
