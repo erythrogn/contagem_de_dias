@@ -1075,25 +1075,40 @@ dialog::backdrop {
   margin-bottom: 2rem;
 }
 
+#section-coisinhas,
 #section-treino {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#section-coisinhas[hidden],
+#section-treino[hidden] {
+  display: none !important;
 }
 
 .treino-add-row {
   display: flex;
   gap: 0.75rem;
   align-items: stretch;
+  width: 100%;
 }
 
 .treino-add-row .field-input {
-  flex: 1 1 auto;
+  flex: 1 1 0%;
+  width: auto;
+  min-width: 0;
 }
 
 .treino-add-row .btn-submit {
   flex: 0 0 auto;
+  width: auto;
+  white-space: nowrap;
 }
 
 .treino-draft {
+  width: 100%;
   list-style: none;
   margin: 0.75rem 0 0;
   padding: 0;
@@ -1294,6 +1309,7 @@ dialog::backdrop {
 }
 
 .treino-form-actions {
+  width: 100%;
   display: flex;
   gap: 1rem;
   align-items: center;
