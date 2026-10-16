@@ -1,29 +1,43 @@
+/*
+  header.css — Estante
+  O header é uma estante de madeira pastel; cada item de navegação é a lombada
+  de um livro. A página atual é o livro "puxado" para fora.
+  Rotas, links, estado ativo e aria-labels continuam os mesmos (header.html).
+*/
+
 :root {
-  /* Fundo noturno profundo (Midnight Blue) */
-  --header-bg-base: rgba(230, 240, 251, 0.75);
-  --header-bg-hover: rgba(230, 240, 251, 0.95);
-  
-  /* Borda dourada sutil */
-  --header-border-color: rgba(233, 200, 79, 0.36);
-  
-  /* Ouro Nobre */
-  --header-gold-primary: rgb(79, 127, 181);
-  
-  /* Brilho em tom Indigo vibrante */
-  --header-gold-glow: rgba(168, 203, 238, 0.4);
-  
-  /* Branco pérola */
+  /* Corpo da estante (azul pastel) */
+  --header-bg-base: rgba(230, 240, 251, 0.92);
+  --header-bg-hover: rgba(230, 240, 251, 0.98);
+
+  /* Tábua da prateleira */
+  --header-shelf-edge: var(--pastel-blue-300);
+  --header-border-color: rgba(63, 111, 166, 0.22);
+
+  /* Destaque (faixa do marcador / brilho) */
+  --header-gold-primary: var(--pastel-blue-500);
+  --header-gold-glow: rgba(168, 203, 238, 0.55);
+
+  /* Texto */
   --header-text-main: rgb(31, 61, 92);
-  
-  /* Azul suave e evidente para textos secundários */
-  --header-text-muted: rgb(79, 127, 181);
-  
+  --header-text-muted: rgb(63, 111, 166);
+
+  /* Lombadas (cores pastel alternadas azul / amarelo) */
+  --spine-1: var(--pastel-yellow-300);
+  --spine-2: var(--pastel-blue-300);
+  --spine-3: var(--pastel-yellow-100);
+  --spine-4: var(--pastel-blue-200);
+  --spine-5: var(--pastel-yellow-500);
+  --spine-6: var(--pastel-blue-100);
+
   --header-font-sans: 'Montserrat', 'Inter', sans-serif;
   --header-width-collapsed: 80px;
   --header-width-expanded: 260px;
   --header-transition-slow: 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  --header-transition-fast: 0.3s linear;
+  --header-transition-fast: 0.3s ease;
 }
+
+/* ===== Estante (header fixo à esquerda) ===== */
 .sidebar-magic {
   position: fixed;
   top: 0;
@@ -31,29 +45,22 @@
   height: 100vh;
   width: var(--header-width-collapsed);
   background-color: var(--header-bg-base);
-  background-image: none;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-top-width: 0px;
-  border-right-width: 1px;
-  border-bottom-width: 0px;
-  border-left-width: 0px;
-  border-top-style: none;
-  border-right-style: solid;
-  border-bottom-style: none;
-  border-left-style: none;
-  border-top-color: transparent;
-  border-right-color: var(--header-border-color);
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(180deg, var(--pastel-blue-50), var(--pastel-blue-100));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--header-border-color);
+  box-shadow:
+    inset -6px 0 0 var(--header-shelf-edge),
+    6px 0 28px rgba(31, 61, 92, 0.14);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   z-index: 9999;
   overflow-x: hidden;
   overflow-y: hidden;
-  box-shadow: 5px 0 30px rgba(31, 61, 92, 0.175);
   transition-property: width, background-color, box-shadow;
   transition-duration: var(--header-transition-slow);
   transition-timing-function: ease;
@@ -62,54 +69,69 @@
 .sidebar-magic:hover {
   width: var(--header-width-expanded);
   background-color: var(--header-bg-hover);
-  box-shadow: 15px 0 50px rgba(31, 61, 92, 0.28);
+  box-shadow:
+    inset -6px 0 0 var(--header-shelf-edge),
+    14px 0 44px rgba(31, 61, 92, 0.22);
 }
+
+/* Prateleira: os livros ficam apoiados na base */
 .nav-tree {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 0.35rem;
   width: 100%;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: 0;
-  margin-right: 0;
+  height: 100%;
+  padding: 1.5rem 0 1.5rem 14px;
+  margin: 0;
+  box-sizing: border-box;
   list-style-type: none;
 }
+
+/* ===== Livro (lombada) ===== */
 .tree-branch {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  text-decoration-line: none;
-  text-decoration-style: solid;
-  height: 54px;
-  width: 100%;
+  justify-content: center;
+  text-decoration: none;
+  height: 74px;
+  width: calc(100% - 14px);
   position: relative;
   cursor: pointer;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 28px;
-  padding-right: 28px;
+  padding: 0 0 0 0;
   box-sizing: border-box;
-  background-color: transparent;
-  transition-property: background-color;
+  border-radius: 6px 0 0 6px;
+  background-color: var(--spine-1);
+  color: var(--header-text-main);
+  /* Lombada: cordões de cima e de baixo + sombra da capa */
+  box-shadow:
+    inset 0 4px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -4px 0 rgba(31, 61, 92, 0.12),
+    inset -3px 0 0 rgba(31, 61, 92, 0.10),
+    -2px 2px 6px rgba(31, 61, 92, 0.10);
+  transition-property: transform, box-shadow, background-color;
   transition-duration: var(--header-transition-fast);
   transition-timing-function: ease;
   transition-delay: 0s;
 }
+.tree-branch:nth-child(1) { background-color: var(--spine-1); }
+.tree-branch:nth-child(2) { background-color: var(--spine-2); }
+.tree-branch:nth-child(3) { background-color: var(--spine-3); }
+.tree-branch:nth-child(4) { background-color: var(--spine-4); }
+.tree-branch:nth-child(5) { background-color: var(--spine-5); }
+.tree-branch:nth-child(6) { background-color: var(--spine-6); }
+
+/* Faixa de marcador: aparece no livro "puxado" */
 .tree-branch::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 15%;
-  height: 70%;
-  width: 2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 6px 0 0 6px;
   background-color: var(--header-gold-primary);
   transform: scaleY(0);
   transform-origin: center;
@@ -123,9 +145,22 @@
 .tree-branch.active::before {
   transform: scaleY(1);
 }
+
+/* Hover: o livro sai um pouco da prateleira */
 .tree-branch:hover {
-  background-color: rgba(255, 248, 217, 0.05);
+  transform: translateX(4px);
 }
+/* Ativo: o livro da página atual está puxado para fora */
+.tree-branch.active {
+  transform: translateX(10px);
+  box-shadow:
+    inset 0 4px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -4px 0 rgba(31, 61, 92, 0.12),
+    inset -3px 0 0 rgba(31, 61, 92, 0.10),
+    -6px 4px 16px rgba(31, 61, 92, 0.22);
+}
+
+/* Ícone = etiqueta no topo da lombada */
 .branch-icon {
   display: flex;
   flex-direction: row;
@@ -133,7 +168,7 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  color: var(--header-text-muted);
+  color: var(--header-text-main);
   flex-shrink: 0;
   transition-property: color, transform, filter;
   transition-duration: var(--header-transition-fast);
@@ -142,25 +177,27 @@
 }
 .tree-branch:hover .branch-icon,
 .tree-branch.active .branch-icon {
-  color: var(--header-gold-primary);
+  color: var(--pastel-blue-700);
   transform: scale(1.1);
-  filter: drop-shadow(0 0 8px var(--header-gold-glow));
 }
+
+/* Título gravado na lombada (aparece ao expandir a estante) */
 .branch-text {
   display: block;
+  position: absolute;
+  left: 58px;
+  top: 50%;
+  margin: -0.6em 0 0 0;
   font-family: var(--header-font-sans);
   font-size: 0.65rem;
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--header-text-muted);
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: 1.8rem;
-  margin-right: 0;
+  color: var(--header-text-main);
   white-space: nowrap;
   opacity: 0;
+  pointer-events: none;
   transform: translateX(-15px);
   transition-property: opacity, transform, color;
   transition-duration: 0.4s;
@@ -173,7 +210,7 @@
 }
 .tree-branch:hover .branch-text,
 .tree-branch.active .branch-text {
-  color: var(--header-text-main);
+  color: var(--pastel-blue-700);
 }
 .tree-branch:nth-child(1) .branch-text { transition-delay: 0.05s; }
 .tree-branch:nth-child(2) .branch-text { transition-delay: 0.10s; }
@@ -185,63 +222,78 @@
   transition-delay: 0s;
   transition-duration: 0.2s;
 }
+
+/* Expandido: a lombada vira uma linha com ícone + título */
+.sidebar-magic:hover .tree-branch {
+  justify-content: flex-start;
+  padding-left: 16px;
+}
+
+/* ===== Mobile: a estante vira uma prateleira horizontal na base ===== */
 @media screen and (max-width: 768px) {
   .sidebar-magic {
     top: auto;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 70px;
-    border-top-width: 1px;
-    border-right-width: 0px;
-    border-bottom-width: 0px;
-    border-left-width: 0px;
-    border-top-style: solid;
-    border-right-style: none;
-    border-bottom-style: none;
-    border-left-style: none;
-    border-top-color: var(--header-border-color);
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 -10px 40px rgba(31, 61, 92, 0.28);
+    height: 78px;
+    border-right: none;
+    border-top: 1px solid var(--header-border-color);
+    background-image: linear-gradient(180deg, var(--pastel-blue-50), var(--pastel-blue-100));
+    box-shadow:
+      inset 0 -6px 0 var(--header-shelf-edge),
+      0 -10px 36px rgba(31, 61, 92, 0.16);
   }
   .sidebar-magic:hover {
     width: 100%;
     background-color: var(--header-bg-base);
+    box-shadow:
+      inset 0 -6px 0 var(--header-shelf-edge),
+      0 -10px 36px rgba(31, 61, 92, 0.16);
   }
   .nav-tree {
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-around;
     height: 100%;
     width: 100%;
     gap: 0;
+    padding: 0 6px 6px;
   }
   .tree-branch {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 66px;
     width: 100%;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
+    margin: 0 2px;
+    border-radius: 5px 5px 0 0;
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -3px 0 rgba(31, 61, 92, 0.12),
+      -2px -2px 6px rgba(31, 61, 92, 0.08);
+  }
+  .tree-branch:hover,
+  .tree-branch.active {
+    transform: translateY(-8px);
   }
   .tree-branch::before {
     top: 0;
-    left: 20%;
-    height: 2px;
-    width: 60%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: auto;
+    height: 4px;
+    border-radius: 5px 5px 0 0;
     transform: scaleX(0);
   }
   .tree-branch:hover::before,
   .tree-branch.active::before {
     transform: scaleX(1);
+  }
+  .sidebar-magic:hover .tree-branch {
+    padding-left: 0;
+    justify-content: center;
   }
   .branch-text {
     display: none;
