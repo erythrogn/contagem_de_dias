@@ -1,6 +1,6 @@
 :root {
-  --bg-dark: #0a0c10; /* O teu fundo azul-profundo/noturno */
-  --text-main: #fcfbf9;
+  --bg-dark: rgb(230, 240, 251); /* O teu fundo azul-profundo/noturno */
+  --text-main: rgb(31, 61, 92);
 }
 
 body {

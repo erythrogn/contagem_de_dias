@@ -9,10 +9,10 @@
   display: flex;
   align-items: center;
   background-color: var(--glass-bg);
-  border-bottom: 1px solid rgba(154, 153, 241, 0.2);
+  border-bottom: 1px solid rgba(168, 203, 238, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 30px rgba(31, 61, 92, 0.175);
 }
 
 .marquee-track {
@@ -160,7 +160,7 @@
 .ftab:hover, .ftab.active {
   border-color: var(--gold-soft);
   color: var(--text-light);
-  background-color: rgba(226, 212, 163, 0.08) !important;
+  background-color: rgba(255, 248, 217, 0.08) !important;
 }
 
 .genre-wrapper {
@@ -205,8 +205,8 @@
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border-gold);
-  background-color: #040508;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
+  background-color: rgb(230, 240, 251);
+  box-shadow: 0 30px 70px rgba(31, 61, 92, 0.28);
 }
 
 .gallery-main-blur-bg {
@@ -241,7 +241,7 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  background-image: linear-gradient(to top, rgba(4, 5, 8, 1) 0%, rgba(4, 5, 8, 0.4) 60%, transparent 100%), linear-gradient(to right, rgba(4, 5, 8, 1) 0%, rgba(4, 5, 8, 0.2) 70%, transparent 100%);
+  background-image: linear-gradient(to top, rgb(230, 240, 251) 0%, rgba(230, 240, 251, 0.4) 60%, transparent 100%), linear-gradient(to right, rgb(230, 240, 251) 0%, rgba(230, 240, 251, 0.2) 70%, transparent 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -250,7 +250,7 @@
   font-family: var(--font-serif);
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 300;
-  color: #ffffff;
+  color: rgb(31, 61, 92);
   margin: 0 0 0.5rem 0;
   line-height: 1.2;
   pointer-events: auto;
@@ -278,7 +278,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background-color: rgba(6, 8, 13, 0.8);
+  background-color: rgba(230, 240, 251, 0.8);
   border: 1px solid var(--border-gold);
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
@@ -295,7 +295,7 @@
 }
 
 .movie-action-btn {
-  background-color: rgba(6, 8, 13, 0.8) !important;
+  background-color: rgba(230, 240, 251, 0.8) !important;
   border: 1px solid var(--border-gold);
   color: var(--text-light);
   width: 42px;
@@ -344,29 +344,29 @@
   flex: 0 0 130px;
   aspect-ratio: 2 / 3;
   border-radius: 10px;
-  border: 1px solid rgba(226, 212, 163, 0.15);
+  border: 1px solid rgba(233, 200, 79, 0.27);
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  background-color: #090b11;
+  background-color: rgb(230, 240, 251);
   scroll-snap-align: start;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(31, 61, 92, 0.14);
   transition: all 0.4s cubic-bezier(0.25, 1, 0.3, 1);
   opacity: 0.6;
 }
 
 .slider-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(226, 212, 163, 0.5);
+  border-color: rgba(233, 200, 79, 0.5);
   opacity: 0.9;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 15px 30px rgba(31, 61, 92, 0.21);
 }
 
 .slider-card.active {
   border-color: var(--gold-soft);
   opacity: 1;
   transform: scale(1.05) translateY(-4px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(226, 212, 163, 0.2);
+  box-shadow: 0 15px 30px rgba(31, 61, 92, 0.245), 0 0 20px rgba(246, 226, 126, 0.2);
 }
 
 .slider-card.watched {
@@ -387,7 +387,7 @@
 }
 
 .slider-btn {
-  background-color: rgba(6, 8, 13, 0.85) !important;
+  background-color: rgba(230, 240, 251, 0.85) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-gold);
@@ -401,7 +401,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 30;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 15px rgba(31, 61, 92, 0.175);
   outline: none;
 }
 
@@ -428,7 +428,7 @@
   border: 1px solid var(--border-gold);
   border-radius: 14px;
   padding: 1.4rem;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 15px 35px rgba(31, 61, 92, 0.158);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -439,8 +439,8 @@
 
 .musica-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(226, 212, 163, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(226, 212, 163, 0.08);
+  border-color: rgba(233, 200, 79, 0.5);
+  box-shadow: 0 20px 40px rgba(31, 61, 92, 0.21), 0 0 20px rgba(246, 226, 126, 0.08);
 }
 
 .musica-card-header {
@@ -493,7 +493,7 @@
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2.5rem;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 35px rgba(31, 61, 92, 0.175);
 }
 
 .player-header {
@@ -521,7 +521,7 @@
 .player-frame-container {
   border-radius: 8px;
   overflow: hidden;
-  background-color: #040508;
+  background-color: rgb(230, 240, 251);
   min-height: 120px;
   display: flex;
   align-items: center;
@@ -530,7 +530,7 @@
 
 .musica-card.active-card {
   border-color: var(--gold-soft);
-  box-shadow: 0 0 25px rgba(226, 212, 163, 0.25);
+  box-shadow: 0 0 25px rgba(246, 226, 126, 0.25);
 }
 
 .musica-btn-group {
@@ -545,7 +545,7 @@
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 0.8rem;
-  border: 1px solid rgba(226, 212, 163, 0.1);
+  border: 1px solid rgba(233, 200, 79, 0.18);
 }
 
 .musica-media {
@@ -554,8 +554,8 @@
   aspect-ratio: 16 / 9;
   border-radius: 6px;
   overflow: hidden;
-  background-color: #040508;
-  border: 1px solid rgba(226, 212, 163, 0.1);
+  background-color: rgb(230, 240, 251);
+  border: 1px solid rgba(233, 200, 79, 0.18);
   margin-bottom: 0.8rem;
   display: flex;
   align-items: center;

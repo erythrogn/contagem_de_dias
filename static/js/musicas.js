@@ -99,7 +99,7 @@ export function parseMediaLink(input) {
     embedUrl = `https://embed.music.apple.com${urlObj.pathname}${urlObj.search}`;
   } else if (hostname.includes("soundcloud.com")) {
     provider = "soundcloud";
-    embedUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(urlObj.href)}&color=%23e2d4a3&auto_play=false&hide_related=true&show_comments=true&show_user=true&show_reposts=false&show_teaser=false`;
+    embedUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(urlObj.href)}&color=%23e9c84f&auto_play=false&hide_related=true&show_comments=true&show_user=true&show_reposts=false&show_teaser=false`;
   } else if (hostname.includes("deezer.com")) {
     provider = "deezer";
     embedUrl = `https://widget.deezer.com/widget/dark${urlObj.pathname}`;

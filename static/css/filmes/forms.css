@@ -6,7 +6,7 @@
   border-radius: 8px;
   padding: 4rem 3rem;
   margin-bottom: 5rem;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 30px 80px rgba(31, 61, 92, 0.21);
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -32,7 +32,7 @@
   line-height: 1.2;
   color: var(--gold-soft);
   margin: 0 0 3rem;
-  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 4px 15px rgba(31, 61, 92, 0.28);
 }
 
 .form-layout {
@@ -70,7 +70,7 @@
   box-sizing: border-box;
   background-color: transparent !important;
   border: 0;
-  border-bottom: 1px solid rgba(226, 212, 163, 0.3);
+  border-bottom: 1px solid rgba(233, 200, 79, 0.5);
   color: var(--text-light);
   caret-color: var(--gold-soft);
   font-family: var(--font-sans);
@@ -92,7 +92,7 @@
 }
 
 .field-input:hover:not(:focus) {
-  border-bottom-color: rgba(226, 212, 163, 0.5);
+  border-bottom-color: rgba(233, 200, 79, 0.5);
 }
 
 input[type="date"].field-input,
@@ -182,15 +182,15 @@ input[type="number"].field-input::-webkit-outer-spin-button {
   justify-content: center;
   overflow: hidden;
   flex: 0 0 90px;
-  background-color: rgba(6, 8, 13, 0.8);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  background-color: rgba(230, 240, 251, 0.8);
+  box-shadow: 0 10px 20px rgba(31, 61, 92, 0.175);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
 
 .poster-preview-box:hover {
-  border-color: rgba(226, 212, 163, 0.45);
+  border-color: rgba(233, 200, 79, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), var(--cinematic-glow);
+  box-shadow: 0 12px 30px rgba(31, 61, 92, 0.227), var(--cinematic-glow);
 }
 
 .poster-preview-img {
@@ -201,12 +201,12 @@ input[type="number"].field-input::-webkit-outer-spin-button {
 }
 
 .poster-placeholder-icon {
-  color: rgba(226, 212, 163, 0.2);
+  color: rgba(79, 127, 181, 0.2);
   transition: color 0.4s ease, transform 0.4s ease;
 }
 
 .poster-preview-box:hover .poster-placeholder-icon {
-  color: rgba(226, 212, 163, 0.35);
+  color: rgba(79, 127, 181, 0.35);
   transform: scale(1.08);
 }
 
@@ -234,16 +234,16 @@ input[type="number"].field-input::-webkit-outer-spin-button {
 }
 
 .btn-submit:hover {
-  background-color: rgba(226, 212, 163, 0.05) !important;
+  background-color: rgba(255, 248, 217, 0.05) !important;
   transform: translateY(-4px);
   border-color: var(--gold-soft);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), var(--cinematic-glow);
+  box-shadow: 0 15px 30px rgba(31, 61, 92, 0.14), var(--cinematic-glow);
   color: var(--text-light);
 }
 
 .btn-submit:active {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), var(--cinematic-glow);
+  box-shadow: 0 8px 20px rgba(31, 61, 92, 0.14), var(--cinematic-glow);
 }
 
 .btn-submit:focus-visible {
@@ -272,13 +272,13 @@ dialog {
   /* Posicionamento automático garantido pela API showModal */
   margin: auto;
   overflow-y: auto;
-  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 50px 100px rgba(31, 61, 92, 0.315);
   scrollbar-width: thin;
   scrollbar-color: var(--border-gold) transparent;
 }
 
 dialog::backdrop {
-  background-color: rgba(4, 5, 8, 0.95);
+  background-color: rgba(230, 240, 251, 0.95);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }
@@ -293,7 +293,7 @@ dialog[open] {
   align-items: center;
   gap: 2rem;
   margin-bottom: 3.5rem;
-  border-bottom: 1px solid rgba(226, 212, 163, 0.2);
+  border-bottom: 1px solid rgba(233, 200, 79, 0.36);
   padding-bottom: 1.5rem;
 }
 
@@ -305,7 +305,7 @@ dialog[open] {
   line-height: 1.2;
   color: var(--gold-soft);
   margin: 0;
-  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 4px 15px rgba(31, 61, 92, 0.28);
 }
 
 .btn-close-dialog {

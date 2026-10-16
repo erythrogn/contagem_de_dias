@@ -1,15 +1,15 @@
 :root {
-  --color-bg-base: #06070a;
-  --color-gold-primary: #e2d4a3;
-  --color-gold-light: rgba(111, 132, 216, 0.25);
-  --color-gold-hover: #89a0ff;
-  --color-text-main: #fdfbf7;
-  --color-text-muted: #b4c2ff;
-  --color-glass-panel: rgba(10, 12, 18, 0.55);
-  --color-glass-border: rgba(226, 212, 163, 0.18);
-  --color-glass-shadow: rgba(0, 0, 0, 0.6);
-  --color-danger: #e63946;
-  --color-success: #2a9d8f;
+  --color-bg-base: rgb(230, 240, 251);
+  --color-gold-primary: rgb(79, 127, 181);
+  --color-gold-light: rgba(168, 203, 238, 0.25);
+  --color-gold-hover: rgb(79, 127, 181);
+  --color-text-main: rgb(31, 61, 92);
+  --color-text-muted: rgb(79, 127, 181);
+  --color-glass-panel: rgba(230, 240, 251, 0.55);
+  --color-glass-border: rgba(255, 248, 217, 0.18);
+  --color-glass-shadow: rgba(31, 61, 92, 0.21);
+  --color-danger: rgb(74, 108, 145);
+  --color-success: rgb(74, 108, 145);
   --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
   --font-sans: 'Montserrat', 'Inter', sans-serif;
 
@@ -34,7 +34,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at 15% 15%, rgba(226, 212, 163, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(226, 212, 163, 0.05) 0%, transparent 45%);
+  background-image: radial-gradient(circle at 15% 15%, rgba(255, 248, 217, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 248, 217, 0.05) 0%, transparent 45%);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -255,7 +255,7 @@ body {
   right: 10px;
   bottom: 10px;
   left: 10px;
-  border: 1px solid rgba(226, 212, 163, 0.08);
+  border: 1px solid rgba(233, 200, 79, 0.144);
   pointer-events: none;
   z-index: 0;
 }
@@ -345,12 +345,12 @@ body {
 }
 
 .field-input::placeholder {
-  color: rgba(253, 251, 247, 0.25);
+  color: rgba(31, 61, 92, 0.25);
 }
 
 .field-input:focus {
   border-bottom-color: var(--color-gold-primary);
-  box-shadow: 0 10px 10px -10px rgba(226, 212, 163, 0.25);
+  box-shadow: 0 10px 10px -10px rgba(246, 226, 126, 0.25);
 }
 
 .field-input:focus-visible {
@@ -407,7 +407,7 @@ textarea.field-input {
   justify-content: center;
   width: 70px;
   height: 90px;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.4);
   border: 1px solid var(--color-glass-border);
   border-radius: 2px;
   overflow: hidden;
@@ -477,7 +477,7 @@ textarea.field-input {
 
 .btn-submit:hover {
   background-color: var(--color-gold-primary);
-  box-shadow: 0 10px 25px -5px rgba(226, 212, 163, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(246, 226, 126, 0.4);
   transform: translateY(-2px);
 }
 
@@ -734,7 +734,7 @@ textarea.field-input {
   justify-content: flex-end;
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(to top, rgba(6, 7, 10, 0.98) 0%, rgba(6, 7, 10, 0.7) 40%, transparent 100%);
+  background-image: linear-gradient(to top, rgba(230, 240, 251, 0.98) 0%, rgba(230, 240, 251, 0.7) 40%, transparent 100%);
   padding: 2rem;
   z-index: 2;
 }
@@ -756,7 +756,7 @@ textarea.field-input {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-gold-primary);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.4);
   padding: 0.4rem 0.8rem;
   border-radius: 30px;
   border: 1px solid var(--color-glass-border);
@@ -880,13 +880,13 @@ dialog {
   width: 100%;
   max-width: 600px;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at top right, rgba(226, 212, 163, 0.05), transparent 60%);
+  background-image: radial-gradient(circle at top right, rgba(255, 248, 217, 0.05), transparent 60%);
   border: 1px solid var(--color-gold-light);
   border-radius: 4px;
   padding: 3rem;
   margin: auto;
   color: var(--color-text-main);
-  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 40px 80px -20px rgba(31, 61, 92, 0.315);
 }
 
 dialog[open] {
@@ -902,7 +902,7 @@ dialog[open] {
 }
 
 dialog::backdrop {
-  background-color: rgba(6, 7, 10, 0.85);
+  background-color: rgba(230, 240, 251, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   animation-name: fadeInBackdrop;
@@ -1155,7 +1155,7 @@ dialog::backdrop {
 .treino-draft-remove:hover,
 .treino-btn-del:hover {
   border-color: var(--gold-soft);
-  background-color: rgba(226, 212, 163, 0.08);
+  background-color: rgba(255, 248, 217, 0.08);
 }
 
 .treino-list {
@@ -1175,7 +1175,7 @@ dialog::backdrop {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-glass-border);
   border-radius: 10px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 15px 35px rgba(31, 61, 92, 0.158);
 }
 
 .treino-card-head,
@@ -1256,7 +1256,7 @@ dialog::backdrop {
 
 .treino-btn-save {
   background-color: var(--gold-soft);
-  color: var(--bg-dark, #06070a);
+  color: var(--bg-dark, rgb(79, 127, 181));
   border: none;
   border-radius: 999px;
   font-family: var(--font-sans);

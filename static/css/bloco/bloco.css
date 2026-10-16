@@ -6,13 +6,13 @@
 @import url("carousel.css");
 @import url("layout.css");
 :root {
-  --bg-dark: #06080d;
-  --champagne-canvas: rgba(253, 250, 240, 0.04);
-  --gold-soft: #e2d4a3;
-  --gold-dark: #dca852;
-  --text-light: #fefefe;
-  --text-muted: rgba(255, 255, 255, 0.45);
-  --border-gold: rgba(226, 212, 163, 0.15);
+  --bg-dark: rgb(230, 240, 251);
+  --champagne-canvas: rgba(255, 248, 217, 0.04);
+  --gold-soft: rgb(79, 127, 181);
+  --gold-dark: rgb(74, 108, 145);
+  --text-light: rgb(31, 61, 92);
+  --text-muted: rgba(31, 61, 92, 0.45);
+  --border-gold: rgba(233, 200, 79, 0.27);
   
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;

@@ -1,11 +1,30 @@
 /* ============================================================
-   tokens.css — Fonte única de cores de destaque (dourado)
+   tokens.css — Paleta única do site (azul e amarelo pastel)
    Carregado primeiro em base.html. Páginas podem sobrescrever
-   apenas tokens próprios; o dourado principal é este.
+   apenas tokens próprios.
    ============================================================ */
 :root {
-  --gold: #e2d4a3;
-  --gold-rgb: 226, 212, 163;
+  /* Azul pastel */
+  --pastel-blue-50: #f4f9ff;
+  --pastel-blue-100: #e6f0fb;
+  --pastel-blue-200: #cfe2f6;
+  --pastel-blue-300: #a8cbee;
+  --pastel-blue-500: #3f6fa6;
+  --pastel-blue-700: #2f5d8c;
+
+  /* Amarelo pastel */
+  --pastel-yellow-50: #fffdf4;
+  --pastel-yellow-100: #fff8d9;
+  --pastel-yellow-300: #f6e27e;
+  --pastel-yellow-500: #e9c84f;
+
+  /* Texto */
+  --navy: #1f3d5c;
+  --navy-muted: #4a6c91;
+
+  /* Tokens de compatibilidade (nomes antigos usados nas páginas) */
+  --gold: var(--pastel-blue-500);
+  --gold-rgb: 91, 143, 199;
   --gold-soft: var(--gold);
   --color-gold-primary: var(--gold);
   --header-gold-primary: var(--gold);

@@ -231,7 +231,7 @@
           <label class="floating-label">Título ou Pergunta</label>
         </div>
         <div class="form-group floating-group">
-          <select id="edit-nType" class="mform-input" required style="background: transparent; border: none; border-bottom: 1px solid var(--border-gold); color: #fff; padding: 10px 0;">
+          <select id="edit-nType" class="mform-input" required style="background: transparent; border: none; border-bottom: 1px solid var(--border-gold); color: rgb(31, 61, 92); padding: 10px 0;">
             <option value="texto">Texto Livre</option>
             <option value="lista">Lista</option>
             <option value="pergunta">Pergunta & Resposta</option>
@@ -427,16 +427,16 @@ function updateMFormUI() {
         let answerUI = '';
         if (hasAns) {
           answerUI = `
-            <div class="c-answer-box" style="border-top:1px solid rgba(226, 212, 163,0.15); margin-top:20px; padding-top:15px;">
+            <div class="c-answer-box" style="border-top:1px solid rgba(233, 200, 79, 0.27); margin-top:20px; padding-top:15px;">
               <span class="c-answer-author" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark);">✦ Resposta de ${escapeHTML(n.answeredBy || expected)}</span>
-              <p class="c-answer-text" style="font-family:var(--font-serif); font-style:italic; font-size:1.15rem; margin-top:8px; line-height:1.6; color:#ffffff;">"${escapeHTML(n.answer).replace(/\n/g,'<br>')}"</p>
+              <p class="c-answer-text" style="font-family:var(--font-serif); font-style:italic; font-size:1.15rem; margin-top:8px; line-height:1.6; color:rgb(31, 61, 92);">"${escapeHTML(n.answer).replace(/\n/g,'<br>')}"</p>
             </div>`;
         } else {
           answerUI = `
-            <div class="c-form-box" style="border-top:1px solid rgba(226, 212, 163,0.15); margin-top:20px; padding-top:15px;">
+            <div class="c-form-box" style="border-top:1px solid rgba(233, 200, 79, 0.27); margin-top:20px; padding-top:15px;">
               <span class="c-answer-author" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark);">✦ ${expected}, sua vez:</span>
               <form class="c-answer-form" data-key="${n.key}" data-answerer="${expected}" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
-                <textarea class="mform-input mform-textarea" rows="2" placeholder="${expected}, responda aqui..." style="margin-bottom:0; font-family:var(--font-sans); font-size:0.9rem; border-bottom:1px solid rgba(226, 212, 163,0.3); color:#fff;"></textarea>
+                <textarea class="mform-input mform-textarea" rows="2" placeholder="${expected}, responda aqui..." style="margin-bottom:0; font-family:var(--font-sans); font-size:0.9rem; border-bottom:1px solid rgba(233, 200, 79, 0.5); color:rgb(31, 61, 92);"></textarea>
                 <button type="submit" class="mform-btn-submit" style="align-self:flex-start; padding: 0.5rem 1.5rem; font-size:0.65rem; letter-spacing:2px;">Responder</button>
               </form>
             </div>`;
@@ -446,9 +446,9 @@ function updateMFormUI() {
         li.className = 'carousel-item';
         li.innerHTML = `
           <img class="carousel-bg" src="${escapeHTML(bg)}" alt="" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='${fallbackImg}';this.classList.add('loaded');" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.15) contrast(1.1); z-index:-1;">
-          <div class="carousel-content" style="padding:3.5rem 3rem; background:rgba(6,8,13,0.4); border-radius:4px; border:1px solid rgba(226, 212, 163,0.15); box-shadow:inset 0 0 40px rgba(0,0,0,0.5); display:flex; flex-direction:column; justify-content:center; height:100%; box-sizing:border-box;">
+          <div class="carousel-content" style="padding:3.5rem 3rem; background:rgba(230, 240, 251, 0.4); border-radius:4px; border:1px solid rgba(233, 200, 79, 0.27); box-shadow:inset 0 0 40px rgba(31, 61, 92, 0.175); display:flex; flex-direction:column; justify-content:center; height:100%; box-sizing:border-box;">
             <div class="cc-who" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:3px; color:var(--gold-dark); margin-bottom:0.5rem;">${escapeHTML(n.author || 'Alguém')} perguntou:</div>
-            <div class="cc-title" style="font-family:var(--font-serif); font-size:2.2rem; font-weight:300; color:#fff; line-height:1.2; letter-spacing:-0.5px; margin-bottom:1.5rem;">${escapeHTML(n.title)}</div>
+            <div class="cc-title" style="font-family:var(--font-serif); font-size:2.2rem; font-weight:300; color:rgb(31, 61, 92); line-height:1.2; letter-spacing:-0.5px; margin-bottom:1.5rem;">${escapeHTML(n.title)}</div>
             <div class="cc-answer">${answerUI}</div>
             <div class="cc-actions" style="display:flex; gap:15px; margin-top:25px; justify-content:flex-end;">
               <button class="btn-action" onclick="window.openEditNote('${n.key}')" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer;">
@@ -464,8 +464,8 @@ function updateMFormUI() {
         const capturedIdx = qIdx;
         const th = document.createElement('div');
         th.className = 'c-thumb';
-        th.style.cssText = "width:50px; height:50px; border-radius:2px; overflow:hidden; display:inline-block; margin:6px; cursor:pointer; border:1px solid rgba(226, 212, 163,0.2); transition:all 0.3s ease; position:relative;";
-        th.innerHTML = `<img src="${escapeHTML(bg)}" alt="" style="width:100%; height:100%; object-fit:cover; filter:brightness(0.5);"><div style="position:absolute; inset:0; background:rgba(226, 212, 163,0.05);"></div>`;
+        th.style.cssText = "width:50px; height:50px; border-radius:2px; overflow:hidden; display:inline-block; margin:6px; cursor:pointer; border:1px solid rgba(233, 200, 79, 0.36); transition:all 0.3s ease; position:relative;";
+        th.innerHTML = `<img src="${escapeHTML(bg)}" alt="" style="width:100%; height:100%; object-fit:cover; filter:brightness(0.5);"><div style="position:absolute; inset:0; background:rgba(255, 248, 217, 0.05);"></div>`;
         th.addEventListener('click', () => window.jumpToSlide(capturedIdx));
         cThumb.appendChild(th);
 
@@ -485,16 +485,16 @@ function updateMFormUI() {
           const hasAns = (n.answer || '').trim() !== '';
           if (hasAns) {
             contentHtml = `
-              <div class="note-qa" style="border-top:1px solid rgba(226, 212, 163,0.12); margin-top:15px; padding-top:15px;">
+              <div class="note-qa" style="border-top:1px solid rgba(233, 200, 79, 0.216); margin-top:15px; padding-top:15px;">
                 <div class="note-qa-label" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark); margin-bottom:6px;">✦ resposta de ${escapeHTML(n.answeredBy)}</div>
-                <div class="note-answer" style="font-family:var(--font-serif); font-style:italic; font-size:1.05rem; line-height:1.5; color:rgba(255,255,255,0.95);">"${escapeHTML(n.answer).replace(/\n/g,'<br>')}"</div>
+                <div class="note-answer" style="font-family:var(--font-serif); font-style:italic; font-size:1.05rem; line-height:1.5; color:rgba(31, 61, 92, 0.95);">"${escapeHTML(n.answer).replace(/\n/g,'<br>')}"</div>
               </div>`;
           } else {
             contentHtml = `
-              <div class="note-qa note-qa-pending" style="border-top:1px solid rgba(226, 212, 163,0.12); margin-top:15px; padding-top:15px;">
+              <div class="note-qa note-qa-pending" style="border-top:1px solid rgba(233, 200, 79, 0.216); margin-top:15px; padding-top:15px;">
                 <div class="note-qa-label" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold-dark); margin-bottom:12px;">✦ aguardando resposta de ${expected}</div>
                 <form class="inline-answer-form" data-key="${n.key}" data-answerer="${expected}" style="display:flex; flex-direction:column; gap:10px;">
-                  <textarea class="mform-textarea" rows="2" placeholder="${expected}, responda aqui..." style="border-bottom:1px solid rgba(226, 212, 163,0.2); font-size:0.85rem; margin-bottom:0; width:100%; background:transparent; color:#fff;"></textarea>
+                  <textarea class="mform-textarea" rows="2" placeholder="${expected}, responda aqui..." style="border-bottom:1px solid rgba(233, 200, 79, 0.36); font-size:0.85rem; margin-bottom:0; width:100%; background:transparent; color:rgb(31, 61, 92);"></textarea>
                   <button type="submit" class="mform-btn-submit" style="align-self:flex-start; font-size:0.65rem; padding:0.4rem 1.2rem; letter-spacing:1px;">Responder</button>
                 </form>
               </div>`;
@@ -509,9 +509,9 @@ function updateMFormUI() {
             <div class="note-badge" title="${escapeHTML(n.type)}" style="color:var(--gold-soft); display:flex; align-items:center;">${ICONS[n.type] || ''}</div>
             ${n.author ? `<div class="note-author" style="font-family:var(--font-sans); font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">Por: ${escapeHTML(n.author)}</div>` : ''}
           </div>
-          <h3 class="note-title" style="font-family:var(--font-serif); font-size:1.75rem; font-weight:300; margin:0; line-height:1.2; color:#ffffff;">${escapeHTML(n.title)}</h3>
+          <h3 class="note-title" style="font-family:var(--font-serif); font-size:1.75rem; font-weight:300; margin:0; line-height:1.2; color:rgb(31, 61, 92);">${escapeHTML(n.title)}</h3>
           <div class="note-body">${contentHtml}</div>
-          <div class="note-actions" style="display:flex; justify-content:flex-end; gap:14px; margin-top:20px; border-top:1px solid rgba(226, 212, 163,0.12); padding-top:12px;">
+          <div class="note-actions" style="display:flex; justify-content:flex-end; gap:14px; margin-top:20px; border-top:1px solid rgba(233, 200, 79, 0.216); padding-top:12px;">
             <button class="btn-action edit" onclick="window.openEditNote('${n.key}')" title="Editar" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; transition:color 0.2s;">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             </button>
@@ -554,7 +554,7 @@ function updateMFormUI() {
         th.style.transform = "scale(1.05)";
       } else {
         th.style.opacity = "0.4";
-        th.style.borderColor = "rgba(226, 212, 163,0.2)";
+        th.style.borderColor = "rgba(233, 200, 79, 0.36)";
         th.style.transform = "scale(1)";
       }
     });

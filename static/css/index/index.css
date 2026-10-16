@@ -1,23 +1,23 @@
 :root {
 
-  --bg-dark: #040508;
-  --champagne-canvas: rgba(245, 240, 220, 0.04);
-  --gold-soft: #e2d4a3;
-  --gold-dark: #1e3a8a;
-  --gold-neon: rgba(226, 212, 163, 0.3);
-  --text-light: #fdfbf7;
-  --text-muted: rgba(148, 163, 184, 0.7);
-  --border-gold: rgba(226, 212, 163, 0.25);
-  --glass-bg: rgba(10, 15, 30, 0.7);
-  --glass-border: rgba(226, 212, 163, 0.15);
+  --bg-dark: rgb(230, 240, 251);
+  --champagne-canvas: rgba(255, 248, 217, 0.04);
+  --gold-soft: rgb(79, 127, 181);
+  --gold-dark: rgb(79, 127, 181);
+  --gold-neon: rgba(79, 127, 181, 0.3);
+  --text-light: rgb(31, 61, 92);
+  --text-muted: rgba(79, 127, 181, 0.7);
+  --border-gold: rgba(233, 200, 79, 0.45);
+  --glass-bg: rgba(230, 240, 251, 0.7);
+  --glass-border: rgba(255, 248, 217, 0.15);
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
-  --cinematic-glow: 0 0 30px rgba(226, 212, 163, 0.15);
+  --cinematic-glow: 0 0 30px rgba(246, 226, 126, 0.15);
 }
 
 
 body {
-  background-color: #06080d;
+  background-color: rgb(230, 240, 251);
   color: var(--text-light);
   font-family: var(--font-sans);
   margin: 0;

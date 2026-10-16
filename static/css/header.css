@@ -1,22 +1,22 @@
 :root {
   /* Fundo noturno profundo (Midnight Blue) */
-  --header-bg-base: rgba(10, 15, 30, 0.75);
-  --header-bg-hover: rgba(15, 22, 40, 0.95);
+  --header-bg-base: rgba(230, 240, 251, 0.75);
+  --header-bg-hover: rgba(230, 240, 251, 0.95);
   
   /* Borda dourada sutil */
-  --header-border-color: rgba(226, 212, 163, 0.2);
+  --header-border-color: rgba(233, 200, 79, 0.36);
   
   /* Ouro Nobre */
-  --header-gold-primary: #e2d4a3;
+  --header-gold-primary: rgb(79, 127, 181);
   
   /* Brilho em tom Indigo vibrante */
-  --header-gold-glow: rgba(60, 80, 200, 0.4);
+  --header-gold-glow: rgba(168, 203, 238, 0.4);
   
   /* Branco pérola */
-  --header-text-main: #fdfbf7;
+  --header-text-main: rgb(31, 61, 92);
   
   /* Azul suave e evidente para textos secundários */
-  --header-text-muted: #607af2;
+  --header-text-muted: rgb(79, 127, 181);
   
   --header-font-sans: 'Montserrat', 'Inter', sans-serif;
   --header-width-collapsed: 80px;
@@ -53,7 +53,7 @@
   z-index: 9999;
   overflow-x: hidden;
   overflow-y: hidden;
-  box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 5px 0 30px rgba(31, 61, 92, 0.175);
   transition-property: width, background-color, box-shadow;
   transition-duration: var(--header-transition-slow);
   transition-timing-function: ease;
@@ -62,7 +62,7 @@
 .sidebar-magic:hover {
   width: var(--header-width-expanded);
   background-color: var(--header-bg-hover);
-  box-shadow: 15px 0 50px rgba(0, 0, 0, 0.8);
+  box-shadow: 15px 0 50px rgba(31, 61, 92, 0.28);
 }
 .nav-tree {
   display: flex;
@@ -124,7 +124,7 @@
   transform: scaleY(1);
 }
 .tree-branch:hover {
-  background-color: rgba(226, 212, 163, 0.05);
+  background-color: rgba(255, 248, 217, 0.05);
 }
 .branch-icon {
   display: flex;
@@ -207,7 +207,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 -10px 40px rgba(31, 61, 92, 0.28);
   }
   .sidebar-magic:hover {
     width: 100%;

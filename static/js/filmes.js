@@ -226,7 +226,7 @@ function renderGenres(section) {
 
 // ─── Imagens de fallback e Ações ──────────────────────────────────────────────
 const fallbackImgs = {
-  filmes: "https://placehold.co/1280x720/1a1c23/4da6ff?text=Sem+Capa",
+  filmes: "https://placehold.co/1280x720/e6f0fb/5b8fc7?text=Sem+Capa",
   series: "https://placehold.co/1280x720/1a231c/4dff99?text=Sem+Capa",
   jogos:  "https://placehold.co/1280x720/231a1c/ff4d7a?text=Sem+Capa",
 };
@@ -358,18 +358,18 @@ function createStars(score, name) {
   let colorVar = '';
 
   switch(num) {
-    case 1: colorVar = '#ef4444'; break;
-    case 2: colorVar = '#f59e0b'; break;
-    case 3: colorVar = '#10b981'; break;
-    case 4: colorVar = '#06b6d4'; break;
-    case 5: colorVar = '#3b82f6'; break;
-    default: colorVar = '#f59e0b'; 
+    case 1: colorVar = '#7fa6cf'; break;
+    case 2: colorVar = '#5b8fc7'; break;
+    case 3: colorVar = '#f6d75a'; break;
+    case 4: colorVar = '#e9c84f'; break;
+    case 5: colorVar = '#2f5d8c'; break;
+    default: colorVar = '#e9c84f'; 
   }
   
   for (let i = 1; i <= 5; i++) {
     const isFilled = i <= num;
     const fill = isFilled ? colorVar : 'none';
-    const stroke = isFilled ? colorVar : 'rgba(255,255,255,0.25)';
+    const stroke = isFilled ? colorVar : 'rgba(31,61,92,0.25)';
     
     stars += `<svg class="star-icon" width="14" height="14" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
   }

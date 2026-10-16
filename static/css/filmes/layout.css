@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   pointer-events: none;
-  background-image: radial-gradient(circle at 50% 0%, rgba(226, 212, 163, 0.05) 0%, transparent 60%);
+  background-image: radial-gradient(circle at 50% 0%, rgba(255, 248, 217, 0.05) 0%, transparent 60%);
   z-index: 0;
 }
 
@@ -16,7 +16,7 @@
   transform: translateX(-50%);
   width: 150vw;
   height: 40vh;
-  background-image: radial-gradient(ellipse at center, rgba(226, 212, 163, 0.03) 0%, transparent 70%);
+  background-image: radial-gradient(ellipse at center, rgba(255, 248, 217, 0.03) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
   animation-name: projectorFlicker;
@@ -63,7 +63,7 @@
   color: var(--text-light);
   margin: 0 0 0.5rem 0;
   line-height: 1.1;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 4px 20px rgba(31, 61, 92, 0.28);
 }
 
 .filmes-accent {

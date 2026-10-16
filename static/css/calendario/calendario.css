@@ -1,18 +1,18 @@
 :root {
-  --color-bg-base: #06070a;
-  --color-gold-primary: #e2d4a3;
-  --color-gold-light: rgba(226, 212, 163, 0.25);
-  --color-gold-hover: #bdb59b;
-  --color-text-main: #fdfbf7;
-  --color-text-muted: #3f4963;
-  --color-glass-panel: rgba(10, 12, 18, 0.55);
-  --color-glass-border: rgba(226, 212, 163, 0.18);
-  --color-glass-shadow: rgba(5, 4, 65, 0.6);
-  --color-dot-anniv: #4e4e4d;
-  --color-dot-viagem: #0099ff;
-  --color-dot-filme: #7472f4;
-  --color-dot-coisinha: #02085a;
-  --color-dot-treino: #3fae6a;
+  --color-bg-base: rgb(230, 240, 251);
+  --color-gold-primary: rgb(79, 127, 181);
+  --color-gold-light: rgba(233, 200, 79, 0.45);
+  --color-gold-hover: rgb(74, 108, 145);
+  --color-text-main: rgb(31, 61, 92);
+  --color-text-muted: rgb(79, 127, 181);
+  --color-glass-panel: rgba(230, 240, 251, 0.55);
+  --color-glass-border: rgba(255, 248, 217, 0.18);
+  --color-glass-shadow: rgba(168, 203, 238, 0.6);
+  --color-dot-anniv: rgb(74, 108, 145);
+  --color-dot-viagem: rgb(233, 200, 79);
+  --color-dot-filme: rgb(63, 111, 166);
+  --color-dot-coisinha: rgb(143, 184, 227);
+  --color-dot-treino: rgb(47, 93, 140);
   --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
   --font-sans: 'Montserrat', 'Inter', sans-serif;
   --transition-slow: 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -223,7 +223,7 @@
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 30px 60px -15px var(--color-glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  box-shadow: 0 30px 60px -15px var(--color-glass-shadow), inset 0 1px 0 rgba(168, 203, 238, 0.02);
   position: relative;
   overflow: hidden;
   animation-name: fadeInUp;
@@ -452,14 +452,14 @@
   pointer-events: none;
 }
 .day.past {
-  color: rgba(253, 251, 247, 0.2);
+  color: rgba(31, 61, 92, 0.2);
 }
 .day:hover:not(.empty) {
   border-top-color: var(--color-gold-light);
   border-right-color: var(--color-gold-light);
   border-bottom-color: var(--color-gold-light);
   border-left-color: var(--color-gold-light);
-  background-color: rgba(226, 212, 163, 0.05);
+  background-color: rgba(255, 248, 217, 0.05);
   transform: scale(1.05);
 }
 .day.today {
@@ -476,18 +476,18 @@
   font-style: italic;
 }
 .day.anniversary {
-  background-color: rgba(34, 211, 238, 0.05);
-  border-top-color: rgba(34, 211, 238, 0.2);
-  border-right-color: rgba(34, 211, 238, 0.2);
-  border-bottom-color: rgba(34, 211, 238, 0.2);
-  border-left-color: rgba(34, 211, 238, 0.2);
+  background-color: rgba(230, 240, 251, 0.05);
+  border-top-color: rgba(168, 203, 238, 0.2);
+  border-right-color: rgba(168, 203, 238, 0.2);
+  border-bottom-color: rgba(168, 203, 238, 0.2);
+  border-left-color: rgba(168, 203, 238, 0.2);
 }
 .day.anniversary:hover:not(.empty) {
-  background-color: rgba(34, 211, 238, 0.1);
-  border-top-color: rgba(34, 211, 238, 0.4);
-  border-right-color: rgba(34, 211, 238, 0.4);
-  border-bottom-color: rgba(34, 211, 238, 0.4);
-  border-left-color: rgba(34, 211, 238, 0.4);
+  background-color: rgba(230, 240, 251, 0.1);
+  border-top-color: rgba(168, 203, 238, 0.4);
+  border-right-color: rgba(168, 203, 238, 0.4);
+  border-bottom-color: rgba(168, 203, 238, 0.4);
+  border-left-color: rgba(168, 203, 238, 0.4);
 }
 .event-dots {
   display: flex;
@@ -551,7 +551,7 @@
   opacity: 0;
   visibility: hidden;
   z-index: 100;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 10px 25px rgba(31, 61, 92, 0.28);
   transition-property: opacity, visibility, transform;
   transition-duration: var(--transition-medium);
   transition-timing-function: ease-out;
@@ -617,7 +617,7 @@
   border-left-style: none;
   border-top-color: transparent;
   border-right-color: transparent;
-  border-bottom-color: rgba(255, 255, 255, 0.02);
+  border-bottom-color: rgba(31, 61, 92, 0.012);
   border-left-color: transparent;
   box-shadow: none;
   z-index: 1;
