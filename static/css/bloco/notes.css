@@ -1,7 +1,16 @@
+/* ============================================================
+   bloco/notes.css — Filtros, cartões de nota e respostas
+   ============================================================ */
+
+[hidden] { display: none !important; }
+
+/* ---- Filtros ---- */
+
 .filter-row {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1.75rem;
   margin-bottom: 3rem;
 }
 
@@ -11,18 +20,21 @@
   font-family: var(--font-sans);
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
   cursor: pointer;
   padding: 0.5rem 0;
   border-bottom: 1px solid transparent;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease;
 }
 
-.ftab:hover, .ftab.active {
-  color: var(--gold-soft);
-  border-bottom-color: var(--gold-soft);
+.ftab:hover,
+.ftab.active {
+  color: var(--ink-accent);
+  border-bottom-color: var(--ink-accent);
 }
+
+/* ---- Mural de notas (masonry) ---- */
 
 .notes-masonry {
   columns: 1;
@@ -30,50 +42,282 @@
 }
 
 @media (min-width: 600px) { .notes-masonry { columns: 2; } }
-@media (min-width: 900px) { .notes-masonry { columns: 3; } }
+@media (min-width: 960px) { .notes-masonry { columns: 3; } }
 
-.note-card {
-  break-inside: avoid;
-  margin-bottom: 1.5rem;
-  background: var(--champagne-canvas);
-  border: 1px solid var(--border-gold);
-  padding: 2rem;
-  border-radius: 2px;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+.notes-empty {
+  column-span: all;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  padding: 3rem 0;
 }
 
+/* ---- Cartão de nota ---- */
+
+.note-card {
+  --accent: var(--gold-line);
+  position: relative;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  padding: 1.75rem 1.75rem 1.1rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 250, 236, 0.9), rgba(233, 243, 252, 0.75));
+  border: 1px solid rgba(233, 200, 79, 0.4);
+  box-shadow: 0 8px 26px rgba(31, 61, 92, 0.08);
+  animation: noteIn 0.55s ease both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Faixa colorida no topo: cor muda conforme o tipo */
+.note-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.75rem;
+  right: 1.75rem;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--accent);
+}
+
+.note-card.type-texto    { --accent: var(--gold-line); }
+.note-card.type-lista    { --accent: var(--ink-accent); }
+.note-card.type-pergunta { --accent: var(--ochre); }
+
 .note-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(31, 61, 92, 0.105);
-  border-color: rgba(233, 200, 79, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(31, 61, 92, 0.14);
+}
+
+@keyframes noteIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.note-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.note-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-accent);
+}
+
+.note-type-icon,
+.note-icon {
+  flex: 0 0 auto;
+}
+
+.note-author {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.note-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.65rem;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0;
+}
+
+.note-body {
+  margin-top: 0.9rem;
+}
+
+.note-text {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--ink);
+  margin: 0;
+}
+
+.note-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.note-list li {
+  margin-bottom: 0.3rem;
+}
+
+.note-list li::marker {
+  color: var(--ochre);
+}
+
+/* ---- Perguntas e respostas (dentro do cartão e do carrossel) ---- */
+
+.note-qa {
+  border-top: 1px solid var(--border-gold);
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+}
+
+.note-qa-label {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin: 0 0 0.6rem;
+}
+
+.note-answer {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+
+.answer-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.answer-input {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(233, 200, 79, 0.6);
+  padding: 0.4rem 0;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.answer-input::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+.answer-input:focus {
+  border-bottom-color: var(--ink-accent);
+}
+
+.btn-answer {
+  background: transparent;
+  border: 1px solid var(--ink-accent);
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-accent);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.btn-answer:hover:not(:disabled) {
+  background: var(--ink-accent);
+  color: #fff;
+}
+
+.btn-answer:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ---- Rodapé do cartão: data + ações ---- */
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(63, 111, 166, 0.25);
 }
 
 .note-date {
   font-family: var(--font-serif);
   font-style: italic;
-  color: var(--gold-dark);
-  font-size: 0.9rem;
-  display: block;
-  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
 }
 
-.note-content {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--text-light);
-  font-weight: 300;
+.note-actions {
+  display: flex;
+  gap: 0.4rem;
 }
 
-/* Botões de deletar/editar da nota */
+/* Botões de editar/apagar */
 .btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   background: transparent;
-  border: none;
-  color: var(--text-muted);
+  border: 1px solid transparent;
+  color: var(--ink-soft);
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 
 .btn-action:hover {
-  color: var(--gold-soft);
+  color: var(--ink-accent);
+  border-color: rgba(63, 111, 166, 0.35);
+}
+
+.btn-action.del:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ---- Diálogo de edição ---- */
+
+.dialog-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--ink);
+}
+
+.edit-form {
+  margin-top: 1.5rem;
+}
+
+.edit-select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-gold);
+  color: var(--ink);
+  padding: 10px 0;
 }
