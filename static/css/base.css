@@ -11,28 +11,6 @@ body {
   font-family: 'Montserrat', sans-serif;
   min-height: 100vh;
 }
-
-/*
-  Página como livro: a borda da página encosta na estante (header).
-  Só decoração (pointer-events: none). Não há fundo nem transform no <main>,
-  para não alterar elementos fixos e larguras 100vw das páginas.
-*/
-main::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: var(--header-width-collapsed, 80px);
-  width: 18px;
-  background: linear-gradient(90deg, rgba(31, 61, 92, 0.14), rgba(31, 61, 92, 0));
-  pointer-events: none;
-  z-index: 1;
-}
-@media screen and (max-width: 768px) {
-  main::before {
-    display: none;
-  }
-}
 /* Respeita a preferência do sistema por movimento reduzido em todas as páginas */
 @media (prefers-reduced-motion: reduce) {
   *,
