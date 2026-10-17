@@ -1,12 +1,12 @@
 :root {
-  --color-bg-base: rgb(230, 240, 251);
+  --color-bg-base: rgb(212, 230, 246);
   --color-gold-primary: rgb(79, 127, 181);
   --color-gold-light: rgba(233, 200, 79, 0.45);
   --color-gold-hover: rgb(74, 108, 145);
   --color-text-main: rgb(31, 61, 92);
   --color-text-muted: rgb(79, 127, 181);
-  --color-glass-panel: rgba(230, 240, 251, 0.55);
-  --color-glass-border: rgba(255, 248, 217, 0.18);
+  --color-glass-panel: rgba(212, 230, 246, 0.55);
+  --color-glass-border: rgba(252, 237, 180, 0.18);
   --color-glass-shadow: rgba(168, 203, 238, 0.6);
   --color-dot-anniv: rgb(74, 108, 145);
   --color-dot-viagem: rgb(233, 200, 79);
@@ -459,7 +459,7 @@
   border-right-color: var(--color-gold-light);
   border-bottom-color: var(--color-gold-light);
   border-left-color: var(--color-gold-light);
-  background-color: rgba(255, 248, 217, 0.05);
+  background-color: rgba(252, 237, 180, 0.05);
   transform: scale(1.05);
 }
 .day.today {
@@ -476,14 +476,14 @@
   font-style: italic;
 }
 .day.anniversary {
-  background-color: rgba(230, 240, 251, 0.05);
+  background-color: rgba(212, 230, 246, 0.05);
   border-top-color: rgba(168, 203, 238, 0.2);
   border-right-color: rgba(168, 203, 238, 0.2);
   border-bottom-color: rgba(168, 203, 238, 0.2);
   border-left-color: rgba(168, 203, 238, 0.2);
 }
 .day.anniversary:hover:not(.empty) {
-  background-color: rgba(230, 240, 251, 0.1);
+  background-color: rgba(212, 230, 246, 0.1);
   border-top-color: rgba(168, 203, 238, 0.4);
   border-right-color: rgba(168, 203, 238, 0.4);
   border-bottom-color: rgba(168, 203, 238, 0.4);

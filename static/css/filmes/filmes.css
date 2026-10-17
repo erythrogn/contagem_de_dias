@@ -1,6 +1,6 @@
 :root {
-  --bg-dark: rgb(230, 240, 251);
-  --champagne-canvas: rgba(255, 248, 217, 0.04);
+  --bg-dark: rgb(212, 230, 246);
+  --champagne-canvas: rgba(252, 237, 180, 0.04);
   --gold-soft: rgb(79, 127, 181);
   --gold-dark: rgb(79, 127, 181);
   --gold-neon: rgba(79, 127, 181, 0.4);
@@ -8,8 +8,8 @@
   --text-main: rgb(31, 61, 92);
   --text-muted: rgba(79, 127, 181, 0.7);
   --border-gold: rgba(233, 200, 79, 0.45);
-  --glass-bg: rgba(230, 240, 251, 0.7);
-  --glass-border: rgba(255, 248, 217, 0.15);
+  --glass-bg: rgba(212, 230, 246, 0.7);
+  --glass-border: rgba(252, 237, 180, 0.15);
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
   --cinematic-glow: 0 0 40px rgba(168, 203, 238, 0.3);

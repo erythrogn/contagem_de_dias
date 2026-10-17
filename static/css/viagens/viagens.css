@@ -1,12 +1,12 @@
 :root {
-  --color-bg-base: rgb(230, 240, 251);
+  --color-bg-base: rgb(212, 230, 246);
   --color-gold-primary: rgb(79, 127, 181);
   --color-gold-light: rgba(233, 200, 79, 0.45);
   --color-gold-hover: rgb(79, 127, 181);
   --color-text-main: rgb(31, 61, 92);
   --color-text-muted: rgba(79, 127, 181, 0.7);
-  --color-glass-panel: rgba(230, 240, 251, 0.7);
-  --color-glass-border: rgba(255, 248, 217, 0.15);
+  --color-glass-panel: rgba(212, 230, 246, 0.7);
+  --color-glass-border: rgba(252, 237, 180, 0.15);
   --color-glass-shadow: rgba(31, 61, 92, 0.21);
   --color-danger: rgb(74, 108, 145);
   --color-success: rgb(74, 108, 145);
@@ -29,7 +29,7 @@ body {
   padding-left: 0;
   padding-right: 0;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at 15% 15%, rgba(255, 248, 217, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 248, 217, 0.05) 0%, transparent 45%);
+  background-image: radial-gradient(circle at 15% 15%, rgba(252, 237, 180, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(252, 237, 180, 0.05) 0%, transparent 45%);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -571,7 +571,7 @@ input[type="date"].field-input::-webkit-calendar-picker-indicator {
   height: 220px;
   position: relative;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 250, 236, 0.5);
 }
 .viagem-image::before {
   content: 'Pintando destino...';
@@ -755,7 +755,7 @@ dialog {
   width: 100%;
   max-width: 600px;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at top right, rgba(255, 248, 217, 0.05), transparent 60%);
+  background-image: radial-gradient(circle at top right, rgba(252, 237, 180, 0.05), transparent 60%);
   border-top-width: 1px;
   border-right-width: 1px;
   border-bottom-width: 1px;
@@ -795,7 +795,7 @@ dialog[open] {
   animation-play-state: running;
 }
 dialog::backdrop {
-  background-color: rgba(230, 240, 251, 0.85);
+  background-color: rgba(212, 230, 246, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   animation-name: fadeInBackdrop;

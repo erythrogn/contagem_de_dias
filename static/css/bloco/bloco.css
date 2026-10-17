@@ -6,8 +6,8 @@
 @import url("carousel.css");
 @import url("layout.css");
 :root {
-  --bg-dark: rgb(230, 240, 251);
-  --champagne-canvas: rgba(255, 248, 217, 0.04);
+  --bg-dark: rgb(212, 230, 246);
+  --champagne-canvas: rgba(252, 237, 180, 0.04);
   --gold-soft: rgb(79, 127, 181);
   --gold-dark: rgb(74, 108, 145);
   --text-light: rgb(31, 61, 92);

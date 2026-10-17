@@ -182,7 +182,7 @@ input[type="number"].field-input::-webkit-outer-spin-button {
   justify-content: center;
   overflow: hidden;
   flex: 0 0 90px;
-  background-color: rgba(230, 240, 251, 0.8);
+  background-color: rgba(212, 230, 246, 0.8);
   box-shadow: 0 10px 20px rgba(31, 61, 92, 0.175);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
@@ -234,7 +234,7 @@ input[type="number"].field-input::-webkit-outer-spin-button {
 }
 
 .btn-submit:hover {
-  background-color: rgba(255, 248, 217, 0.05) !important;
+  background-color: rgba(252, 237, 180, 0.05) !important;
   transform: translateY(-4px);
   border-color: var(--gold-soft);
   box-shadow: 0 15px 30px rgba(31, 61, 92, 0.14), var(--cinematic-glow);
@@ -278,7 +278,7 @@ dialog {
 }
 
 dialog::backdrop {
-  background-color: rgba(230, 240, 251, 0.95);
+  background-color: rgba(212, 230, 246, 0.95);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }

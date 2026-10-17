@@ -5,16 +5,16 @@
    ============================================================ */
 :root {
   /* Azul pastel */
-  --pastel-blue-50: #f4f9ff;
-  --pastel-blue-100: #e6f0fb;
-  --pastel-blue-200: #cfe2f6;
+  --pastel-blue-50: #e9f3fc;
+  --pastel-blue-100: #d4e6f6;
+  --pastel-blue-200: #bcd8f0;
   --pastel-blue-300: #a8cbee;
   --pastel-blue-500: #3f6fa6;
   --pastel-blue-700: #2f5d8c;
 
   /* Amarelo pastel */
-  --pastel-yellow-50: #fffdf4;
-  --pastel-yellow-100: #fff8d9;
+  --pastel-yellow-50: #fff9e3;
+  --pastel-yellow-100: #fcedb4;
   --pastel-yellow-300: #f6e27e;
   --pastel-yellow-500: #e9c84f;
 

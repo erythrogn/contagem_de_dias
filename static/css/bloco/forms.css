@@ -38,7 +38,7 @@
 }
 .type-card input:checked + .type-card-inner, 
 .author-card input:checked + .author-card-inner {
-  background: rgba(255, 248, 217, 0.08);
+  background: rgba(252, 237, 180, 0.08);
   border-color: var(--gold-soft);
   color: var(--gold-soft);
   transform: translateY(-4px);
@@ -78,7 +78,7 @@
   text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
   display: flex; align-items: center; gap: 8px; border-radius: 2px;
 }
-.mform-btn-next:hover, .mform-btn-submit:hover { background: rgba(255, 248, 217, 0.1); transform: scale(1.05); }
+.mform-btn-next:hover, .mform-btn-submit:hover { background: rgba(252, 237, 180, 0.1); transform: scale(1.05); }
 .mform-btn-back { border: none; opacity: 0.6; }
 .mform-btn-back:hover { opacity: 1; transform: translateX(-4px); }
 .mform-hint-box { display: flex; align-items: center; gap: 10px; color: var(--gold-dark); font-style: italic; font-family: var(--font-serif); margin-bottom: 2rem; }

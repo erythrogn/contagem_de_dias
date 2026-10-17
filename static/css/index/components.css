@@ -35,7 +35,7 @@
 .fine-line-decorator {
   height: 1px;
   width: 35px;
-  background: rgba(255, 248, 217, 0.3);
+  background: rgba(252, 237, 180, 0.3);
 }
 
 .celebration-date {
@@ -191,7 +191,7 @@
 }
 
 .golden-aura {
-    background: radial-gradient(circle at center, rgba(255, 248, 217, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(252, 237, 180, 0.08) 0%, transparent 70%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -233,7 +233,7 @@
 }
 
 .bg-vignette.is-centenary-bg {
-    background: radial-gradient(circle at center, rgba(230, 240, 251, 0.15) 0%, var(--bg-dark) 90%);
+    background: radial-gradient(circle at center, rgba(212, 230, 246, 0.15) 0%, var(--bg-dark) 90%);
 }
 
 .stage.is-centenary .minimal-carousel {

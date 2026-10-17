@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(230, 240, 251, 0.9);
+  background-color: rgba(212, 230, 246, 0.9);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   transition: opacity 0.8s ease, filter 0.8s ease;

@@ -1,7 +1,7 @@
 :root {
   /* Fundo noturno profundo (Midnight Blue) */
-  --header-bg-base: rgba(230, 240, 251, 0.75);
-  --header-bg-hover: rgba(230, 240, 251, 0.95);
+  --header-bg-base: rgba(212, 230, 246, 0.75);
+  --header-bg-hover: rgba(212, 230, 246, 0.95);
   
   /* Borda dourada sutil */
   --header-border-color: rgba(233, 200, 79, 0.36);
@@ -124,7 +124,7 @@
   transform: scaleY(1);
 }
 .tree-branch:hover {
-  background-color: rgba(255, 248, 217, 0.05);
+  background-color: rgba(252, 237, 180, 0.05);
 }
 .branch-icon {
   display: flex;

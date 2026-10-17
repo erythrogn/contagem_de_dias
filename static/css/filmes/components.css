@@ -160,7 +160,7 @@
 .ftab:hover, .ftab.active {
   border-color: var(--gold-soft);
   color: var(--text-light);
-  background-color: rgba(255, 248, 217, 0.08) !important;
+  background-color: rgba(252, 237, 180, 0.08) !important;
 }
 
 .genre-wrapper {
@@ -205,7 +205,7 @@
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border-gold);
-  background-color: rgb(230, 240, 251);
+  background-color: rgb(212, 230, 246);
   box-shadow: 0 30px 70px rgba(31, 61, 92, 0.28);
 }
 
@@ -241,7 +241,7 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  background-image: linear-gradient(to top, rgb(230, 240, 251) 0%, rgba(230, 240, 251, 0.4) 60%, transparent 100%), linear-gradient(to right, rgb(230, 240, 251) 0%, rgba(230, 240, 251, 0.2) 70%, transparent 100%);
+  background-image: linear-gradient(to top, rgb(212, 230, 246) 0%, rgba(212, 230, 246, 0.4) 60%, transparent 100%), linear-gradient(to right, rgb(212, 230, 246) 0%, rgba(212, 230, 246, 0.2) 70%, transparent 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -278,7 +278,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background-color: rgba(230, 240, 251, 0.8);
+  background-color: rgba(212, 230, 246, 0.8);
   border: 1px solid var(--border-gold);
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
@@ -295,7 +295,7 @@
 }
 
 .movie-action-btn {
-  background-color: rgba(230, 240, 251, 0.8) !important;
+  background-color: rgba(212, 230, 246, 0.8) !important;
   border: 1px solid var(--border-gold);
   color: var(--text-light);
   width: 42px;
@@ -348,7 +348,7 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  background-color: rgb(230, 240, 251);
+  background-color: rgb(212, 230, 246);
   scroll-snap-align: start;
   box-shadow: 0 8px 20px rgba(31, 61, 92, 0.14);
   transition: all 0.4s cubic-bezier(0.25, 1, 0.3, 1);
@@ -387,7 +387,7 @@
 }
 
 .slider-btn {
-  background-color: rgba(230, 240, 251, 0.85) !important;
+  background-color: rgba(212, 230, 246, 0.85) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-gold);
@@ -521,7 +521,7 @@
 .player-frame-container {
   border-radius: 8px;
   overflow: hidden;
-  background-color: rgb(230, 240, 251);
+  background-color: rgb(212, 230, 246);
   min-height: 120px;
   display: flex;
   align-items: center;
@@ -554,7 +554,7 @@
   aspect-ratio: 16 / 9;
   border-radius: 6px;
   overflow: hidden;
-  background-color: rgb(230, 240, 251);
+  background-color: rgb(212, 230, 246);
   border: 1px solid rgba(233, 200, 79, 0.18);
   margin-bottom: 0.8rem;
   display: flex;

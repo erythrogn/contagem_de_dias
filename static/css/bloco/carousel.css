@@ -22,7 +22,7 @@
 }
 
 .carousel-arrows button {
-  pointer-events: all; background: rgba(230, 240, 251, 0.8); border: 1px solid var(--border-gold);
+  pointer-events: all; background: rgba(212, 230, 246, 0.8); border: 1px solid var(--border-gold);
   color: var(--gold-soft); width: 45px; height: 45px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;
 }
@@ -42,4 +42,4 @@ dialog {
   margin: auto;
   box-shadow: 0 40px 80px rgba(31, 61, 92, 0.315);
 }
-dialog::backdrop { background-color: rgba(230, 240, 251, 0.85); backdrop-filter: blur(10px); }
+dialog::backdrop { background-color: rgba(212, 230, 246, 0.85); backdrop-filter: blur(10px); }

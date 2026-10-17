@@ -5,7 +5,7 @@
 /* Efeito ao passar o rato nas setas do carrossel */
 .nav-arrow:hover {
   border-color: var(--gold-soft);
-  background: rgba(255, 248, 217, 0.05);
+  background: rgba(252, 237, 180, 0.05);
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(246, 226, 126, 0.1);
 }
@@ -61,7 +61,7 @@
     left: 50%;
     width: 2px;
     height: 2px;
-    background: rgb(255, 255, 255);
+    background: rgb(255, 250, 236);
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     pointer-events: none;

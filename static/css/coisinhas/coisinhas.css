@@ -1,12 +1,12 @@
 :root {
-  --color-bg-base: rgb(230, 240, 251);
+  --color-bg-base: rgb(212, 230, 246);
   --color-gold-primary: rgb(79, 127, 181);
   --color-gold-light: rgba(168, 203, 238, 0.25);
   --color-gold-hover: rgb(79, 127, 181);
   --color-text-main: rgb(31, 61, 92);
   --color-text-muted: rgb(79, 127, 181);
-  --color-glass-panel: rgba(230, 240, 251, 0.55);
-  --color-glass-border: rgba(255, 248, 217, 0.18);
+  --color-glass-panel: rgba(212, 230, 246, 0.55);
+  --color-glass-border: rgba(252, 237, 180, 0.18);
   --color-glass-shadow: rgba(31, 61, 92, 0.21);
   --color-danger: rgb(74, 108, 145);
   --color-success: rgb(74, 108, 145);
@@ -34,7 +34,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at 15% 15%, rgba(255, 248, 217, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 248, 217, 0.05) 0%, transparent 45%);
+  background-image: radial-gradient(circle at 15% 15%, rgba(252, 237, 180, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(252, 237, 180, 0.05) 0%, transparent 45%);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -407,7 +407,7 @@ textarea.field-input {
   justify-content: center;
   width: 70px;
   height: 90px;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 250, 236, 0.4);
   border: 1px solid var(--color-glass-border);
   border-radius: 2px;
   overflow: hidden;
@@ -734,7 +734,7 @@ textarea.field-input {
   justify-content: flex-end;
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(to top, rgba(230, 240, 251, 0.98) 0%, rgba(230, 240, 251, 0.7) 40%, transparent 100%);
+  background-image: linear-gradient(to top, rgba(212, 230, 246, 0.98) 0%, rgba(212, 230, 246, 0.7) 40%, transparent 100%);
   padding: 2rem;
   z-index: 2;
 }
@@ -756,7 +756,7 @@ textarea.field-input {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-gold-primary);
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 250, 236, 0.4);
   padding: 0.4rem 0.8rem;
   border-radius: 30px;
   border: 1px solid var(--color-glass-border);
@@ -880,7 +880,7 @@ dialog {
   width: 100%;
   max-width: 600px;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at top right, rgba(255, 248, 217, 0.05), transparent 60%);
+  background-image: radial-gradient(circle at top right, rgba(252, 237, 180, 0.05), transparent 60%);
   border: 1px solid var(--color-gold-light);
   border-radius: 4px;
   padding: 3rem;
@@ -902,7 +902,7 @@ dialog[open] {
 }
 
 dialog::backdrop {
-  background-color: rgba(230, 240, 251, 0.85);
+  background-color: rgba(212, 230, 246, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   animation-name: fadeInBackdrop;
@@ -1155,7 +1155,7 @@ dialog::backdrop {
 .treino-draft-remove:hover,
 .treino-btn-del:hover {
   border-color: var(--gold-soft);
-  background-color: rgba(255, 248, 217, 0.08);
+  background-color: rgba(252, 237, 180, 0.08);
 }
 
 .treino-list {
