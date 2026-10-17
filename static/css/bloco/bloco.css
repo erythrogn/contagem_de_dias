@@ -6,12 +6,12 @@
 @import url("carousel.css");
 @import url("layout.css");
 :root {
-  --bg-dark: rgb(212, 230, 246);
+  --bg-dark: var(--canvas);
   --champagne-canvas: rgba(252, 237, 180, 0.04);
-  --gold-soft: rgb(79, 127, 181);
-  --gold-dark: rgb(74, 108, 145);
-  --text-light: rgb(31, 61, 92);
-  --text-muted: rgba(31, 61, 92, 0.45);
+  --gold-soft: var(--ink-accent);
+  --gold-dark: var(--ochre);
+  --text-light: var(--ink);
+  --text-muted: var(--ink-soft);
   --border-gold: rgba(233, 200, 79, 0.27);
   
   --font-serif: 'Cormorant Garamond', serif;
@@ -20,6 +20,7 @@
 
 body {
   background-color: var(--bg-dark);
+  background-image: linear-gradient(180deg, var(--cream) 0%, #eef0e0 28%, #dbe9f6 65%, #cfe2f4 100%);
   color: var(--text-light);
   font-family: var(--font-sans);
   margin: 0;

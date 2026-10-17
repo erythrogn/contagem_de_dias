@@ -1,13 +1,13 @@
 :root {
-  --bg-dark: rgb(212, 230, 246); /* O teu fundo azul-profundo/noturno */
-  --text-main: rgb(31, 61, 92);
+  --bg-dark: var(--canvas); /* O teu fundo azul-profundo/noturno */
+  --text-main: var(--ink);
 }
 
 body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-dark);
-  background-image: linear-gradient(180deg, #fdf7df 0%, #eef0e0 28%, #dbe9f6 65%, #cfe2f4 100%);
+  background-image: linear-gradient(180deg, var(--cream) 0%, #eef0e0 28%, #dbe9f6 65%, #cfe2f4 100%);
   background-attachment: fixed;
   color: var(--text-main);
   font-family: 'Montserrat', sans-serif;

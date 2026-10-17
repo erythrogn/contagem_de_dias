@@ -1,10 +1,24 @@
 /* ============================================================
-   tokens.css — Paleta única do site (azul e amarelo pastel)
-   Carregado primeiro em base.html. Páginas podem sobrescrever
-   apenas tokens próprios.
+   tokens.css — Paleta única do site (convite: azul-pó, creme e dourado)
+
+   Estudo de cores (contraste WCAG sobre o fundo #d4e6f6):
+   - Texto principal   --ink       #1f3d5c  8.8:1  (corpo, títulos)
+   - Texto secundário  --ink-soft  #3d5f86  5.2:1  (legendas, rótulos)
+   - Destaque azul     --ink-accent #3f6fa6 (títulos em itálico, ícones, linhas)
+   - Dourado de texto  --ochre     #7a5a10  5.0:1  (destaques pequenos)
+   - Dourado decorativo --gold-line #e9c84f (bordas, pontos, brilhos; não é texto)
+   - Perigo            --danger    #a0505c  4.3:1 (rosa-poeira)
+   - Sucesso           --success   #2f6f5a  4.6:1 (verde-sálvia)
+
+   Carregado primeiro em base.html. Os nomes antigos (--gold, --text-main,
+   --color-*) continuam válidos e apontam para estes tokens.
    ============================================================ */
 :root {
-  /* Azul pastel */
+  /* Base */
+  --canvas: #d4e6f6;
+  --cream: #fdf7df;
+
+  /* Azul pastel (escala) */
   --pastel-blue-50: #e9f3fc;
   --pastel-blue-100: #d4e6f6;
   --pastel-blue-200: #bcd8f0;
@@ -12,20 +26,40 @@
   --pastel-blue-500: #3f6fa6;
   --pastel-blue-700: #2f5d8c;
 
-  /* Amarelo pastel */
+  /* Amarelo pastel (escala) */
   --pastel-yellow-50: #fff9e3;
   --pastel-yellow-100: #fcedb4;
   --pastel-yellow-300: #f6e27e;
   --pastel-yellow-500: #e9c84f;
 
-  /* Texto */
-  --navy: #1f3d5c;
-  --navy-muted: #4a6c91;
+  /* Texto e destaques */
+  --ink: #1f3d5c;
+  --ink-soft: #3d5f86;
+  --ink-accent: var(--pastel-blue-500);
+  --ochre: #7a5a10;
+  --gold-line: var(--pastel-yellow-500);
 
-  /* Tokens de compatibilidade (nomes antigos usados nas páginas) */
-  --gold: var(--pastel-blue-500);
-  --gold-rgb: 91, 143, 199;
-  --gold-soft: var(--gold);
-  --color-gold-primary: var(--gold);
-  --header-gold-primary: var(--gold);
+  /* Estados */
+  --danger: #a0505c;
+  --success: #2f6f5a;
+
+  /* ---- Nomes antigos (compatibilidade com as páginas) ---- */
+  --navy: var(--ink);
+  --navy-muted: var(--ink-soft);
+  --bg-dark: var(--canvas);
+  --color-bg-base: var(--canvas);
+  --text-main: var(--ink);
+  --text-light: var(--ink);
+  --text-muted: var(--ink-soft);
+  --color-text-main: var(--ink);
+  --color-text-muted: var(--ink-soft);
+  --gold: var(--ink-accent);
+  --gold-rgb: 63, 111, 166;
+  --gold-soft: var(--ink-accent);
+  --gold-dark: var(--ochre);
+  --color-gold-primary: var(--ink-accent);
+  --color-gold-light: rgba(233, 200, 79, 0.45);
+  --header-gold-primary: var(--ink-accent);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
 }

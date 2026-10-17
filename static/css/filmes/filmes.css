@@ -1,12 +1,12 @@
 :root {
-  --bg-dark: rgb(212, 230, 246);
+  --bg-dark: var(--canvas);
   --champagne-canvas: rgba(252, 237, 180, 0.04);
-  --gold-soft: rgb(79, 127, 181);
-  --gold-dark: rgb(79, 127, 181);
+  --gold-soft: var(--ink-accent);
+  --gold-dark: var(--ochre);
   --gold-neon: rgba(79, 127, 181, 0.4);
-  --text-light: rgb(31, 61, 92);
-  --text-main: rgb(31, 61, 92);
-  --text-muted: rgba(79, 127, 181, 0.7);
+  --text-light: var(--ink);
+  --text-main: var(--ink);
+  --text-muted: var(--ink-soft);
   --border-gold: rgba(233, 200, 79, 0.45);
   --glass-bg: rgba(212, 230, 246, 0.7);
   --glass-border: rgba(252, 237, 180, 0.15);

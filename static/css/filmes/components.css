@@ -250,7 +250,7 @@
   font-family: var(--font-serif);
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 300;
-  color: rgb(31, 61, 92);
+  color: var(--ink);
   margin: 0 0 0.5rem 0;
   line-height: 1.2;
   pointer-events: auto;

@@ -1,15 +1,15 @@
 :root {
-  --color-bg-base: rgb(212, 230, 246);
-  --color-gold-primary: rgb(79, 127, 181);
+  --color-bg-base: var(--canvas);
+  --color-gold-primary: var(--ink-accent);
   --color-gold-light: rgba(168, 203, 238, 0.25);
-  --color-gold-hover: rgb(79, 127, 181);
-  --color-text-main: rgb(31, 61, 92);
-  --color-text-muted: rgb(79, 127, 181);
+  --color-gold-hover: var(--pastel-blue-700);
+  --color-text-main: var(--ink);
+  --color-text-muted: var(--ink-soft);
   --color-glass-panel: rgba(212, 230, 246, 0.55);
   --color-glass-border: rgba(252, 237, 180, 0.18);
   --color-glass-shadow: rgba(31, 61, 92, 0.21);
-  --color-danger: rgb(74, 108, 145);
-  --color-success: rgb(74, 108, 145);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
   --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
   --font-sans: 'Montserrat', 'Inter', sans-serif;
 
@@ -34,7 +34,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--color-bg-base);
-  background-image: radial-gradient(circle at 15% 15%, rgba(252, 237, 180, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(252, 237, 180, 0.05) 0%, transparent 45%);
+  background-image: radial-gradient(circle at 15% 15%, rgba(252, 237, 180, 0.04) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(252, 237, 180, 0.05) 0%, transparent 45%), linear-gradient(180deg, var(--cream) 0%, #eef0e0 28%, #dbe9f6 65%, #cfe2f4 100%);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;

@@ -83,7 +83,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgb(74, 108, 145); /* gold-dark no lugar do vermelho para não ser agressivo */
+  color: var(--ink-soft); /* gold-dark no lugar do vermelho para não ser agressivo */
   opacity: 0;
   transition: opacity 0.3s ease;
   height: 20px;

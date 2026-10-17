@@ -7,16 +7,16 @@
   --header-border-color: rgba(233, 200, 79, 0.36);
   
   /* Ouro Nobre */
-  --header-gold-primary: rgb(79, 127, 181);
+  --header-gold-primary: var(--ink-accent);
   
   /* Brilho em tom Indigo vibrante */
   --header-gold-glow: rgba(168, 203, 238, 0.4);
   
   /* Branco pérola */
-  --header-text-main: rgb(31, 61, 92);
+  --header-text-main: var(--ink);
   
   /* Azul suave e evidente para textos secundários */
-  --header-text-muted: rgb(79, 127, 181);
+  --header-text-muted: var(--ink-soft);
   
   --header-font-sans: 'Montserrat', 'Inter', sans-serif;
   --header-width-collapsed: 80px;

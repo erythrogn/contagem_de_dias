@@ -1,10 +1,10 @@
 :root {
-  --color-bg-base: rgb(212, 230, 246);
-  --color-gold-primary: rgb(79, 127, 181);
+  --color-bg-base: var(--canvas);
+  --color-gold-primary: var(--ink-accent);
   --color-gold-light: rgba(233, 200, 79, 0.45);
-  --color-gold-hover: rgb(74, 108, 145);
-  --color-text-main: rgb(31, 61, 92);
-  --color-text-muted: rgb(79, 127, 181);
+  --color-gold-hover: var(--pastel-blue-700);
+  --color-text-main: var(--ink);
+  --color-text-muted: var(--ink-soft);
   --color-glass-panel: rgba(212, 230, 246, 0.55);
   --color-glass-border: rgba(252, 237, 180, 0.18);
   --color-glass-shadow: rgba(168, 203, 238, 0.6);
